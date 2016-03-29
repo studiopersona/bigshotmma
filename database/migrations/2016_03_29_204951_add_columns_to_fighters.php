@@ -13,8 +13,8 @@ class AddColumnsToFighters extends Migration
     public function up()
     {
         Schema::table('fighters', function (Blueprint $table) {
-            $table->integer('weight_class_id')->after('weight_lbs');
-            $table->string('fighter_image_name')->after('weight_class_id')->unsigned();
+            $table->integer('weight_class_id')->after('weight_lbs')->unsigned();
+            $table->string('fighter_image_name')->after('weight_class_id');
         });
     }
 
