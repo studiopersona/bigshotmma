@@ -1,6 +1,6 @@
 <?php
 
-namespace bsmma\Console\Commands;
+namespace Bsmma\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;

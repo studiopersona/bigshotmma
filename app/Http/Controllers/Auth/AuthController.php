@@ -1,10 +1,10 @@
 <?php
 
-namespace bsmma\Http\Controllers\Auth;
+namespace Bsmma\Http\Controllers\Auth;
 
-use bsmma\User;
+use Bsmma\User;
 use Validator;
-use bsmma\Http\Controllers\Controller;
+use Bsmma\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 

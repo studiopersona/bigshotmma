@@ -1,6 +1,6 @@
 <?php
 
-namespace bsmma\Providers;
+namespace Bsmma\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

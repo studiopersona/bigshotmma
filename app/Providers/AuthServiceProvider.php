@@ -1,6 +1,6 @@
 <?php
 
-namespace bsmma\Providers;
+namespace Bsmma\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'bsmma\Model' => 'bsmma\Policies\ModelPolicy',
+        'Bsmma\Model' => 'Bsmma\Policies\ModelPolicy',
     ];
 
     /**

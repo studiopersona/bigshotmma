@@ -11,7 +11,7 @@
 |
 */
 
-$factory->define(bsmma\User::class, function (Faker\Generator $faker) {
+$factory->define(Bsmma\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->safeEmail,

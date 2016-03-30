@@ -1,6 +1,6 @@
 <?php
 
-namespace bsmma\Events;
+namespace Bsmma\Events;
 
 abstract class Event
 {

@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => bsmma\User::class,
+            'model' => Bsmma\User::class,
         ],
 
         // 'users' => [

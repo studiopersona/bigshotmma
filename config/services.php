@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model' => bsmma\User::class,
+        'model' => Bsmma\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],

@@ -1,6 +1,6 @@
 <?php
 
-namespace bsmma\Jobs;
+namespace Bsmma\Jobs;
 
 use Illuminate\Bus\Queueable;
 

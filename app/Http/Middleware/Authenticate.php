@@ -1,6 +1,6 @@
 <?php
 
-namespace bsmma\Http\Middleware;
+namespace Bsmma\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;

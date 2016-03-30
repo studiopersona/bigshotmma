@@ -1,6 +1,6 @@
 <?php
 
-namespace bsmma\Providers;
+namespace Bsmma\Providers;
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -13,8 +13,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'bsmma\Events\SomeEvent' => [
-            'bsmma\Listeners\EventListener',
+        'Bsmma\Events\SomeEvent' => [
+            'Bsmma\Listeners\EventListener',
         ],
     ];
 

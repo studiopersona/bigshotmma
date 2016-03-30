@@ -1,6 +1,6 @@
 <?php
 
-namespace bsmma\Console;
+namespace Bsmma\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
