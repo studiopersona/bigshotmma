@@ -8,7 +8,7 @@ class UserRole extends Model
 {
 	protected $gaurded = ['id','user_role'];
 
-	public function user()
+	public function users()
 	{
 		return $this->hasMany('Bsmma\User');
 	}

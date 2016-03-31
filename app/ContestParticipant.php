@@ -9,4 +9,15 @@ class ContestParticipant extends Model
     protected $guarded = [];
 
     protected $dates = [];
+
+    // Relationships -------------------------------------
+    public function contest()
+    {
+        return $this->beelongsTo('Bsmma\Contest');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('Bsmma\User');
+    }
 }

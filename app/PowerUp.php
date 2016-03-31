@@ -9,4 +9,9 @@ class PowerUp extends Model
     protected $guarded = [];
 
     protected $dates = [];
+
+    public function picks()
+    {
+        return $this->belongsToMany('Bsmma\Pick');
+    }
 }
