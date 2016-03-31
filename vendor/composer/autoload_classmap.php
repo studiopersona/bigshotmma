@@ -16,6 +16,8 @@ return array(
     'AddForgeinKeyToWinners' => $baseDir . '/database/migrations/2016_03_29_213652_add_forgein_key_to_winners.php',
     'AddImageNameColumnToContestTypes' => $baseDir . '/database/migrations/2016_03_29_194626_add_image_name_column_to_contest_types.php',
     'AddPointColumnToFinishes' => $baseDir . '/database/migrations/2016_03_29_211905_add_point_column_to_finishes.php',
+    'AlterFightsTableAndAddPivotTable' => $baseDir . '/database/migrations/2016_03_31_175728_alter_fights_table_and_add_pivot_table.php',
+    'ChangeNameOfPicksToPowerUps' => $baseDir . '/database/migrations/2016_03_31_175321_change_name_of_picks_to_power_ups.php',
     'CreateContestParticipantsTable' => $baseDir . '/database/migrations/2016_03_25_15_create_contest_participants_table.php',
     'CreateContestTypesTable' => $baseDir . '/database/migrations/2016_03_25_07_create_contest_types_table.php',
     'CreateContestsTable' => $baseDir . '/database/migrations/2016_03_25_10_create_contests_table.php',
