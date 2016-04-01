@@ -13,7 +13,7 @@ class ContestParticipant extends Model
     // Relationships -------------------------------------
     public function contest()
     {
-        return $this->beelongsTo('Bsmma\Contest');
+        return $this->belongsTo('Bsmma\Contest');
     }
 
     public function user()

@@ -18,10 +18,14 @@ Route::group(['middleware' => ['web']], function () {
         return view('welcome');
     });
 
-    Route::group(['prefix' => 'api'], function()
+    Route::group(['prefix' => 'api/v1'], function()
 	{
 	    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
 	    Route::post('authenticate', 'AuthenticateController@authenticate');
+	    Route::resource('events', 'EventsController', ['only' => ['index','show']]);
+	    Route::resource('contests', 'ContestsController');
+	    Route::resource('contestfights', 'ContestFightsController');
+	    Route::resource('powerups', 'PowerUpsController');
 	});
 
 });

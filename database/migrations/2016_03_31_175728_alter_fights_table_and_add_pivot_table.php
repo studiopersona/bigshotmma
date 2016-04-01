@@ -12,7 +12,7 @@ class AlterFightsTableAndAddPivotTable extends Migration
      */
     public function up()
     {
-        Schema::table('fights', function($table) {
+        /Schema::table('fights', function($table) {
             $table->dropForeign('fights_fighterA_id_foreign');
             $table->dropForeign('fights_fighterB_id_foreign');
         });

@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Bsmma\User;
 use Bsmma\UserRole;
+use Bsmma\Promoter;
+use Bsmma\ContestType;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,8 +18,10 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $this->userRoleTable();
-        $this->userTable();
+        //$this->userRoleTable();
+        //$this->userTable();
+        $this->promotersTable();
+        $this->contestTypesTable();
 
         Model::reguard();
     }
@@ -104,6 +108,59 @@ class DatabaseSeeder extends Seeder
         foreach ($users as $user)
         {
             User::create($user);
+        }
+    }
+
+    public function promotersTable()
+    {
+        DB::table('promoters')->delete();
+
+        $data = [
+            [   'promoter'=>'UFC',
+                'slug' => 'ufc'
+            ],
+            [   'promoter'=>'Bellator',
+                'slug' => 'bellator'
+            ],
+            [   'promoter'=>'XFC',
+                'slug' => 'xfc'
+            ],
+            [   'promoter'=>'King of the Cage',
+                'slug' => 'kotc'
+            ],
+            [   'promoter'=>'WSOF',
+                'slug' => 'wsof'
+            ],
+        ];
+
+        foreach ( $data as $row )
+        {
+            Promoter::create($row);
+        }
+    }
+
+    public function contestTypesTable()
+    {
+        DB::table('contest_types')->delete();
+
+        $data = [
+            [   'contest_type_name'=>'Old School',
+                'contest_type_rules' => '<p>Players finishing in the top 20% receive a prize.</p> <p>The <a href="">top tier</a> adjusted<br />depending on the number of players in each contest.</p>',
+                'image_name' => 'classic-controller.png'
+            ],
+            [   'contest_type_name'=>'50/50',
+                'contest_type_rules' => "<p>Players finishing in the top 50% receive a prize.<br />All others receive nothing.</p><p>Good day, sir!<nt /><em>(or ma’am)</em></p>",
+                'image_name' => 'pot-o-gold.png'
+            ],
+            [   'contest_type_name'=>'Monarch',
+                'contest_type_rules' => '<p>Only the top ranked player receives a prize.</p><p>In the event of a tie, the top prize will be split evenly among the winners.<em>(Hence the name)</em></p>',
+                'image_name' => 'crown.png'
+            ],
+        ];
+
+        foreach ( $data as $row )
+        {
+            ContestType::create($row);
         }
     }
 

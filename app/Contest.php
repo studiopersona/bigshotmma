@@ -36,4 +36,9 @@ class Contest extends Model
     {
         return $this->hasMany('Bsmma\Winner');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany('Bsmma\User', 'contest_participants');
+    }
 }

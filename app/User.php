@@ -28,4 +28,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('Bsmma\UserRole');
     }
+
+    public function contests()
+    {
+        return $this->belongsToMany('Bsmma\Contest');
+    }
 }
