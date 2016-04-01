@@ -15,4 +15,9 @@ class Fight extends Model
     {
         return $this->belongsToMany('Bsmma\Fighter');
     }
+
+    public function picks()
+    {
+    	return $this->hasMany('Bsmma\Pick');
+    }
 }

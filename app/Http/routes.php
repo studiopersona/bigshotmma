@@ -24,7 +24,7 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::post('authenticate', 'AuthenticateController@authenticate');
 	    Route::resource('events', 'EventsController', ['only' => ['index','show']]);
 	    Route::resource('contests', 'ContestsController');
-	    Route::resource('contestfights', 'ContestFightsController');
+	    Route::resource('picks', 'PicksController');
 	    Route::resource('powerups', 'PowerUpsController');
 	});
 

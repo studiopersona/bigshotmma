@@ -5,9 +5,23 @@ namespace Bsmma\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Bsmma\Http\Requests;
+use Bsmma\User;
+use Bsmma\Pick;
+use Bsmma\divStrong\Transformers\PickTransformer;
 
-class ContestFightsController extends Controller
+class PicksController extends ApiController
 {
+    public function __construct(
+        Pick $pick,
+        User $user,
+        PickTransformer $pickTransformer
+    )
+    {
+        $this->pick = $pick;
+        $this->user = $user;
+        $this->pickTransformer = $pickTransformer;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +29,20 @@ class ContestFightsController extends Controller
      */
     public function index()
     {
-        //
+        $picks = $this->pick->with([
+                    'contest.event.fights.fighters',
+                    'fight',
+                    'finish',
+                    'fighter',
+                    'powerUps',
+                ])
+                ->where('user_id', $this->user->getAuthUser())
+                ->get();
+
+        return $this->respond([
+            'picks' => $this->pickTransformer->transformCollection($picks->toArray()),
+        ]);
+
     }
 
     /**

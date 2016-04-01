@@ -12,7 +12,12 @@ class Pick extends Model
 
     public function powerUps()
     {
-        return $this->belongsToMany('Bsmma\PowerUp');
+        return $this->belongsTo('Bsmma\PowerUp');
+    }
+
+    public function contest()
+    {
+        return $this->belongsTo('Bsmma\Contest');
     }
 
     public function fightResult()
@@ -20,9 +25,14 @@ class Pick extends Model
         return $this->belongsTo('Bsmma\FightResult');
     }
 
+    public function fight()
+    {
+        return $this->belongsTo('Bsmma\Fight');
+    }
+
     public function fighter()
     {
-        return $this->belongsTo('Bsmma\Fighter');
+        return $this->belongsTo('Bsmma\Fighter', 'winning_fighter_id');
     }
 
     public function finish()

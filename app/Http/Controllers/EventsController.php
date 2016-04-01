@@ -5,9 +5,20 @@ namespace Bsmma\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Bsmma\Http\Requests;
+use Bsmma\Event;
+use Bsmma\Promoter;
+use Bsmma\divStrong\Transformers\EventTransformer as EventTransformer;
 
-class EventsController extends Controller
+class EventsController extends ApiController
 {
+    protected $eventTransformer;
+
+    public function __construct(Event $event, EventTransformer $eventTransformer)
+    {
+        $this->event = $event;
+        $this->eventTransformer = $eventTransformer;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +26,9 @@ class EventsController extends Controller
      */
     public function index()
     {
-        //
+        return $this->respond([
+            'events' => $this->eventTransformer->transformCollection($this->event->with('promoter')->get()->toArray()),
+        ]);
     }
 
     /**
@@ -47,7 +60,19 @@ class EventsController extends Controller
      */
     public function show($id)
     {
-        //
+        $event = $this->event
+                    ->where('id', $id)
+                    ->with(['promoter'])
+                    ->get();
+
+        if ( $event->isEmpty() )
+        {
+            return $this->respondNotFound('Event does not exsist');
+        }
+
+        return $this->respond([
+            'event' => $this->eventTransformer->transformCollection($event->toArray()),
+        ]);
     }
 
     /**

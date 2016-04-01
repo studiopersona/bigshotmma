@@ -12,6 +12,6 @@ class PowerUp extends Model
 
     public function picks()
     {
-        return $this->belongsToMany('Bsmma\Pick');
+        return $this->hasMany('Bsmma\Pick');
     }
 }

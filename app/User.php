@@ -24,6 +24,12 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function getAuthUser()
+    {
+        return 2;
+    }
+
+    // Relationships --------------------------------------
     public function userRole()
     {
         return $this->belongsTo('Bsmma\UserRole');
@@ -33,4 +39,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('Bsmma\Contest');
     }
+
+    public function picks()
+    {
+        return $this->belongsToMany('Bsmma\Pick');
+    }
+
 }
