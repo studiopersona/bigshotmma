@@ -1,21 +1,34 @@
-// browserify entrypoint
-
-var Vue = require('vue');
-
-import AppHeader from './components/AppHeader.vue';
+import Vue from 'vue';
+import App from './components/App.vue';
+import Register from './components/Register.vue';
 import Login from './components/Login.vue';
+import Events from './components/Events.vue';
+import VueRouter from 'vue-router';
+import VueResource from 'vue-resource';
+Vue.use(VueResource);
+Vue.use(VueRouter);
 
-new Vue({
-	el: '#app',
+export var router = new VueRouter();
 
-	data: {
-		pageHeader: 'Player Login',
-		pageSubheader: 'Don\'t have an account yet? <a href="#">Sign Up</a>',
-	},
+// Set up routing and match routes to components
+router.map({
+   '/login': {
+    component: Login
+  },
 
-	components: { AppHeader, Login },
+  '/register': {
+    component: Register
+  },
 
-	ready() {
-
-	},
+  '/events': {
+    component: Events
+  }
 });
+
+// Redirect to the home route if any routes are unmatched
+router.redirect({
+  '*': '/home'
+});
+
+// Start the app on the #app div
+router.start(App, '#app');

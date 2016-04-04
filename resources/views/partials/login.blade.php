@@ -5,7 +5,7 @@
 			<div class="col-xs-100">
 				<label for="email">
 					<span class="visuallyhidden">Email</span>
-					<input type="email" placeholder="EMAIL ADDRESS">
+					<input type="email" placeholder="EMAIL ADDRESS" v-model="playerEmail">
 				</label>
 			</div>
 		</div>
@@ -13,13 +13,13 @@
 			<div class="col-xs-100">
 				<label for="password">
 					<span class="visuallyhidden">Password</span>
-					<input type="password" placeholder="PASSWORD">
+					<input type="password" placeholder="PASSWORD" v-model="pwd">
 				</label>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xs-100">
-				<button type="submit" class="button button--primary">Login</button>
+				<button @click="authenticate" data-submitUrl="{{ url('api/v1/authenticate') }}" type="submit" class="button button--primary">Login</button>
 			</div>
 		</div>
 	</div>

@@ -15,13 +15,14 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/', function ()
     {
-        return view('login');
+        return view('index');
     });
 
     Route::group(['prefix' => 'api/v1'], function()
 	{
 	    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
 	    Route::post('authenticate', 'AuthenticateController@authenticate');
+	    Route::post('register', 'AuthenticateController@register');
 	    Route::resource('events', 'EventsController', ['only' => ['index','show']]);
 	    Route::get('player/{id}/contests', 'ContestsController@index');
 	    Route::resource('contests', 'ContestsController');

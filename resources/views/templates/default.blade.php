@@ -27,10 +27,7 @@
 		</script>
 	</head>
 	<body>
-
-		<div id="app">
-			@yield('content')
-		</div><!-- #app -->
+		<div id="app"></div>
 
 		<!-- scripts -->
 		@yield('scripts')

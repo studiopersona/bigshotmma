@@ -1,12 +1,5 @@
 <template>
-	<header class="pageHeader">
-		<h1 class="pageHeader__header">Player Login</h1>
-		<h4 class="pageHeader__subheader">
-			Don't have an account yet?
-			<a href="#">Sign Up</a>
-		</h4>
-	</header>
-	<div class="loginForm">
+	<div class="registerForm">
 		<div class="container-fluid">
 			<div class="alert alert-danger" v-if="error">
 	        	<p>{{ error }}</p>
@@ -23,19 +16,24 @@
 				<div class="col-xs-100">
 					<label for="password">
 						<span class="visuallyhidden">Password</span>
-						<input type="password" placeholder="PASSWORD" v-model="credentials.password">
+						<input type="password" placeholder="PASSWORD"  v-model="credentials.password">
+					</label>
+				</div>
+			</div>
+			<div class="row form__row">
+				<div class="col-xs-100">
+					<label for="playerName">
+						<span class="visuallyhidden">Player Name</span>
+						<input type="text" placeholder="PLAYER NAME" v-model="credentials.playerName">
 					</label>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-100">
-					<button @click="submit()" type="submit" class="button button--primary">Login</button>
+					<button @click="submit()" type="submit" class="button button--primary">Sign Up</button>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="logo">
-		<img src="http://edward.dev/bsmma/public/images/logo.jpg" alt="Blood Sport Fantasy MMA Logo">
 	</div>
   </template>
 
@@ -48,7 +46,8 @@
         // properties that will be used in it
         credentials: {
           username: '',
-          password: ''
+          password: '',
+          playerName: '',
         },
         error: ''
       }
@@ -57,7 +56,8 @@
       submit() {
         var credentials = {
           username: this.credentials.username,
-          password: this.credentials.password
+          password: this.credentials.password,
+          playerName: this.credentials.playerName,
         }
         // We need to pass the component's this context
         // to properly make use of http in the auth service

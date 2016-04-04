@@ -12,6 +12,8 @@ require('laravel-elixir-vueify');
  |
  */
 
+elixir.config.js.browserify.watchify.options.poll = true;
+
 elixir(function(mix) {
     mix.sass('app.scss').version('public/css/app.css');
     mix.browserify('index.js').version('public/js/index.js');
