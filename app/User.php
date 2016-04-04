@@ -26,7 +26,7 @@ class User extends Authenticatable
 
     public function getAuthUser()
     {
-        return 2;
+        return 1;
     }
 
     // Relationships --------------------------------------
@@ -37,7 +37,7 @@ class User extends Authenticatable
 
     public function contests()
     {
-        return $this->belongsToMany('Bsmma\Contest');
+        return $this->belongsToMany('Bsmma\Contest', 'contest_participants');
     }
 
     public function picks()

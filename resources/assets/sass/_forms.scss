@@ -1,0 +1,102 @@
+.form {
+	input,
+	select,
+	textarea {
+		background: $form-field-bkgd-color;
+		padding: 1em;
+		font-size: 1.5rem;
+		border: 1px solid $form-field-border-color;
+		width: 100%;
+	}
+}
+
+.form__row {
+	margin-bottom: 1.5rem;
+}
+
+@media screen and (max-width: 768px) {
+	.form-wrap {
+		padding: 0 2.4rem;
+	}
+}
+
+.working-indicator {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+}
+
+.submit-wrap {
+	overflow: auto;
+}
+
+.spinner-wrap {
+	margin-top: -6px;
+}
+
+// form errors
+
+.parsley-errors-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+
+	li {
+		padding: 0.7rem 1.4rem;
+		background: $color-red;
+		color: $color-white;
+		position: relative;
+		display: inline-block;
+		font-size: 1.4rem;
+
+		&:before {
+		    content: "";
+		    display: block;
+		    width: 0;
+		    height: 0;
+		    border-style: solid;
+		    border-width: 0 12px 10px;
+		    border-color: transparent transparent $color-red transparent;
+		    position: absolute;
+		    top: -10px;
+		    left: 10px;
+		}
+	}
+}
+
+.error-centered + .parsley-errors-list {
+	text-align: center;
+}
+
+.form-error,
+.form-success {
+	font-size: 1.6rem;
+	color: $color-red;
+}
+
+.form-success {
+	color: $color-green;
+}
+
+// response
+
+.server-response {
+	padding: 0.7rem;
+	font-size: 2.1rem;
+	border: 1px solid;
+	margin: 0.35rem auto;
+	width: 80%;
+	background: #fff;
+
+
+	&.error {
+		color: $color-red;
+		border-color: $color-red;
+	}
+
+	&.success {
+		color: $color-green;
+		border-color: $color-green;
+	}
+}

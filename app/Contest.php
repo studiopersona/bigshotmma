@@ -27,11 +27,6 @@ class Contest extends Model
         return $this->hasMany('Bsmma\Pick');
     }
 
-    public function contestParticipants()
-    {
-        return $this->hasMany('Bsmma\ContestParticipant');
-    }
-
     public function winners()
     {
         return $this->hasMany('Bsmma\Winner');
