@@ -10,6 +10,8 @@
 
 <script>
     export default {
+        props: ['loaderClasses'],
+
         data() {
             return {
                working: false,
@@ -18,7 +20,7 @@
 
         computed: {
             loaderClasses() {
-                (this.working) ? 'js-global-loader loader' : 'js-global-loader loader visuallyhidden';
+                return (this.working) ? 'js-global-loader loader' : 'js-global-loader loader visuallyhidden';
             },
         },
     };

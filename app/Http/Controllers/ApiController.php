@@ -32,6 +32,18 @@ class ApiController extends Controller
     	return $this->respondWithError($message);
     }
 
+    public function respondUnkownError($message = 'The server encountered an error while processing your request')
+    {
+        $statusCode = $this->setStatusCode(500);
+        return $this->respondWithError($message);
+    }
+
+    public function respondAlreadyExists($message = 'Already Exists')
+    {
+        $statusCode = $this->setStatusCode(412);
+        return $this->respondWithError($message);
+    }
+
     public function respond($data, $headers = [])
     {
     	return response()->json($data, $this->getStatusCode(), $headers);

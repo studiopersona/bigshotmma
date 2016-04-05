@@ -16,8 +16,9 @@ export default {
 
     // Send a request to the login URL and save the returned JWT
     login(context, creds, redirect) {
+        context.working = true;
         context.$http.post(LOGIN_URL, creds, (data) => {
-            localStorage.setItem('id_token', data.id_token);
+            localStorage.setItem('id_token', data.token);
 
             this.user.authenticated = true;
 
@@ -34,7 +35,7 @@ export default {
 
     signup(context, creds, redirect) {
         context.$http.post(SIGNUP_URL, creds, (data) => {
-            localStorage.setItem('id_token', data.id_token);
+            localStorage.setItem('id_token', data.token);
 
             this.user.authenticated = true;
 
@@ -56,6 +57,7 @@ export default {
 
     checkAuth() {
         var jwt = localStorage.getItem('id_token');
+
         if(jwt) {
             this.user.authenticated = true;
         }

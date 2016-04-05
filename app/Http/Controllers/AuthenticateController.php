@@ -3,6 +3,7 @@
 namespace Bsmma\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Hash;
 
 use Bsmma\Http\Requests;
 use Bsmma\Http\Controllers\Controller;
@@ -25,8 +26,6 @@ class AuthenticateController extends ApiController
         // grab credentials from the request
         $credentials = $request->only('email', 'password');
 
-        dd($credentials);
-
         try {
             // attempt to verify the credentials and create a token for the current user
             if (! $token = JWTAuth::attempt($credentials)) {
@@ -43,13 +42,16 @@ class AuthenticateController extends ApiController
 
     public function register(Request $request)
     {
-        $credentials = $request->only('email', 'password', 'playerName');
-        dd($credentials);
+        $credentials = $request->only('email', 'password', 'player_name');
+
+        $credentials['password'] = Hash::make($request->newPassword);
 
         try {
-            User:create($credentials);
+            User::create($credentials);
         } catch (Illuminate\Database\QueryException $e) {
-            dd($e);
+            return $this->respondUnkownError();
+        } catch (\PDOException $e) {
+            if ( $e->errorInfo[1] == 1062 ) return $this->respondAlreadyExists('The Email Address Provided is Already in Use');
         }
     }
 }

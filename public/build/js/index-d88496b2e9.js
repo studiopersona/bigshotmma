@@ -14419,8 +14419,9 @@ exports.default = {
     login: function login(context, creds, redirect) {
         var _this = this;
 
+        context.working = true;
         context.$http.post(LOGIN_URL, creds, function (data) {
-            localStorage.setItem('id_token', data.id_token);
+            localStorage.setItem('id_token', data.token);
 
             _this.user.authenticated = true;
 
@@ -14437,7 +14438,7 @@ exports.default = {
         var _this2 = this;
 
         context.$http.post(SIGNUP_URL, creds, function (data) {
-            localStorage.setItem('id_token', data.id_token);
+            localStorage.setItem('id_token', data.token);
 
             _this2.user.authenticated = true;
 
@@ -14458,6 +14459,7 @@ exports.default = {
     },
     checkAuth: function checkAuth() {
         var jwt = localStorage.getItem('id_token');
+
         if (jwt) {
             this.user.authenticated = true;
         } else {
@@ -14481,6 +14483,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = {
+    props: ['loaderClasses'],
+
     data: function data() {
         return {
             working: false
@@ -14490,7 +14494,7 @@ exports.default = {
 
     computed: {
         loaderClasses: function loaderClasses() {
-            this.working ? 'js-global-loader loader' : 'js-global-loader loader visuallyhidden';
+            return this.working ? 'js-global-loader loader' : 'js-global-loader loader visuallyhidden';
         }
     }
 };
@@ -14500,7 +14504,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/App.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\App.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14521,17 +14525,19 @@ var _auth2 = _interopRequireDefault(_auth);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+
+    props: [],
+
     data: function data() {
         return {
-            contestsList: '',
-            imageSrc: 'public/images/events/' + this.imageName,
-            imageName: ''
+            contestsList: { 'contests': {} },
+            rowCounter: 1
         };
     },
     ready: function ready() {
         var _this = this;
 
-        this.$http.get('http://edward.dev/bsmma/api/v1/contests', function (data) {
+        this.$http.get('http://edward.dev/bsmma/api/v1/event/' + this.$route.params.event_id + '/contests', function (data) {
             _this.contestsList = data;
         }, {
             // Attach the JWT header
@@ -14554,12 +14560,12 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\">\n    <h1 class=\"pageHeader__header\">Enter a Contest</h1>\n    <h4 class=\"pageHeader__subheader\">\n        Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n    </h4>\n</header>\n<div class=\"contestList\">\n    <ul>\n        <li @click=\"showItem()\" class=\"contestList__item\" v-for=\"contest in contentList.events\">\n            <div class=\"container-fluid\">\n                <div class=\"col-xs-20\">\n                    <img class=\"contestList__img\" src=\"http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg\" alt=\"{{ event.event_name }} Image\">\n                </div>\n                <div class=\"col-xs-45\">\n                    <div class=\"contestList__date\"></div>\n                    <div class=\"contestList__name\"></div>\n                    <div class=\"contestList__type\"></div>\n                </div>\n                <div class=\"col-xs-25\">\n                    <div class=\"contestList__entriesTitle\"></div>\n                    <div class=\"contestList__entries\"></div>\n                </div>\n                <div class=\"col-xs-10\">\n                    <div class=\"contestList__buyinTitle\"></div>\n                    <div class=\"contestList__buyin\"></div>\n                </div>\n            </div>\n        </li>\n    </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\">\n    <h1 class=\"pageHeader__header\">Enter a Contest</h1>\n    <h4 class=\"pageHeader__subheader\">\n        Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n    </h4>\n</header>\n<div class=\"contestList\">\n    <ul>\n        <li @click=\"showItem()\" class=\"contestList__item\" v-for=\"contest in contestsList.contests\">\n            <div class=\"container-fluid\">\n                <div class=\"col-xs-20\">\n                    <img class=\"contestList__img\" src=\"http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg\" alt=\"{{ contest.event_name }} Image\">\n                </div>\n                <div class=\"col-xs-45 contestList__infoWarp\">\n                    <div class=\"contestList__date\">{{ contest.event_date }}</div>\n                    <div class=\"contestList__name\">{{ contest.event_short_name }}</div>\n                    <div class=\"contestList__type\">{{ contest.contest_type_name }}</div>\n                </div>\n                <div class=\"col-xs-20\">\n                    <div class=\"contestList__entriesTitle\">Entries</div>\n                    <div class=\"contestList__entries\">{{ contest.total_participants }}/{{ contest.max_participants }}</div>\n                </div>\n                <div class=\"col-xs-15\">\n                    <div class=\"contestList__buyinTitle\">Buy-In</div>\n                    <div class=\"contestList__buyin\">${{ contest.buy_in }}</div>\n                </div>\n            </div>\n        </li>\n    </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Contests.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Contests.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14580,18 +14586,24 @@ var _auth2 = _interopRequireDefault(_auth);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+
+    props: ['working'],
+
     data: function data() {
         return {
-            eventsList: '',
+            eventsList: { 'events': [] },
             imageSrc: 'public/images/events/' + this.imageName,
-            imageName: ''
+            imageName: '',
+            working: false
         };
+    },
+    created: function created() {
+        this.working = true;
     },
     ready: function ready() {
         var _this = this;
 
         this.$http.get('http://edward.dev/bsmma/api/v1/events', function (data) {
-            console.log(data);
             _this.eventsList = data;
         }, {
             // Attach the JWT header
@@ -14614,12 +14626,12 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\">\n    <h1 class=\"pageHeader__header\">Choose an Event</h1>\n    <h4 class=\"pageHeader__subheader\">\n        Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n    </h4>\n</header>\n<div class=\"eventList\">\n    <ul>\n        <li class=\"eventList__item\" v-for=\"event in eventsList.events\">\n            <a v-link=\"{ path: 'event/' + event.event_id + '/contests' }\" href=\"#\">\n                <img class=\"eventList__img\" src=\"http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg\" alt=\"{{ event.event_name }} Image\">\n                <div class=\"eventList__name\">{{ event.event_name }}</div>\n                <div class=\"eventList__date\">{{ event.date }} {{ event.time }}</div>\n            </a>\n        </li>\n    </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\" :working.sync=\"working\">\n    <h1 class=\"pageHeader__header\">Choose an Event</h1>\n    <h4 class=\"pageHeader__subheader\">\n        Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n    </h4>\n</header>\n<div class=\"eventList\">\n    <ul>\n        <li class=\"eventList__item\" v-for=\"event in eventsList.events\">\n            <a v-link=\"{ path: 'event/' + event.event_id + '/contests' }\" href=\"#\">\n                <img class=\"eventList__img\" src=\"http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg\" alt=\"{{ event.event_name }} Image\">\n                <div class=\"eventList__name\">{{ event.event_name }}</div>\n                <div class=\"eventList__date\">{{ event.date }} {{ event.time }}</div>\n            </a>\n        </li>\n    </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Events.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Events.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14640,15 +14652,19 @@ var _auth2 = _interopRequireDefault(_auth);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+
+	props: ['working'],
+
 	data: function data() {
 		return {
 
 			credentials: {
-				username: '',
+				email: '',
 				password: ''
 			},
 			error: '',
-			alertType: ''
+			alertType: '',
+			working: false
 		};
 	},
 
@@ -14656,10 +14672,10 @@ exports.default = {
 	methods: {
 		submit: function submit() {
 			var credentials = {
-				username: this.credentials.username,
+				email: this.credentials.email,
 				password: this.credentials.password
 			};
-			this.working = true;
+
 			// We need to pass the component's this context
 			// to properly make use of http in the auth service
 			_auth2.default.login(this, credentials, 'events');
@@ -14679,12 +14695,12 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\">\n\t<h1 class=\"pageHeader__header\">Player Login</h1>\n\t<h4 class=\"pageHeader__subheader\">\n\t\tDon't have an account yet?\n\t\t<a href=\"#\">Sign Up</a>\n\t</h4>\n</header>\n<div class=\"loginForm form\">\n\t<div class=\"container-fluid\">\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"email\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.username\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"password\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">X</span>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Login</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n<div class=\"container-fluid\">\n\t<div class=\"col-xs-100\">\n\t\t<div class=\"logo\">\n\t\t\t<img src=\"http://edward.dev/bsmma/public/image/logo.jpg\" alt=\"Blood Sport Fantasy MMA Logo\">\n\t\t</div>\n\t</div>\n</div>\n "
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\" :working.syc=\"working\">\n\t<h1 class=\"pageHeader__header\">Player Login</h1>\n\t<h4 class=\"pageHeader__subheader\">\n\t\tDon't have an account yet?\n\t\t<a v-link=\"{path:\" '=\"\" register'=\"\" }=\"\" href=\"#\">Sign Up</a>\n\t</h4>\n</header>\n<div class=\"loginForm form\">\n\t<div class=\"container-fluid\">\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"email\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.email\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"password\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">x</span>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Login</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n<div class=\"container-fluid\">\n\t<div class=\"col-xs-100\">\n\t\t<div class=\"logo\">\n\t\t\t<img src=\"http://edward.dev/bsmma/public/image/logo.jpg\" alt=\"Blood Sport Fantasy MMA Logo\">\n\t\t</div>\n\t</div>\n</div>\n "
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Login.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Login.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14695,7 +14711,7 @@ if (module.hot) {(function () {  module.hot.accept()
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 
 var _auth = require('../auth');
@@ -14705,40 +14721,56 @@ var _auth2 = _interopRequireDefault(_auth);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-  data: function data() {
-    return {
-      // We need to initialize the component with any
-      // properties that will be used in it
-      credentials: {
-        username: '',
-        password: '',
-        playerName: ''
-      },
-      error: ''
-    };
-  },
 
-  methods: {
-    submit: function submit() {
-      var credentials = {
-        username: this.credentials.username,
-        password: this.credentials.password,
-        playerName: this.credentials.playerName
-      };
-      // We need to pass the component's this context
-      // to properly make use of http in the auth service
-      _auth2.default.login(this, credentials, 'events');
-    }
-  }
+	props: ['working'],
+
+	data: function data() {
+		return {
+			// We need to initialize the component with any
+			// properties that will be used in it
+			credentials: {
+				email: '',
+				password: '',
+				player_name: ''
+			},
+			error: ''
+		};
+	},
+
+
+	methods: {
+		submit: function submit() {
+			var credentials = {
+				email: this.credentials.email,
+				password: this.credentials.password,
+				player_name: this.credentials.player_name
+			};
+			// We need to pass the component's this context
+			// to properly make use of http in the auth service
+			_auth2.default.signup(this, credentials, 'events');
+		}
+	},
+
+	computed: {
+		alertClasses: function alertClasses() {
+			var type = this.alertType;
+
+			return {
+				'Alert': true,
+				'Alert--Success': type == 'success',
+				'Alert--Error': type == 'error'
+			};
+		}
+	}
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"registerForm form\">\n\t<div class=\"container-fluid\">\n\t\t<div :class=\"alertClasses\" v-if=\"error\" :type=\"alertType\">\n\t\t\t<p>{{ error }}</p>\n\t\t\t<span class=\"Alert__close\" @click=\"show = flase\">X</span>\n\t\t</div>\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"email\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.username\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"password\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"playerName\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Player Name</span>\n\t\t\t\t\t<input type=\"text\" placeholder=\"PLAYER NAME\" v-model=\"credentials.playerName\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Sign Up</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n "
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\" :working.syc=\"working\">\n\t<h1 class=\"pageHeader__header\">Player Sign-up</h1>\n\t<h4 class=\"pageHeader__subheader\">\n\t\tAlready have an account?\n\t\t<a v-link=\"{path:\" '=\"\" login'}=\"\" href=\"#\">Login</a>\n\t</h4>\n</header>\n<div class=\"registerForm form\">\n\t<div class=\"container-fluid\">\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"email\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.email\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"password\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"playerName\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Player Name</span>\n\t\t\t\t\t<input type=\"text\" placeholder=\"PLAYER NAME\" v-model=\"credentials.player_name\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">x</span>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Sign Up</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n<div class=\"container-fluid\">\n\t<div class=\"col-xs-100\">\n\t\t<div class=\"logo\">\n\t\t\t<img src=\"http://edward.dev/bsmma/public/image/logo.jpg\" alt=\"Blood Sport Fantasy MMA Logo\">\n\t\t</div>\n\t</div>\n</div>\n "
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Register.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Register.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {

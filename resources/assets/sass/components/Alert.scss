@@ -17,8 +17,13 @@
 
 .Alert__close {
 	position: absolute;
-	top: 1em;
-	right: 1em;
-	font-weight: bold;
-	cursor: pointer;
+    top: -8px;
+    right: -8px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid;
+    vertical-align: middle;
+    border-radius: 50%;
+    padding: 0 5px 2px;
+    background: $color-white;
 }

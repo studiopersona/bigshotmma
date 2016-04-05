@@ -1,0 +1,49 @@
+.contestList__item {
+	font-size: 1rem;
+	padding: 0.7rem 0.5rem 0.5rem 0;
+	background: $color-gray-light;
+
+	a {
+		text-decoration: none;
+		color: $color-black;
+	}
+
+	&:nth-child(2n) {
+		background: $color-white;
+	}
+}
+
+.contestList__infoWarp {
+	padding-left: 0.2rem;
+}
+
+.contestList__date {
+	margin-bottom: 0.3rem;
+}
+
+.contestList__name {
+	margin: 0 0 0.3rem 0;
+	font-weight: 700;
+	font-size: 1.2rem;
+}
+
+.contestList__type {
+	font-style: italic;
+}
+
+.contestList__img {
+	width: 100%;
+}
+
+.contestList__buyinTitle,
+.contestList__entriesTitle {
+	text-align: center;
+}
+
+.contestList__entries,
+.contestList__buyin {
+	font-size: 1.3rem;
+	font-weight: 700;
+	padding-top: 0.3rem;
+	text-align: center;
+}

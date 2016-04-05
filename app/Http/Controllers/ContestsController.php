@@ -46,7 +46,16 @@ class ContestsController extends ApiController
 
     public function eventLimited($eventId)
     {
+        $contests = $this->getContests(NULL, $eventId);
 
+        if ( $contests->isEmpty() )
+        {
+            return $this->respondNotFound('No contests found');
+        }
+
+        return $this->respond([
+            'contests' => $this->contestTransformer->transformCollection($contests->toArray()),
+        ]);
     }
 
     /**
@@ -131,24 +140,35 @@ class ContestsController extends ApiController
         //
     }
 
-    private function getContests($playerId)
+    private function getContests($playerId, $eventId = NULL)
     {
         $query = $this->contest->with([
-                        'event',
                         'contestType',
                         'event.fights.fighters',
+                        'event',
+                        'users'
                     ])
                     ->where('deadline', '>', date('Y-m-d H:i:s'));
 
-        if ( is_null($playerId) )
+        if ( ! is_null($playerId) )
         {
-          $contests = $query->get();
-        } else {
-            $contests = $query->with(['users'])->whereHas('users', function($q) use ($playerId) {
+            $query->whereHas('users', function($q) use ($playerId) {
                 $q->where('id', (int)$playerId);
-            })->get();
+            });
         }
 
-        return $contests;
+        if ( ! is_null($eventId) )
+        {
+            $query->whereHas('event', function($q) use ($eventId) {
+                $q->where('id', (int)$eventId);
+            });
+        }
+
+        return $query->get();
+    }
+
+    private function getTotalParticipants($contestId)
+    {
+        return $this->contestParticipant->where('contest_id', $contestId)->count();
     }
 }

@@ -4086,44 +4086,6 @@ a {
   width: 100%;
   margin-bottom: 0.5rem; }
 
-.contestList__item {
-  font-size: 1rem;
-  padding: 0.7rem 0.5rem 0.5rem 0;
-  background: #eee; }
-  .contestList__item a {
-    text-decoration: none;
-    color: #000; }
-  .contestList__item:nth-child(2n) {
-    background: #fff; }
-
-.contestList__infoWarp {
-  padding-left: 0.2rem; }
-
-.contestList__date {
-  margin-bottom: 0.3rem; }
-
-.contestList__name {
-  margin: 0 0 0.3rem 0;
-  font-weight: 700;
-  font-size: 1.2rem; }
-
-.contestList__type {
-  font-style: italic; }
-
-.contestList__img {
-  width: 100%; }
-
-.contestList__buyinTitle,
-.contestList__entriesTitle {
-  text-align: center; }
-
-.contestList__entries,
-.contestList__buyin {
-  font-size: 1.3rem;
-  font-weight: 700;
-  padding-top: 0.3rem;
-  text-align: center; }
-
 .Alert {
   position: relative;
   background: #ddd;
@@ -4140,15 +4102,10 @@ a {
 
 .Alert__close {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: 1em;
+  right: 1em;
   font-weight: bold;
-  cursor: pointer;
-  border: 1px solid;
-  vertical-align: middle;
-  border-radius: 50%;
-  padding: 0 5px 2px;
-  background: #fff; }
+  cursor: pointer; }
 
 .form input,
 .form select,
@@ -4256,12 +4213,12 @@ a {
     background: #fff;
     color: #a80300; }
   .button--primary[disabled] {
-    background: #eee;
-    color: #ccc;
+    background: #ccc;
+    color: #888;
     cursor: default; }
   .button--primary[disabled]:hover {
-    background: #eee;
-    color: #ccc; }
+    background: #ccc;
+    color: #888; }
 
 .logo {
   text-align: center; }

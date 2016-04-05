@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('country')->default('USA');
             $table->string('phone');
             $table->integer('balance');
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->default(0);
             $table->integer('user_role_id')->unsigned();
             $table->timestamp('last_login');
             $table->rememberToken();

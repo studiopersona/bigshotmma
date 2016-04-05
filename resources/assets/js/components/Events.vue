@@ -1,5 +1,5 @@
 <template>
-    <header class="pageHeader">
+    <header class="pageHeader" :working.sync="working">
         <h1 class="pageHeader__header">Choose an Event</h1>
         <h4 class="pageHeader__subheader">
             Over <span class="pageHeader--highlight">{{ poolTotal }}</span> Total Prize Pool
@@ -21,17 +21,24 @@
 <script>
     import auth from '../auth';
     export default {
+
+        props: ['working'],
+
         data() {
             return {
-                eventsList: '',
+                eventsList: { 'events':[] },
                 imageSrc: 'public/images/events/' + this.imageName,
                 imageName: '',
+                working: false,
             }
+        },
+
+        created() {
+            this.working = true;
         },
 
         ready() {
             this.$http.get('http://edward.dev/bsmma/api/v1/events', (data) => {
-                console.log(data);
                 this.eventsList = data;
             }, {
                 // Attach the JWT header

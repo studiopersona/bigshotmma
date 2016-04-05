@@ -7,23 +7,23 @@
     </header>
     <div class="contestList">
         <ul>
-            <li @click="showItem()" class="contestList__item" v-for="contest in contentList.events">
+            <li @click="showItem()" class="contestList__item" v-for="contest in contestsList.contests">
                 <div class="container-fluid">
                     <div class="col-xs-20">
-                        <img class="contestList__img" src="http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg" alt="{{ event.event_name }} Image">
+                        <img class="contestList__img" src="http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg" alt="{{ contest.event_name }} Image">
                     </div>
-                    <div class="col-xs-45">
-                        <div class="contestList__date"></div>
-                        <div class="contestList__name"></div>
-                        <div class="contestList__type"></div>
+                    <div class="col-xs-45 contestList__infoWarp">
+                        <div class="contestList__date">{{ contest.event_date }}</div>
+                        <div class="contestList__name">{{ contest.event_short_name }}</div>
+                        <div class="contestList__type">{{ contest.contest_type_name }}</div>
                     </div>
-                    <div class="col-xs-25">
-                        <div class="contestList__entriesTitle"></div>
-                        <div class="contestList__entries"></div>
+                    <div class="col-xs-20">
+                        <div class="contestList__entriesTitle">Entries</div>
+                        <div class="contestList__entries">{{ contest.total_participants }}/{{ contest.max_participants }}</div>
                     </div>
-                    <div class="col-xs-10">
-                        <div class="contestList__buyinTitle"></div>
-                        <div class="contestList__buyin"></div>
+                    <div class="col-xs-15">
+                        <div class="contestList__buyinTitle">Buy-In</div>
+                        <div class="contestList__buyin">${{ contest.buy_in }}</div>
                     </div>
                 </div>
             </li>
@@ -34,16 +34,18 @@
 <script>
     import auth from '../auth';
     export default {
+
+        props: [],
+
         data() {
             return {
-                contestsList: '',
-                imageSrc: 'public/images/events/' + this.imageName,
-                imageName: '',
+                contestsList: { 'contests':{} },
+                rowCounter: 1,
             }
         },
 
         ready() {
-            this.$http.get('http://edward.dev/bsmma/api/v1/contests', (data) => {
+            this.$http.get('http://edward.dev/bsmma/api/v1/event/' + this.$route.params.event_id + '/contests', (data) => {
                 this.contestsList = data;
             }, {
                 // Attach the JWT header
