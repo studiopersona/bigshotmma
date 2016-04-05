@@ -42,7 +42,10 @@ class ContestsController extends ApiController
         return $this->respond([
             'contests' => $this->contestTransformer->transformCollection($contests->toArray()),
         ]);
+    }
 
+    public function eventLimited($eventId)
+    {
 
     }
 

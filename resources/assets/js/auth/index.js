@@ -3,69 +3,71 @@
 import {router} from '../index';
 
 // URL and endpoint constants
-const API_URL = 'http://edward.dev/api/v1/';
+const API_URL = 'http://edward.dev/bsmma/api/v1/';
 const LOGIN_URL = API_URL + 'authenticate';
 const SIGNUP_URL = API_URL + 'register';
 
 export default {
 
-  // User object will let us check authentication status
-  user: {
-    authenticated: false
-  },
+    // User object will let us check authentication status
+    user: {
+        authenticated: false
+    },
 
-  // Send a request to the login URL and save the returned JWT
-  login(context, creds, redirect) {
-    context.$http.post(LOGIN_URL, creds, (data) => {
-      localStorage.setItem('id_token', data.id_token);
+    // Send a request to the login URL and save the returned JWT
+    login(context, creds, redirect) {
+        context.$http.post(LOGIN_URL, creds, (data) => {
+            localStorage.setItem('id_token', data.id_token);
 
-      this.user.authenticated = true;
+            this.user.authenticated = true;
 
-      // Redirect to a specified route
-      if(redirect) {
-        router.go(redirect);
-      }
+            // Redirect to a specified route
+            if(redirect) {
+                router.go(redirect);
+            }
 
-    }).error((err) => {
-      context.error = err;
-    });
-  },
+        }).error((err) => {
+            context.error = err.error.message;
+            context.alertType = 'error';
+        });
+    },
 
-  signup(context, creds, redirect) {
-    context.$http.post(SIGNUP_URL, creds, (data) => {
-      localStorage.setItem('id_token', data.id_token);
+    signup(context, creds, redirect) {
+        context.$http.post(SIGNUP_URL, creds, (data) => {
+            localStorage.setItem('id_token', data.id_token);
 
-      this.user.authenticated = true;
+            this.user.authenticated = true;
 
-      if(redirect) {
-        router.go(redirect);
-      }
+            if(redirect) {
+                router.go(redirect);
+            }
 
-    }).error((err) => {
-      context.error = err;
-    });
-  },
+        }).error((err) => {
+            context.error = err.error.message;
+            context.alertType = 'error';
+        });
+    },
 
-  // To log out, we just need to remove the token
-  logout() {
-    localStorage.removeItem('id_token');
-    this.user.authenticated = false;
-  },
+    // To log out, we just need to remove the token
+    logout() {
+        localStorage.removeItem('id_token');
+        this.user.authenticated = false;
+    },
 
-  checkAuth() {
-    var jwt = localStorage.getItem('id_token');
-    if(jwt) {
-      this.user.authenticated = true;
+    checkAuth() {
+        var jwt = localStorage.getItem('id_token');
+        if(jwt) {
+            this.user.authenticated = true;
+        }
+        else {
+            this.user.authenticated = false;
+        }
+    },
+
+    // The object to be passed as a header for authenticated requests
+    getAuthHeader() {
+        return {
+            'Authorization': 'Bearer ' + localStorage.getItem('id_token')
+        };
     }
-    else {
-      this.user.authenticated = false;
-    }
-  },
-
-  // The object to be passed as a header for authenticated requests
-  getAuthHeader() {
-    return {
-      'Authorization': 'Bearer ' + localStorage.getItem('id_token')
-    };
-  }
 };

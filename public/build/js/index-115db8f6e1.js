@@ -14474,7 +14474,7 @@ exports.default = {
     }
 };
 
-},{"../index":35}],30:[function(require,module,exports){
+},{"../index":34}],30:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14523,65 +14523,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     data: function data() {
         return {
-            contestsList: '',
-            imageSrc: 'public/images/events/' + this.imageName,
-            imageName: ''
-        };
-    },
-    ready: function ready() {
-        var _this = this;
-
-        this.$http.get('http://edward.dev/bsmma/api/v1/contests', function (data) {
-            _this.contestsList = data;
-        }, {
-            // Attach the JWT header
-            headers: _auth2.default.getAuthHeader()
-        }).error(function (err) {
-            return console.log(err);
-        });
-    },
-
-
-    methods: {},
-
-    route: {
-        // Check the users auth status before
-        // allowing navigation to the route
-
-        canActivate: function canActivate() {
-            return _auth2.default.user.authenticated;
-        }
-    }
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\">\n    <h1 class=\"pageHeader__header\">Enter a Contest</h1>\n    <h4 class=\"pageHeader__subheader\">\n        Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n    </h4>\n</header>\n<div class=\"contestList\">\n    <ul>\n        <li @click=\"showItem()\" class=\"contestList__item\" v-for=\"contest in contentList.events\">\n            <div class=\"container-fluid\">\n                <div class=\"col-xs-20\">\n                    <img class=\"contestList__img\" src=\"http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg\" alt=\"{{ event.event_name }} Image\">\n                </div>\n                <div class=\"col-xs-45\">\n                    <div class=\"contestList__date\"></div>\n                    <div class=\"contestList__name\"></div>\n                    <div class=\"contestList__type\"></div>\n                </div>\n                <div class=\"col-xs-25\">\n                    <div class=\"contestList__entriesTitle\"></div>\n                    <div class=\"contestList__entries\"></div>\n                </div>\n                <div class=\"col-xs-10\">\n                    <div class=\"contestList__buyinTitle\"></div>\n                    <div class=\"contestList__buyin\"></div>\n                </div>\n            </div>\n        </li>\n    </ul>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Contests.vue"
-  if (!module.hot.data) {
-    hotAPI.createRecord(id, module.exports)
-  } else {
-    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],32:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _auth = require('../auth');
-
-var _auth2 = _interopRequireDefault(_auth);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-    data: function data() {
-        return {
             eventsList: '',
             imageSrc: 'public/images/events/' + this.imageName,
             imageName: ''
@@ -14614,7 +14555,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\">\n    <h1 class=\"pageHeader__header\">Choose an Event</h1>\n    <h4 class=\"pageHeader__subheader\">\n        Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n    </h4>\n</header>\n<div class=\"eventList\">\n    <ul>\n        <li class=\"eventList__item\" v-for=\"event in eventsList.events\">\n            <a v-link=\"{ path: 'event/' + event.event_id + '/contests' }\" href=\"#\">\n                <img class=\"eventList__img\" src=\"http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg\" alt=\"{{ event.event_name }} Image\">\n                <div class=\"eventList__name\">{{ event.event_name }}</div>\n                <div class=\"eventList__date\">{{ event.date }} {{ event.time }}</div>\n            </a>\n        </li>\n    </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\">\n    <h1 class=\"pageHeader__header\">Choose an Event</h1>\n    <h4 class=\"pageHeader__subheader\">\n        Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n    </h4>\n</header>\n<div class=\"eventList\">\n    <ul>\n        <li class=\"eventList__item\" v-for=\"event in eventsList.events\">\n            <a v-link=\"{ path: '/event' }\" href=\"#\">\n                <img class=\"eventList__img\" src=\"http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg\" alt=\"{{ event.event_name }} Image\">\n                <div class=\"eventList__name\">{{ event.event_name }}</div>\n                <div class=\"eventList__date\">{{ event.date }} {{ event.time }}</div>\n            </a>\n        </li>\n    </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -14626,7 +14567,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],33:[function(require,module,exports){
+},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],32:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14691,7 +14632,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],34:[function(require,module,exports){
+},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14745,7 +14686,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],35:[function(require,module,exports){
+},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],34:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14772,10 +14713,6 @@ var _Login2 = _interopRequireDefault(_Login);
 var _Events = require('./components/Events.vue');
 
 var _Events2 = _interopRequireDefault(_Events);
-
-var _Contests = require('./components/Contests.vue');
-
-var _Contests2 = _interopRequireDefault(_Contests);
 
 var _vueRouter = require('vue-router');
 
@@ -14806,8 +14743,8 @@ router.map({
     component: _Events2.default
   },
 
-  'event/:event_id/contests': {
-    component: _Contests2.default
+  '/event': {
+    component: Event
   }
 });
 
@@ -14819,6 +14756,6 @@ router.redirect({
 // Start the app on the #app div
 router.start(_App2.default, '#app');
 
-},{"./components/App.vue":30,"./components/Contests.vue":31,"./components/Events.vue":32,"./components/Login.vue":33,"./components/Register.vue":34,"vue":28,"vue-resource":16,"vue-router":27}]},{},[35]);
+},{"./components/App.vue":30,"./components/Events.vue":31,"./components/Login.vue":32,"./components/Register.vue":33,"vue":28,"vue-resource":16,"vue-router":27}]},{},[34]);
 
 //# sourceMappingURL=index.js.map

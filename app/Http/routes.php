@@ -25,6 +25,7 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::post('register', 'AuthenticateController@register');
 	    Route::resource('events', 'EventsController', ['only' => ['index','show']]);
 	    Route::get('player/{id}/contests', 'ContestsController@index');
+	    Route::get('event/{id}/contests', 'ContestsController@eventLimited');
 	    Route::resource('contests', 'ContestsController');
 	    Route::resource('picks', 'PicksController');
 	    Route::resource('powerups', 'PowerUpsController');

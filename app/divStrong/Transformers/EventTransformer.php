@@ -16,8 +16,8 @@ class EventTransformer extends Transformer {
                 'promoter_name' => $event['promoter']['promoter'],
                 'promoter_slug' => $event['promoter']['slug'],
             ],
-            'date' => date('d/m/Y', strtotime($event['date_time'])),
-            'time' => date('h:ia', strtotime($event['date_time'])),
+            'date' => date('m/d/Y', strtotime($event['date_time'])),
+            'time' => date('g:ia', strtotime($event['date_time'])),
         ];
     }
 }

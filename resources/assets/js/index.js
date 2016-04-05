@@ -3,6 +3,7 @@ import App from './components/App.vue';
 import Register from './components/Register.vue';
 import Login from './components/Login.vue';
 import Events from './components/Events.vue';
+import Contests from './components/Contests.vue';
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
@@ -22,12 +23,16 @@ router.map({
 
   '/events': {
     component: Events
+  },
+
+  'event/:event_id/contests': {
+    component: Contests
   }
 });
 
 // Redirect to the home route if any routes are unmatched
 router.redirect({
-  '*': '/home'
+  '*': '/login'
 });
 
 // Start the app on the #app div

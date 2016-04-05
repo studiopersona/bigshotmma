@@ -20,6 +20,12 @@ class ApiController extends Controller
     	$this->statusCode = $statusCode;
     }
 
+    public function respondInvaildCredentials($message = 'Not Authorized')
+    {
+        $statusCode = $this->setStatusCode(401);
+        return $this->respondWithError($message);
+    }
+
     public function respondNotFound($message = 'Not Found')
     {
     	$statusCode = $this->setStatusCode(404);

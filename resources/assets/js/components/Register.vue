@@ -1,9 +1,10 @@
 <template>
-	<div class="registerForm">
+	<div class="registerForm form">
 		<div class="container-fluid">
-			<div class="alert alert-danger" v-if="error">
-	        	<p>{{ error }}</p>
-	      	</div>
+			<div :class="alertClasses" v-if="error" :type="alertType">
+				<p>{{ error }}</p>
+				<span class="Alert__close" @click="show = flase">X</span>
+			</div>
 			<div class="row form__row">
 				<div class="col-xs-100">
 					<label for="email">

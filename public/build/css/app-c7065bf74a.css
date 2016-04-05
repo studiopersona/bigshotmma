@@ -4066,25 +4066,20 @@ a {
 
 .eventList__item {
   text-align: center;
-  width: 46%;
-  margin: 0 2rem 2rem 0;
-  font-size: 1rem;
-  font-weight: 700;
-  float: left; }
+  width: 48%;
+  margin: 0 2% 2rem 0;
+  font-size: 1.1rem; }
   .eventList__item:nth-child(2n) {
     margin-right: 0; }
-  .eventList__item:nth-child(2n + 1) {
-    clear: left; }
   .eventList__item a {
     text-decoration: none;
     color: #000; }
 
 .eventList__name {
-  margin: 0; }
+  margin-bottom: 0.5rem; }
 
 .eventList__img {
-  width: 100%;
-  margin-bottom: 0.5rem; }
+  width: 100%; }
 
 .Alert {
   position: relative;

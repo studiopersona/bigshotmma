@@ -10,7 +10,7 @@ use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Bsmma\User;
 
-class AuthenticateController extends Controller
+class AuthenticateController extends ApiController
 {
     public function __construct()
     {
@@ -25,10 +25,12 @@ class AuthenticateController extends Controller
         // grab credentials from the request
         $credentials = $request->only('email', 'password');
 
+        dd($credentials);
+
         try {
             // attempt to verify the credentials and create a token for the current user
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 401);
+                return $this->respondInvaildCredentials('Email Password Mismatch');
             }
         } catch (JWTException $e) {
             // error while attempting to encode token
