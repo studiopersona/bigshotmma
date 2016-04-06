@@ -9,6 +9,7 @@ use Bsmma\Contest;
 use Bsmma\ContestParticipant;
 use Bsmma\User;
 use Bsmma\divStrong\Transformers\ContestTransformer as ContestTransformer;
+use Bsmma\divStrong\Transformers\PlayerTransformer as PlayerTransformer;
 
 class ContestsController extends ApiController
 {
@@ -17,12 +18,15 @@ class ContestsController extends ApiController
         User $user,
         Contest $contest,
         ContestParticipant $contestParticipant,
-        ContestTransformer $contestTransformer)
+        ContestTransformer $contestTransformer,
+        PlayerTransformer $playerTransformer
+    )
     {
         $this->user = $user;
         $this->contest = $contest;
         $this->contestParticipant = $contestParticipant;
         $this->contestTransformer = $contestTransformer;
+        $this->playerTransformer = $playerTransformer;
     }
 
     /**
@@ -56,6 +60,34 @@ class ContestsController extends ApiController
         return $this->respond([
             'contests' => $this->contestTransformer->transformCollection($contests->toArray()),
         ]);
+    }
+
+    public function getParticipants($contest_id)
+    {
+        $participants = $this->contest->with(['event', 'users', 'contestType'])
+                            ->where('id', $contest_id)
+                            ->get();
+
+        if ( $participants->isEmpty() )
+        {
+            return $this->respondNotFound('Contest Not Found');
+        }
+
+        $participants = $participants->toArray();
+
+        foreach($participants[0]['users'] as $key => $participant)
+        {
+            $participants[0]['users'][$key]['record'] = $this->getPlayerRecord($participant['id']);
+        }
+
+        return $this->respond([
+            'participants' => $this->playerTransformer->transformCollection($participants),
+        ]);
+    }
+
+    public function getFights($contest_id)
+    {
+
     }
 
     /**
@@ -170,5 +202,13 @@ class ContestsController extends ApiController
     private function getTotalParticipants($contestId)
     {
         return $this->contestParticipant->where('contest_id', $contestId)->count();
+    }
+
+    private function getPlayerRecord($user_id)
+    {
+        return [
+            'wins' => 10,
+            'losses' => 20
+        ];
     }
 }

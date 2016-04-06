@@ -4,8 +4,12 @@ import Register from './components/Register.vue';
 import Login from './components/Login.vue';
 import Events from './components/Events.vue';
 import Contests from './components/Contests.vue';
+import ContestLobby from './components/ContestLobby.vue';
+import Fights from './components/Fights.vue';
+
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
+
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
@@ -27,7 +31,16 @@ router.map({
 
   'event/:event_id/contests': {
     component: Contests
-  }
+  },
+
+  'contest/:contest_id/players': {
+    component: ContestLobby
+  },
+
+  'contest/:contest_id/fights': {
+    component: Fights
+  },
+
 });
 
 // Redirect to the home route if any routes are unmatched

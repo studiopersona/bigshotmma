@@ -1,3 +1,13 @@
+.stripped-list {
+    > li {
+        background-color: $color-gray-light;
+
+        &:nth-child(2n) {
+            background-color: $color-white;
+        }
+    }
+}
+
 /*
  * Hide from both screenreaders and browsers: h5bp.com/u
  */

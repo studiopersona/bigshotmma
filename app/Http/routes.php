@@ -26,6 +26,8 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::resource('events', 'EventsController', ['only' => ['index','show']]);
 	    Route::get('player/{id}/contests', 'ContestsController@index');
 	    Route::get('event/{id}/contests', 'ContestsController@eventLimited');
+	    Route::get('contest/{id}/players', 'ContestsController@getParticipants');
+	    Route::get('contest/{id}/fights', 'ContestController@getFights');
 	    Route::resource('contests', 'ContestsController');
 	    Route::resource('picks', 'PicksController');
 	    Route::resource('powerups', 'PowerUpsController');

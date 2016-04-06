@@ -6,7 +6,7 @@
         </h4>
     </header>
     <div class="contestList">
-        <ul>
+        <ul class="stripped-list">
             <li @click="showItem()" class="contestList__item" v-for="contest in contestsList.contests">
                 <div class="container-fluid">
                     <div class="col-xs-20">
