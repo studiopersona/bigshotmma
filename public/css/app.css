@@ -4088,13 +4088,10 @@ a {
 
 .contestList__item {
   font-size: 1rem;
-  padding: 0.7rem 0.5rem 0.5rem 0;
-  background: #eee; }
+  padding: 0.7rem 0.5rem 0.5rem 0; }
   .contestList__item a {
     text-decoration: none;
     color: #000; }
-  .contestList__item:nth-child(2n) {
-    background: #fff; }
 
 .contestList__infoWarp {
   padding-left: 0.2rem; }
@@ -4338,6 +4335,11 @@ a {
 .back {
   -webkit-transform: rotateY(-180deg);
   transform: rotateY(-180deg); }
+
+.stripped-list > li {
+  background-color: #eee; }
+  .stripped-list > li:nth-child(2n) {
+    background-color: #fff; }
 
 /*
  * Hide from both screenreaders and browsers: h5bp.com/u

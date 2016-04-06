@@ -14476,7 +14476,7 @@ exports.default = {
     }
 };
 
-},{"../index":35}],30:[function(require,module,exports){
+},{"../index":37}],30:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14504,7 +14504,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\App.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/App.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14512,6 +14512,71 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":28,"vue-hot-reload-api":2}],31:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _auth = require('../auth');
+
+var _auth2 = _interopRequireDefault(_auth);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+
+    props: ['working'],
+
+    data: function data() {
+        return {
+            participantsList: { 'participants': [] },
+            contest: {},
+            working: false
+        };
+    },
+    created: function created() {
+        this.working = true;
+    },
+    ready: function ready() {
+        var _this = this;
+
+        this.$http.get('http://edward.dev/bsmma/api/v1/contest/' + this.$route.params.contest_id + '/participants', function (data) {
+            _this.participantsList = data;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        }).error(function (err) {
+            return console.log(err);
+        });
+    },
+
+
+    methods: {},
+
+    route: {
+        // Check the users auth status before
+        // allowing navigation to the route
+
+        canActivate: function canActivate() {
+            return _auth2.default.user.authenticated;
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\" :working.sync=\"working\">\n    <h1 class=\"pageHeader__header\">Contest Lobby</h1>\n    <h4 class=\"pageHeader__subheader\">\n        {{ participantsList.contest.event_short_name }} - {{ participantsList.contest.event_date }}\n    </h4>\n</header>\n<div class=\"contestDetails\">\n    <table>\n        <tbody>\n            <tr>\n                <td>Buy in: ${{ participantsList.contest.buy_in }}</td>\n                <td>Entries: {{ participantsList.contest.total_participants }}/{{ participantsList.contest.max_participants }}</td>\n            </tr>\n            <tr>\n                <td>Prize Pool: ${{ participantsList.contest.prize_pool }}</td>\n                <td class=\"contestDetails__type\">{{ participantsList.contest.contest_type_name }}</td>\n            </tr>\n        </tbody>\n    </table>\n</div>\n<div class=\"participantsList\">\n    <ul class=\"stripped-list\">\n        <li class=\"participantsList__item\" v-for=\"participant in participantsList.participants\">\n            <div class=\"container-fluid\">\n                <div class=\"col-xs-15 participantsList__img\">\n                    <img src=\"http://edward.dev/bsmma/public/image/player.jpg\">\n                </div>\n                <div class=\"col-xs-40 participantsList__name\">\n                    {{ participant.palyer_name }}\n                </div>\n                <div class=\"col-xs-25 participantsList__record\">\n                    {{ participant.wins }} - {{ participant.losses }}\n                </div>\n                <div class=\"col-xs-20 participantsList__wins\">\n                    {{ participant.win_percentage }}%\n                </div>\n            </div>\n        </li>\n    </ul>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/var/www/html/bsmma/resources/assets/js/components/ContestLobby.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],32:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14548,7 +14613,11 @@ exports.default = {
     },
 
 
-    methods: {},
+    methods: {
+        showLobby: function showLobby(e) {
+            console.log(e);
+        }
+    },
 
     route: {
         // Check the users auth status before
@@ -14560,19 +14629,19 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\">\n    <h1 class=\"pageHeader__header\">Enter a Contest</h1>\n    <h4 class=\"pageHeader__subheader\">\n        Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n    </h4>\n</header>\n<div class=\"contestList\">\n    <ul>\n        <li @click=\"showItem()\" class=\"contestList__item\" v-for=\"contest in contestsList.contests\">\n            <div class=\"container-fluid\">\n                <div class=\"col-xs-20\">\n                    <img class=\"contestList__img\" src=\"http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg\" alt=\"{{ contest.event_name }} Image\">\n                </div>\n                <div class=\"col-xs-45 contestList__infoWarp\">\n                    <div class=\"contestList__date\">{{ contest.event_date }}</div>\n                    <div class=\"contestList__name\">{{ contest.event_short_name }}</div>\n                    <div class=\"contestList__type\">{{ contest.contest_type_name }}</div>\n                </div>\n                <div class=\"col-xs-20\">\n                    <div class=\"contestList__entriesTitle\">Entries</div>\n                    <div class=\"contestList__entries\">{{ contest.total_participants }}/{{ contest.max_participants }}</div>\n                </div>\n                <div class=\"col-xs-15\">\n                    <div class=\"contestList__buyinTitle\">Buy-In</div>\n                    <div class=\"contestList__buyin\">${{ contest.buy_in }}</div>\n                </div>\n            </div>\n        </li>\n    </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\">\n    <h1 class=\"pageHeader__header\">Enter a Contest</h1>\n    <h4 class=\"pageHeader__subheader\">\n        Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n    </h4>\n</header>\n<div class=\"contestList\">\n    <ul class=\"stripped-list\">\n        <li class=\"contestList__item\" v-for=\"contest in contestsList.contests\">\n            <a v-link=\"{ path: 'contest/' + contest.id + '/players' }\" href=\"#\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-20\">\n                        <img class=\"contestList__img\" src=\"http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg\" alt=\"{{ contest.event_name }} Image\">\n                    </div>\n                    <div class=\"col-xs-45 contestList__infoWarp\">\n                        <div class=\"contestList__date\">{{ contest.event_date }}</div>\n                        <div class=\"contestList__name\">{{ contest.event_short_name }}</div>\n                        <div class=\"contestList__type\">{{ contest.contest_type_name }}</div>\n                    </div>\n                    <div class=\"col-xs-20\">\n                        <div class=\"contestList__entriesTitle\">Entries</div>\n                        <div class=\"contestList__entries\">{{ contest.total_participants }}/{{ contest.max_participants }}</div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"contestList__buyinTitle\">Buy-In</div>\n                        <div class=\"contestList__buyin\">${{ contest.buy_in }}</div>\n                    </div>\n                </div>\n            </a>\n        </li>\n    </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Contests.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Contests.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],32:[function(require,module,exports){
+},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14631,14 +14700,78 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Events.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Events.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],33:[function(require,module,exports){
+},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],34:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _auth = require('../auth');
+
+var _auth2 = _interopRequireDefault(_auth);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+
+    props: ['working'],
+
+    data: function data() {
+        return {
+            fightsList: { 'fights': [] },
+            working: false
+        };
+    },
+    created: function created() {
+        this.working = true;
+    },
+    ready: function ready() {
+        var _this = this;
+
+        this.$http.get('http://edward.dev/bsmma/api/v1/contest/' + this.$route.contest_id + '/fights', function (data) {
+            _this.fightsList = data;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        }).error(function (err) {
+            return console.log(err);
+        });
+    },
+
+
+    methods: {},
+
+    route: {
+        // Check the users auth status before
+        // allowing navigation to the route
+
+        canActivate: function canActivate() {
+            return _auth2.default.user.authenticated;
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\" :working.sync=\"working\">\n    <h1 class=\"pageHeader__header\">Choose an Event</h1>\n    <h4 class=\"pageHeader__subheader\">\n        Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n    </h4>\n</header>\n<div class=\"fightsList\">\n    <ul>\n        <li class=\"fightsList__item\" v-for=\"fight in fightsList.fights\">\n\n        </li>\n    </ul>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Fights.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14700,14 +14833,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Login.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Login.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],34:[function(require,module,exports){
+},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14770,14 +14903,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Register.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Register.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],35:[function(require,module,exports){
+},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14808,6 +14941,14 @@ var _Events2 = _interopRequireDefault(_Events);
 var _Contests = require('./components/Contests.vue');
 
 var _Contests2 = _interopRequireDefault(_Contests);
+
+var _ContestLobby = require('./components/ContestLobby.vue');
+
+var _ContestLobby2 = _interopRequireDefault(_ContestLobby);
+
+var _Fights = require('./components/Fights.vue');
+
+var _Fights2 = _interopRequireDefault(_Fights);
 
 var _vueRouter = require('vue-router');
 
@@ -14840,7 +14981,16 @@ router.map({
 
   'event/:event_id/contests': {
     component: _Contests2.default
+  },
+
+  'contest/:contest_id/players': {
+    component: _ContestLobby2.default
+  },
+
+  'contest/:contest_id/fights': {
+    component: _Fights2.default
   }
+
 });
 
 // Redirect to the home route if any routes are unmatched
@@ -14851,6 +15001,6 @@ router.redirect({
 // Start the app on the #app div
 router.start(_App2.default, '#app');
 
-},{"./components/App.vue":30,"./components/Contests.vue":31,"./components/Events.vue":32,"./components/Login.vue":33,"./components/Register.vue":34,"vue":28,"vue-resource":16,"vue-router":27}]},{},[35]);
+},{"./components/App.vue":30,"./components/ContestLobby.vue":31,"./components/Contests.vue":32,"./components/Events.vue":33,"./components/Fights.vue":34,"./components/Login.vue":35,"./components/Register.vue":36,"vue":28,"vue-resource":16,"vue-router":27}]},{},[37]);
 
 //# sourceMappingURL=index.js.map
