@@ -1,8 +1,19 @@
+ .spinnerWrap {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255,255,255, 0.8);
+    z-index: 100;
+}
+
 .loader {
   left: 50%;
-  top: 50%;
-  position: fixed;
+  top: 33%;
+  position: absolute;
   transform: translate(-50%, -50%);
+  z-index: 50;
 
   #spinner {
     box-sizing: border-box;

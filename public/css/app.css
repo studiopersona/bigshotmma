@@ -3963,12 +3963,22 @@ strong {
 *:after {
   box-sizing: border-box; }
 
+.spinnerWrap {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 100; }
+
 .loader {
   left: 50%;
-  top: 50%;
-  position: fixed;
+  top: 33%;
+  position: absolute;
   -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%); }
+  transform: translate(-50%, -50%);
+  z-index: 50; }
   .loader #spinner {
     box-sizing: border-box;
     stroke: #a80300;
@@ -4029,7 +4039,7 @@ html {
 body {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
-  padding: 2rem; }
+  padding: 2rem 0; }
 
 a {
   color: #a80300;
@@ -4055,7 +4065,9 @@ a {
 .loginForm,
 .registerForm {
   text-align: center;
-  margin-bottom: 2rem; }
+  margin-bottom: 2rem;
+  position: relative;
+  padding: 0 2rem; }
 
 .loginForm__form {
   margin: 0 auto; }
@@ -4063,6 +4075,11 @@ a {
 .login__forgotPassword {
   text-align: center;
   margin-bottom: 4rem; }
+
+.eventList {
+  position: relative;
+  min-height: 100px;
+  padding: 0 1rem; }
 
 .eventList__item {
   text-align: center;
@@ -4086,9 +4103,13 @@ a {
   width: 100%;
   margin-bottom: 0.5rem; }
 
+.contestList {
+  position: relative;
+  min-height: 100px; }
+
 .contestList__item {
   font-size: 1rem;
-  padding: 0.7rem 0.5rem 0.5rem 0; }
+  padding: 0.9rem 0.5rem 0.5rem; }
   .contestList__item a {
     text-decoration: none;
     color: #000; }
@@ -4097,10 +4118,10 @@ a {
   padding-left: 0.2rem; }
 
 .contestList__date {
-  margin-bottom: 0.3rem; }
+  margin-bottom: 0.6rem; }
 
 .contestList__name {
-  margin: 0 0 0.3rem 0;
+  margin: 0 0 0.6rem 0;
   font-weight: 700;
   font-size: 1.2rem; }
 
@@ -4118,8 +4139,35 @@ a {
 .contestList__buyin {
   font-size: 1.3rem;
   font-weight: 700;
-  padding-top: 0.3rem;
+  padding-top: 0.6rem;
   text-align: center; }
+
+.participantsList {
+  postion: relative;
+  min-height: 100px; }
+
+.contestDetails {
+  padding: 0 1rem;
+  font-size: 1.2rem; }
+  .contestDetails .row {
+    margin-bottom: 0.5rem; }
+    .contestDetails .row > div:nth-child(2) {
+      text-align: right; }
+
+.contestDetails__title {
+  font-weight: 700; }
+
+.participantsList__item {
+  padding: 0.9rem 0.5rem 0.5rem; }
+
+.participantsList__itemTitle {
+  text-align: center;
+  font-size: 1rem; }
+
+.participantsList__record,
+.participantsList__wins {
+  text-align: center;
+  font-size: 1.3rem; }
 
 .Alert {
   position: relative;
@@ -4146,6 +4194,49 @@ a {
   border-radius: 50%;
   padding: 0 5px 2px;
   background: #fff; }
+
+.infoModal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 5.5rem 2rem 2rem;
+  background: rgba(0, 0, 0, 0.9);
+  transition: -webkit-transform 0.3s ease;
+  transition: transform 0.3s ease;
+  -webkit-transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
+  overflow: hidden;
+  color: #fff;
+  text-align: center; }
+  .infoModal.show {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0); }
+
+.infoModal__rules p {
+  margin-bottom: 1.5rem; }
+
+.infoModal__title {
+  font-size: 3rem;
+  text-transform: uppercase;
+  margin-bottom: 2rem; }
+
+.infoModal__image {
+  margin-bottom: 3rem; }
+
+.infoModal__close {
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  color: #fff;
+  border: 4px solid;
+  border-radius: 50%;
+  padding: 0 1.1rem 0.4rem; }
 
 .form input,
 .form select,
@@ -4340,6 +4431,18 @@ a {
   background-color: #eee; }
   .stripped-list > li:nth-child(2n) {
     background-color: #fff; }
+
+/**
+ * Clearfix helper
+ * Used to contain floats: http://nicolasgallagher.com/micro-clearfix-hack/
+ */
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table; }
+
+.clearfix:after {
+  clear: both; }
 
 /*
  * Hide from both screenreaders and browsers: h5bp.com/u

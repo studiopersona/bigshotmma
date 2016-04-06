@@ -3,7 +3,7 @@
 		<h1 class="pageHeader__header">Player Sign-up</h1>
 		<h4 class="pageHeader__subheader">
 			Already have an account?
-			<a v-link={path: '/login'} href="#">Login</a>
+			<a v-link="{ path: '/login' }" href="#">Login</a>
 		</h4>
 	</header>
 	<div class="registerForm form">
@@ -87,7 +87,7 @@
 		},
 
 		computed: {
-			alertClasses : function() {
+			alertClasses() {
 				var type = this.alertType;
 
 				return {
@@ -96,7 +96,10 @@
 					'Alert--Error': type == 'error'
 				};
 			},
-		}
 
+			loaderClasses() {
+                return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
+            },
+		},
 	}
   </script>

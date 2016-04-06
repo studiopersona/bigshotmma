@@ -1,6 +1,11 @@
+.contestList {
+	position: relative;
+	min-height: 100px;
+}
+
 .contestList__item {
 	font-size: 1rem;
-	padding: 0.7rem 0.5rem 0.5rem 0;
+	padding: 0.9rem 0.5rem 0.5rem;
 
 	a {
 		text-decoration: none;
@@ -13,11 +18,11 @@
 }
 
 .contestList__date {
-	margin-bottom: 0.3rem;
+	margin-bottom: 0.6rem;
 }
 
 .contestList__name {
-	margin: 0 0 0.3rem 0;
+	margin: 0 0 0.6rem 0;
 	font-weight: 700;
 	font-size: 1.2rem;
 }
@@ -39,6 +44,6 @@
 .contestList__buyin {
 	font-size: 1.3rem;
 	font-weight: 700;
-	padding-top: 0.3rem;
+	padding-top: 0.6rem;
 	text-align: center;
 }

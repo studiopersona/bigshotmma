@@ -1,0 +1,36 @@
+.participantsList {
+	postion: relative;
+	min-height: 100px;
+}
+
+.contestDetails {
+	padding: 0 1rem;
+	font-size: 1.2rem;
+
+	.row {
+		margin-bottom: 0.5rem;
+
+		> div:nth-child(2) {
+			text-align: right;
+		}
+	}
+}
+
+.contestDetails__title {
+	font-weight: 700;
+}
+
+.participantsList__item {
+	padding: 0.9rem 0.5rem 0.5rem;
+}
+
+.participantsList__itemTitle {
+	text-align: center;
+	font-size: 1rem;
+}
+
+.participantsList__record,
+.participantsList__wins {
+	text-align: center;
+	font-size: 1.3rem;
+}

@@ -29,15 +29,15 @@ router.map({
     component: Events
   },
 
-  'event/:event_id/contests': {
+  '/event/:event_id/contests': {
     component: Contests
   },
 
-  'contest/:contest_id/players': {
+  '/contest/:contest_id/players': {
     component: ContestLobby
   },
 
-  'contest/:contest_id/fights': {
+  '/contest/:contest_id/fights': {
     component: Fights
   },
 

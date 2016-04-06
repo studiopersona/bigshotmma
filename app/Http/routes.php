@@ -27,10 +27,12 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('player/{id}/contests', 'ContestsController@index');
 	    Route::get('event/{id}/contests', 'ContestsController@eventLimited');
 	    Route::get('contest/{id}/players', 'ContestsController@getParticipants');
-	    Route::get('contest/{id}/fights', 'ContestController@getFights');
+	    Route::get('contest/{id}/fights', 'ContestsController@getFights');
 	    Route::resource('contests', 'ContestsController');
 	    Route::resource('picks', 'PicksController');
 	    Route::resource('powerups', 'PowerUpsController');
+	    Route::get('contest-types', 'ContestTypesController@index');
+	    Route::get('power-ups', 'PowerUpsController@index');
 	});
 
 });

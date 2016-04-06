@@ -10,6 +10,7 @@ use Bsmma\ContestParticipant;
 use Bsmma\User;
 use Bsmma\divStrong\Transformers\ContestTransformer as ContestTransformer;
 use Bsmma\divStrong\Transformers\PlayerTransformer as PlayerTransformer;
+use Bsmma\divStrong\Transformers\FightTransformer as FightTransformer;
 
 class ContestsController extends ApiController
 {
@@ -19,7 +20,8 @@ class ContestsController extends ApiController
         Contest $contest,
         ContestParticipant $contestParticipant,
         ContestTransformer $contestTransformer,
-        PlayerTransformer $playerTransformer
+        PlayerTransformer $playerTransformer,
+        FightTransformer $fightTransformer
     )
     {
         $this->user = $user;
@@ -27,6 +29,7 @@ class ContestsController extends ApiController
         $this->contestParticipant = $contestParticipant;
         $this->contestTransformer = $contestTransformer;
         $this->playerTransformer = $playerTransformer;
+        $this->fightTransformer = $fightTransformer;
     }
 
     /**
@@ -87,7 +90,18 @@ class ContestsController extends ApiController
 
     public function getFights($contest_id)
     {
+        $fights = $this->contest->with(['event', 'event.fights', 'event.fights.fighters'])
+                    ->where('id', $contest_id)
+                    ->get();
 
+        if ( $fights->isEmpty() )
+        {
+            return $this->respondNotFound('No Fights Found for this Contest');
+        }
+
+        return $this->respond([
+            'fights' => $this->fightTransformer->transformCollection($fights->toArray()),
+        ]);
     }
 
     /**
@@ -208,7 +222,8 @@ class ContestsController extends ApiController
     {
         return [
             'wins' => 10,
-            'losses' => 20
+            'losses' => 20,
+            'win_percentage' => (10/20) * 100,
         ];
     }
 }

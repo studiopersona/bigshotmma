@@ -14,6 +14,7 @@ class PlayerTransformer extends Transformer {
                 'buy_in' => $player['entry_fee'],
                 'prize_pool' => count($player['users']) * (int)$player['entry_fee'],
                 'contest_type_name' => $player['contest_type']['contest_type_name'],
+                'contest_type_id' => $player['contest_type']['id'],
             ],
             'participants' => $player['users'],
         ];
