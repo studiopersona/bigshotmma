@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Nationality extends Model
 {
+	protected $table = "nationalities";
+
     protected $guarded = [];
 
     protected $dates = [];

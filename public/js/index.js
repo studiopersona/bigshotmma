@@ -14482,7 +14482,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\App.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/App.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14516,7 +14516,8 @@ exports.default = {
                     total_participants: '',
                     max_participants: '',
                     prize_pool: '',
-                    contest_type_name: ''
+                    contest_type_name: '',
+                    contest_id: ''
                 }
             }],
             contestTypes: {},
@@ -14598,12 +14599,12 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Contest Lobby</h1>\n        <h4 class=\"pageHeader__subheader\">\n            {{ participantsList[0].contest.event_short_name }} - {{ participantsList[0].contest.event_date }}\n        </h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Buy in:</span> ${{ participantsList[0].contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                <span class=\"contestDetails__title\">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}\n                </div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ participantsList[0].contest.contest_type_id }}\">\n                        {{ participantsList[0].contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"participantsList\">\n        <ul class=\"stripped-list\">\n            <li class=\"participantsList__item\" v-for=\"participant in participantsList[0].participants\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-15 participantsList__img\">\n                        <img src=\"http://edward.dev/bsmma/public/image/player.jpg\">\n                    </div>\n                    <div class=\"col-xs-40\">\n                        <div class=\"participantsList__itemTitle\">&nbsp;</div>\n                        <div class=\"participantsList__name\">\n                            {{ participant.player_name }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-25\">\n                        <div class=\"participantsList__itemTitle\">Record</div>\n                        <div class=\"participantsList__record\">\n                            {{ participant.record.wins }} - {{ participant.record.losses }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-20\">\n                        <div class=\"participantsList__itemTitle\">Win %</div>\n                        <div class=\"participantsList__wins\">\n                            {{ participant.record.win_percentage }}%\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <div class=\"container-fluid\">\n        <div class=\"col-xs-100\">\n            <button v-link=\"{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }\" type=\"button\" class=\"button button--primary\">Enter</button>\n        </div>\n    </div>\n    <section :class=\"infoModalClasses\">\n        <h3 class=\"infoModal__title\">{{ infoModalContent.title }}</h3>\n        <img class=\"infoModal__image\" src=\"public/image/contest-types/{{ infoModalContent.image }}\" alt=\"{{ infoModalContent.title }} Image\">\n        <div class=\"infoModal__rules\">\n            {{{ infoModalContent.rules }}}\n        </div>\n        <button @click=\"infoModalClose\" type=\"button\" class=\"infoModal__close\">x</button>\n    </section>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Contest Lobby</h1>\n        <h4 class=\"pageHeader__subheader\">\n            {{ participantsList[0].contest.event_short_name }} - {{ participantsList[0].contest.event_date }}\n        </h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Buy in:</span> ${{ participantsList[0].contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                <span class=\"contestDetails__title\">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}\n                </div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ participantsList[0].contest.contest_type_id }}\">\n                        {{ participantsList[0].contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"participantsList\">\n        <ul class=\"stripped-list\">\n            <li class=\"participantsList__item\" v-for=\"participant in participantsList[0].participants\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-15 participantsList__img\">\n                        <img src=\"http://edward.dev/bsmma/public/image/player.jpg\">\n                    </div>\n                    <div class=\"col-xs-40\">\n                        <div class=\"participantsList__itemTitle\">&nbsp;</div>\n                        <div class=\"participantsList__name\">\n                            {{ participant.player_name }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-25\">\n                        <div class=\"participantsList__itemTitle\">Record</div>\n                        <div class=\"participantsList__record\">\n                            {{ participant.record.wins }} - {{ participant.record.losses }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-20\">\n                        <div class=\"participantsList__itemTitle\">Win %</div>\n                        <div class=\"participantsList__wins\">\n                            {{ participant.record.win_percentage }}%\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <div class=\"container-fluid\">\n        <div class=\"col-xs-100\">\n            <a v-link=\"{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }\" class=\"button button--primary\">Enter</a>\n        </div>\n    </div>\n    <section :class=\"infoModalClasses\">\n        <h3 class=\"infoModal__title\">{{ infoModalContent.title }}</h3>\n        <img class=\"infoModal__image\" src=\"public/image/contest-types/{{ infoModalContent.image }}\" alt=\"{{ infoModalContent.title }} Image\">\n        <div class=\"infoModal__rules\">\n            {{{ infoModalContent.rules }}}\n        </div>\n        <button @click=\"infoModalClose\" type=\"button\" class=\"infoModal__close\">x</button>\n    </section>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\ContestLobby.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/ContestLobby.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14678,7 +14679,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Contests.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Contests.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14751,7 +14752,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Events.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Events.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14777,8 +14778,19 @@ exports.default = {
 
     data: function data() {
         return {
-            fightsList: { 'fights': [] },
-            working: false
+            fightsList: {
+                fights: [],
+                event: {
+                    event_short_name: ''
+                }
+            },
+            powerUps: {},
+            finishes: {},
+            working: false,
+            powerUpModalClasses: ['powerUpModal'],
+            selectedPowerUp: {},
+            powerUpId: '',
+            playerPicks: []
         };
     },
     created: function created() {
@@ -14787,18 +14799,60 @@ exports.default = {
     ready: function ready() {
         var _this = this;
 
-        this.$http.get('http://edward.dev/bsmma/api/v1/contest/' + this.$route.contest_id + '/fights', function (data) {
+        this.$http.get('http://edward.dev/bsmma/api/v1/contest/' + this.$route.params.contest_id + '/fights', function (data) {
             _this.fightsList = data;
+            _this.working = false;
         }, {
             // Attach the JWT header
             headers: _auth2.default.getAuthHeader()
         }).error(function (err) {
             return console.log(err);
         });
+
+        this.$http.get('http://edward.dev/bsmma/api/v1/power-ups', function (data) {
+            _this.powerUps = data;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        });
+
+        this.$http.get('http://edward.dev/bsmma/api/v1/finishes', function (data) {
+            _this.finishes = data;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        });
     },
 
 
-    methods: {},
+    methods: {
+        confirmPowerUp: function confirmPowerUp(e) {
+            var newPowerUp;
+            e.preventDefault();
+
+            // if the content is already loaded don't load it again
+            if (this.powerUpId !== e.target.dataset.powerUp) {
+                this.powerUpId = e.target.dataset.powerUp;
+                newPowerUp = this.powerUps.find(this.findPowerUp);
+
+                this.selectedPowerUp.title = newPowerUp.name;
+                this.selectedPowerUp.rules = newPowerUp.description, this.selectedPowerUp.image = newPowerUp.image_name;
+                this.selectedPowerUp.color = newPowerUp.color;
+                this.selectedPowerUp.bonus_points = newPowerUp.bonus_points;
+                this.selectedPowerUp.penalty_points = newPowerUp.penalty_points;
+            }
+
+            this.powerUpModalClasses.push('show');
+        },
+        findPowerUp: function findPowerUp(powerUp) {
+            return powerUp.id === parseInt(this.powerUpId, 10);
+        },
+        powerUpModalClose: function powerUpModalClose(e) {
+            e.preventDefault();
+
+            this.powerUpModalClasses = ['powerUpModal'];
+        }
+    },
 
     computed: {
         loaderClasses: function loaderClasses() {
@@ -14816,12 +14870,12 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Choose an Event</h1>\n        <h4 class=\"pageHeader__subheader\">\n            Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n        </h4>\n    </header>\n    <div class=\"fightsList\">\n        <ul>\n            <li class=\"fightsList__item\" v-for=\"fight in fightsList.fights\">\n\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Choose 5 Fights</h1>\n        <h4 class=\"pageHeader__subheader\">\n        </h4>\n    </header>\n    <div class=\"fightsList\">\n        <ul>\n            <li class=\"fightsList__item\" v-for=\"fight in fightsList.fights\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-50\">\n                        <div class=\"col-xs-50\">\n                            <img class=\"fightsList__fighter\" src=\"\" alt=\"{{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }} Image\">\n                            <img class=\"fightsList__flag\" src=\"\" alt=\"{{ fight.fighters[0].nationality.country_name }} Flag\">\n                        </div>\n                        <div class=\"col-xs-50\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[0].height_ft }}' {{ fight.fighters[0].height_in }}\"\n                                {{ fight.fighters[0].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[0].wins }} - {{ fight.fighters[0].loses }} - {{ fight.fighters[0].draws }}\n                            </div>\n                            <div class=\"fightsList__spread\">\n                                150\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"col-xs-50\">\n                        <div class=\"col-xs-50\">\n                            <img class=\"fightsList__fighter\" src=\"\" alt=\"{{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }} Image\">\n                            <img class=\"fightsList__flag\" src=\"\" alt=\"{{ fight.fighters[1].nationality.country_name }} Flag\">\n                        </div>\n                        <div class=\"col-xs-50\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[1].height_ft }}' {{ fight.fighters[1].height_in }}\"\n                                {{ fight.fighters[1].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[1].wins }} - {{ fight.fighters[1].loses }} - {{ fight.fighters[1].draws }}\n                            </div>\n                            <div class=\"fightsList__spread\">\n                                150\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"fightsList__pick\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-100\">\n                            How will win?\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Finish</option>\n                                <option v-for=\"finish in finishes\" value=\"{{ finish.id }}\">{{ finish.name }}({{ finish.points }})</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Round</option>\n                                <option value=\"1\">1</option>\n                                <option value=\"2\">2</option>\n                                <option value=\"3\">3</option>\n                                <option value=\"4\">4</option>\n                                <option value=\"5\">5</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Minute</option>\n                                <option value=\"1\">1</option>\n                                <option value=\"2\">2</option>\n                                <option value=\"3\">3</option>\n                                <option value=\"4\">4</option>\n                                <option value=\"5\">5</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"col-xs-25\" v-for=\"powerUp in powerUps\">\n                                <button type=\"button\" @click=\"confirmPowerUp\" data-power-up=\"{{ powerUp.power_up_id }}\">\n                                    <img src=\"\" alt=\"{{ powerUp.name }}\">\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n        <section :class=\"powerUpModalClasses\">\n            <h3 class=\"powerUpModal__title\">{{ selectedPowerUp.title }}</h3>\n            <img class=\"powerUpModal__image\" src=\"\" alt=\"{{ selectedPowerUp.title }}\">\n            <div class=\"powerUpModal__description\">\n                {{{ selectedPowerUp.description }}}\n            </div>\n            <div class=\"powerUpModal__points\">\n                +{{ selectedPowerUp.bonus_points }} Points\n            </div>\n            <div class=\"powerUpModal__apply\">\n                <p>Apply this power up?</p>\n                <p>Failure results in a -{{ selectedPowerUp.penalty_points }} penalty</p>\n            </div>\n            <div class=\"powerUpModal__confirm\">\n                <button class=\"powerUpModal__confirm--no\">No</button>\n                <button class=\"powerUpModal__confirm--yes\">Yes</button>\n            </div>\n        </section>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Fights.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Fights.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14899,7 +14953,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Login.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Login.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14971,7 +15025,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Register.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Register.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {

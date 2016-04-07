@@ -15,4 +15,9 @@ class Fighter extends Model
     {
         return $this->belongsToMany('Bsmma\Fight');
     }
+
+    public function nationality()
+    {
+    	return $this->belongsTo('Bsmma\Nationality');
+    }
 }

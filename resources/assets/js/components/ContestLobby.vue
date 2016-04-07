@@ -66,7 +66,7 @@
         </div>
         <div class="container-fluid">
             <div class="col-xs-100">
-                <button v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }" type="button" class="button button--primary">Enter</button>
+                <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }" class="button button--primary">Enter</a>
             </div>
         </div>
         <section :class="infoModalClasses">
@@ -97,6 +97,7 @@
                         max_participants: '',
                         prize_pool: '',
                         contest_type_name: '',
+                        contest_id: '',
                     },
                 }],
                 contestTypes: {},

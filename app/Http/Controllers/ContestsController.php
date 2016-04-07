@@ -90,7 +90,12 @@ class ContestsController extends ApiController
 
     public function getFights($contest_id)
     {
-        $fights = $this->contest->with(['event', 'event.fights', 'event.fights.fighters'])
+        $fights = $this->contest->with([
+                        'event',
+                        'event.fights',
+                        'event.fights.fighters',
+                        'event.fights.fighters.nationality'
+                    ])
                     ->where('id', $contest_id)
                     ->get();
 
