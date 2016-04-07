@@ -2,19 +2,46 @@
     <div :working="working">
         <header class="pageHeader" :working.sync="working">
             <h1 class="pageHeader__header">Choose 5 Fights</h1>
-            <h4 class="pageHeader__subheader">
-            </h4>
+            <h4 class="pageHeader__subheader">{{ fightList[0].event.event_short_name }}</h4>
         </header>
         <div class="fightsList">
             <ul>
-                <li class="fightsList__item" v-for="fight in fightsList.fights">
-                    <div class="container-fluid">
-                        <div class="col-xs-50">
-                            <div class="col-xs-50">
-                                <img class="fightsList__fighter" src="" alt="{{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }} Image">
-                                <img class="fightsList__flag" src="" alt="{{ fight.fighters[0].nationality.country_name }} Flag">
+                <li class="fightsList__item" v-for="fight in fightsList[0].fights">
+                    <div class="container-fluid fightsList__fightersWrap">
+                        <div class="col-xs-50 fightsList__fighterStatsWarp">
+                            <div
+                                class="fightsList__clickableArea"
+                                @click.stop.prevent="selectFighter"
+                                data-fighter-id="{{ fight.fighters[0].id }}"
+                                data-fight-id="{{ fight.id }}"
+                            ></div>
+                            <div class="col-xs-40 fightsList__fighterWrap">
+                                <div class="fightsList__fighterImgWrap" data-fight-id="{{ fight.id }}">
+                                    <img
+                                        :class="['fightsList__fighter', (fight.fighters[0].spread == fight.fighters[1].spread) ? 'favorite' : '']"
+                                        :src="'public/image/fighters/' + fight.fighters[0].fighter_image_name"
+                                        alt="{{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }} Image"
+                                        data-fighter-id="{{ fight.fighters[0].id }}"
+                                    >
+                                    <img
+                                        class="fightsList__flag left"
+                                        :src="'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri"
+                                        :show
+                                        alt="{{ fight.fighters[0].nationality.country_name }} Flag"
+                                    >
+                                    <div class="fightsList__selectedIndicatorWrap">
+                                        <div class="fightsList__selectedIndicator" data-fighter-id="{{ fight.fighters[0].id }}">
+                                            <span v-if:"parseInt(fight.fighters[0].spread, 10) > parseInt(fight.fighters[1].spread, 10)">
+                                                Favorite
+                                            </span>
+                                            <span v-else>
+                                                Underdog
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-xs-50">
+                            <div class="col-xs-60">
                                 <div class="fightsList__fighterName">
                                     {{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }}
                                 </div>
@@ -29,13 +56,15 @@
                                     150
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xs-50">
-                            <div class="col-xs-50">
-                                <img class="fightsList__fighter" src="" alt="{{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }} Image">
-                                <img class="fightsList__flag" src="" alt="{{ fight.fighters[1].nationality.country_name }} Flag">
-                            </div>
-                            <div class="col-xs-50">
+                        </div><!-- .fightsList__fighterStatsWarp -->
+                        <div class="col-xs-50 fightsList__fighterStatsWarp">
+                            <div
+                                class="fightsList__clickableArea"
+                                @click.stop.prevent="selectFighter"
+                                data-fighter-id="{{ fight.fighters[1].id }}"
+                                data-fight-id="{{ fight.id }}"
+                            ></div>
+                            <div class="col-xs-60">
                                 <div class="fightsList__fighterName">
                                     {{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }}
                                 </div>
@@ -50,12 +79,37 @@
                                     150
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="fightsList__pick">
+                            <div class="col-xs-40  fightsList__fighterWrap">
+                                <div class="fightsList__fighterImgWrap" data-fight-id="{{ fight.id }}">
+                                    <img
+                                        :class="['fightsList__fighter', (fight.fighters[1].spread > fight.fighters[0].spread) ? 'favorite' : '']"
+                                        :src="'public/image/fighters/' + fight.fighters[1].fighter_image_name"
+                                        alt="{{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }} Image"
+                                        data-fighter-id="{{ fight.fighters[1].id }}"
+                                    >
+                                    <img
+                                        class="fightsList__flag right"
+                                        :src="'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri"
+                                        alt="{{ fight.fighters[1].nationality.country_name }} Flag"
+                                    >
+                                     <div class="fightsList__selectedIndicatorWrap">
+                                        <div class="fightsList__selectedIndicator" data-fighter-id="{{ fight.fighters[1].id }}">
+                                            <span v-if:"parseInt(fight.fighters[1].spread, 10) > parseInt(fight.fighters[0].spread, 10)">
+                                                Favorite
+                                            </span>
+                                            <span v-else>
+                                                Underdog
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div><!-- .fightsList__fighterImgWrap -->
+                            </div><!-- .fightsList__fighterWrap -->
+                        </div><!-- .fightsList__fighterStatsWarp -->
+                    </div><!-- .fightsList__fightersWrap -->
+                    <div class="fightsList__pick" data-fight-id="{{ fight.id }}">
                         <div class="container-fluid">
                             <div class="col-xs-100">
-                                How will win?
+                                <div class="fightsList__pickHeader">How will win?</div>
                             </div>
                             <div class="col-xs-100">
                                 <select>
@@ -84,9 +138,13 @@
                                 </select>
                             </div>
                             <div class="col-xs-100">
-                                <div class="col-xs-25" v-for="powerUp in powerUps">
-                                    <button type="button" @click="confirmPowerUp" data-power-up="{{ powerUp.power_up_id }}">
-                                        <img src="" alt="{{ powerUp.name }}">
+                                <div class="fightsList__pickHeader">Power-up (optional)</div>
+                            </div>
+                            <div class="col-xs-100 powerUpsList">
+                                <div class="col-xs-23 col-xs-offset-2" v-for="powerUp in powerUps">
+                                    <button class="powerUpList__btn" type="button" @click="confirmPowerUp" data-power-up="{{ powerUp.power_up_id }}">
+                                        <span class="visuallyhidden">{{ powerUp.name }}</span>
+                                        <img :src="'public/image/powerups/' + powerUp.image_name" alt="{{ powerUp.name }} Image">
                                     </button>
                                 </div>
                             </div>
@@ -131,19 +189,21 @@
 
         data() {
             return {
-                fightsList: {
+                fightsList: [{
                     fights: [],
                     event: {
                         event_short_name: '',
                     },
-                },
+                }],
                 powerUps: {},
                 finishes: {},
                 working: false,
                 powerUpModalClasses: ['powerUpModal'],
+                fighterClasses: ['fightsList__fighter'],
                 selectedPowerUp: {},
                 powerUpId: '',
                 playerPicks: [],
+                currentFight: '',
             }
         },
 
@@ -153,7 +213,7 @@
 
         ready() {
             this.$http.get('http://edward.dev/bsmma/api/v1/contest/' + this.$route.params.contest_id + '/fights', (data) => {
-                this.fightsList = data;
+                this.fightsList = data.fights;
                 this.working = false;
             }, {
                 // Attach the JWT header
@@ -207,12 +267,40 @@
 
                 this.powerUpModalClasses = ['powerUpModal'];
             },
+
+            selectFighter(e) {
+                var fightPickToShow,
+                    fightPickIndicator,
+                    fightPickImage,
+                    resetFightSelectionImage,
+                    resetFightSelectionIndicator;
+
+                // check if working on the same fight that is open if so act accordingly
+                // if not close all picks before opening again
+
+                // reset the fight selection
+                resetFightSelectionImage = document.querySelector('div.fightsList__fighterImgWrap[data-fight-id="' + e.target.dataset.fightId + '"] img.fightsList__fighter');
+                resetFightSelectionIndicator = document.querySelector('div.fightsList__fighterImgWrap[data-fight-id="' + e.target.dataset.fightId + '"] div.fightsList__selectedIndicator');
+                resetFightSelectionImage.classList.remove('selected');
+                resetFightSelectionIndicator.classList.remove('show');
+                // set new fight selection
+                fightPickToShow = document.querySelector('div.fightsList__pick[data-fight-id="' + e.target.dataset.fightId + '"]');
+                fightPickIndicator = document.querySelector('div.fightsList__selectedIndicator[data-fighter-id="' + e.target.dataset.fighterId + '"]');
+                fightPickImage = document.querySelector('img.fightsList__fighter[data-fighter-id="' + e.target.dataset.fighterId + '"]');
+                fightPickToShow.classList.toggle('show');
+                fightPickIndicator.classList.toggle('show');
+                fightPickImage.classList.toggle('selected');
+            },
         },
 
         computed: {
             loaderClasses() {
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
             },
+
+            fighterClasses() {
+                return (fightsList[0].fight)
+            }
         },
 
         route: {

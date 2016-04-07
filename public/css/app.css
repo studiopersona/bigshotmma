@@ -4195,6 +4195,113 @@ a {
   padding: 0 5px 2px;
   background: #fff; }
 
+.fightsList__clickableArea {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  z-index: 5; }
+
+.fightsList__fighterStatsWarp {
+  position: relative; }
+
+.fightsList__pick {
+  padding: 0 1.5rem; }
+  .fightsList__pick select {
+    width: 90%;
+    margin: 0 auto;
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.75rem;
+    color: #888;
+    background: #efefef;
+    border: none;
+    margin-bottom: 1.25rem; }
+
+.fightsList__pickHeader {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 1.5rem 0; }
+
+.fightsList__item {
+  background-color: #eee;
+  padding-top: 1rem; }
+  .fightsList__item:first-child {
+    padding-top: 0; }
+  .fightsList__item:nth-child(2n) {
+    background-color: #fff; }
+  .fightsList__item .fightsList__pick {
+    background-color: #fff;
+    border-bottom: 4px solid #eee;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease; }
+    .fightsList__item .fightsList__pick.show {
+      min-height: 420px; }
+  .fightsList__item .fightsList__fightersWrap {
+    padding: 0.9rem 0.5rem 0.5rem; }
+
+.fightsList__fighterName,
+.fightsList__fighterHeight,
+.fightsList__fighterRecord,
+.fightsList__spread {
+  font-size: 1.1rem;
+  padding-left: 0.5rem; }
+
+.fightsList__fighterWrap {
+  position: relative; }
+
+.fightsList__fighterImgWrap {
+  position: relative; }
+
+.fightsList__selectedIndicator {
+  position: absolute;
+  bottom: -0.9rem;
+  left: 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  background: #e51937;
+  color: #fff;
+  padding: 0.5rem 0;
+  text-align: center;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease; }
+  .fightsList__selectedIndicator.show {
+    opacity: 1;
+    visibility: visible; }
+  .fightsList__selectedIndicator.favorite {
+    background-color: #2dbe0c; }
+
+.fightsList__fighter {
+  width: 100%; }
+  .fightsList__fighter.selected {
+    border: 2px solid #e51937; }
+    .fightsList__fighter.selected.favorite {
+      border-color: #2dbe0c; }
+
+.fightsList__flag {
+  width: 30%;
+  position: absolute;
+  z-index: 1;
+  top: -3px; }
+  .fightsList__flag.left {
+    left: -3px; }
+  .fightsList__flag.right {
+    right: -3px; }
+
+.powerUpList__btn {
+  margin-bottom: 1rem;
+  background: transparent;
+  border: none; }
+  .powerUpList__btn img {
+    width: 100%; }
+
 .infoModal {
   position: absolute;
   left: 0;

@@ -1,0 +1,146 @@
+.fightsList__clickableArea {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background:transparent;
+	z-index: 5;
+}
+
+.fightsList__fighterStatsWarp {
+	position: relative;
+}
+
+.fightsList__pick {
+	padding: 0 1.5rem;
+
+	select {
+		width: 90%;
+	    margin: 0 auto;
+	    display: block;
+	    font-size: 1.8rem;
+	    font-weight: 700;
+	    text-transform: uppercase;
+	    padding: 0.75rem;
+	    color: #888;
+	    background: #efefef;
+	    border: none;
+	    margin-bottom: 1.25rem;
+	}
+}
+
+.fightsList__pickHeader {
+	font-size: 1.8rem;
+	font-weight: 700;
+	margin: 1.5rem 0;
+}
+
+.fightsList__item {
+	background-color: $color-gray-light;
+	padding-top: 1rem;
+
+	&:first-child {
+		padding-top: 0;
+	}
+
+	&:nth-child(2n) {
+		background-color: $color-white;
+	}
+
+	.fightsList__pick {
+		background-color: $color-white;
+		border-bottom: 4px solid $color-gray-light;
+		height: 0;
+		overflow: hidden;
+		transition: height 0.3s ease;
+
+		&.show {
+			min-height: 420px;
+		}
+	}
+
+	.fightsList__fightersWrap {
+		padding: 0.9rem 0.5rem 0.5rem;
+	}
+}
+
+.fightsList__fighterName,
+.fightsList__fighterHeight,
+.fightsList__fighterRecord,
+.fightsList__spread {
+	font-size: 1.1rem;
+	padding-left: 0.5rem;
+}
+
+.fightsList__fighterWrap {
+	position: relative;
+}
+
+.fightsList__fighterImgWrap {
+	position: relative;
+}
+
+.fightsList__selectedIndicator {
+	position: absolute;
+	bottom: -0.9rem;
+	left: 0;
+	font-size: 0.9rem;
+	text-transform: uppercase;
+	background: $color-red;
+	color: $color-white;
+	padding: 0.5rem 0;
+	text-align: center;
+	width: 100%;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease;
+
+	&.show {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	&.favorite {
+		background-color: $color-green;
+	}
+}
+
+.fightsList__fighter {
+	width: 100%;
+
+	&.selected {
+		border: 2px solid $color-red;
+
+		&.favorite {
+			border-color: $color-green;
+		}
+	}
+
+
+}
+
+.fightsList__flag {
+	width: 30%;
+	position: absolute;
+	z-index: 1;
+	top: -3px;
+
+	&.left {
+		left: -3px;
+	}
+
+	&.right {
+		right: -3px;
+	}
+}
+
+.powerUpList__btn {
+	margin-bottom: 1rem;
+	background: transparent;
+	border: none;
+
+	img {
+		width: 100%;
+	}
+}
