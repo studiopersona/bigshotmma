@@ -4311,8 +4311,8 @@ a {
   bottom: 0;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.2s ease;
-  transition: transform 0.2s ease;
+  transition: -webkit-transform 0.3s ease;
+  transition: transform 0.3s ease;
   -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
@@ -4355,8 +4355,8 @@ a {
   z-index: 20;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.2s ease;
-  transition: transform 0.2s ease;
+  transition: -webkit-transform 0.3s ease;
+  transition: transform 0.3s ease;
   -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
@@ -4432,16 +4432,14 @@ a {
   right: 0;
   top: 0;
   z-index: 30;
-  height: auto;
-  padding: 5.5rem 2rem;
+  height: 10rem;
+  padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
   transition: -webkit-transform 0.3s ease;
   transition: transform 0.3s ease;
-  -webkit-transform: translate3d(0, -110%, 0);
-  transform: translate3d(0, -110%, 0);
+  -webkit-transform: translate3d(0, -100%, 0);
+  transform: translate3d(0, -100%, 0);
   overflow: hidden;
-  font-size: 2.5rem;
-  font-weight: 700;
   color: #fff;
   text-align: center;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8); }
@@ -4453,14 +4451,14 @@ a {
   position: absolute;
   top: 0.8rem;
   right: 1rem;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   background: transparent;
   border: none;
   color: #fff;
   border: 4px solid;
   border-radius: 50%;
-  padding: 0 0.9rem 0.2rem; }
+  padding: 0 1.1rem 0.4rem; }
 
 .form input,
 .form select,

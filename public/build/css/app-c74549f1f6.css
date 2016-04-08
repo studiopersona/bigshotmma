@@ -4304,15 +4304,15 @@ a {
     width: 100%; }
 
 .infoModal {
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.2s ease;
-  transition: transform 0.2s ease;
+  transition: -webkit-transform 0.3s ease;
+  transition: transform 0.3s ease;
   -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
@@ -4347,7 +4347,7 @@ a {
   padding: 0 1.1rem 0.4rem; }
 
 .powerUpModal {
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
   top: 0;
@@ -4355,8 +4355,8 @@ a {
   z-index: 20;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.2s ease;
-  transition: transform 0.2s ease;
+  transition: -webkit-transform 0.3s ease;
+  transition: transform 0.3s ease;
   -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
@@ -4386,81 +4386,39 @@ a {
   margin-bottom: 1.5rem; }
 
 .powerUpModal__image {
-  width: 40%;
+  width: 30%;
   display: block;
   margin: 0 auto 1rem; }
 
 .powerUpModal__description {
-  font-size: 1.7rem;
-  line-height: 1.4;
-  margin-bottom: 1rem; }
+  font-size: 2.5rem;
+  line-height: 1.4; }
 
 .powerUpModal__points {
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 4.5rem; }
 
-.powerUpModal__apply {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  line-height: 1.6; }
+.powerupModal__apply {
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.4; }
 
 .powerUpModal__apply--big {
-  font-size: 2.2rem; }
+  font-size: 2.5rem; }
 
 .powerUpModal__confirm button {
   padding: 0.6rem 2rem;
   color: #fff;
   text-transform: uppercase;
   border-radius: 4px;
-  font-size: 2.5rem;
-  font-weight: 700;
-  border: none;
-  margin-right: 0.5rem; }
-  .powerUpModal__confirm button:last-child {
-    margin-right: 0; }
+  font-size: 3rem; }
 
 .powerUpModal__confirm .powerUpModal__confirm--no {
   background-color: #e51937; }
 
 .powerUpModal__confirm .powerUpModal__confirm--yes {
   background-color: #2dbe0c; }
-
-.alertNotice {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 30;
-  height: auto;
-  padding: 5.5rem 2rem;
-  background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.3s ease;
-  transition: transform 0.3s ease;
-  -webkit-transform: translate3d(0, -110%, 0);
-  transform: translate3d(0, -110%, 0);
-  overflow: hidden;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #fff;
-  text-align: center;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8); }
-  .alertNotice.show {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0); }
-
-.alertModal__close {
-  position: absolute;
-  top: 0.8rem;
-  right: 1rem;
-  font-size: 2rem;
-  font-weight: 700;
-  background: transparent;
-  border: none;
-  color: #fff;
-  border: 4px solid;
-  border-radius: 50%;
-  padding: 0 0.9rem 0.2rem; }
 
 .form input,
 .form select,

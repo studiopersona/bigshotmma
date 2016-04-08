@@ -4355,8 +4355,8 @@ a {
   z-index: 20;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.2s ease;
-  transition: transform 0.2s ease;
+  transition: -webkit-transform 0.3s ease;
+  transition: transform 0.3s ease;
   -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;

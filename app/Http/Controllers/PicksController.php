@@ -63,7 +63,26 @@ class PicksController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $user = \JWTAuth::parseToken()->authenticate();
+        $requestData = $request->all();
+
+        $data = [];
+        $data['user_id'] = $user->id;
+
+        foreach ( $requestData['picks'] as $pickRow )
+        {
+            foreach ( $pickRow as $column => $value )
+            {
+                if ( (int)$value === 0 ) $value = NULL;
+                $data[$column] = $value;
+            }
+
+            $this->pick->insert($data);
+        }
+
+        return $this->respond([
+            'outcome' => 'Success',
+        ]);
     }
 
     /**
@@ -75,6 +94,31 @@ class PicksController extends ApiController
     public function show($id)
     {
         //
+    }
+
+    public function showCard($contest_id)
+    {
+        $user = \JWTAuth::parseToken()->authenticate();
+
+        $picks = $this->pick->with([
+                        'contest',
+                        'fight',
+                        'fighter',
+                        'finish',
+                        'powerUps',
+                    ])
+                    ->where('contest_id', $contest_id)
+                    ->where('user_id', $user->id)
+                    ->get();
+
+        if ( $picks->isEmpty() )
+        {
+            return $this->respondNotFound('No Picks Found');
+        }
+
+        return $this->respond([
+            'picks' => $this->pickTransformer->transformCollection($picks->toArray()),
+        ]);
     }
 
     /**

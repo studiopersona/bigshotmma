@@ -4311,8 +4311,8 @@ a {
   bottom: 0;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.2s ease;
-  transition: transform 0.2s ease;
+  transition: -webkit-transform 0.3s ease;
+  transition: transform 0.3s ease;
   -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
@@ -4355,8 +4355,8 @@ a {
   z-index: 20;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.2s ease;
-  transition: transform 0.2s ease;
+  transition: -webkit-transform 0.3s ease;
+  transition: transform 0.3s ease;
   -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
@@ -4432,8 +4432,8 @@ a {
   right: 0;
   top: 0;
   z-index: 30;
-  height: auto;
-  padding: 5.5rem 2rem;
+  height: 10rem;
+  padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
   transition: -webkit-transform 0.3s ease;
   transition: transform 0.3s ease;

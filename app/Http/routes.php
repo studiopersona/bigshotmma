@@ -30,6 +30,7 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('contest/{id}/fights', 'ContestsController@getFights');
 	    Route::resource('contests', 'ContestsController');
 	    Route::resource('picks', 'PicksController');
+	    Route::get('contest/{id}/picks', 'PicksController@showCard');
 	    Route::resource('powerups', 'PowerUpsController');
 	    Route::get('contest-types', 'ContestTypesController@index');
 	    Route::get('power-ups', 'PowerUpsController@index');

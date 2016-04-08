@@ -13,7 +13,7 @@ class Fighter extends Model
     // Relationships ------------------------
     public function fights()
     {
-        return $this->belongsToMany('Bsmma\Fight');
+        return $this->belongsToMany('Bsmma\Fight')->withPivot('odds');
     }
 
     public function nationality()

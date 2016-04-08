@@ -17,6 +17,7 @@ return array(
     'AddForeignKeys' => $baseDir . '/database/migrations/2016_03_25_215434_add_foreign_keys.php',
     'AddForgeinKeyToWinners' => $baseDir . '/database/migrations/2016_03_29_213652_add_forgein_key_to_winners.php',
     'AddImageNameColumnToContestTypes' => $baseDir . '/database/migrations/2016_03_29_194626_add_image_name_column_to_contest_types.php',
+    'AddOddsColumnToFightFighter' => $baseDir . '/database/migrations/2016_04_08_205128_add_odds_column_to_fight_fighter.php',
     'AddPlayerNameColumnToUsers' => $baseDir . '/database/migrations/2016_04_05_163440_add_player_name_column_to_users.php',
     'AddPointColumnToFinishes' => $baseDir . '/database/migrations/2016_03_29_211905_add_point_column_to_finishes.php',
     'AddPowerUpIdColumnToFightResults' => $baseDir . '/database/migrations/2016_04_01_172222_add_power_up_id_column_to_fight_results.php',

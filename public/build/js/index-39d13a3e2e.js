@@ -14477,7 +14477,7 @@ exports.default = {
     }
 };
 
-},{"../index":38}],30:[function(require,module,exports){
+},{"../index":37}],30:[function(require,module,exports){
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <router-view></router-view>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
@@ -14999,7 +14999,7 @@ exports.default = {
             console.log(compiledPicks);
 
             this.$http.post('http://edward.dev/bsmma/api/v1/picks', { picks: compiledPicks }, function (data) {
-                if (data.success) $router.go({ path: '/contest/' + _this2.contestId + '/picks' });
+                if (data.success) _this2.alert;
             }, {
                 // Attach the JWT header
                 headers: _auth2.default.getAuthHeader()
@@ -15130,70 +15130,6 @@ if (module.hot) {(function () {  module.hot.accept()
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _auth = require('../auth');
-
-var _auth2 = _interopRequireDefault(_auth);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-
-    props: ['working'],
-
-    data: function data() {
-        return {};
-    },
-    created: function created() {
-        this.working = true;
-    },
-    ready: function ready() {
-        var _this = this;
-
-        this.$http.get('http://edward.dev/bsmma/api/v1/contest/' + this.$route.params.contest_id + '/picks', function (data) {
-            _this.fightPicksList = data;
-            _this.working = false;
-        }, {
-            // Attach the JWT header
-            headers: _auth2.default.getAuthHeader()
-        }).error(function (err) {
-            return console.log(err);
-        });
-    },
-
-
-    methods: {},
-
-    computed: {},
-
-    route: {
-        // Check the users auth status before
-        // allowing navigation to the route
-
-        canActivate: function canActivate() {
-            return _auth2.default.user.authenticated;
-        }
-    }
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Picks</h1>\n        <h4 class=\"pageHeader__subheader\">{{ fightsList[0].event.event_short_name }}</h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Buy in:</span> ${{ participantsList[0].contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                <span class=\"contestDetails__title\">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}\n                </div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ participantsList[0].contest.contest_type_id }}\">\n                        {{ participantsList[0].contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"fightPicksList\">\n        <ul>\n            <li class=\"fightPicksList__item\" v-for=\"pick in picksList[0].picks\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-10\">\n                        {{ }}\n                    </div>\n                    <div class=\"col-xs-45\">\n                        <div class=\"fightPicksList__fighterName\"></div>\n                        <div class=\"fightPicksList__odds\"></div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\"></div>\n                        <div class=\"fightPicksList__stat\"></div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\"></div>\n                        <div class=\"fightPicksList__stat\"></div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\"></div>\n                        <div class=\"fightPicksList__stat\"></div>\n                    </div>\n                </div>\n                <div class=\"fightPicksList__details\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-100 fightPicksList__resultString\">\n\n                        </div>\n                        <div class=\"col-xs-100 fightPicksList__choicesTitle\">\n\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"col-xs-10\">\n\n                            </div>\n                            <div class=\"col-xs-80\">\n\n                            </div>\n                            <div class=\"col-xs-10\">\n\n                            </div>\n                        </div>\n                        <div class=\"col-xs-100 fightPicksList__totalWrap\">\n                            <div class=\"col-xs-50 fightPicksList__totalTitle\">\n                                Total\n                            </div>\n                            <div class=\"col-xs-50 fightPicksList__totalValue\">\n\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n                <button type=\"button\" class=\"button button--primary\" v-link=\"{ path: '/' }\">View Results</button>\n            </div>\n        </div>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/PlayerPicks.vue"
-  if (!module.hot.data) {
-    hotAPI.createRecord(id, module.exports)
-  } else {
-    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],37:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
@@ -15262,7 +15198,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],38:[function(require,module,exports){
+},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15301,10 +15237,6 @@ var _ContestLobby2 = _interopRequireDefault(_ContestLobby);
 var _Fights = require('./components/Fights.vue');
 
 var _Fights2 = _interopRequireDefault(_Fights);
-
-var _PlayerPicks = require('./components/PlayerPicks.vue');
-
-var _PlayerPicks2 = _interopRequireDefault(_PlayerPicks);
 
 var _vueRouter = require('vue-router');
 
@@ -15345,10 +15277,6 @@ router.map({
 
   '/contest/:contest_id/fights': {
     component: _Fights2.default
-  },
-
-  '/contest/:contest_id/picks': {
-    component: _PlayerPicks2.default
   }
 
 });
@@ -15361,6 +15289,6 @@ router.redirect({
 // Start the app on the #app div
 router.start(_App2.default, '#app');
 
-},{"./components/App.vue":30,"./components/ContestLobby.vue":31,"./components/Contests.vue":32,"./components/Events.vue":33,"./components/Fights.vue":34,"./components/Login.vue":35,"./components/PlayerPicks.vue":36,"./components/Register.vue":37,"vue":28,"vue-resource":16,"vue-router":27}]},{},[38]);
+},{"./components/App.vue":30,"./components/ContestLobby.vue":31,"./components/Contests.vue":32,"./components/Events.vue":33,"./components/Fights.vue":34,"./components/Login.vue":35,"./components/Register.vue":36,"vue":28,"vue-resource":16,"vue-router":27}]},{},[37]);
 
 //# sourceMappingURL=index.js.map
