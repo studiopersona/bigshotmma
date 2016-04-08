@@ -4079,7 +4079,6 @@ a {
 .eventList {
   position: relative;
   min-height: 100px;
-  width: 100%;
   padding: 0 1rem; }
 
 .eventList__item {

@@ -14432,6 +14432,7 @@ exports.default = {
         }).error(function (err) {
             context.error = err.error.message;
             context.alertType = 'error';
+            context.working = false;
         });
     },
     signup: function signup(context, creds, redirect) {
@@ -14482,7 +14483,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\App.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/App.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14599,12 +14600,12 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Contest Lobby</h1>\n        <h4 class=\"pageHeader__subheader\">\n            {{ participantsList[0].contest.event_short_name }} - {{ participantsList[0].contest.event_date }}\n        </h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Buy in:</span> ${{ participantsList[0].contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                <span class=\"contestDetails__title\">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}\n                </div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ participantsList[0].contest.contest_type_id }}\">\n                        {{ participantsList[0].contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"participantsList\">\n        <ul class=\"stripped-list\">\n            <li class=\"participantsList__item\" v-for=\"participant in participantsList[0].participants\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-15 participantsList__img\">\n                        <img src=\"http://edward.dev/bsmma/public/image/player.jpg\">\n                    </div>\n                    <div class=\"col-xs-40\">\n                        <div class=\"participantsList__itemTitle\">&nbsp;</div>\n                        <div class=\"participantsList__name\">\n                            {{ participant.player_name }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-25\">\n                        <div class=\"participantsList__itemTitle\">Record</div>\n                        <div class=\"participantsList__record\">\n                            {{ participant.record.wins }} - {{ participant.record.losses }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-20\">\n                        <div class=\"participantsList__itemTitle\">Win %</div>\n                        <div class=\"participantsList__wins\">\n                            {{ participant.record.win_percentage }}%\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <div class=\"container-fluid\">\n        <div class=\"col-xs-100\">\n            <a v-link=\"{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }\" class=\"button button--primary\">Enter</a>\n        </div>\n    </div>\n    <section :class=\"infoModalClasses\">\n        <h3 class=\"infoModal__title\">{{ infoModalContent.title }}</h3>\n        <img class=\"infoModal__image\" src=\"public/image/contest-types/{{ infoModalContent.image }}\" alt=\"{{ infoModalContent.title }} Image\">\n        <div class=\"infoModal__rules\">\n            {{{ infoModalContent.rules }}}\n        </div>\n        <button @click=\"infoModalClose\" type=\"button\" class=\"infoModal__close\">x</button>\n    </section>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Contest Lobby</h1>\n        <h4 class=\"pageHeader__subheader\">\n            {{ participantsList[0].contest.event_short_name }} - {{ participantsList[0].contest.event_date }}\n        </h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Buy in:</span> ${{ participantsList[0].contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                <span class=\"contestDetails__title\">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}\n                </div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ participantsList[0].contest.contest_type_id }}\">\n                        {{ participantsList[0].contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"participantsList\">\n        <ul class=\"stripped-list\">\n            <li class=\"participantsList__item\" v-for=\"participant in participantsList[0].participants\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-15 participantsList__img\">\n                        <img src=\"http://edward.dev/bsmma/public/image/player.jpg\">\n                    </div>\n                    <div class=\"col-xs-40\">\n                        <div class=\"participantsList__itemTitle\">&nbsp;</div>\n                        <div class=\"participantsList__name\">\n                            {{ participant.player_name }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-25\">\n                        <div class=\"participantsList__itemTitle\">Record</div>\n                        <div class=\"participantsList__record\">\n                            {{ participant.record.wins }} - {{ participant.record.losses }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-20\">\n                        <div class=\"participantsList__itemTitle\">Win %</div>\n                        <div class=\"participantsList__wins\">\n                            {{ participant.record.win_percentage }}%\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <div class=\"container-fluid\">\n        <div class=\"col-xs-100 button-wrap\">\n            <a v-link=\"{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }\" class=\"button button--primary\">Enter</a>\n        </div>\n    </div>\n    <section :class=\"infoModalClasses\">\n        <h3 class=\"infoModal__title\">{{ infoModalContent.title }}</h3>\n        <img class=\"infoModal__image\" src=\"public/image/contest-types/{{ infoModalContent.image }}\" alt=\"{{ infoModalContent.title }} Image\">\n        <div class=\"infoModal__rules\">\n            {{{ infoModalContent.rules }}}\n        </div>\n        <button @click=\"infoModalClose\" type=\"button\" class=\"infoModal__close\">x</button>\n    </section>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\ContestLobby.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/ContestLobby.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14679,7 +14680,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Contests.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Contests.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14747,12 +14748,12 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\">\n        <h1 class=\"pageHeader__header\">Choose an Event</h1>\n        <h4 class=\"pageHeader__subheader\">\n            Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n        </h4>\n    </header>\n    <div class=\"eventList clearfix\">\n        <ul>\n            <li class=\"eventList__item\" v-for=\"event in eventsList.events\">\n                <a v-link=\"{ path: '/event/' + event.event_id + '/contests' }\" href=\"#\">\n                    <img class=\"eventList__img\" src=\"http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg\" alt=\"{{ event.event_name }} Image\">\n                    <div class=\"eventList__name\">{{ event.event_name }}</div>\n                    <div class=\"eventList__date\">{{ event.date }} {{ event.time }}</div>\n                </a>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\">\n        <h1 class=\"pageHeader__header\">Choose an Event</h1>\n        <h4 class=\"pageHeader__subheader\">\n            Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n        </h4>\n    </header>\n    <div class=\"container-fluid\">\n        <div class=\"col-xs-100\">\n            <div class=\"eventList clearfix\">\n                <ul>\n                    <li class=\"eventList__item\" v-for=\"event in eventsList.events\">\n                        <a v-link=\"{ path: '/event/' + event.event_id + '/contests' }\" href=\"#\">\n                            <img class=\"eventList__img\" src=\"http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg\" alt=\"{{ event.event_name }} Image\">\n                            <div class=\"eventList__name\">{{ event.event_name }}</div>\n                            <div class=\"eventList__date\">{{ event.date }} {{ event.time }}</div>\n                        </a>\n                    </li>\n                </ul>\n                <div :class=\"loaderClasses\">\n                    <div class=\"js-global-loader loader\">\n                        <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                            <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                        </svg>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Events.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Events.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14788,11 +14789,11 @@ exports.default = {
             finishes: {},
             working: false,
             powerUpModalClasses: ['powerUpModal'],
-            fighterClasses: ['fightsList__fighter'],
             selectedPowerUp: {},
             powerUpId: '',
             playerPicks: [],
-            currentFight: ''
+            currentFightId: '',
+            currentFighterId: ''
         };
     },
     created: function created() {
@@ -14847,6 +14848,9 @@ exports.default = {
             this.powerUpModalClasses.push('show');
         },
         findPowerUp: function findPowerUp(powerUp) {
+            console.log(powerUp.id);
+            console.log(this.powerUpId);
+            console.log(powerUp.id === parseInt(this.powerUpId, 10));
             return powerUp.id === parseInt(this.powerUpId, 10);
         },
         powerUpModalClose: function powerUpModalClose(e) {
@@ -14854,33 +14858,141 @@ exports.default = {
 
             this.powerUpModalClasses = ['powerUpModal'];
         },
-        selectFighter: function selectFighter(e) {
-            var fightPickToShow, fightPickIndicator, fightPickImage, resetFightSelectionImage, resetFightSelectionIndicator;
+        selectFight: function selectFight(e) {
+            if (this.playerPicks.length === 5) {
+                // inform that this pick will be the alternate
+            } else if (this.palyerPicks.length === 6) {
+                    // inform that the will need to remove a pick to add this one
+                } else {
+                        if (this.currentFightId !== e.target.dataset.fightId) {
+                            this.switchFight(e);
+                            this.updatePicks({
+                                fighterId: e.target.dataset.fighterId,
+                                finishId: '',
+                                round: '',
+                                minute: '',
+                                powerUpId: ''
+                            });
+                        } else {
+                            this.updatePicks({
+                                fighterId: e.target.dataset.fighterId,
+                                finishId: '',
+                                round: '',
+                                minute: '',
+                                powerUpId: ''
+                            });
+                        }
+                    }
+        },
+        addPick: function addPick(eventData) {
+            this.playerPicks.push({
+                fightId: e.target.dataset.fightId,
+                fighterId: e.target.dataset.fighterId,
+                finishId: 0,
+                round: 0,
+                minute: 0,
+                powerUpId: 0
+            });
+        },
+        updatePicks: function updatePicks(newData) {
+            var pickData,
+                pickDataIndex = -1;
+            // search for this fight in picks
+            pickData = this.playerPicks.find(this.findPick);
+            // if a pic was already made for this fight
+            if (pickData) {
+                // check pick fithter id with current fighter id
+                // change if different do nothing if its the same
+                if (newData.fighterId !== '') {
+                    if (pickData.fighterId !== newData.fighterId) {
+                        this.deselectFighter(pickData.fighterId);
 
-            // check if working on the same fight that is open if so act accordingly
-            // if not close all picks before opening again
+                        if (pickDataIndex === -1) pickDataIndex = this.palyerPicks.findIndex(findPick);
+                        console.log(pickDataIndex);
 
-            // reset the fight selection
-            resetFightSelectionImage = document.querySelector('div.fightsList__fighterImgWrap[data-fight-id="' + e.target.dataset.fightId + '"] img.fightsList__fighter');
-            resetFightSelectionIndicator = document.querySelector('div.fightsList__fighterImgWrap[data-fight-id="' + e.target.dataset.fightId + '"] div.fightsList__selectedIndicator');
-            resetFightSelectionImage.classList.remove('selected');
-            resetFightSelectionIndicator.classList.remove('show');
-            // set new fight selection
-            fightPickToShow = document.querySelector('div.fightsList__pick[data-fight-id="' + e.target.dataset.fightId + '"]');
-            fightPickIndicator = document.querySelector('div.fightsList__selectedIndicator[data-fighter-id="' + e.target.dataset.fighterId + '"]');
-            fightPickImage = document.querySelector('img.fightsList__fighter[data-fighter-id="' + e.target.dataset.fighterId + '"]');
-            fightPickToShow.classList.toggle('show');
-            fightPickIndicator.classList.toggle('show');
-            fightPickImage.classList.toggle('selected');
+                        if (pickDataIndex !== -1) this.playerPicks[pickDataIndex].fighterId = newData.fighterId;
+
+                        this.selectFighter(e.target.dataset.fighterId);
+                    }
+                }
+
+                if (newData.finishId !== '') {
+                    if (newData.finishId !== pickData.finishId) {
+                        if (pickDataIndex === -1) pickDataIndex = this.palyerPicks.findIndex(findPick);
+
+                        if (pickDataIndex !== -1) this.playerPicks[pickDataIndex].finishId = newData.finishId;
+                    }
+                }
+
+                if (newData.round !== '') {
+                    if (newData.round !== pickData.round) {
+                        if (pickDataIndex === -1) pickDataIndex = this.palyerPicks.findIndex(findPick);
+
+                        if (pickDataIndex !== -1) this.playerPicks[pickDataIndex].round = newData.round;
+                    }
+                }
+
+                if (newData.minute !== '') {
+                    if (newData.minute !== pickData.minute) {
+                        if (pickDataIndex === -1) pickDataIndex = this.palyerPicks.findIndex(findPick);
+
+                        if (pickDataIndex !== -1) this.playerPicks[pickDataIndex].minute = newData.minute;
+                    }
+                }
+
+                if (newData.powerUpId !== '') {
+                    if (newData.powerUpId !== pickData.powerUpId) {
+                        if (pickDataIndex === -1) pickDataIndex = this.palyerPicks.findIndex(findPick);
+
+                        if (pickDataIndex !== -1) this.playerPicks[pickDataIndex].powerUpId = newData.powerUpId;
+                    }
+                }
+            } else {
+                this.addPick(e);
+                this.selectFighter(e.target.dataset.fighterId);
+            }
+        },
+        findPick: function findPick(playerPick) {
+            return playerPick.fightId === this.currentFightId;
+        },
+        switchFight: function switchFight(e) {
+            var fightToClose, figthToOpen;
+
+            fightToClose = document.querySelector('div.fightsList__pick[data-fight-id="' + this.currentFightId + '"]');
+            if (fightToClose) fightToClose.classList.toggle('show');
+
+            fightToOpen = document.querySelector('div.fightsList__pick[data-fight-id="' + e.target.dataset.fightId + '"]');
+            fightToOpen.classList.toggle('show');
+            // update currentFightId
+            this.currentFightId = e.target.dataset.fightId;
+        },
+        selectFighter: function selectFighter(fighterId) {
+            var fighterImageToSelect, fighterIndicatorToSelect;
+
+            fighterImageToSelect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
+            if (!fighterImageToSelect.classList.contains('selected')) {
+                fighterImageToSelect.classList.add('selected');
+                fighterIndicatorToSelect = document.querySelector('div.fightsList__selectedIndicator[data-fighter-id="' + fighterId + '"]');
+                fighterIndicatorToSelect.classList.add('show');
+
+                this.currentFighterId = fighterId;
+            }
+        },
+        deselectFighter: function deselectFighter(fighterId) {
+            var fighterImageToDeselect, fighterIndicatorToDeselect;
+
+            fighterImageToDeselect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
+            if (fighterImageToDeselect.classList.contains('selected')) {
+                fighterImageToSelect.classList.remove('selected');
+                fighterIndicatorToDeselect = document.querySelector('div.fightsList__selectedIndicator[data-fighter-id="' + fighterId + '"]');
+                fighterIndicatorToSelect.classList.remove('show');
+            }
         }
     },
 
     computed: {
         loaderClasses: function loaderClasses() {
             return this.working ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
-        },
-        fighterClasses: function fighterClasses() {
-            return fightsList[0].fight;
         }
     },
 
@@ -14894,12 +15006,12 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Choose 5 Fights</h1>\n        <h4 class=\"pageHeader__subheader\">{{ fightList[0].event.event_short_name }}</h4>\n    </header>\n    <div class=\"fightsList\">\n        <ul>\n            <li class=\"fightsList__item\" v-for=\"fight in fightsList[0].fights\">\n                <div class=\"container-fluid fightsList__fightersWrap\">\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFighter\" data-fighter-id=\"{{ fight.fighters[0].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-40 fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (fight.fighters[0].spread == fight.fighters[1].spread) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[0].fighter_image_name\" alt=\"{{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                <img class=\"fightsList__flag left\" :src=\"'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri\" :show=\"\" alt=\"{{ fight.fighters[0].nationality.country_name }} Flag\">\n                                <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div class=\"fightsList__selectedIndicator\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                        <span v-if:\"parseint(fight.fighters[0].spread,=\"\" 10)=\"\"> parseInt(fight.fighters[1].spread, 10)\"&gt;\n                                            Favorite\n                                        </span>\n                                        <span v-else=\"\">\n                                            Underdog\n                                        </span>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"col-xs-60\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[0].height_ft }}' {{ fight.fighters[0].height_in }}\"\n                                {{ fight.fighters[0].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[0].wins }} - {{ fight.fighters[0].loses }} - {{ fight.fighters[0].draws }}\n                            </div>\n                            <div class=\"fightsList__spread\">\n                                150\n                            </div>\n                        </div>\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFighter\" data-fighter-id=\"{{ fight.fighters[1].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-60\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[1].height_ft }}' {{ fight.fighters[1].height_in }}\"\n                                {{ fight.fighters[1].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[1].wins }} - {{ fight.fighters[1].loses }} - {{ fight.fighters[1].draws }}\n                            </div>\n                            <div class=\"fightsList__spread\">\n                                150\n                            </div>\n                        </div>\n                        <div class=\"col-xs-40  fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (fight.fighters[1].spread > fight.fighters[0].spread) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[1].fighter_image_name\" alt=\"{{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                <img class=\"fightsList__flag right\" :src=\"'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri\" alt=\"{{ fight.fighters[1].nationality.country_name }} Flag\">\n                                 <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div class=\"fightsList__selectedIndicator\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                        <span v-if:\"parseint(fight.fighters[1].spread,=\"\" 10)=\"\"> parseInt(fight.fighters[0].spread, 10)\"&gt;\n                                            Favorite\n                                        </span>\n                                        <span v-else=\"\">\n                                            Underdog\n                                        </span>\n                                    </div>\n                                </div>\n                            </div><!-- .fightsList__fighterImgWrap -->\n                        </div><!-- .fightsList__fighterWrap -->\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                </div><!-- .fightsList__fightersWrap -->\n                <div class=\"fightsList__pick\" data-fight-id=\"{{ fight.id }}\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">How will win?</div>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Finish</option>\n                                <option v-for=\"finish in finishes\" value=\"{{ finish.id }}\">{{ finish.name }}({{ finish.points }})</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Round</option>\n                                <option value=\"1\">1</option>\n                                <option value=\"2\">2</option>\n                                <option value=\"3\">3</option>\n                                <option value=\"4\">4</option>\n                                <option value=\"5\">5</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Minute</option>\n                                <option value=\"1\">1</option>\n                                <option value=\"2\">2</option>\n                                <option value=\"3\">3</option>\n                                <option value=\"4\">4</option>\n                                <option value=\"5\">5</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">Power-up (optional)</div>\n                        </div>\n                        <div class=\"col-xs-100 powerUpsList\">\n                            <div class=\"col-xs-23 col-xs-offset-2\" v-for=\"powerUp in powerUps\">\n                                <button class=\"powerUpList__btn\" type=\"button\" @click=\"confirmPowerUp\" data-power-up=\"{{ powerUp.power_up_id }}\">\n                                    <span class=\"visuallyhidden\">{{ powerUp.name }}</span>\n                                    <img :src=\"'public/image/powerups/' + powerUp.image_name\" alt=\"{{ powerUp.name }} Image\">\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n        <section :class=\"powerUpModalClasses\">\n            <h3 class=\"powerUpModal__title\">{{ selectedPowerUp.title }}</h3>\n            <img class=\"powerUpModal__image\" src=\"\" alt=\"{{ selectedPowerUp.title }}\">\n            <div class=\"powerUpModal__description\">\n                {{{ selectedPowerUp.description }}}\n            </div>\n            <div class=\"powerUpModal__points\">\n                +{{ selectedPowerUp.bonus_points }} Points\n            </div>\n            <div class=\"powerUpModal__apply\">\n                <p>Apply this power up?</p>\n                <p>Failure results in a -{{ selectedPowerUp.penalty_points }} penalty</p>\n            </div>\n            <div class=\"powerUpModal__confirm\">\n                <button class=\"powerUpModal__confirm--no\">No</button>\n                <button class=\"powerUpModal__confirm--yes\">Yes</button>\n            </div>\n        </section>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Choose 5 Fights</h1>\n        <h4 class=\"pageHeader__subheader\">{{ fightsList[0].event.event_short_name }}</h4>\n    </header>\n    <div class=\"fightsList\">\n        <ul>\n            <li class=\"fightsList__item\" v-for=\"fight in fightsList[0].fights\">\n                <div class=\"container-fluid fightsList__fightersWrap\">\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFighter\" data-fighter-id=\"{{ fight.fighters[0].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-40 fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (fight.fighters[0].spread == fight.fighters[1].spread) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[0].fighter_image_name\" alt=\"{{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                <img class=\"fightsList__flag left\" :src=\"'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri\" :show=\"\" alt=\"{{ fight.fighters[0].nationality.country_name }} Flag\">\n                                <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div class=\"fightsList__selectedIndicator\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                        <span v-if:\"parseint(fight.fighters[0].spread,=\"\" 10)=\"\"> parseInt(fight.fighters[1].spread, 10)\"&gt;\n                                            Favorite\n                                        </span>\n                                        <span v-else=\"\">\n                                            Underdog\n                                        </span>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"col-xs-60\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[0].height_ft }}' {{ fight.fighters[0].height_in }}\"\n                                {{ fight.fighters[0].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[0].wins }} - {{ fight.fighters[0].loses }} - {{ fight.fighters[0].draws }}\n                            </div>\n                            <div class=\"fightsList__spread\">\n                                150\n                            </div>\n                        </div>\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFighter\" data-fighter-id=\"{{ fight.fighters[1].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-60\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[1].height_ft }}' {{ fight.fighters[1].height_in }}\"\n                                {{ fight.fighters[1].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[1].wins }} - {{ fight.fighters[1].loses }} - {{ fight.fighters[1].draws }}\n                            </div>\n                            <div class=\"fightsList__spread\">\n                                150\n                            </div>\n                        </div>\n                        <div class=\"col-xs-40  fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (fight.fighters[1].spread > fight.fighters[0].spread) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[1].fighter_image_name\" alt=\"{{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                <img class=\"fightsList__flag right\" :src=\"'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri\" alt=\"{{ fight.fighters[1].nationality.country_name }} Flag\">\n                                 <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div class=\"fightsList__selectedIndicator\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                        <span v-if:\"parseint(fight.fighters[1].spread,=\"\" 10)=\"\"> parseInt(fight.fighters[0].spread, 10)\"&gt;\n                                            Favorite\n                                        </span>\n                                        <span v-else=\"\">\n                                            Underdog\n                                        </span>\n                                    </div>\n                                </div>\n                            </div><!-- .fightsList__fighterImgWrap -->\n                        </div><!-- .fightsList__fighterWrap -->\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                </div><!-- .fightsList__fightersWrap -->\n                <div class=\"fightsList__pick\" data-fight-id=\"{{ fight.id }}\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">How will win?</div>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Finish</option>\n                                <option v-for=\"finish in finishes\" value=\"{{ finish.id }}\">{{ finish.name }} (+{{ finish.points }})</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Round</option>\n                                <option value=\"1\">1</option>\n                                <option value=\"2\">2</option>\n                                <option value=\"3\">3</option>\n                                <option value=\"4\">4</option>\n                                <option value=\"5\">5</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Minute</option>\n                                <option value=\"1\">1</option>\n                                <option value=\"2\">2</option>\n                                <option value=\"3\">3</option>\n                                <option value=\"4\">4</option>\n                                <option value=\"5\">5</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">Power-up (optional)</div>\n                        </div>\n                        <div class=\"col-xs-100 powerUpsList\">\n                            <div class=\"col-xs-23 col-xs-offset-2\" v-for=\"powerUp in powerUps\">\n                                <button class=\"powerUpList__btn\" type=\"button\" @click=\"confirmPowerUp\" data-power-up=\"{{ powerUp.power_up_id }}\">\n                                    <span class=\"visuallyhidden\">{{ powerUp.name }}</span>\n                                    <img :src=\"'public/image/powerups/' + powerUp.image_name\" alt=\"{{ powerUp.name }} Image\">\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n        <section :class=\"powerUpModalClasses\">\n            <h3 class=\"powerUpModal__title\">{{ selectedPowerUp.title }}</h3>\n            <img class=\"powerUpModal__image\" src=\"\" alt=\"{{ selectedPowerUp.title }}\">\n            <div class=\"powerUpModal__description\">\n                {{{ selectedPowerUp.description }}}\n            </div>\n            <div class=\"powerUpModal__points\">\n                +{{ selectedPowerUp.bonus_points }} Points\n            </div>\n            <div class=\"powerUpModal__apply\">\n                <p>Apply this power up?</p>\n                <p>Failure results in a -{{ selectedPowerUp.penalty_points }} penalty</p>\n            </div>\n            <div class=\"powerUpModal__confirm\">\n                <button class=\"powerUpModal__confirm--no\">No</button>\n                <button class=\"powerUpModal__confirm--yes\">Yes</button>\n            </div>\n        </section>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Fights.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Fights.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14972,12 +15084,12 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n\t<header class=\"pageHeader\">\n\t\t<h1 class=\"pageHeader__header\">Player Login</h1>\n\t\t<h4 class=\"pageHeader__subheader\">\n\t\t\tDon't have an account yet?\n\t\t\t<a v-link=\"{ path: '/register' }\" href=\"#\">Sign Up</a>\n\t\t</h4>\n\t</header>\n\t<div class=\"loginForm form\">\n\t\t<div class=\"container-fluid\">\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"email\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.email\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"password\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">x</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Login</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n\t</div>\n\t<div class=\"container-fluid\">\n\t\t<div class=\"col-xs-100\">\n\t\t\t<div class=\"logo\">\n\t\t\t\t<img src=\"http://edward.dev/bsmma/public/image/logo.jpg\" alt=\"Blood Sport Fantasy MMA Logo\">\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n "
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n\t<header class=\"pageHeader\">\n\t\t<h1 class=\"pageHeader__header\">Player Login</h1>\n\t\t<h4 class=\"pageHeader__subheader\">\n\t\t\tDon't have an account yet?\n\t\t\t<a v-link=\"{ path: '/register' }\" href=\"#\">Sign Up</a>\n\t\t</h4>\n\t</header>\n\t<div class=\"loginForm form\">\n\t\t<div class=\"container-fluid\">\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"email\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.email\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"password\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">x</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Login</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n\t</div>\n\t<div class=\"container-fluid\">\n\t\t<div class=\"col-xs-100\">\n\t\t\t<div class=\"logo\">\n\t\t\t\t<img src=\"http://edward.dev/bsmma/public/image/logo.jpg\" alt=\"Blood Sport Fantasy MMA Logo\">\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Login.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Login.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -15049,7 +15161,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Register.vue"
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Register.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {

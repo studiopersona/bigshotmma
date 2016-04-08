@@ -52,8 +52,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
-  </template>
+	</div></template>
 
   <script>
   	import auth from '../auth'

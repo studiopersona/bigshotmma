@@ -6,21 +6,25 @@
                 Over <span class="pageHeader--highlight">{{ poolTotal }}</span> Total Prize Pool
             </h4>
         </header>
-        <div class="eventList clearfix">
-            <ul>
-                <li class="eventList__item" v-for="event in eventsList.events">
-                    <a v-link="{ path: '/event/' + event.event_id + '/contests' }" href="#">
-                        <img class="eventList__img" src="http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg" alt="{{ event.event_name }} Image">
-                        <div class="eventList__name">{{ event.event_name }}</div>
-                        <div class="eventList__date">{{ event.date }} {{ event.time }}</div>
-                    </a>
-                </li>
-            </ul>
-            <div :class="loaderClasses">
-                <div class="js-global-loader loader">
-                    <svg viewBox="0 0 32 32" width="32" height="32">
-                        <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
-                    </svg>
+        <div class="container-fluid">
+            <div class="col-xs-100">
+                <div class="eventList clearfix">
+                    <ul>
+                        <li class="eventList__item" v-for="event in eventsList.events">
+                            <a v-link="{ path: '/event/' + event.event_id + '/contests' }" href="#">
+                                <img class="eventList__img" src="http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg" alt="{{ event.event_name }} Image">
+                                <div class="eventList__name">{{ event.event_name }}</div>
+                                <div class="eventList__date">{{ event.date }} {{ event.time }}</div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div :class="loaderClasses">
+                        <div class="js-global-loader loader">
+                            <svg viewBox="0 0 32 32" width="32" height="32">
+                                <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

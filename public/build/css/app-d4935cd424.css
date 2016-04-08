@@ -4079,7 +4079,6 @@ a {
 .eventList {
   position: relative;
   min-height: 100px;
-  width: 100%;
   padding: 0 1rem; }
 
 .eventList__item {
@@ -4491,10 +4490,6 @@ a {
     background: #eee;
     color: #ccc; }
 
-.button-wrap {
-  margin-top: 2.5rem;
-  text-align: center; }
-
 .logo {
   text-align: center; }
   .logo img {
@@ -4575,6 +4570,9 @@ a {
   background-color: #eee; }
   .stripped-list > li:nth-child(2n) {
     background-color: #fff; }
+
+.text-center {
+  text-align: center; }
 
 /**
  * Clearfix helper

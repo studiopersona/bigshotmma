@@ -30,6 +30,7 @@ export default {
         }).error((err) => {
             context.error = err.error.message;
             context.alertType = 'error';
+            context.working = false;
         });
     },
 

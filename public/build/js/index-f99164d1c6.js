@@ -1,4 +1,50 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
+},{"core-js/library/fn/object/define-property":3}],2:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+var _defineProperty = require("../core-js/object/define-property");
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (obj, key, value) {
+  if (key in obj) {
+    (0, _defineProperty2.default)(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+},{"../core-js/object/define-property":1}],3:[function(require,module,exports){
+var $ = require('../../modules/$');
+module.exports = function defineProperty(it, key, desc){
+  return $.setDesc(it, key, desc);
+};
+},{"../../modules/$":4}],4:[function(require,module,exports){
+var $Object = Object;
+module.exports = {
+  create:     $Object.create,
+  getProto:   $Object.getPrototypeOf,
+  isEnum:     {}.propertyIsEnumerable,
+  getDesc:    $Object.getOwnPropertyDescriptor,
+  setDesc:    $Object.defineProperty,
+  setDescs:   $Object.defineProperties,
+  getKeys:    $Object.keys,
+  getNames:   $Object.getOwnPropertyNames,
+  getSymbols: $Object.getOwnPropertySymbols,
+  each:       [].forEach
+};
+},{}],5:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -91,7 +137,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],2:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var Vue // late bind
 var map = Object.create(null)
 var shimmed = false
@@ -391,7 +437,7 @@ function format (id) {
   return id.match(/[^\/]+\.vue$/)[0]
 }
 
-},{}],3:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /**
  * Before Interceptor.
  */
@@ -411,7 +457,7 @@ module.exports = {
 
 };
 
-},{"../util":26}],4:[function(require,module,exports){
+},{"../util":30}],8:[function(require,module,exports){
 /**
  * Base client.
  */
@@ -478,7 +524,7 @@ function parseHeaders(str) {
     return headers;
 }
 
-},{"../../promise":19,"../../util":26,"./xhr":7}],5:[function(require,module,exports){
+},{"../../promise":23,"../../util":30,"./xhr":11}],9:[function(require,module,exports){
 /**
  * JSONP client.
  */
@@ -528,7 +574,7 @@ module.exports = function (request) {
     });
 };
 
-},{"../../promise":19,"../../util":26}],6:[function(require,module,exports){
+},{"../../promise":23,"../../util":30}],10:[function(require,module,exports){
 /**
  * XDomain client (Internet Explorer).
  */
@@ -567,7 +613,7 @@ module.exports = function (request) {
     });
 };
 
-},{"../../promise":19,"../../util":26}],7:[function(require,module,exports){
+},{"../../promise":23,"../../util":30}],11:[function(require,module,exports){
 /**
  * XMLHttp client.
  */
@@ -619,7 +665,7 @@ module.exports = function (request) {
     });
 };
 
-},{"../../promise":19,"../../util":26}],8:[function(require,module,exports){
+},{"../../promise":23,"../../util":30}],12:[function(require,module,exports){
 /**
  * CORS Interceptor.
  */
@@ -658,7 +704,7 @@ function crossOrigin(request) {
     return (requestUrl.protocol !== originUrl.protocol || requestUrl.host !== originUrl.host);
 }
 
-},{"../util":26,"./client/xdr":6}],9:[function(require,module,exports){
+},{"../util":30,"./client/xdr":10}],13:[function(require,module,exports){
 /**
  * Header Interceptor.
  */
@@ -686,7 +732,7 @@ module.exports = {
 
 };
 
-},{"../util":26}],10:[function(require,module,exports){
+},{"../util":30}],14:[function(require,module,exports){
 /**
  * Service for sending network requests.
  */
@@ -786,7 +832,7 @@ Http.headers = {
 
 module.exports = _.http = Http;
 
-},{"../promise":19,"../util":26,"./before":3,"./client":4,"./cors":8,"./header":9,"./interceptor":11,"./jsonp":12,"./method":13,"./mime":14,"./timeout":15}],11:[function(require,module,exports){
+},{"../promise":23,"../util":30,"./before":7,"./client":8,"./cors":12,"./header":13,"./interceptor":15,"./jsonp":16,"./method":17,"./mime":18,"./timeout":19}],15:[function(require,module,exports){
 /**
  * Interceptor factory.
  */
@@ -833,7 +879,7 @@ function when(value, fulfilled, rejected) {
     return promise.then(fulfilled, rejected);
 }
 
-},{"../promise":19,"../util":26}],12:[function(require,module,exports){
+},{"../promise":23,"../util":30}],16:[function(require,module,exports){
 /**
  * JSONP Interceptor.
  */
@@ -853,7 +899,7 @@ module.exports = {
 
 };
 
-},{"./client/jsonp":5}],13:[function(require,module,exports){
+},{"./client/jsonp":9}],17:[function(require,module,exports){
 /**
  * HTTP method override Interceptor.
  */
@@ -872,7 +918,7 @@ module.exports = {
 
 };
 
-},{}],14:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /**
  * Mime Interceptor.
  */
@@ -910,7 +956,7 @@ module.exports = {
 
 };
 
-},{"../util":26}],15:[function(require,module,exports){
+},{"../util":30}],19:[function(require,module,exports){
 /**
  * Timeout Interceptor.
  */
@@ -942,7 +988,7 @@ module.exports = function () {
     };
 };
 
-},{}],16:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 /**
  * Install plugin.
  */
@@ -997,7 +1043,7 @@ if (window.Vue) {
 
 module.exports = install;
 
-},{"./http":10,"./promise":19,"./resource":20,"./url":21,"./util":26}],17:[function(require,module,exports){
+},{"./http":14,"./promise":23,"./resource":24,"./url":25,"./util":30}],21:[function(require,module,exports){
 /**
  * Promises/A+ polyfill v1.1.4 (https://github.com/bramstein/promis)
  */
@@ -1178,7 +1224,7 @@ p.catch = function (onRejected) {
 
 module.exports = Promise;
 
-},{"../util":26}],18:[function(require,module,exports){
+},{"../util":30}],22:[function(require,module,exports){
 /**
  * URL Template v2.0.6 (https://github.com/bramstein/url-template)
  */
@@ -1330,7 +1376,7 @@ exports.encodeReserved = function (str) {
     }).join('');
 };
 
-},{}],19:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 /**
  * Promise adapter.
  */
@@ -1441,7 +1487,7 @@ p.always = function (callback) {
 
 module.exports = Promise;
 
-},{"./lib/promise":17,"./util":26}],20:[function(require,module,exports){
+},{"./lib/promise":21,"./util":30}],24:[function(require,module,exports){
 /**
  * Service for interacting with RESTful services.
  */
@@ -1553,7 +1599,7 @@ Resource.actions = {
 
 module.exports = _.resource = Resource;
 
-},{"./util":26}],21:[function(require,module,exports){
+},{"./util":30}],25:[function(require,module,exports){
 /**
  * Service for URL templating.
  */
@@ -1685,7 +1731,7 @@ function serialize(params, obj, scope) {
 
 module.exports = _.url = Url;
 
-},{"../util":26,"./legacy":22,"./query":23,"./root":24,"./template":25}],22:[function(require,module,exports){
+},{"../util":30,"./legacy":26,"./query":27,"./root":28,"./template":29}],26:[function(require,module,exports){
 /**
  * Legacy Transform.
  */
@@ -1733,7 +1779,7 @@ function encodeUriQuery(value, spaces) {
         replace(/%20/g, (spaces ? '%20' : '+'));
 }
 
-},{"../util":26}],23:[function(require,module,exports){
+},{"../util":30}],27:[function(require,module,exports){
 /**
  * Query Parameter Transform.
  */
@@ -1759,7 +1805,7 @@ module.exports = function (options, next) {
     return url;
 };
 
-},{"../util":26}],24:[function(require,module,exports){
+},{"../util":30}],28:[function(require,module,exports){
 /**
  * Root Prefix Transform.
  */
@@ -1777,7 +1823,7 @@ module.exports = function (options, next) {
     return url;
 };
 
-},{"../util":26}],25:[function(require,module,exports){
+},{"../util":30}],29:[function(require,module,exports){
 /**
  * URL Template (RFC 6570) Transform.
  */
@@ -1795,7 +1841,7 @@ module.exports = function (options) {
     return url;
 };
 
-},{"../lib/url-template":18}],26:[function(require,module,exports){
+},{"../lib/url-template":22}],30:[function(require,module,exports){
 /**
  * Utility functions.
  */
@@ -1919,7 +1965,7 @@ function merge(target, source, deep) {
     }
 }
 
-},{}],27:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 /*!
  * vue-router v0.7.11
  * (c) 2016 Evan You
@@ -4569,7 +4615,7 @@ function merge(target, source, deep) {
   return Router;
 
 }));
-},{}],28:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v1.0.20
@@ -14393,7 +14439,7 @@ if (config.devtools) {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":1}],29:[function(require,module,exports){
+},{"_process":5}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14477,7 +14523,7 @@ exports.default = {
     }
 };
 
-},{"../index":37}],30:[function(require,module,exports){
+},{"../index":41}],34:[function(require,module,exports){
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <router-view></router-view>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
@@ -14490,7 +14536,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":28,"vue-hot-reload-api":2}],31:[function(require,module,exports){
+},{"vue":32,"vue-hot-reload-api":6}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14612,7 +14658,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],32:[function(require,module,exports){
+},{"../auth":33,"vue":32,"vue-hot-reload-api":6}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14687,7 +14733,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],33:[function(require,module,exports){
+},{"../auth":33,"vue":32,"vue-hot-reload-api":6}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14760,12 +14806,18 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],34:[function(require,module,exports){
+},{"../auth":33,"vue":32,"vue-hot-reload-api":6}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _methods;
 
 var _auth = require('../auth');
 
@@ -14789,6 +14841,7 @@ exports.default = {
             finishes: {},
             working: false,
             powerUpModalClasses: ['powerUpModal'],
+            fighterClasses: ['fightsList__fighter'],
             selectedPowerUp: {},
             powerUpId: '',
             playerPicks: [],
@@ -14828,12 +14881,10 @@ exports.default = {
     },
 
 
-    methods: {
+    methods: (_methods = {
         confirmPowerUp: function confirmPowerUp(e) {
             var newPowerUp;
             e.preventDefault();
-
-            console.log(e);
 
             // if the content is already loaded don't load it again
             if (this.powerUpId !== e.target.dataset.powerUp) {
@@ -14860,106 +14911,55 @@ exports.default = {
 
             this.powerUpModalClasses = ['powerUpModal'];
         },
-        selectFight: function selectFight(e) {
-            if (this.playerPicks.length === 5) {
-                // inform that this pick will be the alternate
-            } else if (this.playerPicks.length === 6) {
-                    // inform that the will need to remove a pick to add this one
-                } else {
-                        if (this.currentFightId !== e.target.dataset.fightId) {
-                            this.switchFight(e);
-                            this.updatePicks({
-                                fighterId: e.target.dataset.fighterId,
-                                finishId: '',
-                                round: '',
-                                minute: '',
-                                powerUpId: ''
-                            });
-                        } else {
-                            this.updatePicks({
-                                fighterId: e.target.dataset.fighterId,
-                                finishId: '',
-                                round: '',
-                                minute: '',
-                                powerUpId: ''
-                            });
-                        }
-                    }
+        selectFighter: function selectFighter(e) {
+            var fightToClose, fightToOpen, fighterImageToDeselect, fighterIndicatorToDeselect, fighterImageToSelect, fighterIndicatorToSelect, pickData;
+
+            // check if working on the same fight that is open if so act accordingly
+            // if not close all picks before opening again
+
+            if (this.currentFightId !== e.target.dataset.fightId) {
+                this.switchFight(e);
+                this.updatePicks();
+            } else {
+                this.updatePicks();
+            }
         },
-        addPick: function addPick(newData) {
+        addPick: function addPick(eventData) {
             this.playerPicks.push({
-                fightId: this.currentFightId,
-                fighterId: newData.fighterId,
+                fightId: e.target.dataset.fightId,
+                fighterId: e.target.dataset.fighterId,
                 finishId: 0,
                 round: 0,
                 minute: 0,
                 powerUpId: 0
             });
         },
-        updatePicks: function updatePicks(newData) {
-            var pickData,
-                pickDataIndex = -1;
+        updatePicks: function updatePicks() {
             // search for this fight in picks
             pickData = this.playerPicks.find(this.findPick);
             // if a pic was already made for this fight
             if (pickData) {
                 // check pick fithter id with current fighter id
                 // change if different do nothing if its the same
-                if (newData.fighterId !== '') {
-                    if (pickData.fighterId !== newData.fighterId) {
-                        this.deselectFighter(pickData.fighterId);
+                if (pickData.fighterId !== e.target.dataset.fighterId) {
+                    this.deselectFighter(pickData.fighterId);
 
-                        if (pickDataIndex === -1) pickDataIndex = this.playerPicks.findIndex(this.findPick);
-                        console.log(pickDataIndex);
+                    pickDataIndex = this.palyerPicks.findIndex(findPick);
+                    console.log(pickDataIndex);
 
-                        if (pickDataIndex !== -1) this.playerPicks[pickDataIndex].fighterId = newData.fighterId;
+                    if (pickDataIndex !== -1) this.playerPicks[pickDataIndex].fighterId = e.target.dataset.fighterId;
 
-                        this.selectFighter(newData.fighterId);
-                    }
-                }
-
-                if (newData.finishId !== '') {
-                    if (newData.finishId !== pickData.finishId) {
-                        if (pickDataIndex === -1) pickDataIndex = this.playerPicks.findIndex(this.findPick);
-
-                        if (pickDataIndex !== -1) this.playerPicks[pickDataIndex].finishId = newData.finishId;
-                    }
-                }
-
-                if (newData.round !== '') {
-                    if (newData.round !== pickData.round) {
-                        if (pickDataIndex === -1) pickDataIndex = this.playerPicks.findIndex(this.findPick);
-
-                        if (pickDataIndex !== -1) this.playerPicks[pickDataIndex].round = newData.round;
-                    }
-                }
-
-                if (newData.minute !== '') {
-                    if (newData.minute !== pickData.minute) {
-                        if (pickDataIndex === -1) pickDataIndex = this.playerPicks.findIndex(this.findPick);
-
-                        if (pickDataIndex !== -1) this.playerPicks[pickDataIndex].minute = newData.minute;
-                    }
-                }
-
-                if (newData.powerUpId !== '') {
-                    if (newData.powerUpId !== pickData.powerUpId) {
-                        if (pickDataIndex === -1) pickDataIndex = this.playerPicks.findIndex(this.findPick);
-
-                        if (pickDataIndex !== -1) this.playerPicks[pickDataIndex].powerUpId = newData.powerUpId;
-                    }
+                    this.selectFighter(e.target.dataset.fighterId);
                 }
             } else {
-                this.addPick(newData);
-                this.selectFighter(newData.fighterId);
+                this.addPick(e);
+                this.selectFighter(e.target.dataset.fighterId);
             }
         },
         findPick: function findPick(playerPick) {
             return playerPick.fightId === this.currentFightId;
         },
         switchFight: function switchFight(e) {
-            var fightToClose, fightToOpen;
-
             fightToClose = document.querySelector('div.fightsList__pick[data-fight-id="' + this.currentFightId + '"]');
             if (fightToClose) fightToClose.classList.toggle('show');
 
@@ -14967,34 +14967,31 @@ exports.default = {
             fightToOpen.classList.toggle('show');
             // update currentFightId
             this.currentFightId = e.target.dataset.fightId;
-        },
-        selectFighter: function selectFighter(fighterId) {
-            var fighterImageToSelect, fighterIndicatorToSelect;
-
-            fighterImageToSelect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
-            if (!fighterImageToSelect.classList.contains('selected')) {
-                fighterImageToSelect.classList.add('selected');
-                fighterIndicatorToSelect = document.querySelector('div.fightsList__selectedIndicator[data-fighter-id="' + fighterId + '"]');
-                fighterIndicatorToSelect.classList.add('show');
-
-                this.currentFighterId = fighterId;
-            }
-        },
-        deselectFighter: function deselectFighter(fighterId) {
-            var fighterImageToDeselect, fighterIndicatorToDeselect;
-
-            fighterImageToDeselect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
-            if (fighterImageToDeselect.classList.contains('selected')) {
-                fighterImageToDeselect.classList.remove('selected');
-                fighterIndicatorToDeselect = document.querySelector('div.fightsList__selectedIndicator[data-fighter-id="' + fighterId + '"]');
-                fighterIndicatorToDeselect.classList.remove('show');
-            }
         }
-    },
+    }, (0, _defineProperty3.default)(_methods, 'selectFighter', function selectFighter(fighterId) {
+        fighterImageToSelect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
+        if (!fighterImageToSelect.classList.contains('selected')) {
+            fighterImageToSelect.classList.add('selected');
+            fighterIndicatorToSelect = document.querySelector('div.fightsList__selectedIndicator[data-fighter-id="' + fighterId + '"]');
+            fighterIndicatorToSelect.classList.add('show');
+
+            this.currentFighterId = fighterId;
+        }
+    }), (0, _defineProperty3.default)(_methods, 'deselectFighter', function deselectFighter(fighterId) {
+        fighterImageToDeselect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
+        if (fighterImageToDeselect.classList.contains('selected')) {
+            fighterImageToSelect.classList.remove('selected');
+            fighterIndicatorToDeselect = document.querySelector('div.fightsList__selectedIndicator[data-fighter-id="' + fighterId + '"]');
+            fighterIndicatorToSelect.classList.remove('show');
+        }
+    }), _methods),
 
     computed: {
         loaderClasses: function loaderClasses() {
             return this.working ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
+        },
+        fighterClasses: function fighterClasses() {
+            return fightsList[0].fight;
         }
     },
 
@@ -15008,7 +15005,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Choose 5 Fights</h1>\n        <h4 class=\"pageHeader__subheader\">{{ fightsList[0].event.event_short_name }}</h4>\n    </header>\n    <div class=\"fightsList\">\n        <ul>\n            <li class=\"fightsList__item\" v-for=\"fight in fightsList[0].fights\">\n                <div class=\"container-fluid fightsList__fightersWrap\">\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFight\" data-fighter-id=\"{{ fight.fighters[0].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-40 fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (fight.fighters[0].spread == fight.fighters[1].spread) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[0].fighter_image_name\" alt=\"{{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                <img class=\"fightsList__flag left\" :src=\"'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri\" :show=\"\" alt=\"{{ fight.fighters[0].nationality.country_name }} Flag\">\n                                <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div class=\"fightsList__selectedIndicator\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                        <span v-if:\"parseint(fight.fighters[0].spread,=\"\" 10)=\"\"> parseInt(fight.fighters[1].spread, 10)\"&gt;\n                                            Favorite\n                                        </span>\n                                        <span v-else=\"\">\n                                            Underdog\n                                        </span>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"col-xs-60\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[0].height_ft }}' {{ fight.fighters[0].height_in }}\"\n                                {{ fight.fighters[0].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[0].wins }} - {{ fight.fighters[0].loses }} - {{ fight.fighters[0].draws }}\n                            </div>\n                            <div class=\"fightsList__spread\">\n                                150\n                            </div>\n                        </div>\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFight\" data-fighter-id=\"{{ fight.fighters[1].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-60\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[1].height_ft }}' {{ fight.fighters[1].height_in }}\"\n                                {{ fight.fighters[1].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[1].wins }} - {{ fight.fighters[1].loses }} - {{ fight.fighters[1].draws }}\n                            </div>\n                            <div class=\"fightsList__spread\">\n                                150\n                            </div>\n                        </div>\n                        <div class=\"col-xs-40  fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (fight.fighters[1].spread > fight.fighters[0].spread) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[1].fighter_image_name\" alt=\"{{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                <img class=\"fightsList__flag right\" :src=\"'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri\" alt=\"{{ fight.fighters[1].nationality.country_name }} Flag\">\n                                 <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div class=\"fightsList__selectedIndicator\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                        <span v-if:\"parseint(fight.fighters[1].spread,=\"\" 10)=\"\"> parseInt(fight.fighters[0].spread, 10)\"&gt;\n                                            Favorite\n                                        </span>\n                                        <span v-else=\"\">\n                                            Underdog\n                                        </span>\n                                    </div>\n                                </div>\n                            </div><!-- .fightsList__fighterImgWrap -->\n                        </div><!-- .fightsList__fighterWrap -->\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                </div><!-- .fightsList__fightersWrap -->\n                <div class=\"fightsList__pick\" data-fight-id=\"{{ fight.id }}\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">How will win?</div>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Finish</option>\n                                <option v-for=\"finish in finishes\" value=\"{{ finish.id }}\">{{ finish.name }} (+{{ finish.points }})</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Round</option>\n                                <option value=\"1\">1</option>\n                                <option value=\"2\">2</option>\n                                <option value=\"3\">3</option>\n                                <option value=\"4\">4</option>\n                                <option value=\"5\">5</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Minute</option>\n                                <option value=\"1\">1</option>\n                                <option value=\"2\">2</option>\n                                <option value=\"3\">3</option>\n                                <option value=\"4\">4</option>\n                                <option value=\"5\">5</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">Power-up (optional)</div>\n                        </div>\n                        <div class=\"col-xs-100 powerUpsList\">\n                            <div class=\"col-xs-23 col-xs-offset-2\" v-for=\"powerUp in powerUps\">\n                                <button class=\"powerUpList__btn\" type=\"button\" @click=\"confirmPowerUp\" data-power-up=\"{{ powerUp.power_up_id }}\">\n                                    <span class=\"visuallyhidden\">{{ powerUp.name }}</span>\n                                    <img :src=\"'public/image/powerups/' + powerUp.image_name\" alt=\"{{ powerUp.name }} Image\">\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n        <section :class=\"powerUpModalClasses\">\n            <h3 class=\"powerUpModal__title\">{{ selectedPowerUp.title }}</h3>\n            <img class=\"powerUpModal__image\" src=\"\" alt=\"{{ selectedPowerUp.title }}\">\n            <div class=\"powerUpModal__description\">\n                {{{ selectedPowerUp.description }}}\n            </div>\n            <div class=\"powerUpModal__points\">\n                +{{ selectedPowerUp.bonus_points }} Points\n            </div>\n            <div class=\"powerUpModal__apply\">\n                <p>Apply this power up?</p>\n                <p>Failure results in a -{{ selectedPowerUp.penalty_points }} penalty</p>\n            </div>\n            <div class=\"powerUpModal__confirm\">\n                <button class=\"powerUpModal__confirm--no\">No</button>\n                <button class=\"powerUpModal__confirm--yes\">Yes</button>\n            </div>\n        </section>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Choose 5 Fights</h1>\n        <h4 class=\"pageHeader__subheader\">{{ fightsList[0].event.event_short_name }}</h4>\n    </header>\n    <div class=\"fightsList\">\n        <ul>\n            <li class=\"fightsList__item\" v-for=\"fight in fightsList[0].fights\">\n                <div class=\"container-fluid fightsList__fightersWrap\">\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFighter\" data-fighter-id=\"{{ fight.fighters[0].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-40 fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (fight.fighters[0].spread == fight.fighters[1].spread) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[0].fighter_image_name\" alt=\"{{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                <img class=\"fightsList__flag left\" :src=\"'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri\" :show=\"\" alt=\"{{ fight.fighters[0].nationality.country_name }} Flag\">\n                                <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div class=\"fightsList__selectedIndicator\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                        <span v-if:\"parseint(fight.fighters[0].spread,=\"\" 10)=\"\"> parseInt(fight.fighters[1].spread, 10)\"&gt;\n                                            Favorite\n                                        </span>\n                                        <span v-else=\"\">\n                                            Underdog\n                                        </span>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"col-xs-60\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[0].height_ft }}' {{ fight.fighters[0].height_in }}\"\n                                {{ fight.fighters[0].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[0].wins }} - {{ fight.fighters[0].loses }} - {{ fight.fighters[0].draws }}\n                            </div>\n                            <div class=\"fightsList__spread\">\n                                150\n                            </div>\n                        </div>\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFighter\" data-fighter-id=\"{{ fight.fighters[1].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-60\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[1].height_ft }}' {{ fight.fighters[1].height_in }}\"\n                                {{ fight.fighters[1].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[1].wins }} - {{ fight.fighters[1].loses }} - {{ fight.fighters[1].draws }}\n                            </div>\n                            <div class=\"fightsList__spread\">\n                                150\n                            </div>\n                        </div>\n                        <div class=\"col-xs-40  fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (fight.fighters[1].spread > fight.fighters[0].spread) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[1].fighter_image_name\" alt=\"{{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                <img class=\"fightsList__flag right\" :src=\"'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri\" alt=\"{{ fight.fighters[1].nationality.country_name }} Flag\">\n                                 <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div class=\"fightsList__selectedIndicator\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                        <span v-if:\"parseint(fight.fighters[1].spread,=\"\" 10)=\"\"> parseInt(fight.fighters[0].spread, 10)\"&gt;\n                                            Favorite\n                                        </span>\n                                        <span v-else=\"\">\n                                            Underdog\n                                        </span>\n                                    </div>\n                                </div>\n                            </div><!-- .fightsList__fighterImgWrap -->\n                        </div><!-- .fightsList__fighterWrap -->\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                </div><!-- .fightsList__fightersWrap -->\n                <div class=\"fightsList__pick\" data-fight-id=\"{{ fight.id }}\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">How will win?</div>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Finish</option>\n                                <option v-for=\"finish in finishes\" value=\"{{ finish.id }}\">{{ finish.name }} (+{{ finish.points }})</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Round</option>\n                                <option value=\"1\">1</option>\n                                <option value=\"2\">2</option>\n                                <option value=\"3\">3</option>\n                                <option value=\"4\">4</option>\n                                <option value=\"5\">5</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select>\n                                <option value=\"0\">Choose Minute</option>\n                                <option value=\"1\">1</option>\n                                <option value=\"2\">2</option>\n                                <option value=\"3\">3</option>\n                                <option value=\"4\">4</option>\n                                <option value=\"5\">5</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">Power-up (optional)</div>\n                        </div>\n                        <div class=\"col-xs-100 powerUpsList\">\n                            <div class=\"col-xs-23 col-xs-offset-2\" v-for=\"powerUp in powerUps\">\n                                <button class=\"powerUpList__btn\" type=\"button\" @click=\"confirmPowerUp\" data-power-up=\"{{ powerUp.power_up_id }}\">\n                                    <span class=\"visuallyhidden\">{{ powerUp.name }}</span>\n                                    <img :src=\"'public/image/powerups/' + powerUp.image_name\" alt=\"{{ powerUp.name }} Image\">\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n        <section :class=\"powerUpModalClasses\">\n            <h3 class=\"powerUpModal__title\">{{ selectedPowerUp.title }}</h3>\n            <img class=\"powerUpModal__image\" src=\"\" alt=\"{{ selectedPowerUp.title }}\">\n            <div class=\"powerUpModal__description\">\n                {{{ selectedPowerUp.description }}}\n            </div>\n            <div class=\"powerUpModal__points\">\n                +{{ selectedPowerUp.bonus_points }} Points\n            </div>\n            <div class=\"powerUpModal__apply\">\n                <p>Apply this power up?</p>\n                <p>Failure results in a -{{ selectedPowerUp.penalty_points }} penalty</p>\n            </div>\n            <div class=\"powerUpModal__confirm\">\n                <button class=\"powerUpModal__confirm--no\">No</button>\n                <button class=\"powerUpModal__confirm--yes\">Yes</button>\n            </div>\n        </section>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -15020,7 +15017,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],35:[function(require,module,exports){
+},{"../auth":33,"babel-runtime/helpers/defineProperty":2,"vue":32,"vue-hot-reload-api":6}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15098,7 +15095,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],36:[function(require,module,exports){
+},{"../auth":33,"vue":32,"vue-hot-reload-api":6}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15170,7 +15167,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":29,"vue":28,"vue-hot-reload-api":2}],37:[function(require,module,exports){
+},{"../auth":33,"vue":32,"vue-hot-reload-api":6}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15261,6 +15258,6 @@ router.redirect({
 // Start the app on the #app div
 router.start(_App2.default, '#app');
 
-},{"./components/App.vue":30,"./components/ContestLobby.vue":31,"./components/Contests.vue":32,"./components/Events.vue":33,"./components/Fights.vue":34,"./components/Login.vue":35,"./components/Register.vue":36,"vue":28,"vue-resource":16,"vue-router":27}]},{},[37]);
+},{"./components/App.vue":34,"./components/ContestLobby.vue":35,"./components/Contests.vue":36,"./components/Events.vue":37,"./components/Fights.vue":38,"./components/Login.vue":39,"./components/Register.vue":40,"vue":32,"vue-resource":20,"vue-router":31}]},{},[41]);
 
 //# sourceMappingURL=index.js.map

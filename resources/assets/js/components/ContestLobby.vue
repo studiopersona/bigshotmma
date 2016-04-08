@@ -65,7 +65,7 @@
             </div>
         </div>
         <div class="container-fluid">
-            <div class="col-xs-100">
+            <div class="col-xs-100 button-wrap">
                 <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }" class="button button--primary">Enter</a>
             </div>
         </div>

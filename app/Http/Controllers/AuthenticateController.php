@@ -44,7 +44,7 @@ class AuthenticateController extends ApiController
     {
         $credentials = $request->only('email', 'password', 'player_name');
 
-        $credentials['password'] = Hash::make($request->newPassword);
+        $credentials['password'] = Hash::make($request->password);
 
         try {
             User::create($credentials);
