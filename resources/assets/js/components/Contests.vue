@@ -12,7 +12,7 @@
                     <a v-link="{ path: '/contest/' + contest.contest_id + '/players' }" href="#">
                         <div class="container-fluid">
                             <div class="col-xs-20">
-                                <img class="contestList__img" src="http://edward.dev/bsmma/public/image/events/ufn-rothwell-vs-dos-santos.jpg" alt="{{ contest.event_name }} Image">
+                                <img class="contestList__img" :src="URL.base + '/public/image/events/' + contest.event_image_file" alt="{{ contest.event_name }} Image">
                             </div>
                             <div class="col-xs-45 contestList__infoWarp">
                                 <div class="contestList__date">{{ contest.event_date }}</div>

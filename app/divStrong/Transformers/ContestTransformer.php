@@ -16,6 +16,7 @@ class ContestTransformer extends Transformer {
             'event_short_name' => $contest['event']['event_short_name'],
             'event_date' => date('m/d/Y', strtotime($contest['event']['date_time'])),
             'event_time' => date('h:ia', strtotime($contest['event']['date_time'])),
+            'event_image_file' => $contest['event']['event_image_name'],
             'fights' => $contest['event']['fights'],
         ];
     }

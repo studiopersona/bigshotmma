@@ -30,12 +30,9 @@
                                         alt="{{ fight.fighters[0].nationality.country_name }} Flag"
                                     >
                                     <div class="fightsList__selectedIndicatorWrap">
-                                        <div :class="['fightsList__selectedIndicator', (fight.fighters[0].pivot.odds > fight.fighters[1].pivot.odds) ? 'favorite' : '']" data-fighter-id="{{ fight.fighters[0].id }}">
-                                            <span v-if:"fight.fighters[0].pivot.odds > fight.fighters[1].pivot.odds">
-                                                &nbps; <!--Favorite-->
-                                            </span>
-                                            <span v-else>
-                                                &nbsp; <!--Underdog-->
+                                        <div :class="['fightsList__selectedIndicator', (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'favorite' : '']" data-fighter-id="{{ fight.fighters[0].id }}">
+                                            <span>
+                                                {{ (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'Favorite' : 'Underdog' }}
                                             </span>
                                         </div>
                                     </div>
@@ -82,7 +79,7 @@
                             <div class="col-xs-40  fightsList__fighterWrap">
                                 <div class="fightsList__fighterImgWrap" data-fight-id="{{ fight.id }}">
                                     <img
-                                        :class="['fightsList__fighter', (fight.fighters[1].pivot.odds > fight.fighters[0].spread) ? 'favorite' : '']"
+                                        :class="['fightsList__fighter', (parseInt(fight.fighters[1].pivot.odds, 10) > parseInt(fight.fighters[0].pivot.odds, 10)) ? 'favorite' : '']"
                                         :src="'public/image/fighters/' + fight.fighters[1].fighter_image_name"
                                         alt="{{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }} Image"
                                         data-fighter-id="{{ fight.fighters[1].id }}"
@@ -94,11 +91,8 @@
                                     >
                                      <div class="fightsList__selectedIndicatorWrap">
                                         <div :class="['fightsList__selectedIndicator', (fight.fighters[1].pivot.odds > fight.fighters[0].pivot.odds) ? 'favorite' : '']" data-fighter-id="{{ fight.fighters[1].id }}">
-                                            <span v-if:"fight.fighters[1].pivot.odds > fight.fighters[0].pivot.odds">
-                                                &nbps; <!--Favorite-->
-                                            </span>
-                                            <span v-else>
-                                                &nbsp; <!--Underdog-->
+                                            <span>
+                                                {{ (parseInt(fight.fighters[1].pivot.odds, 10) > parseInt(fight.fighters[0].pivot.odds, 10)) ? 'Favorite' : 'Underdog' }}
                                             </span>
                                         </div>
                                     </div>

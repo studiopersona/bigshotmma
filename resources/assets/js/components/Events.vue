@@ -12,7 +12,7 @@
                     <ul>
                         <li class="eventList__item" v-for="event in eventsList.events">
                             <a v-link="{ path: '/event/' + event.event_id + '/contests' }" href="#">
-                                <img class="eventList__img" :src="URL.base + 'public/image/events/ufn-rothwell-vs-dos-santos.jpg'" alt="{{ event.event_name }} Image">
+                                <img class="eventList__img" :src="URL.base + '/public/image/events/' + event.event_image_file" alt="{{ event.event_name }} Image">
                                 <div class="eventList__name">{{ event.event_name }}</div>
                                 <div class="eventList__date">{{ event.date }} {{ event.time }}</div>
                             </a>

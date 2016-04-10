@@ -3,7 +3,7 @@
 import {router} from '../index';
 
 // URL and endpoint constants
-const API_URL = 'http://edward.dev/bsmma/api/v1/';
+const API_URL = URL.base + '/api/v1/';
 const LOGIN_URL = API_URL + 'authenticate';
 const SIGNUP_URL = API_URL + 'register';
 

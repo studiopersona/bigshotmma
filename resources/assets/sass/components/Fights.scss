@@ -121,17 +121,17 @@
 }
 
 .fightsList__flag {
-	width: 30%;
+	width: 40%;
 	position: absolute;
 	z-index: 1;
-	top: -3px;
+	top: -11px;
 
 	&.left {
-		left: -3px;
+		left: -6px;
 	}
 
 	&.right {
-		right: -3px;
+		right: -6px;
 	}
 }
 

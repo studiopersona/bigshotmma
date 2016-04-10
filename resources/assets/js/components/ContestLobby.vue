@@ -71,7 +71,7 @@
         </div>
         <section :class="infoModalClasses">
             <h3 class="infoModal__title">{{ infoModalContent.title }}</h3>
-            <img class="infoModal__image" src="public/image/contest-types/{{ infoModalContent.image }}" alt="{{ infoModalContent.title }} Image">
+            <img class="infoModal__image" :src="URL.base + '/public/image/contest-types/' + infoModalContent.image" alt="{{ infoModalContent.title }} Image">
             <div class="infoModal__rules">
                 {{{ infoModalContent.rules }}}
             </div>
