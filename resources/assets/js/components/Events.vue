@@ -40,8 +40,6 @@
         data() {
             return {
                 eventsList: { 'events':[] },
-                imageSrc: 'public/images/events/' + this.imageName,
-                imageName: '',
                 working: false,
             }
         },
@@ -51,7 +49,7 @@
         },
 
         ready() {
-            this.$http.get('http://edward.dev/bsmma/api/v1/events', (data) => {
+            this.$http.get( URL.base + '/api/v1/events', (data) => {
                 this.eventsList = data;
                 this.working = false;
             }, {

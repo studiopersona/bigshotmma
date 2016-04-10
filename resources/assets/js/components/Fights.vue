@@ -271,7 +271,7 @@
         },
 
         ready() {
-            this.$http.get('http://edward.dev/bsmma/api/v1/contest/' + this.$route.params.contest_id + '/fights', (data) => {
+            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', (data) => {
                 this.fightsList = data.fights;
                 this.working = false;
             }, {
@@ -279,14 +279,14 @@
                 headers: auth.getAuthHeader()
             }).error((err) => console.log(err))
 
-            this.$http.get('http://edward.dev/bsmma/api/v1/power-ups', (data) => {
+            this.$http.get(URL.base + '/api/v1/power-ups', (data) => {
                 this.powerUps = data;
             }, {
                 // Attach the JWT header
                 headers: auth.getAuthHeader()
             })
 
-            this.$http.get('http://edward.dev/bsmma/api/v1/finishes', (data) => {
+            this.$http.get(URL.base + '/api/v1/finishes', (data) => {
                 this.finishes = data;
             }, {
                 // Attach the JWT header
@@ -462,7 +462,7 @@
 
                 console.log(compiledPicks);
 
-                this.$http.post('http://edward.dev/bsmma/api/v1/picks', { picks: compiledPicks }, (data) => {
+                this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, (data) => {
                     if ( data.success ) this.$router.go({ path: '/contest/' + this.contestId + '/picks' });
                 }, {
                     // Attach the JWT header

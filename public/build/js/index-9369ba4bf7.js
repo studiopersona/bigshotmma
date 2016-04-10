@@ -14539,7 +14539,7 @@ exports.default = {
     ready: function ready() {
         var _this = this;
 
-        this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', function (data) {
+        this.$http.get('http://edward.dev/bsmma/api/v1/contest/' + this.$route.params.contest_id + '/players', function (data) {
             _this.participantsList = data.participants;
             _this.working = false;
         }, {
@@ -14549,7 +14549,7 @@ exports.default = {
             return console.log(err);
         });
 
-        this.$http.get(URL.base + '/api/v1/contest-types', function (data) {
+        this.$http.get('http://edward.dev/bsmma/api/v1/contest-types', function (data) {
             _this.contestTypes = data;
         }, {
             // Attach the JWT header
@@ -14641,7 +14641,7 @@ exports.default = {
     ready: function ready() {
         var _this = this;
 
-        this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', function (data) {
+        this.$http.get('http://edward.dev/bsmma/api/v1/event/' + this.$route.params.event_id + '/contests', function (data) {
             _this.contestsList = data;
             _this.working = false;
         }, {
@@ -14652,6 +14652,12 @@ exports.default = {
         });
     },
 
+
+    methods: {
+        showLobby: function showLobby(e) {
+            console.log(e);
+        }
+    },
 
     computed: {
         loaderClasses: function loaderClasses() {
@@ -14701,6 +14707,8 @@ exports.default = {
     data: function data() {
         return {
             eventsList: { 'events': [] },
+            imageSrc: 'public/images/events/' + this.imageName,
+            imageName: '',
             working: false
         };
     },
@@ -14710,7 +14718,7 @@ exports.default = {
     ready: function ready() {
         var _this = this;
 
-        this.$http.get(URL.base + '/api/v1/events', function (data) {
+        this.$http.get('http://edward.dev/bsmma/api/v1/events', function (data) {
             _this.eventsList = data;
             _this.working = false;
         }, {
@@ -14811,7 +14819,7 @@ exports.default = {
     ready: function ready() {
         var _this = this;
 
-        this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', function (data) {
+        this.$http.get('http://edward.dev/bsmma/api/v1/contest/' + this.$route.params.contest_id + '/fights', function (data) {
             _this.fightsList = data.fights;
             _this.working = false;
         }, {
@@ -14821,14 +14829,14 @@ exports.default = {
             return console.log(err);
         });
 
-        this.$http.get(URL.base + '/api/v1/power-ups', function (data) {
+        this.$http.get('http://edward.dev/bsmma/api/v1/power-ups', function (data) {
             _this.powerUps = data;
         }, {
             // Attach the JWT header
             headers: _auth2.default.getAuthHeader()
         });
 
-        this.$http.get(URL.base + '/api/v1/finishes', function (data) {
+        this.$http.get('http://edward.dev/bsmma/api/v1/finishes', function (data) {
             _this.finishes = data;
         }, {
             // Attach the JWT header
@@ -14990,7 +14998,7 @@ exports.default = {
 
             console.log(compiledPicks);
 
-            this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, function (data) {
+            this.$http.post('http://edward.dev/bsmma/api/v1/picks', { picks: compiledPicks }, function (data) {
                 if (data.success) _this2.$router.go({ path: '/contest/' + _this2.contestId + '/picks' });
             }, {
                 // Attach the JWT header
@@ -15106,7 +15114,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n\t<header class=\"pageHeader\">\n\t\t<h1 class=\"pageHeader__header\">Player Login</h1>\n\t\t<h4 class=\"pageHeader__subheader\">\n\t\t\tDon't have an account yet?\n\t\t\t<a v-link=\"{ path: '/register' }\">Sign Up</a>\n\t\t</h4>\n\t</header>\n\t<div class=\"loginForm form\">\n\t\t<div class=\"container-fluid\">\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"email\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.email\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"password\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">x</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Login</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n\t</div>\n\t<div class=\"container-fluid\">\n\t\t<div class=\"col-xs-100\">\n\t\t\t<div class=\"logo\">\n\t\t\t\t<img :src=\" URL.base + '/public/image/logo.jpg'\" alt=\"Blood Sport Fantasy MMA Logo\">\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n\t<header class=\"pageHeader\">\n\t\t<h1 class=\"pageHeader__header\">Player Login</h1>\n\t\t<h4 class=\"pageHeader__subheader\">\n\t\t\tDon't have an account yet?\n\t\t\t<a v-link=\"{ path: '/register' }\" href=\"#\">Sign Up</a>\n\t\t</h4>\n\t</header>\n\t<div class=\"loginForm form\">\n\t\t<div class=\"container-fluid\">\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"email\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.email\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"password\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">x</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Login</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n\t</div>\n\t<div class=\"container-fluid\">\n\t\t<div class=\"col-xs-100\">\n\t\t\t<div class=\"logo\">\n\t\t\t\t<img src=\"http://edward.dev/bsmma/public/image/logo.jpg\" alt=\"Blood Sport Fantasy MMA Logo\">\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -15279,7 +15287,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\" :working.syc=\"working\">\n\t<h1 class=\"pageHeader__header\">Player Sign-up</h1>\n\t<h4 class=\"pageHeader__subheader\">\n\t\tAlready have an account?\n\t\t<a v-link=\"{ path: '/login' }\">Login</a>\n\t</h4>\n</header>\n<div class=\"registerForm form\">\n\t<div class=\"container-fluid\">\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"email\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.email\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"password\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"playerName\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Player Name</span>\n\t\t\t\t\t<input type=\"text\" placeholder=\"PLAYER NAME\" v-model=\"credentials.player_name\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">x</span>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Sign Up</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n<div class=\"container-fluid\">\n\t<div class=\"col-xs-100\">\n\t\t<div class=\"logo\">\n\t\t\t<img :src=\"URL.base + '/public/image/logo.jpg'\" alt=\"Blood Sport Fantasy MMA Logo\">\n\t\t</div>\n\t</div>\n</div>\n "
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<header class=\"pageHeader\" :working.syc=\"working\">\n\t<h1 class=\"pageHeader__header\">Player Sign-up</h1>\n\t<h4 class=\"pageHeader__subheader\">\n\t\tAlready have an account?\n\t\t<a v-link=\"{ path: '/login' }\" href=\"#\">Login</a>\n\t</h4>\n</header>\n<div class=\"registerForm form\">\n\t<div class=\"container-fluid\">\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"email\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.email\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"password\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<label for=\"playerName\">\n\t\t\t\t\t<span class=\"visuallyhidden\">Player Name</span>\n\t\t\t\t\t<input type=\"text\" placeholder=\"PLAYER NAME\" v-model=\"credentials.player_name\">\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">x</span>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Sign Up</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n<div class=\"container-fluid\">\n\t<div class=\"col-xs-100\">\n\t\t<div class=\"logo\">\n\t\t\t<img src=\"http://edward.dev/bsmma/public/image/logo.jpg\" alt=\"Blood Sport Fantasy MMA Logo\">\n\t\t</div>\n\t</div>\n</div>\n "
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

@@ -4,7 +4,7 @@
 			<h1 class="pageHeader__header">Player Login</h1>
 			<h4 class="pageHeader__subheader">
 				Don't have an account yet?
-				<a v-link="{ path: '/register' }" href="#">Sign Up</a>
+				<a v-link="{ path: '/register' }">Sign Up</a>
 			</h4>
 		</header>
 		<div class="loginForm form">
@@ -48,7 +48,7 @@
 		<div class="container-fluid">
 			<div class="col-xs-100">
 				<div class="logo">
-					<img src="http://edward.dev/bsmma/public/image/logo.jpg" alt="Blood Sport Fantasy MMA Logo">
+					<img :src=" URL.base + '/public/image/logo.jpg'" alt="Blood Sport Fantasy MMA Logo">
 				</div>
 			</div>
 		</div>

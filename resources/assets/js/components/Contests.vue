@@ -60,19 +60,13 @@
         },
 
         ready() {
-            this.$http.get('http://edward.dev/bsmma/api/v1/event/' + this.$route.params.event_id + '/contests', (data) => {
+            this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', (data) => {
                 this.contestsList = data;
                 this.working = false;
             }, {
                 // Attach the JWT header
                 headers: auth.getAuthHeader()
             }).error((err) => console.log(err))
-        },
-
-        methods: {
-            showLobby(e) {
-                console.log(e);
-            },
         },
 
         computed: {
