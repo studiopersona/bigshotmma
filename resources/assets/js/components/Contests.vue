@@ -52,6 +52,11 @@
             return {
                 contestsList: { 'contests':{} },
                 working: false,
+                URL: {
+                    base: window.URL.base,
+                    current: window.URL.current,
+                    full: window.URL.full,
+                },
             }
         },
 

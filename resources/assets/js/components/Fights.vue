@@ -263,6 +263,11 @@
                     action: false,
                 },
                 contestId: this.$route.params.contest_id,
+                URL: {
+                    base: window.URL.base,
+                    current: window.URL.current,
+                    full: window.URL.full,
+                },
             }
         },
 

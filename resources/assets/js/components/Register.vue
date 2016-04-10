@@ -69,7 +69,12 @@
 					password: '',
 					player_name: '',
 				},
-				error: ''
+				error: '',
+                URL: {
+                    base: window.URL.base,
+                    current: window.URL.current,
+                    full: window.URL.full,
+                },
 			}
 		},
 

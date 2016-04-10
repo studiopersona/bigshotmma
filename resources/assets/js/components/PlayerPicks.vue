@@ -202,6 +202,11 @@
                 results: [],
                 working: false,
                 numberNames: ['One', 'Two', 'Three', 'Four', 'Five'],
+                URL: {
+                    base: window.URL.base,
+                    current: window.URL.current,
+                    full: window.URL.full,
+                },
             }
         },
 

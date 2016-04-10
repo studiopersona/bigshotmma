@@ -33,7 +33,7 @@
                 <li class="participantsList__item" v-for="participant in participantsList[0].participants">
                     <div class="container-fluid">
                         <div class="col-xs-15 participantsList__img">
-                            <img src="http://edward.dev/bsmma/public/image/player.jpg">
+                            <img src="public/image/avatar/male.jpg">
                         </div>
                         <div class="col-xs-40">
                             <div class="participantsList__itemTitle">&nbsp;</div>
@@ -110,6 +110,11 @@
                 contest: {},
                 working: false,
                 infoModalClasses: ['infoModal'],
+                URL: {
+                    base: window.URL.base,
+                    current: window.URL.current,
+                    full: window.URL.full,
+                },
             }
         },
 

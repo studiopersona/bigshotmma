@@ -48,11 +48,12 @@
 		<div class="container-fluid">
 			<div class="col-xs-100">
 				<div class="logo">
-					<img :src=" URL.base + '/public/image/logo.jpg'" alt="Blood Sport Fantasy MMA Logo">
+					<img :src="URL.base + '/public/image/logo.jpg'" alt="Blood Sport Fantasy MMA Logo">
 				</div>
 			</div>
 		</div>
-	</div></template>
+	</div>
+</template>
 
   <script>
   	import auth from '../auth'
@@ -70,6 +71,11 @@
 				error: '',
 				alertType: '',
 				working: false,
+                URL: {
+                    base: window.URL.base,
+                    current: window.URL.current,
+                    full: window.URL.full,
+                },
 			}
 		},
 
@@ -79,6 +85,7 @@
 
 		ready() {
 			this.working = false;
+			console.log(URL.base);
 		},
 
 		methods: {
