@@ -14999,7 +14999,7 @@ exports.default = {
             console.log(compiledPicks);
 
             this.$http.post('http://edward.dev/bsmma/api/v1/picks', { picks: compiledPicks }, function (data) {
-                if (data.success) $router.go({ path: '/contest/' + _this2.contestId + '/picks' });
+                if (data.success) _this2.$router.go({ path: '/contest/' + _this2.contestId + '/picks' });
             }, {
                 // Attach the JWT header
                 headers: _auth2.default.getAuthHeader()
@@ -15144,7 +15144,20 @@ exports.default = {
     props: ['working'],
 
     data: function data() {
-        return {};
+        return {
+            picksList: [{
+                event: {
+                    event_short_name: ''
+                },
+                contest: {
+                    buy_in: '',
+                    max_participants: '',
+                    prize_pool: ''
+                }
+            }],
+            working: false,
+            numberNames: ['One', 'Two', 'Three', 'Four', 'Five']
+        };
     },
     created: function created() {
         this.working = true;
@@ -15153,7 +15166,8 @@ exports.default = {
         var _this = this;
 
         this.$http.get('http://edward.dev/bsmma/api/v1/contest/' + this.$route.params.contest_id + '/picks', function (data) {
-            _this.fightPicksList = data;
+            _this.picksList = data.picks;
+            console.log(_this.picksList);
             _this.working = false;
         }, {
             // Attach the JWT header
@@ -15161,10 +15175,25 @@ exports.default = {
         }).error(function (err) {
             return console.log(err);
         });
+
+        this.$http.get('http://edward.dev/bsmma/api/v1/contest/' + this.$route.params.contest_id + '/results', function (data) {
+            _this.results = data.results;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        }).error(function (err) {
+            console.log(err);
+        });
     },
 
 
-    methods: {},
+    methods: {
+        toggleDetails: function toggleDetails(pickId, e) {
+            var pickToToggle = document.querySelector('div.fightPicksList__item[data-pick-id="' + pickId + '"]');
+
+            pickToToggle.classList.toggle('show');
+        }
+    },
 
     computed: {},
 
@@ -15178,7 +15207,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Picks</h1>\n        <h4 class=\"pageHeader__subheader\">{{ fightsList[0].event.event_short_name }}</h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Buy in:</span> ${{ participantsList[0].contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                <span class=\"contestDetails__title\">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}\n                </div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ participantsList[0].contest.contest_type_id }}\">\n                        {{ participantsList[0].contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"fightPicksList\">\n        <ul>\n            <li class=\"fightPicksList__item\" v-for=\"pick in picksList[0].picks\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-10\">\n                        {{ }}\n                    </div>\n                    <div class=\"col-xs-45\">\n                        <div class=\"fightPicksList__fighterName\"></div>\n                        <div class=\"fightPicksList__odds\"></div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\"></div>\n                        <div class=\"fightPicksList__stat\"></div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\"></div>\n                        <div class=\"fightPicksList__stat\"></div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\"></div>\n                        <div class=\"fightPicksList__stat\"></div>\n                    </div>\n                </div>\n                <div class=\"fightPicksList__details\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-100 fightPicksList__resultString\">\n\n                        </div>\n                        <div class=\"col-xs-100 fightPicksList__choicesTitle\">\n\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"col-xs-10\">\n\n                            </div>\n                            <div class=\"col-xs-80\">\n\n                            </div>\n                            <div class=\"col-xs-10\">\n\n                            </div>\n                        </div>\n                        <div class=\"col-xs-100 fightPicksList__totalWrap\">\n                            <div class=\"col-xs-50 fightPicksList__totalTitle\">\n                                Total\n                            </div>\n                            <div class=\"col-xs-50 fightPicksList__totalValue\">\n\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n                <button type=\"button\" class=\"button button--primary\" v-link=\"{ path: '/' }\">View Results</button>\n            </div>\n        </div>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Picks</h1>\n        <h4 class=\"pageHeader__subheader\">{{ picksList[0].event.event_short_name }}</h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Buy in:</span> ${{ picksList[0].contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Entries:</span> {{ picksList[0].contest.total_participants }}/{{ picksList[0].contest.max_participants }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Prize Pool:</span> ${{ picksList[0].contest.prize_pool  }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    Winning\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"fightPicksList\">\n        <ul class=\"stripped-list\">\n            <li @click=\"toggleDetails(pick.id, $event)\" data-pick-id=\"{{ pick.id }}\" class=\"fightPicksList__item\" v-for=\"pick in picksList[0].picks\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-10\">\n                        {{ }}\n                    </div>\n                    <div class=\"col-xs-45\">\n                        <div class=\"fightPicksList__fighterName\">\n                            {{ pick.fighter.firstname }} {{ pick.fighter.lastname }}\n                        </div>\n                        <div class=\"fightPicksList__odds\">\n\n                        </div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\">Result</div>\n                        <div class=\"fightPicksList__stat\">---</div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\">Finish</div>\n                        <div class=\"fightPicksList__stat\">---</div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\">Points</div>\n                        <div class=\"fightPicksList__stat\">---</div>\n                    </div>\n                </div>\n                <div class=\"fightPicksList__details\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-100 fightPicksList__resultString\">\n                            Fight Results Not Avaiable\n                        </div>\n                        <div class=\"col-xs-100 fightPicksList__choicesTitle\">\n                            Choices\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"col-xs-10 fightPicksList__fighter--icon\">\n                                <img src=\"public/image/icons/star.png\">\n                            </div>\n                            <div class=\"col-xs-80\">\n                                <h4>Favorite to Win</h4>\n                                <p></p>\n                            </div>\n                            <div class=\"col-xs-10 fightPicksList__points\">\n                                ---\n                            </div>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"col-xs-10 fightPicksList__finish--icon\">\n                                <img src=\"public/image/icons/fist.png\">\n                            </div>\n                            <div class=\"col-xs-80\">\n                                <h4>Tko/ko</h4>\n                                <p></p>\n                            </div>\n                            <div class=\"col-xs-10 fightPicksList__points\">\n                                ---\n                            </div>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"col-xs-10 fightPicksList__finish--icon\">\n                                <img src=\"public/image/icons/bell.png\">\n                            </div>\n                            <div class=\"col-xs-80\">\n                                <h4>Round One</h4>\n                                <p></p>\n                            </div>\n                            <div class=\"col-xs-10 fightPicksList__points\">\n                                ---\n                            </div>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"col-xs-10 fightPicksList__finish--icon\">\n                                <img src=\"public/image/icons/stopwatch.png\" <=\"\" div=\"\">\n                            <div class=\"col-xs-80\">\n                                <h4>Minute Three</h4>\n                                <p></p>\n\n                            </div>\n                            <div class=\"col-xs-10 fightPicksList__points\">\n\n                            </div>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"col-xs-10 fightPicksList__finish--icon\">\n                                <img src=\"public/image/powerups/bonecrucher.png\">\n                            </div>\n                            <div class=\"col-xs-80\">\n                                <h4 style=\"color:blue;\">Bonecrusher</h4>\n                                <p></p>\n                            </div>\n                            <div class=\"col-xs-10 fightPicksList__points\">\n                                ---\n                            </div>\n                        </div>\n                        <div class=\"col-xs-100 fightPicksList__totalWrap\">\n                            <div class=\"col-xs-50 fightPicksList__totalTitle\">\n                                Total\n                            </div>\n                            <div class=\"col-xs-50 fightPicksList__totalValue\">\n                                ---\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div></li>\n        </ul>\n        <div class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n                <button type=\"button\" class=\"button button--primary\" v-link=\"{ path: '/' }\">View Results</button>\n            </div>\n        </div>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

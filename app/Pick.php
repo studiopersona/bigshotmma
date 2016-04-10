@@ -10,7 +10,7 @@ class Pick extends Model
 
     protected $dates = [];
 
-    public function powerUps()
+    public function powerUp()
     {
         return $this->belongsTo('Bsmma\PowerUp');
     }

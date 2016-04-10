@@ -8,18 +8,21 @@ use Bsmma\Http\Requests;
 use Bsmma\User;
 use Bsmma\Pick;
 use Bsmma\divStrong\Transformers\PickTransformer;
+use Bsmma\divStrong\Transformers\PlayerPickTransformer;
 
 class PicksController extends ApiController
 {
     public function __construct(
         Pick $pick,
         User $user,
-        PickTransformer $pickTransformer
+        PickTransformer $pickTransformer,
+        PlayerPickTransformer $playerPickTransformer
     )
     {
         $this->pick = $pick;
         $this->user = $user;
         $this->pickTransformer = $pickTransformer;
+        $this->playerPickTransformer = $playerPickTransformer;
     }
 
     /**
@@ -34,7 +37,7 @@ class PicksController extends ApiController
                     'fight',
                     'finish',
                     'fighter',
-                    'powerUps',
+                    'powerUp',
                 ])
                 ->where('user_id', $this->user->getAuthUser())
                 ->get();
@@ -81,7 +84,7 @@ class PicksController extends ApiController
         }
 
         return $this->respond([
-            'outcome' => 'Success',
+            'success' => true,
         ]);
     }
 
@@ -102,10 +105,13 @@ class PicksController extends ApiController
 
         $picks = $this->pick->with([
                         'contest',
+                        'contest.event',
+                        'contest.users',
+                        'contest.event.fights.fighters',
                         'fight',
                         'fighter',
                         'finish',
-                        'powerUps',
+                        'powerUp',
                     ])
                     ->where('contest_id', $contest_id)
                     ->where('user_id', $user->id)
@@ -117,7 +123,7 @@ class PicksController extends ApiController
         }
 
         return $this->respond([
-            'picks' => $this->pickTransformer->transformCollection($picks->toArray()),
+            'picks' => $this->playerPickTransformer->transformCollection($picks->toArray()),
         ]);
     }
 

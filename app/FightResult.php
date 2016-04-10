@@ -25,4 +25,14 @@ class FightResult extends Model
     {
         return $this->belongsTo('Bsmma\Finish');
     }
+
+    public function powerUps()
+    {
+        return $this->belongsToMany('Bsmma\PowerUp');
+    }
+
+    public function contests()
+    {
+        return $this->hasMany('Bsmma\Contest');
+    }
 }

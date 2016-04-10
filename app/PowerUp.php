@@ -14,4 +14,9 @@ class PowerUp extends Model
     {
         return $this->hasMany('Bsmma\Pick');
     }
+
+    public function fightResults()
+    {
+    	return $this->belongsToMany('Bsmma\FightResult');
+    }
 }

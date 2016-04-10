@@ -36,4 +36,9 @@ class Contest extends Model
     {
         return $this->belongsToMany('Bsmma\User', 'contest_participants');
     }
+
+    public function fightResult()
+    {
+        return $this->belongsTo('Bsmma\FightResult');
+    }
 }

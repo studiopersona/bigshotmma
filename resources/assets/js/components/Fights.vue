@@ -463,7 +463,7 @@
                 console.log(compiledPicks);
 
                 this.$http.post('http://edward.dev/bsmma/api/v1/picks', { picks: compiledPicks }, (data) => {
-                    if ( data.success ) $router.go({ path: '/contest/' + this.contestId + '/picks' });
+                    if ( data.success ) this.$router.go({ path: '/contest/' + this.contestId + '/picks' });
                 }, {
                     // Attach the JWT header
                     headers: auth.getAuthHeader()

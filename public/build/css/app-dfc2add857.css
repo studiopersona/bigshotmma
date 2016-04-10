@@ -4309,7 +4309,7 @@ a {
   transition: height 0.3s ease; }
 
 .fightPicksList__item.show .fightPicksList__details {
-  min-height: 380px; }
+  min-height: 600px; }
 
 .fightPicksList__image,
 .fightPicksList__icon > img {
@@ -4342,10 +4342,7 @@ a {
 
 .fightPicksList__resultString {
   margin: 1rem 0;
-  text-align: center; }
-
-.fightPicksList__row {
-  padding: 1.25rem 0 0.65rem; }
+  text-algin: center; }
 
 .fightPicksList__selectionTitle {
   text-transform: uppercase;
@@ -4370,10 +4367,6 @@ a {
     content: "+"; }
   .fightPicksList__points.penalty::before {
     content: "-"; }
-
-.fightPicksList__powerUpName {
-  font-weight: 700;
-  text-transform: uppercase; }
 
 .fightPicksList__totalTitle {
   font-size: 1.5rem;

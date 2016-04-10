@@ -4309,20 +4309,20 @@ a {
   transition: height 0.3s ease; }
 
 .fightPicksList__item.show .fightPicksList__details {
-  min-height: 380px; }
+  min-height: 600px; }
 
-.fightPicksList__image,
-.fightPicksList__icon > img {
+.fightPickList__image,
+.fightPicksList__icon {
   width: 100%; }
 
 .fightPicksList__fighterName {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 0.1rem;
-  padding-top: 1rem; }
+  margin-bottom: 0.25rem;
+  padding-top: 0.5rem; }
 
 .fightPicksList__odds {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   color: #e51937; }
   .fightPicksList__odds.favorite {
     color: #2dbe0c; }
@@ -4330,7 +4330,7 @@ a {
 .fightPicksList__title {
   font-size: 0.9rem;
   text-transform: uppercase;
-  margin: 0.5rem 0 0.15rem;
+  margin-bottom: 0.5rem;
   text-align: center; }
 
 .fightPicksList__stat {
@@ -4339,17 +4339,6 @@ a {
   text-align: center; }
   .fightPicksList__stat.correct {
     color: #2dbe0c; }
-
-.fightPicksList__resultString {
-  margin: 1rem 0;
-  text-align: center; }
-
-.fightPicksList__row {
-  padding: 1.25rem 0 0.65rem; }
-
-.fightPicksList__selectionTitle {
-  text-transform: uppercase;
-  font-size: 1.25rem; }
 
 .fightPicksList__choicesTitle {
   font-size: 1.25rem;
@@ -4370,10 +4359,6 @@ a {
     content: "+"; }
   .fightPicksList__points.penalty::before {
     content: "-"; }
-
-.fightPicksList__powerUpName {
-  font-weight: 700;
-  text-transform: uppercase; }
 
 .fightPicksList__totalTitle {
   font-size: 1.5rem;
