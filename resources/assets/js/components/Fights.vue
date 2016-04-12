@@ -341,10 +341,11 @@
             },
 
             selectFight(e) {
-                if ( this.playerPicks.length === 5 ) {
-                    // inform that this pick will be the alternate
-                } else if ( this.playerPicks.length === 6 ) {
-                    // inform that the will need to remove a pick to add this one
+                if ( this.playerPicks.length === 6 ) {
+                    this.alert({
+                        type: 'Alert',
+                        msg: 'You\'ve already selected the maximum number of fights. Please remove one of your selections if you would like to add this fight.',
+                    });
                 } else {
                     if ( this.currentFightId !== e.target.dataset.fightId ) {
                         this.switchFight(e);
@@ -370,6 +371,7 @@
             updatePicks(newData) {
                 var pickData,
                     pickDataIndex = -1;
+
                 // search for this fight in picks
                 pickData = this.playerPicks.find(this.findPick);
                 // if a pic was already made for this fight
@@ -445,28 +447,45 @@
                 // sync the pick with the server
                 // take to player picks page
                 // or stay on page and confirm entry?
-                compiledPicks = this.playerPicks.map(function(pick) {
-                    var fightdata = localfightData[parseInt(pick.fightId, 10)];
 
-                    return {
-                        contest_id: localContestId,
-                        fight_id: parseInt(pick.fightId, 10),
-                        winning_fighter_id: parseInt(pick.fighterId, 10),
-                        finish_id: parseInt(fightdata.finishId, 10),
-                        round: parseInt(fightdata.round, 10),
-                        minute: parseInt(fightdata.minute, 10),
-                        power_up_id: parseInt(fightdata.powerupId, 10),
-                    };
-                });
+                if ( this.playerPicks.length < 5 ) {
+                    this.alert({
+                        type: 'Warning',
+                        msg: 'You\'ve only seleted ' + this.playerPicks.length + ' fights out of 5 that you are allowed to play. Would you like to stay and select more fights or continue commiting your selections?',
+                        action: '<button type="button" @click="closeAlert" class="alertNotice__confirm--no">Stay</button><button @click="continueCommit" type="button" class="alertNotice__confirm--yes">Continue</button>'
+                    });
+                    // alert that you have only picked x number of fights
+                    // allowed to pick 5 plus one alternate
+                } else if ( this.playerPicks.length === 5 ) {
+                    this.alert({
+                        type: 'Warning',
+                        msg: 'You\'ve seleted ' + this.playerPicks.length + ' fights you may choose one more fight as an alternate in case one of your five slected fights is scratched.',
+                        action: '<button type="button" @click="closeAlert" class="alertNotice__confirm--no">Stay</button><button @click="continueCommit" type="button" class="alertNotice__confirm--yes">Continue</button>'
+                    });
+                } else if ( this.playerPicks.length > 5 ) {
+                    compiledPicks = this.playerPicks.map(function(pick) {
+                        var fightdata = localfightData[parseInt(pick.fightId, 10)];
 
-                console.log(compiledPicks);
+                        return {
+                            contest_id: localContestId,
+                            fight_id: parseInt(pick.fightId, 10),
+                            winning_fighter_id: parseInt(pick.fighterId, 10),
+                            finish_id: parseInt(fightdata.finishId, 10),
+                            round: parseInt(fightdata.round, 10),
+                            minute: parseInt(fightdata.minute, 10),
+                            power_up_id: parseInt(fightdata.powerupId, 10),
+                        };
+                    });
 
-                this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, (data) => {
-                    if ( data.success ) this.$router.go({ path: '/contest/' + this.contestId + '/picks' });
-                }, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                });
+                    // validate selections
+
+                    this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, (data) => {
+                        if ( data.success ) this.$router.go({ path: '/contest/' + this.contestId + '/picks' });
+                    }, {
+                        // Attach the JWT header
+                        headers: auth.getAuthHeader()
+                    });
+                }
             },
 
             alert(options) {
@@ -475,7 +494,7 @@
 
                 this.alertNotice.action = (options.action) ? options.action : false;
 
-                alertModalClasses = ['alertNotice', 'show'];
+                this.alertNoticeClasses = ['alertNotice', 'show'];
             },
 
             alertNoticeClose(e) {
