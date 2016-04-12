@@ -1,8 +1,8 @@
 <template>
     <div :working="working">
         <header class="pageHeader" :working.sync="working">
-            <h1 class="pageHeader__header">Choose 5 Fights</h1>
-            <h4 class="pageHeader__subheader">{{ fightsList[0].event.event_short_name }}</h4>
+            <h1 class="pageHeader__header">{{ playerPicks.length }}/5 Fights Chosen</h1>
+            <h4 class="pageHeader__subheader">{{ totalPowerUps }}/3 Power-ups Used</h4>
         </header>
         <div class="fightsList">
             <ul>
@@ -28,6 +28,12 @@
                                         :src="'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri"
                                         :show
                                         alt="{{ fight.fighters[0].nationality.country_name }} Flag"
+                                    >
+                                    <img
+                                        class="fightsList__powerup left"
+                                        :src="'public/image/powerups/' + powerUpsSelected(fight.id)"
+                                        data-fighter-id="{{ fight.fighters[0].id}}"
+                                        data-fight-id="{{ fight.id }}"
                                     >
                                     <div class="fightsList__selectedIndicatorWrap">
                                         <div :class="['fightsList__selectedIndicator', (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'favorite' : '']" data-fighter-id="{{ fight.fighters[0].id }}">
@@ -107,28 +113,28 @@
                             </div>
                             <div class="col-xs-100">
                                 <select v-model="fightData[fight.id].finishId">
-                                    <option value="0">Choose Finish</option>
+                                    <option value="0">Choose Finish (+5)</option>
                                     <option v-for="finish in finishes" value="{{ finish.id }}">{{ finish.name }} (+{{ finish.points }})</option>
                                 </select>
                             </div>
                             <div class="col-xs-100">
                                 <select v-model="fightData[fight.id].round">
-                                    <option value="0">Choose Round</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
+                                    <option value="0">Choose Round (+2)</option>
+                                    <option value="1">Round 1 (+2)</option>
+                                    <option value="2">Round 2 (+2)</option>
+                                    <option value="3">Round 3 (+2)</option>
+                                    <option value="4">Round 4 (+2)</option>
+                                    <option value="5">Round 5 (+2)</option>
                                 </select>
                             </div>
                             <div class="col-xs-100">
                                 <select v-model="fightData[fight.id].minute">
-                                    <option value="0">Choose Minute</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
+                                    <option value="0">Choose Minute (+1)</option>
+                                    <option value="1">1 (+1)</option>
+                                    <option value="2">2 (+1)</option>
+                                    <option value="3">3 (+1)</option>
+                                    <option value="4">4 (+1)</option>
+                                    <option value="5">5 (+1)</option>
                                 </select>
                             </div>
                             <div class="col-xs-100">
@@ -145,6 +151,7 @@
                                             data-fight-id="{{ fight.id }}"
                                             alt="{{ powerUp.name }} Image"
                                         >
+                                        <span style="color: {{ powerUp.color }}">{{ powerUp.name }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -322,6 +329,7 @@
             selectPowerUp(fightId, powerUpId, e) {
                 if ( this.totalPowerUps < 3 ) {
                     this.fightData[fightId].powerupId = powerUpId;
+                    ++this.totalPowerUps;
                     this.powerUpModalClose(e);
                 } else {
                     this.alert({
@@ -507,6 +515,19 @@
         computed: {
             loaderClasses() {
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
+            },
+
+            powerUpsSelected(fightId) {
+                var pId = fightData[fightId].powerId,
+                    puImage;
+
+                var findPowerUp = function(powerUp) {
+                    return powerUp.power_up_id === parseInt(pId, 10);
+                };
+
+                puData = this.powerUps.find(findPowerUp);
+
+                return puData.image_name;
             },
         },
 
