@@ -4245,25 +4245,9 @@ a {
     overflow: hidden;
     transition: height 0.3s ease; }
     .fightsList__item .fightsList__pick.show {
-      min-height: calc(1vw * 160); }
+      min-height: calc(1vw * 140); }
   .fightsList__item .fightsList__fightersWrap {
     padding: 0.9rem 0.5rem 0.5rem; }
-
-.fightsList__powerup {
-  width: 40%;
-  opacity: 0;
-  visibility: hidden;
-  position: absolute;
-  top: -11px;
-  z-index: 10;
-  transition: opacity 0.3s ease; }
-  .fightsList__powerup.left {
-    right: -6px; }
-  .fightsList__powerup.right {
-    left: -6px; }
-  .fightsList__powerup.show {
-    visibility: visible;
-    opacity: 1; }
 
 .fightsList__fighterName,
 .fightsList__fighterHeight,
@@ -4316,7 +4300,7 @@ a {
     right: -6px; }
 
 .powerUpList__btn {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   background: transparent;
   border: none; }
   .powerUpList__btn img {

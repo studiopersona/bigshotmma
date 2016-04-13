@@ -56,12 +56,36 @@
 		transition: height 0.3s ease;
 
 		&.show {
-			min-height: 420px;
+			min-height: calc(1vw * 160);
 		}
 	}
 
 	.fightsList__fightersWrap {
 		padding: 0.9rem 0.5rem 0.5rem;
+	}
+}
+
+.fightsList__powerup {
+	width: 40%;
+	opacity: 0;
+	visibility: hidden;
+	position: absolute;
+	top: -11px;
+	z-index: 10;
+
+	transition: opacity 0.3s ease;
+
+	&.left {
+		right: -6px;
+	}
+
+	&.right {
+		left: -6px;
+	}
+
+	&.show {
+		visibility: visible;
+		opacity: 1;
 	}
 }
 
@@ -136,7 +160,7 @@
 }
 
 .powerUpList__btn {
-	margin-bottom: 1rem;
+	margin-bottom: 2rem;
 	background: transparent;
 	border: none;
 

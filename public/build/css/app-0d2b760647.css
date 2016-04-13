@@ -4245,7 +4245,7 @@ a {
     overflow: hidden;
     transition: height 0.3s ease; }
     .fightsList__item .fightsList__pick.show {
-      min-height: calc(1vw * 160); }
+      min-height: calc(1vw * 140); }
   .fightsList__item .fightsList__fightersWrap {
     padding: 0.9rem 0.5rem 0.5rem; }
 
@@ -4255,7 +4255,6 @@ a {
   visibility: hidden;
   position: absolute;
   top: -11px;
-  z-index: 10;
   transition: opacity 0.3s ease; }
   .fightsList__powerup.left {
     right: -6px; }

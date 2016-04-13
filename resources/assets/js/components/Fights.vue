@@ -31,9 +31,10 @@
                                     >
                                     <img
                                         class="fightsList__powerup left"
-                                        :src="'public/image/powerups/' + powerUpsSelected(fight.id)"
+                                        :src="'public/image/powerups/' + fightData[fight.id].powerupImage"
                                         data-fighter-id="{{ fight.fighters[0].id}}"
                                         data-fight-id="{{ fight.id }}"
+                                        @click="removePowerUp(fight.id, $event)"
                                     >
                                     <div class="fightsList__selectedIndicatorWrap">
                                         <div :class="['fightsList__selectedIndicator', (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'favorite' : '']" data-fighter-id="{{ fight.fighters[0].id }}">
@@ -95,8 +96,17 @@
                                         :src="'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri"
                                         alt="{{ fight.fighters[1].nationality.country_name }} Flag"
                                     >
+                                    <img
+                                        class="fightsList__powerup right"
+                                        :src="'public/image/powerups/' + fightData[fight.id].powerupImage"
+                                        data-fighter-id="{{ fight.fighters[1].id}}"
+                                        data-fight-id="{{ fight.id }}"
+                                        @click="removePowerUp(fight.id, $event)"
+                                    >
                                      <div class="fightsList__selectedIndicatorWrap">
-                                        <div :class="['fightsList__selectedIndicator', (fight.fighters[1].pivot.odds > fight.fighters[0].pivot.odds) ? 'favorite' : '']" data-fighter-id="{{ fight.fighters[1].id }}">
+                                        <div
+                                            :class="['fightsList__selectedIndicator', (fight.fighters[1].pivot.odds > fight.fighters[0].pivot.odds) ? 'favorite' : '']"
+                                            data-fighter-id="{{ fight.fighters[1].id }}">
                                             <span>
                                                 {{ (parseInt(fight.fighters[1].pivot.odds, 10) > parseInt(fight.fighters[0].pivot.odds, 10)) ? 'Favorite' : 'Underdog' }}
                                             </span>
@@ -106,7 +116,7 @@
                             </div><!-- .fightsList__fighterWrap -->
                         </div><!-- .fightsList__fighterStatsWarp -->
                     </div><!-- .fightsList__fightersWrap -->
-                    <div class="fightsList__pick" :fightData="fightData[fight.id]" data-fight-id="{{ fight.id }}">
+                    <div class="fightsList__pick" data-fight-id="{{ fight.id }}">
                         <div class="container-fluid">
                             <div class="col-xs-100">
                                 <div class="fightsList__pickHeader">How will win?</div>
@@ -130,11 +140,11 @@
                             <div class="col-xs-100">
                                 <select v-model="fightData[fight.id].minute">
                                     <option value="0">Choose Minute (+1)</option>
-                                    <option value="1">1 (+1)</option>
-                                    <option value="2">2 (+1)</option>
-                                    <option value="3">3 (+1)</option>
-                                    <option value="4">4 (+1)</option>
-                                    <option value="5">5 (+1)</option>
+                                    <option value="1">Minute 1 (+1)</option>
+                                    <option value="2">Minute 2 (+1)</option>
+                                    <option value="3">Minute 3 (+1)</option>
+                                    <option value="4">Minute 4 (+1)</option>
+                                    <option value="5">Minute 5 (+1)</option>
                                 </select>
                             </div>
                             <div class="col-xs-100">
@@ -151,9 +161,15 @@
                                             data-fight-id="{{ fight.id }}"
                                             alt="{{ powerUp.name }} Image"
                                         >
-                                        <span style="color: {{ powerUp.color }}">{{ powerUp.name }}</span>
+                                        <span :style="{color: powerUp.color, fontSize: '1rem'}">{{ powerUp.name }}</span>
                                     </button>
                                 </div>
+                            </div>
+                            <div class="col-xs-100 button-wrap">
+                                <button @click="clearFight(fight.id, $event)"
+                                        type="button"
+                                        class="button button--primary"
+                                >Clear</button>
                             </div>
                         </div>
                     </div>
@@ -177,21 +193,21 @@
             </div>
         </div>
         <section :class="powerUpModalClasses">
-            <h3 class="powerUpModal__title" style="color:{{ selectedPowerUp.color }}">{{ selectedPowerUp.title }}</h3>
+            <h3 class="powerUpModal__title" :style="{color: selectedPowerUp.color}">{{ selectedPowerUp.title }}</h3>
             <img class="powerUpModal__image" :src="'public/image/powerups/' + selectedPowerUp.image_name" alt="{{ selectedPowerUp.title }}">
             <div class="powerUpModal__description">
                 {{{ selectedPowerUp.description }}}
             </div>
-            <div class="powerUpModal__points" style="color:{{ selectedPowerUp.color }}">
+            <div class="powerUpModal__points" :style="{color: selectedPowerUp.color}">
                 +{{ selectedPowerUp.bonus_points }} points
             </div>
             <div class="powerUpModal__apply">
                 <p class="powerUpModal__apply--big">Apply this power up?</p>
-                <p style="color:{{ selectedPowerUp.color }}">Failure results in a -{{ selectedPowerUp.penalty_points }} penalty</p>
+                <p :style="{color: selectedPowerUp.color}">Failure results in a -{{ selectedPowerUp.penalty_points }} penalty</p>
             </div>
             <div class="powerUpModal__confirm">
                 <button @click="powerUpModalClose" class="powerUpModal__confirm--no">No</button>
-                <button @click="selectPowerUp(selectedPowerUp.fightId, selectedPowerUp.id, $event)" class="powerUpModal__confirm--yes">Yes</button>
+                <button @click="selectPowerUp(selectedPowerUp.fightId, selectedPowerUp.id, selectedPowerUp.image_name, $event)" class="powerUpModal__confirm--yes">Yes</button>
             </div>
             <button @click="powerUpModalClose" type="button" class="powerUpModal__close">x</button>
         </section>
@@ -242,21 +258,21 @@
                 currentFighterId: '',
                 fightData:[
                     {},
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
-                    { finishId: 0, round:0, minute:0, powerupId: 0 },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
+                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
                 ],
                 alertNotice: {
                     type: 'Alert',
@@ -298,14 +314,13 @@
                 // Attach the JWT header
                 headers: auth.getAuthHeader()
             })
+
         },
 
         methods: {
             confirmPowerUp(e) {
                 var newPowerUp;
                 e.preventDefault();
-
-                console.log(e);
 
                 // if the content is already loaded don't load it again
                 if ( this.powerUpId !== e.target.dataset.powerUp )
@@ -326,14 +341,25 @@
                 this.powerUpModalClasses.push('show');
             },
 
-            selectPowerUp(fightId, powerUpId, e) {
+            selectPowerUp(fightId, powerUpId, powerUpImage, e) {
+                var findFight = function(playerPick) {
+                        return parseInt(playerPick.fightId, 10) === parseInt(fightId, 10);
+                    },
+                    fightPick,
+                    puIndicatorImage;
+
                 if ( this.totalPowerUps < 3 ) {
+                    if (this.fightData[fightId].powerupId === 0) ++this.totalPowerUps;
                     this.fightData[fightId].powerupId = powerUpId;
-                    ++this.totalPowerUps;
+                    this.fightData[fightId].powerupImage = powerUpImage;
                     this.powerUpModalClose(e);
+                    // find fighter choosen for the fight and add show class to powerup image indicator
+                    fightPick = this.playerPicks.find(findFight);
+                    puIndicatorImage = document.querySelector('img.fightsList__powerup[data-fight-id="' + fightId +'"][data-fighter-id="' + fightPick.fighterId + '"]');
+                    puIndicatorImage.classList.add('show');
                 } else {
                     this.alert({
-                        msg: 'You may only apply 3 powers ups per contest.<br>You will need to remove one or more applied power ups in order to activate another.'
+                        msg: 'You may only apply 3 powers-ups per contest.<br>You will need to remove one or more applied power-ups in order to activate another.'
                     });
                 }
             },
@@ -348,6 +374,21 @@
                 this.powerUpModalClasses = ['powerUpModal'];
             },
 
+            removePowerUp(fightId, e) {
+                var powerupImageIndicator;
+
+                this.fightData[fightId].powerupId = 0;
+                this.powerupImage = '';
+
+                // remove the show class form powerup images
+                powerupImageIndicator = document.querySelectorAll('img.fightsList__powerup[data-fight-id="' + fightId + '"]');
+                for (var i = 0; i < powerupImageIndicator.length; ++i) {
+                    powerupImageIndicator[i].classList.remove('show');
+                };
+
+                this.totalPowerUps--;
+            },
+
             selectFight(e) {
                 if ( this.playerPicks.length === 6 ) {
                     this.alert({
@@ -359,11 +400,13 @@
                         this.switchFight(e);
                         this.updatePicks({
                             fighterId: e.target.dataset.fighterId,
+                            fightId: e.target.dataset.fightId,
                         });
 
                     } else {
                         this.updatePicks({
                             fighterId: e.target.dataset.fighterId,
+                            fightId: e.target.dataset.fightId,
                         });
                     }
                 }
@@ -391,16 +434,15 @@
                             this.deselectFighter(pickData.fighterId);
 
                             if (pickDataIndex === -1 ) pickDataIndex = this.playerPicks.findIndex(this.findPick);
-                            console.log(pickDataIndex);
 
                             if ( pickDataIndex !== -1 ) this.playerPicks[pickDataIndex].fighterId = newData.fighterId;
 
-                            this.selectFighter(newData.fighterId);
+                            this.selectFighter(newData.fighterId, newData.fightId);
                         }
                     }
                 } else {
                     this.addPick(newData);
-                    this.selectFighter(newData.fighterId);
+                    this.selectFighter(newData.fighterId, newData.fightId);
                 }
             },
 
@@ -421,15 +463,65 @@
                 this.currentFightId = e.target.dataset.fightId;
             },
 
-            selectFighter(fighterId) {
+            clearFight(fightId, e) {
+                var findPick = function(playerPick) {
+                        return parseInt(playerPick.fightId, 10) === parseInt(fightId, 10);
+                    },
+                    fightersEls,
+                    fighterIndicatorEls,
+                    fightPickEl,
+                    powerupIndicators,
+                    pickDataIndex;
+
+                // search for this fight in picks
+                pickDataIndex = this.playerPicks.findIndex(findPick);
+                if ( pickDataIndex !== -1 ) {
+                    // delete the pick
+                    this.playerPicks.splice(parseInt(pickDataIndex, 10), 1);
+                    if (this.fightData[pickDataIndex].powerupId !== 0) {
+                        this.totalPowerUps--;
+                        powerupIndicators = document.querySelectorAll('img.fightsList__powerup[data-fight-id="' + fightId + '"]');
+                        for ( var i = 0; i < powerupIndicators.length; ++i) {
+                            powerupIndicators[i].classList.remove('show');
+                        }
+                    }
+                    // reset the fight data for this fight
+                    this.fightData[parseInt(fightId, 10)].finishId = 0;
+                    this.fightData[parseInt(fightId, 10)].round = 0;
+                    this.fightData[parseInt(fightId, 10)].minute = 0;
+                    this.fightData[parseInt(fightId, 10)].powerupId = 0;
+                    this.fightData[parseInt(fightId, 10)].powerupImage = '';
+
+                    // remove fighter selection indicator
+                    fightersEls = document.querySelectorAll('div.fightsList__fighterImgWrap[data-fight-id="' + fightId + '"] .fightsList__fighter');
+                    fighterIndicatorEls = document.querySelectorAll('div.fightsList__fighterImgWrap[data-fight-id="' + fightId + '"] .fightsList__selectedIndicator');
+                    fightPickEl = document.querySelector('div.fightsList__pick[data-fight-id="' + fightId + '"]');
+                    fightPickEl.classList.toggle('show');
+                    for ( var i = 0; i < fightersEls.length; ++i ) {
+                        fightersEls[i].classList.remove('selected');
+                        fighterIndicatorEls[i].classList.remove('show');
+                    };
+                    this.currentFightId = '';
+                    this.currentFighterId = '';
+                }
+
+            },
+
+            selectFighter(fighterId, fightId) {
                 var fighterImageToSelect,
-                    fighterIndicatorToSelect;
+                    fighterIndicatorToSelect,
+                    powerUpImageToSelect;
 
                 fighterImageToSelect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
                 if ( ! fighterImageToSelect.classList.contains('selected') ) {
                     fighterImageToSelect.classList.add('selected');
                     fighterIndicatorToSelect = document.querySelector('div.fightsList__selectedIndicator[data-fighter-id="' + fighterId  + '"]');
                     fighterIndicatorToSelect.classList.add('show');
+                    // if a powerup is selected make sure to show it on the new fighter
+                    if ( this.fightData[parseInt(fightId, 10)].powerupId !== 0) {
+                        powerUpImageToSelect = document.querySelector('img.fightsList__powerup[data-fighter-id="' + fighterId + '"]');
+                        powerUpImageToSelect.classList.add('show');
+                    }
 
                     this.currentFighterId = fighterId;
                 }
@@ -437,13 +529,17 @@
 
             deselectFighter(fighterId) {
                 var fighterImageToDeselect,
-                    fighterIndicatorToDeselect;
+                    fighterIndicatorToDeselect,
+                    powerUpImageToDeselect;
+
 
                 fighterImageToDeselect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
                 if ( fighterImageToDeselect.classList.contains('selected') ) {
                     fighterImageToDeselect.classList.remove('selected');
                     fighterIndicatorToDeselect = document.querySelector('div.fightsList__selectedIndicator[data-fighter-id="' + fighterId  + '"]');
                     fighterIndicatorToDeselect.classList.remove('show');
+                    powerUpImageToDeselect = document.querySelector('img.fightsList__powerup[data-fighter-id="' + fighterId + '"]');
+                    powerUpImageToDeselect.classList.remove('show');
                 }
             },
 
@@ -515,19 +611,6 @@
         computed: {
             loaderClasses() {
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
-            },
-
-            powerUpsSelected(fightId) {
-                var pId = fightData[fightId].powerId,
-                    puImage;
-
-                var findPowerUp = function(powerUp) {
-                    return powerUp.power_up_id === parseInt(pId, 10);
-                };
-
-                puData = this.powerUps.find(findPowerUp);
-
-                return puData.image_name;
             },
         },
 
