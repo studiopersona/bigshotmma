@@ -77,8 +77,11 @@
                                 </div>
                                 <div class="col-xs-75">
                                     <h4 class="fightPicksList__selectionTitle">Favorite to Win</h4>
-                                    <p v-show="results.length">
+                                    <p class="fighPicksList__selectionResults" v-show="results.length">
 
+                                    </p>
+                                    <p class="fighPicksList__selectionResults" v-else>
+                                        Results not entered yet
                                     </p>
                                 </div>
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__points">
@@ -95,6 +98,9 @@
                                 <div class="col-xs-75">
                                     <h4 class="fightPicksList__selectionTitle">{{ pick.finish.finish_type }}</h4>
                                     <p v-show="results.length"></p>
+                                    <p class="fighPicksList__selectionResults" v-else>
+                                        Results not entered yet
+                                    </p>
                                 </div>
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__points">
                                     ---
@@ -110,6 +116,9 @@
                                 <div class="col-xs-75">
                                     <h4 class="fightPicksList__selectionTitle">Round {{ numberNames[parseInt(pick.round, 10) - 1] }}</h4>
                                     <p v-show="results.length"></p>
+                                    <p class="fighPicksList__selectionResults" v-else>
+                                        Results not entered yet
+                                    </p>
                                 </div>
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__points">
                                     ---
@@ -125,7 +134,9 @@
                                 <div class="col-xs-75">
                                     <h4 class="fightPicksList__selectionTitle">Minute {{ numberNames[parseInt(pick.minute, 10) - 1] }}</h4>
                                     <p v-show="results.length"></p>
-
+                                    <p class="fighPicksList__selectionResults" v-else>
+                                        Results not entered yet
+                                    </p>
                                 </div>
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__points">
                                     ---
@@ -134,13 +145,16 @@
                                     result
                                 </div>
                             </div>
-                            <div class="col-xs-100 fightPicksList__row">
+                            <div v-if="pick.power_up.image" class="col-xs-100 fightPicksList__row">
                                 <div class="col-xs-10 fightPicksList__icon">
                                     <img :src="'public/image/powerups/' + pick.power_up.image">
                                 </div>
                                 <div class="col-xs-75">
                                     <h4 class="fightPicksList__powerUpName" style="color:{{ pick.power_up.color }}">{{ pick.power_up.power_up_name }}</h4>
                                     <p v-show="results.length"></p>
+                                    <p class="fighPicksList__selectionResults" v-else>
+                                        Results not entered yet
+                                    </p>
                                 </div>
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__points" style="color: {{ pick.power_up.color }}">
                                     ---
@@ -150,10 +164,10 @@
                                 </div>
                             </div>
                             <div class="col-xs-100 fightPicksList__totalWrap">
-                                <div class="col-xs-50 fightPicksList__totalTitle">
+                                <div class="col-xs-85 fightPicksList__totalTitle">
                                     Total
                                 </div>
-                                <div class="col-xs-50 fightPicksList__totalValue">
+                                <div class="col-xs-15 fightPicksList__totalValue">
                                     ---
                                 </div>
                             </div>

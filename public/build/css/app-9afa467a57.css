@@ -4327,11 +4327,8 @@ a {
   overflow: hidden;
   transition: height 0.3s ease; }
 
-.fightPicksList__item {
-  padding: 0.9rem 0 0.5rem; }
-
 .fightPicksList__item.show .fightPicksList__details {
-  min-height: calc(1vw * 115); }
+  min-height: 380px; }
 
 .fightPicksList__image,
 .fightPicksList__icon > img {
@@ -4352,7 +4349,7 @@ a {
 .fightPicksList__title {
   font-size: 0.9rem;
   text-transform: uppercase;
-  margin: 0.5rem 0 0.15rem;
+  margin: 0.5rem 0 0.15rem 1rem;
   text-align: center; }
 
 .fightPicksList__stat {
@@ -4364,7 +4361,7 @@ a {
 
 .fighPicksList__selectionResults {
   font-size: 1rem;
-  margin: 0.3rem 0 0.15rem 1rem; }
+  margin: 0.5rem 0 0.15rem 1rem; }
 
 .fightPicksList__resultString {
   margin: 1rem 0;
@@ -4375,15 +4372,13 @@ a {
 
 .fightPicksList__selectionTitle {
   text-transform: uppercase;
-  font-size: 1.25rem;
-  margin-left: 1rem; }
+  font-size: 1.25rem; }
 
 .fightPicksList__choicesTitle {
   font-size: 1.25rem;
   width: 100%;
   border-bottom: 1px solid #000;
-  text-transform: uppercase;
-  padding: 0 0 0.5rem 0.5rem; }
+  text-transform: uppercase; }
   .fightPicksList__choicesTitle.correct {
     color: #2dbe0c; }
 
@@ -4401,23 +4396,16 @@ a {
 
 .fightPicksList__powerUpName {
   font-weight: 700;
-  text-transform: uppercase;
-  padding-left: 1rem; }
-
-.fightPicksList__totalWrap {
-  padding: 1.5rem 0.5rem 0.5rem 0;
-  border-top: 2px inset #ddd; }
+  text-transform: uppercase; }
 
 .fightPicksList__totalTitle {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  text-transform: uppercase;
-  padding-left: 0.5rem; }
+  text-transform: uppercase; }
 
 .fightPicksList__totalValue {
   font-size: 2.5rem;
-  font-weight: 700;
-  text-align: center; }
+  font-weight: 700; }
 
 .infoModal {
   position: fixed;

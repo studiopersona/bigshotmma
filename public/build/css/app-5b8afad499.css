@@ -4327,9 +4327,6 @@ a {
   overflow: hidden;
   transition: height 0.3s ease; }
 
-.fightPicksList__item {
-  padding: 0.9rem 0 0.5rem; }
-
 .fightPicksList__item.show .fightPicksList__details {
   min-height: calc(1vw * 115); }
 
@@ -4382,8 +4379,7 @@ a {
   font-size: 1.25rem;
   width: 100%;
   border-bottom: 1px solid #000;
-  text-transform: uppercase;
-  padding: 0 0 0.5rem 0.5rem; }
+  text-transform: uppercase; }
   .fightPicksList__choicesTitle.correct {
     color: #2dbe0c; }
 
@@ -4401,8 +4397,7 @@ a {
 
 .fightPicksList__powerUpName {
   font-weight: 700;
-  text-transform: uppercase;
-  padding-left: 1rem; }
+  text-transform: uppercase; }
 
 .fightPicksList__totalWrap {
   padding: 1.5rem 0.5rem 0.5rem 0;

@@ -4382,8 +4382,7 @@ a {
   font-size: 1.25rem;
   width: 100%;
   border-bottom: 1px solid #000;
-  text-transform: uppercase;
-  padding: 0 0 0.5rem 0.5rem; }
+  text-transform: uppercase; }
   .fightPicksList__choicesTitle.correct {
     color: #2dbe0c; }
 
