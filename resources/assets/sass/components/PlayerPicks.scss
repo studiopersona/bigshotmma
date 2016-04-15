@@ -9,7 +9,7 @@
 }
 
 .fightPicksList__item.show .fightPicksList__details  {
-	min-height: calc(1vw * 115);
+	min-height: calc(1vw * 111);
 }
 
 .fightPicksList__image,
@@ -57,12 +57,17 @@
 }
 
 .fightPicksList__resultString {
-	margin: 1rem 0;
+	margin: 1rem auto 2rem;
 	text-align: center;
+
 }
 
 .fightPicksList__row {
-	padding: 1.25rem 0 0.65rem;
+	padding: 1.05rem 0 0rem;
+
+	&:first-of-type {
+		padding-top: 1.25rem;
+	}
 }
 
 .fightPicksList__selectionTitle {
@@ -86,6 +91,8 @@
 .fightPicksList__points {
 	font-size: 2.5rem;
 	font-weight: 700;
+	text-align: right;
+	padding-right: 1rem;
 
 	&.penalty {
 		color: $color-red;
@@ -93,14 +100,6 @@
 
 	&.correct {
 		color: $color-green;
-	}
-
-	&.correct::before {
-		content: "+";
-	}
-
-	&.penalty::before {
-		content: "-";
 	}
 }
 
@@ -111,7 +110,8 @@
 }
 
 .fightPicksList__totalWrap {
-	padding: 1.5rem 0.5rem 0.5rem 0;
+	padding: 0.5rem 0.5rem 0.5rem 0;
+	margin-top: 1rem;
 	border-top: 2px inset #ddd;
 }
 
@@ -120,10 +120,12 @@
 	font-weight: 700;
 	text-transform: uppercase;
 	padding-left: 0.5rem;
+	line-height: 1.9;
 }
 
 .fightPicksList__totalValue {
 	font-size: 2.5rem;
 	font-weight: 700;
-	text-align: center;
+	text-align: right;
+	padding-right: 0.5rem;
 }

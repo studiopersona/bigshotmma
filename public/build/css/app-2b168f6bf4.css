@@ -4039,7 +4039,8 @@ html {
 body {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
-  padding: 2rem 0; }
+  padding: 2rem 0;
+  background: #6c6c6c; }
 
 a {
   color: #a80300;
@@ -4048,8 +4049,9 @@ a {
     color: #ff130f; }
 
 #app {
-  max-width: 600px;
-  margin: 0 auto; }
+  max-width: 650px;
+  margin: 0 auto;
+  background: #fff; }
 
 .pageHeader {
   text-align: center;
@@ -4510,7 +4512,6 @@ a {
 
 .powerUpModal__image {
   width: 40%;
-  max-width: 200px;
   display: block;
   margin: 0 auto 1rem; }
 

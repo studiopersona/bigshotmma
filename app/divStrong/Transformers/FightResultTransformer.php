@@ -6,6 +6,7 @@ class FightResultTransformer extends Transformer {
     {
         return [
             'fightResults' => $fightResult,
+            'totalTime' => date('i:s', strtotime($fightResult['total_time'])),
         ];
     }
 }

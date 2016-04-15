@@ -4047,10 +4047,6 @@ a {
   a:hover, a :focus {
     color: #ff130f; }
 
-#app {
-  max-width: 600px;
-  margin: 0 auto; }
-
 .pageHeader {
   text-align: center;
   margin-bottom: 4rem; }
@@ -4335,7 +4331,7 @@ a {
   padding: 0.9rem 0 0.5rem; }
 
 .fightPicksList__item.show .fightPicksList__details {
-  min-height: calc(1vw * 111); }
+  min-height: calc(1vw * 140); }
 
 .fightPicksList__image,
 .fightPicksList__icon > img {
@@ -4510,7 +4506,6 @@ a {
 
 .powerUpModal__image {
   width: 40%;
-  max-width: 200px;
   display: block;
   margin: 0 auto 1rem; }
 

@@ -4047,10 +4047,6 @@ a {
   a:hover, a :focus {
     color: #ff130f; }
 
-#app {
-  max-width: 600px;
-  margin: 0 auto; }
-
 .pageHeader {
   text-align: center;
   margin-bottom: 4rem; }
@@ -4335,7 +4331,7 @@ a {
   padding: 0.9rem 0 0.5rem; }
 
 .fightPicksList__item.show .fightPicksList__details {
-  min-height: calc(1vw * 111); }
+  min-height: calc(1vw * 132); }
 
 .fightPicksList__image,
 .fightPicksList__icon > img {
@@ -4371,13 +4367,13 @@ a {
   margin: 0.3rem 0 0.15rem 1rem; }
 
 .fightPicksList__resultString {
-  margin: 1rem auto 2rem;
-  text-align: center; }
+  margin: 1rem 0;
+  text-align: center;
+  width: 70%; }
 
 .fightPicksList__row {
-  padding: 1.05rem 0 0rem; }
-  .fightPicksList__row:first-of-type {
-    padding-top: 1.25rem; }
+  padding: 1.25rem 0 0.65rem;
+  margin-bottom: 1.25rem; }
 
 .fightPicksList__selectionTitle {
   text-transform: uppercase;
@@ -4409,22 +4405,20 @@ a {
   padding-left: 1rem; }
 
 .fightPicksList__totalWrap {
-  padding: 0.5rem 0.5rem 0.5rem 0;
-  margin-top: 1rem;
+  padding: 1.5rem 0.5rem 0.5rem 0;
   border-top: 2px inset #ddd; }
 
 .fightPicksList__totalTitle {
   font-size: 1.6rem;
   font-weight: 700;
   text-transform: uppercase;
-  padding-left: 0.5rem;
-  line-height: 1.9; }
+  padding-left: 0.5rem; }
 
 .fightPicksList__totalValue {
   font-size: 2.5rem;
   font-weight: 700;
   text-align: right;
-  padding-right: 0.5rem; }
+  padding-right: 1rem; }
 
 .infoModal {
   position: fixed;
@@ -4510,7 +4504,6 @@ a {
 
 .powerUpModal__image {
   width: 40%;
-  max-width: 200px;
   display: block;
   margin: 0 auto 1rem; }
 

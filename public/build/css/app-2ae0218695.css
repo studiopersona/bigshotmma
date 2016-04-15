@@ -4048,8 +4048,7 @@ a {
     color: #ff130f; }
 
 #app {
-  max-width: 600px;
-  margin: 0 auto; }
+  max-width: 800px; }
 
 .pageHeader {
   text-align: center;
@@ -4510,7 +4509,6 @@ a {
 
 .powerUpModal__image {
   width: 40%;
-  max-width: 200px;
   display: block;
   margin: 0 auto 1rem; }
 

@@ -16,3 +16,8 @@ a {
 		color: lighten($color-primary, 20%);
 	}
 }
+
+#app {
+	max-width: 600px;
+	margin: 0 auto;
+}
