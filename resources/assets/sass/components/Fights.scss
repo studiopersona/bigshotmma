@@ -10,6 +10,10 @@
 
 .fightsList__fighterStatsWarp {
 	position: relative;
+
+	.right {
+		text-align: right;
+	}
 }
 
 .fightsList__pick {
@@ -95,6 +99,14 @@
 .fightsList__spread {
 	font-size: 1.1rem;
 	padding-left: 0.5rem;
+}
+
+.fightsList__spread {
+	color: $color-red;
+
+	&.favorite {
+		color: $color-green;
+	}
 }
 
 .fightsList__fighterWrap {

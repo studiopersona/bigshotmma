@@ -4278,11 +4278,6 @@ a {
   font-size: 1.1rem;
   padding-left: 0.5rem; }
 
-.fightsList__spread {
-  color: #e51937; }
-  .fightsList__spread.favorite {
-    color: #2dbe0c; }
-
 .fightsList__fighterWrap {
   position: relative; }
 

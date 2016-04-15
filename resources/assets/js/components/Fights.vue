@@ -1,7 +1,7 @@
 <template>
     <div :working="working">
         <header class="pageHeader" :working.sync="working">
-            <h1 class="pageHeader__header">{{ playerPicks.length }}/5 Fights Chosen</h1>
+            <h1 class="pageHeader__header">Fighters {{ playerPicks.length }}/5 Chosen</h1>
             <h4 class="pageHeader__subheader">{{ totalPowerUps }}/3 Power-ups Used</h4>
         </header>
         <div class="fightsList">
@@ -39,7 +39,7 @@
                                     <div class="fightsList__selectedIndicatorWrap">
                                         <div :class="['fightsList__selectedIndicator', (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'favorite' : '']" data-fighter-id="{{ fight.fighters[0].id }}">
                                             <span>
-                                                {{ (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'Favorite' : 'Underdog' }}
+                                                {{ (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'Favorite +3' : 'Underdog +5' }}
                                             </span>
                                         </div>
                                     </div>
@@ -56,7 +56,7 @@
                                 <div class="fightsList__fighterRecord">
                                     {{ fight.fighters[0].wins }} - {{ fight.fighters[0].loses }} - {{ fight.fighters[0].draws }}
                                 </div>
-                                <div class="fightsList__spread">
+                                <div :class="['fightsList__spread', fight.fighters[0].pivot.odds > 0 ? 'favorite' : '']">
                                     {{ fight.fighters[0].pivot.odds }}
                                 </div>
                             </div>
@@ -68,7 +68,7 @@
                                 data-fighter-id="{{ fight.fighters[1].id }}"
                                 data-fight-id="{{ fight.id }}"
                             ></div>
-                            <div class="col-xs-60">
+                            <div class="col-xs-60 right">
                                 <div class="fightsList__fighterName">
                                     {{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }}
                                 </div>
@@ -79,7 +79,7 @@
                                 <div class="fightsList__fighterRecord">
                                     {{ fight.fighters[1].wins }} - {{ fight.fighters[1].loses }} - {{ fight.fighters[1].draws }}
                                 </div>
-                                <div class="fightsList__spread">
+                                <div :class="['fightsList__spread', fight.fighters[1].pivot.odds > 0 ? 'favorite' : '']">
                                     {{ fight.fighters[1].pivot.odds }}
                                 </div>
                             </div>
@@ -108,7 +108,7 @@
                                             :class="['fightsList__selectedIndicator', (fight.fighters[1].pivot.odds > fight.fighters[0].pivot.odds) ? 'favorite' : '']"
                                             data-fighter-id="{{ fight.fighters[1].id }}">
                                             <span>
-                                                {{ (parseInt(fight.fighters[1].pivot.odds, 10) > parseInt(fight.fighters[0].pivot.odds, 10)) ? 'Favorite' : 'Underdog' }}
+                                                {{ (parseInt(fight.fighters[1].pivot.odds, 10) > parseInt(fight.fighters[0].pivot.odds, 10)) ? 'Favorite +3' : 'Underdog +5' }}
                                             </span>
                                         </div>
                                     </div>
