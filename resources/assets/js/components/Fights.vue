@@ -475,9 +475,8 @@
 
                 // search for this fight in picks
                 pickDataIndex = this.playerPicks.findIndex(findPick);
-                console.log('power up id: ', this.fightData[pickDataIndex].powerupId);
                 if ( pickDataIndex !== -1 ) {
-                    if (this.fightData[pickDataIndex].powerupId !== 0 ) {
+                    if (this.fightData[parseInt(this.playerPicks[parseInt(pickDataIndex, 10)].fightId, 10)].powerupId !== 0 ) {
                         this.totalPowerUps--;
                         powerupIndicators = document.querySelectorAll('img.fightsList__powerup[data-fight-id="' + fightId + '"]');
                         for ( var i = 0; i < powerupIndicators.length; ++i) {
