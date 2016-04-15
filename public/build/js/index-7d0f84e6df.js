@@ -15458,8 +15458,7 @@ exports.default = {
 
         this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', function (data) {
             _this.results = data.results;
-            console.log('returned results: ', data.results);
-            _this.parseResults(data.results);
+            _this.parseResults();
         }, {
             // Attach the JWT header
             headers: _auth2.default.getAuthHeader()
@@ -15476,17 +15475,12 @@ exports.default = {
 
             pickToToggle.classList.toggle('show');
         },
-        parseResults: function parseResults(results) {
-            results.forEach(function (obj, i) {
-                var findFight = function findFight(pick) {
-                    return parseInt(pick.fight_id, 10) === parseInt(obj.fightResults.fight_id, 10);
-                },
-                    fightPicks;
-
-                console.log('results passed in: ', results[0].fightResults.fight_id);
-
-                fightPicks = this.picksList.find(findFight);
-                console.log('fight picks: ', fightPicks);
+        parseResults: function parseResults() {
+            this.results.forEach(function (obj, i) {
+                var fightPicks = this.picksList.find(findFight),
+                    findFight = function findFight(pick) {
+                    return parseInt(pick.fight_id, 10) === parseInt(obj.fight_id, 10);
+                };
 
                 outcome[obj.fight_id].fighter = obj.winning_fighter_id === fightPicks.fighter.winning_fighter_id ? 1 : 0;
                 outcome[obj.fight_id].finish_id = obj.winning_fighter_id === fightPicks.finish.finish_id ? 1 : 0;
@@ -15494,8 +15488,6 @@ exports.default = {
                 outcome[obj.fight_id].minute = obj.winning_fighter_id === fightPicks.minute ? 1 : 0;
                 //outcome[obj.fight_id].fighter = ( obj.winning_fighter_id === fightPicks.fighter.winning_fighter_id ) ? 1 : 0;
             });
-
-            console.log('outcome: ', this.outcome);
         }
     },
 

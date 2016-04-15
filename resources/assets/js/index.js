@@ -11,7 +11,7 @@ import PlayerPicks from './components/PlayerPicks.vue';
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
 
-Vue.config.debug = true;
+Vue.config.debug = false;
 
 Vue.use(VueResource);
 Vue.use(VueRouter);

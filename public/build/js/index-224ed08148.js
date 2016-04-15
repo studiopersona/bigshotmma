@@ -15477,14 +15477,13 @@ exports.default = {
             pickToToggle.classList.toggle('show');
         },
         parseResults: function parseResults(results) {
+            var findFight = function findFight(pick) {
+                return parseInt(pick.fight_id, 10) === parseInt(obj.fightResults.fight_id, 10);
+            },
+                fightPicks;
+
+            console.log('results passed in: ', results[0].fightResults.fight_id);
             results.forEach(function (obj, i) {
-                var findFight = function findFight(pick) {
-                    return parseInt(pick.fight_id, 10) === parseInt(obj.fightResults.fight_id, 10);
-                },
-                    fightPicks;
-
-                console.log('results passed in: ', results[0].fightResults.fight_id);
-
                 fightPicks = this.picksList.find(findFight);
                 console.log('fight picks: ', fightPicks);
 

@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 
 use Bsmma\Http\Requests;
 use Bsmma\FightResult;
+use Bsmma\divStrong\Transformers\FightResultTransformer as FightResultTransformer;
 
 class FightResultsController extends ApiController
 {
-    public function __construct(FightResult $fightResult)
+    public function __construct(FightResult $fightResult, FightResultTransformer $fightResultTransformer)
     {
     	$this->fightResult = $fightResult;
+        $this->fightResultTransformer = $fightResultTransformer;
     }
 
     public function index($contest_id)

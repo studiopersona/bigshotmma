@@ -47,7 +47,7 @@
                         <div class="col-xs-15">
                             <div class="fightPicksList__title">Result</div>
                             <div v-if="!results.length" class="fightPicksList__stat">---</div>
-                            <div v-else class="fightPicksList__stat">Actual Stat Here</div>
+                            <div v-else class="fightPicksList__stat">{{ outcome[pick.fight_id].fighter ? 'W' : 'L' }}</div>
                         </div>
                         <div class="col-xs-15">
                             <div class="fightPicksList__title">Finish</div>
@@ -214,6 +214,7 @@
                     },
                 }],
                 results: [],
+                outcome: [],
                 working: false,
                 numberNames: ['One', 'Two', 'Three', 'Four', 'Five'],
                 URL: {
@@ -232,7 +233,6 @@
             console.log(URL.base);
             this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/picks', (data) => {
                 this.picksList = data.picks;
-                console.log(this.picksList);
                 this.working = false;
             }, {
                 // Attach the JWT header
@@ -241,6 +241,8 @@
 
             this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', (data) => {
                 this.results = data.results;
+                console.log('returned results: ', data.results);
+                this.parseResults(data.results);
             }, {
                 // Attach the JWT header
                 headers: auth.getAuthHeader()
@@ -252,10 +254,31 @@
         methods: {
             toggleDetails(pickId, e) {
                 e.preventDefault();
-                console.log(pickId);
                 var pickToToggle = document.querySelector('li.fightPicksList__item[data-pick-id="' + pickId + '"]');
-                console.log(pickToToggle);
+
                 pickToToggle.classList.toggle('show');
+            },
+
+            parseResults(results) {
+                results.forEach(function(obj, i) {
+                    var findFight = function(pick) {
+                            return parseInt(pick.fight_id, 10) === parseInt(obj.fightResults.fight_id, 10);
+                        },
+                        fightPicks;
+
+                    console.log('results passed in: ', results[0].fightResults.fight_id);
+
+                    fightPicks = this.picksList.find(findFight);
+                    console.log('fight picks: ', fightPicks);
+
+                    outcome[obj.fight_id].fighter = ( obj.winning_fighter_id === fightPicks.fighter.winning_fighter_id ) ? 1 : 0;
+                    outcome[obj.fight_id].finish_id = ( obj.winning_fighter_id === fightPicks.finish.finish_id ) ? 1 : 0;
+                    outcome[obj.fight_id].round = ( obj.winning_fighter_id === fightPicks.round ) ? 1 : 0;
+                    outcome[obj.fight_id].minute = ( obj.winning_fighter_id === fightPicks.minute ) ? 1 : 0;
+                    //outcome[obj.fight_id].fighter = ( obj.winning_fighter_id === fightPicks.fighter.winning_fighter_id ) ? 1 : 0;
+                });
+
+                console.log('outcome: ', this.outcome);
             },
         },
 
