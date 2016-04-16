@@ -213,7 +213,7 @@
         </section>
         <section :class="alertNoticeClasses">
             <div>
-                <span class="alertNotice__type">{{ alertNotice.type }}</span>: {{ alertNotice.msg }}
+                <span class="alertNotice__type">{{ alertNotice.type }}</span>: {{{ alertNotice.msg }}}
                 <button @click="alertNoticeClose" type="button" class="alertModal__close">x</button>
             </div>
             <div v-if="alertNotice.action" class="button-wrap">
@@ -393,7 +393,7 @@
                 if ( this.playerPicks.length === 6 ) {
                     this.alert({
                         type: 'Alert',
-                        msg: 'You\'ve already selected the maximum number of fights. Please remove one of your selections if you would like to add this fight.',
+                        msg: 'You\'ve already selected the maximum number of fights. Please clear one of your selections if you would like to add this fight.',
                     });
                 } else {
                     if ( this.currentFightId !== e.target.dataset.fightId ) {
