@@ -549,7 +549,8 @@
             commitPicks() {
                 var localfightData = this.fightData,
                     localContestId = this.contestId,
-                    compiledPicks;
+                    compiledPicks,
+                    errors;
                 // compile data with playerPicks and fightData
                 // sync the pick with the server
                 // take to player picks page
@@ -585,14 +586,41 @@
                     });
 
                     // validate selections
-
-                    this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, (data) => {
-                        if ( data.success ) this.$router.go({ path: '/contest/' + this.contestId + '/picks' });
-                    }, {
-                        // Attach the JWT header
-                        headers: auth.getAuthHeader()
-                    });
+                    errors = this.validatePicks(compiledPicks);
+                    if ( ! errors.length ) {
+                        this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, (data) => {
+                            if ( data.success ) this.$router.go({ path: '/contest/' + this.contestId + '/picks' });
+                        }, {
+                            // Attach the JWT header
+                            headers: auth.getAuthHeader()
+                        });
+                    } else {
+                        // display errors here
+                        console.log(errors);
+                        alert('There are errors');
+                    }
                 }
+            },
+
+            validatePicks(picks) {
+                var errors = [];
+                // make sure in every fight picked that all data is entered
+                // finish_id, minute, and roudn can't be 0
+                // power up id can be zero
+                picks.forEach(function(pick, i) {
+                    var error = {
+                        finish: false,
+                        minute: false,
+                        round: false,
+                    };
+                    if (pick.finish_id === 0 ) error.finish = true;
+                    if (pick.minute === 0 ) error.minute = true;
+                    if (pick.round === 0 ) error.round = true;
+
+                    if ( error.finish || error.minute || error.round ) errors.push(error);
+                });
+
+                return errors;
             },
 
             alert(options) {

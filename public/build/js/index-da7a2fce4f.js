@@ -15229,7 +15229,8 @@ exports.default = {
 
             var localfightData = this.fightData,
                 localContestId = this.contestId,
-                compiledPicks;
+                compiledPicks,
+                errors;
             // compile data with playerPicks and fightData
             // sync the pick with the server
             // take to player picks page
@@ -15265,14 +15266,32 @@ exports.default = {
                     });
 
                     // validate selections
-
-                    this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, function (data) {
-                        if (data.success) _this2.$router.go({ path: '/contest/' + _this2.contestId + '/picks' });
-                    }, {
-                        // Attach the JWT header
-                        headers: _auth2.default.getAuthHeader()
-                    });
+                    errors = this.validatePicks(compiledPicks);
+                    if (!errors.length) {
+                        console.log(compiledPicks);
+                        this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, function (data) {
+                            if (data.success) _this2.$router.go({ path: '/contest/' + _this2.contestId + '/picks' });
+                        }, {
+                            // Attach the JWT header
+                            headers: _auth2.default.getAuthHeader()
+                        });
+                    } else {
+                        // display errors here
+                    }
                 }
+        },
+        validatePicks: function validatePicks(picks) {
+            var errors = [];
+            // make sure in every fight picked that all data is entered
+            // finish_id, minute, and roudn can't be 0
+            // power up id can be zero
+            picks.forEach(function (pick, i) {
+                if (pick.finish_id === 0) errors[i].finish = true;
+                if (pick.minute === 0) errors[i].minute = true;
+                if (pick.round === 0) errors[i].round = true;
+            });
+
+            return errors;
         },
         alert: function alert(options) {
             this.alertNotice.type = options.type ? options.type : 'Alert';
