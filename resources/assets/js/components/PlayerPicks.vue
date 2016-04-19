@@ -11,7 +11,8 @@
                         <span class="contestDetails__title">Buy in:</span> ${{ picksList[0].contest.buy_in }}
                     </div>
                     <div class="col-xs-50 text-right">
-                        <span class="contestDetails__title">Entries:</span> {{ picksList[0].contest.total_participants }}/{{ picksList[0].contest.max_participants }}
+                        <span class="contestDetails__title">Standing:</span> <span v-if="results.length">{{ playerRanking }}/{{ standings.length }}</span>
+                        <span v-else>No Results Reported</span>
                     </div>
                 </div>
                 <div class="row">
@@ -241,8 +242,11 @@
                 }],
                 results: [],
                 outcome: [],
+                standings: [],
                 totalPoints: 0,
                 working: false,
+                playerId: 0,
+                playerRanking: 0,
                 numberNames: ['One', 'Two', 'Three', 'Four', 'Five'],
                 URL: {
                     base: window.URL.base,
@@ -270,6 +274,15 @@
                     headers: auth.getAuthHeader()
                 }).error((err) => {
                     console.log(err);
+                });
+
+                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings', (data) => {
+                    this.standings = data.data[0].standings;
+                    this.playerId = data.data[0].player;
+                    this.determineRank(data.data[0].standings);
+                }, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
                 });
             }, {
                 // Attach the JWT header
@@ -355,6 +368,17 @@
 
                     vm.totalPoints += outcome[i].points;
                 });
+            },
+
+            determineRank(standings) {
+                var vm = this,
+                    findPlayer = function(standing) {
+                        console.log('standing player id: ', parseInt(standing.player_id, 10));
+                        console.log('playerId: ', vm.playerId)
+                        return parseInt(standing.player_id, 10) === parseInt(vm.playerId, 10);
+                    };
+
+                this.playerRanking = ( standings.findIndex(findPlayer) + 1 );
             },
         },
 

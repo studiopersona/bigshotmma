@@ -116,10 +116,10 @@
                             </div><!-- .fightsList__fighterWrap -->
                         </div><!-- .fightsList__fighterStatsWarp -->
                     </div><!-- .fightsList__fightersWrap -->
-                    <div class="fightsList__pick" data-fight-id="{{ fight.id }}">
+                    <div class="fightsList__pick" id="{{ fight.id }}" data-fight-id="{{ fight.id }}">
                         <div class="container-fluid">
                             <div class="col-xs-100">
-                                <div class="fightsList__pickHeader">How will win?</div>
+                                <div class="fightsList__pickHeader">How will {{ currentFighterName }} win?</div>
                             </div>
                             <div class="col-xs-100">
                                 <select v-model="fightData[fight.id].finishId">
@@ -256,6 +256,7 @@
                 playerPicks: [],
                 currentFightId: '',
                 currentFighterId: '',
+                currentFighterName: '',
                 fightData:[
                     {},
                     { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
@@ -390,11 +391,23 @@
             },
 
             selectFight(e) {
+                var checkPick = function(playerPick) {
+                        return playerPick.fightId === e.target.dataset.fightId;
+                    };
+
                 if ( this.playerPicks.length === 6 ) {
-                    this.alert({
-                        type: 'Alert',
-                        msg: 'You\'ve already selected the maximum number of fights. Please clear one of your selections if you would like to add this fight.',
-                    });
+                    if ( this.playerPicks.findIndex(checkPick) !== -1 ) {
+                        this.switchFight(e);
+                        this.updatePicks({
+                            fighterId: e.target.dataset.fighterId,
+                            fightId: e.target.dataset.fightId,
+                        });
+                    } else {
+                        this.alert({
+                            type: 'Alert',
+                            msg: 'You\'ve already selected the maximum number of fights. Please clear one of your selections if you would like to add this fight.',
+                        });
+                    }
                 } else {
                     if ( this.currentFightId !== e.target.dataset.fightId ) {
                         this.switchFight(e);
@@ -423,6 +436,7 @@
                 var pickData,
                     pickDataIndex = -1;
 
+                console.log('updating picks');
                 // search for this fight in picks
                 pickData = this.playerPicks.find(this.findPick);
                 // if a pic was already made for this fight
@@ -430,6 +444,7 @@
                     // check pick fithter id with current fighter id
                     // change if different do nothing if its the same
                     if ( newData.fighterId !== '') {
+                        console.log('new data not blank');
                         if ( pickData.fighterId !== newData.fighterId ) {
                             this.deselectFighter(pickData.fighterId);
 
@@ -437,6 +452,8 @@
 
                             if ( pickDataIndex !== -1 ) this.playerPicks[pickDataIndex].fighterId = newData.fighterId;
 
+                            this.selectFighter(newData.fighterId, newData.fightId);
+                        } else {
                             this.selectFighter(newData.fighterId, newData.fightId);
                         }
                     }
@@ -476,17 +493,17 @@
                 // search for this fight in picks
                 pickDataIndex = this.playerPicks.findIndex(findPick);
                 if ( pickDataIndex !== -1 ) {
+                    // check for applied power-ups and remove if applied
                     if (this.fightData[parseInt(this.playerPicks[parseInt(pickDataIndex, 10)].fightId, 10)].powerupId !== 0 ) {
                         this.totalPowerUps--;
+                        // remove the power-up icons
                         powerupIndicators = document.querySelectorAll('img.fightsList__powerup[data-fight-id="' + fightId + '"]');
                         for ( var i = 0; i < powerupIndicators.length; ++i) {
                             powerupIndicators[i].classList.remove('show');
                         }
-
-                        // delete the pick
-                        this.playerPicks.splice(parseInt(pickDataIndex, 10), 1);
                     }
-
+                    // delete the pick
+                    this.playerPicks.splice(parseInt(pickDataIndex, 10), 1);
 
                     // reset the fight data for this fight
                     this.fightData[parseInt(fightId, 10)].finishId = 0;
@@ -515,6 +532,7 @@
                     fighterIndicatorToSelect,
                     powerUpImageToSelect;
 
+                console.log('selecting fighter');
                 fighterImageToSelect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
                 if ( ! fighterImageToSelect.classList.contains('selected') ) {
                     fighterImageToSelect.classList.add('selected');
@@ -527,6 +545,10 @@
                     }
 
                     this.currentFighterId = fighterId;
+                    this.fighterName();
+                } else {
+                    this.currentFighterId = fighterId;
+                    this.fighterName();
                 }
             },
 
@@ -544,6 +566,23 @@
                     powerUpImageToDeselect = document.querySelector('img.fightsList__powerup[data-fighter-id="' + fighterId + '"]');
                     powerUpImageToDeselect.classList.remove('show');
                 }
+            },
+
+            fighterName() {
+                var vm = this,
+                    selectedFight,
+                    selectedFighter,
+                    findFight = function(fight) {
+                        return fight.id === parseInt(vm.currentFightId, 10);
+                    },
+                    findFighter = function(fighter) {
+                        return fighter.id === parseInt(vm.currentFighterId, 10);
+                    };
+
+                selectedFight = this.fightsList[0].fights.find(findFight);
+                selectedFighter = selectedFight.fighters.find(findFighter);
+
+                this.currentFighterName = selectedFighter.firstname + ' ' + selectedFighter.lastname;
             },
 
             commitPicks() {

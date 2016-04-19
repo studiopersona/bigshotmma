@@ -36,6 +36,8 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('power-ups', 'PowerUpsController@index');
 	    Route::get('finishes', 'FinishesController@index');
 	    Route::get('contest/{id}/results', 'FightResultsController@index');
+	    Route::get('contest/{id}/standings', 'PicksController@getPlayerStandings');
+	    Route::get('contest/{id}/standings-list', 'PicksController@getPlayerStandingsList');
 	});
 
 });
