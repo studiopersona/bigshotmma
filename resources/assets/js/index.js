@@ -7,6 +7,7 @@ import Contests from './components/Contests.vue';
 import ContestLobby from './components/ContestLobby.vue';
 import Fights from './components/Fights.vue';
 import PlayerPicks from './components/PlayerPicks.vue';
+import Standings from './components/Standings.vue';
 
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
@@ -46,7 +47,11 @@ router.map({
 
   '/contest/:contest_id/picks': {
     component: PlayerPicks
-  }
+  },
+
+  '/contest/:contest_id/standings': {
+    component: Standings
+  },
 
 });
 

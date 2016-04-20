@@ -29,6 +29,7 @@ class PlayerPickTransformer extends Transformer {
             	'event_short_name' => $pick['contest']['event']['event_short_name'],
             ],
             'contest' => [
+                'id' => $pick['contest']['id'],
             	'buy_in' => $pick['contest']['entry_fee'],
             	'max_participants' => $pick['contest']['max_participants'],
             	'total_participants' => count($pick['contest']['users']),

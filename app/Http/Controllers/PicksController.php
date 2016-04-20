@@ -7,24 +7,30 @@ use Illuminate\Http\Request;
 use Bsmma\Http\Requests;
 use Bsmma\User;
 use Bsmma\Pick;
+use Bsmma\Contest;
 use Bsmma\FightResult;
 use Bsmma\divStrong\Transformers\PickTransformer;
 use Bsmma\divStrong\Transformers\PlayerPickTransformer;
+use Bsmma\divStrong\Transformers\ContestTransformer;
 
 class PicksController extends ApiController
 {
     public function __construct(
         Pick $pick,
         User $user,
+        Contest $contest,
         FightResult $fightResult,
         PickTransformer $pickTransformer,
-        PlayerPickTransformer $playerPickTransformer
+        PlayerPickTransformer $playerPickTransformer,
+        ContestTransformer $contestTransformer
     )
     {
         $this->pick = $pick;
         $this->user = $user;
+        $this->contest = $contest;
         $this->pickTransformer = $pickTransformer;
         $this->playerPickTransformer = $playerPickTransformer;
+        $this->contestTransformer = $contestTransformer;
         $this->fightResult = $fightResult;
     }
 
@@ -237,9 +243,21 @@ class PicksController extends ApiController
                             ->with('powerUps')
                             ->get();
 
+        $contestData = $this->contest->with([
+                        'contestType',
+                        'event.fights.fighters',
+                        'event',
+                        'users'
+                    ])
+                    ->where('id', $contest_id)
+                    ->get();
+
+        $contest = $this->contestTransformer->transformCollection($contestData->toArray());
+
         if ( ! $picks->isEmpty() ) {
             $current_user_id = 0;
             $tally = 0;
+            $winning_fights = 0;
             $picks = $picks->toArray();
             $contestResults = $contestResults->toArray();
 
@@ -249,10 +267,12 @@ class PicksController extends ApiController
                         $standings[] = [
                             'player_id' => $current_user_id,
                             'total' => $tally,
+                            'fights_won' => $winning_fights,
                         ];
                     }
                     $current_user_id = (int)$pick['user_id'];
                     $tally = 0;
+                    $winning_fights = 0;
                 }
 
                 foreach ( $contestResults as $result )
@@ -262,6 +282,7 @@ class PicksController extends ApiController
                         // did player pick the winning fighter
                         if ( (int)$result['winning_fighter_id'] === (int)$pick['winning_fighter_id'] )
                         {
+                            $winning_fights += 1;
                             // was the winning fighter the favorite or the underdog
                             foreach ($pick['fight']['fighters'] as $fighter)
                             {
@@ -311,6 +332,7 @@ class PicksController extends ApiController
             $standings[] = [
                 'player_id' => $current_user_id,
                 'total' => $tally,
+                'fights_won' => $winning_fights,
             ];
         }
 
@@ -327,7 +349,8 @@ class PicksController extends ApiController
 
         $data = [
             'standings' => $standings,
-            'player' => $user->id
+            'player' => $user->id,
+            'contest' => $contest,
         ];
 
         return $this->respond(['data' => [$data]]);

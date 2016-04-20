@@ -20,7 +20,7 @@
                         <span class="contestDetails__title">Prize Pool:</span> ${{ picksList[0].contest.prize_pool  }}
                     </div>
                     <div class="col-xs-50 text-right">
-                        Winning
+                        <span class="contestDetails__title">Your Winnigs:</span> $0
                     </div>
                 </div>
             </div>

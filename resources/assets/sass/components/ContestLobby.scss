@@ -8,10 +8,14 @@
 	font-size: 1.2rem;
 
 	.row {
-		margin-bottom: 0.5rem;
+		margin-bottom: 1rem;
 
 		> div:nth-child(2) {
 			text-align: right;
+		}
+
+		&:last-child {
+			margin-bottom: 2rem;
 		}
 	}
 }
@@ -27,6 +31,11 @@
 .participantsList__itemTitle {
 	text-align: center;
 	font-size: 1rem;
+}
+
+.participantsList__name {
+	padding-left: 1rem;
+	line-height: 1.2;
 }
 
 .participantsList__record,

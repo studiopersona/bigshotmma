@@ -213,11 +213,15 @@
         </section>
         <section :class="alertNoticeClasses">
             <div>
-                <span class="alertNotice__type">{{ alertNotice.type }}</span>: {{{ alertNotice.msg }}}
+                <h2 class="alertNotice__header">{{ alertNotice.header }}</h2>
+                <div class="alertNotice__subject">{{ alertNotice.subject }}</div>
+                <div class="alertNotice__body">
+                    {{{ alertNotice.body }}}
+                </div>
                 <button @click="alertNoticeClose" type="button" class="alertModal__close">x</button>
             </div>
             <div v-if="alertNotice.action" class="button-wrap">
-                {{{ alertNotice.action }}}
+                <button @click="alertNoticeClose" type="button" class="button button--green">Got It</button>
             </div>
         </section>
     </div>
@@ -276,8 +280,9 @@
                     { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
                 ],
                 alertNotice: {
-                    type: 'Alert',
-                    msg: 'This is something you should know',
+                    header: 'Alert',
+                    subject: '',
+                    body: '',
                     action: false,
                 },
                 contestId: this.$route.params.contest_id,
@@ -360,7 +365,10 @@
                     puIndicatorImage.classList.add('show');
                 } else {
                     this.alert({
-                        msg: 'You may only apply 3 powers-ups per contest.<br>You will need to remove one or more applied power-ups in order to activate another.'
+                        header: 'Heads Up!',
+                        subject: 'Too Many Power Ups',
+                        body: 'You can remove a power up by tapping the icon that appears over the fighter it is applied to.',
+                        action: true,
                     });
                 }
             },
@@ -404,8 +412,10 @@
                         });
                     } else {
                         this.alert({
-                            type: 'Alert',
-                            msg: 'You\'ve already selected the maximum number of fights. Please clear one of your selections if you would like to add this fight.',
+                            header: 'Heads Up',
+                            body: 'You\'ve already selected the maximum number of fights. Please clear one of your selections if you would like to add this fight.',
+                            subject: 'Too Many Fights Picked',
+                            action: true,
                         });
                     }
                 } else {
@@ -597,17 +607,19 @@
 
                 if ( this.playerPicks.length < 5 ) {
                     this.alert({
-                        type: 'Warning',
-                        msg: 'You\'ve only seleted ' + this.playerPicks.length + ' fights out of 5 that you are allowed to play. Would you like to stay and select more fights or continue commiting your selections?',
-                        action: '<button type="button" @click="closeAlert" class="alertNotice__confirm--no">Stay</button><button @click="continueCommit" type="button" class="alertNotice__confirm--yes">Continue</button>'
+                        header: 'Heads Up',
+                        subject: 'You need to pick more fighters to compete in this contest',
+                        body: '<div>Current Picks</div><div>' + this.playerPicks.length + '/5</div><div>Just a few more clicks...</div>',
+                        action: true,
                     });
                     // alert that you have only picked x number of fights
                     // allowed to pick 5 plus one alternate
                 } else if ( this.playerPicks.length === 5 ) {
                     this.alert({
-                        type: 'Warning',
-                        msg: 'You\'ve seleted ' + this.playerPicks.length + ' fights you may choose one more fight as an alternate in case one of your five slected fights is scratched.',
-                        action: '<button type="button" @click="closeAlert" class="alertNotice__confirm--no">Stay</button><button @click="continueCommit" type="button" class="alertNotice__confirm--yes">Continue</button>'
+                        header: 'Warning',
+                        subject: 'Choose an Reserve Fight',
+                        body: 'You\'ve seleted ' + this.playerPicks.length + ' fights you may choose one more fight as an alternate in case one of your five selected fights is scratched.',
+                        action: true
                     });
                 } else if ( this.playerPicks.length > 5 ) {
                     compiledPicks = this.playerPicks.map(function(pick) {

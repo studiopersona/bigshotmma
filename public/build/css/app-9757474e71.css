@@ -4351,7 +4351,7 @@ a {
   padding: 0.9rem 0 0.5rem; }
 
 .fightPicksList__item.show .fightPicksList__details {
-  min-height: calc(1vw * 116); }
+  min-height: calc(1vw * 111); }
 
 .fightPicksList__image,
 .fightPicksList__icon > img {
@@ -4445,9 +4445,7 @@ a {
 .standingsList__rank,
 .standingsList__points,
 .standingsList__wins {
-  font-size: 2rem;
-  text-align: center;
-  margin-top: 0.5rem; }
+  font-size: 2rem; }
 
 .infoModal {
   position: fixed;
@@ -4469,8 +4467,7 @@ a {
     transform: translate3d(0, 0, 0); }
 
 .infoModal__rules p {
-  margin-bottom: 2rem;
-  font-size: 2rem; }
+  margin-bottom: 1.5rem; }
 
 .infoModal__title {
   font-size: 3rem;
