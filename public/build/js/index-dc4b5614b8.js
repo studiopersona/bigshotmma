@@ -15108,7 +15108,7 @@ exports.default = {
                 this.alert({
                     header: 'Heads Up!',
                     subject: 'Too Many Power Ups',
-                    body: 'You can remove a power up by tapping the icon that appears over the fighter it is applied to.',
+                    body: '<p>You can only apply 3 power ups per contest.</p><p>You can remove a power up by tapping the icon that appears over the fighter it is applied to.</p>',
                     action: true
                 });
             }
@@ -15395,8 +15395,9 @@ exports.default = {
             return errors;
         },
         alert: function alert(options) {
-            this.alertNotice.type = options.type ? options.type : 'Alert';
-            this.alertNotice.msg = options.msg ? options.msg : 'You did something wrong.';
+            this.alertNotice.header = options.header ? options.header : 'Alert';
+            this.alertNotice.subject = options.subject ? options.subject : 'You did something wrong.';
+            this.alertNotice.body = options.body ? options.body : '';
 
             this.alertNotice.action = options.action ? options.action : false;
 

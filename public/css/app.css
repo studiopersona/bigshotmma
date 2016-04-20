@@ -4588,7 +4588,7 @@ a {
   -webkit-transform: translate3d(0, -110%, 0);
   transform: translate3d(0, -110%, 0);
   overflow: hidden;
-  font-size: 2.5rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: #fff;
   text-align: center;
@@ -4596,6 +4596,8 @@ a {
   .alertNotice.show {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
+  .alertNotice p {
+    margin: 0 0 2rem; }
 
 .alertModal__close {
   position: absolute;
