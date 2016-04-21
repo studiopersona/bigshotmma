@@ -4186,8 +4186,7 @@ a {
 .participantsList__record,
 .participantsList__wins {
   text-align: center;
-  font-size: 1.6rem;
-  line-height: 1.6; }
+  font-size: 1.3rem; }
 
 .participantsList__img img {
   width: 100%; }
@@ -4729,7 +4728,7 @@ a {
 .button, .button--block, .button--primary, .button--green {
   background: transparent;
   padding: 0.4em 2.5em;
-  font-size: 1.4em;
+  font-size: 1.5em;
   font-weight: 700;
   text-transform: uppercase;
   color: #fff;

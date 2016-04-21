@@ -36,6 +36,7 @@ export default {
 
     signup(context, creds, redirect) {
         context.$http.post(SIGNUP_URL, creds, (data) => {
+            console.log(data);
             localStorage.setItem('id_token', data.token);
 
             this.user.authenticated = true;

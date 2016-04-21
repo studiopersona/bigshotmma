@@ -1,5 +1,15 @@
 .fightsList {
 	position: relative;
+	margin-bottom: 6rem;
+
+	> div .button-wrap {
+		position: fixed;
+		bottom: 0;
+		z-index: 30;
+		margin-top: 2.5rem;
+		padding: 1.5rem 0;
+		background: $color-white;
+	}
 }
 
 .fightsList__clickableArea {
@@ -74,7 +84,7 @@
 }
 
 .fightsList__powerup {
-	width: 40%;
+	width: 50%;
 	opacity: 0;
 	visibility: hidden;
 	position: absolute;

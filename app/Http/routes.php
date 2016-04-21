@@ -25,6 +25,7 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::post('register', 'AuthenticateController@register');
 	    Route::resource('events', 'EventsController', ['only' => ['index','show']]);
 	    Route::get('player/{id}/contests', 'ContestsController@index');
+	    Route::get('player/contests-entered', 'ContestParticipantsController@getByPlayer');
 	    Route::get('event/{id}/contests', 'ContestsController@eventLimited');
 	    Route::get('contest/{id}/players', 'ContestsController@getParticipants');
 	    Route::get('contest/{id}/fights', 'ContestsController@getFights');

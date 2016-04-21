@@ -14647,6 +14647,7 @@ exports.default = {
         var _this2 = this;
 
         context.$http.post(SIGNUP_URL, creds, function (data) {
+            console.log(data);
             localStorage.setItem('id_token', data.token);
 
             _this2.user.authenticated = true;
@@ -14845,6 +14846,7 @@ exports.default = {
     data: function data() {
         return {
             contestsList: { 'contests': {} },
+            contestsEntered: [],
             working: false,
             URL: {
                 base: window.URL.base,
@@ -14862,6 +14864,15 @@ exports.default = {
         this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', function (data) {
             _this.contestsList = data;
             _this.working = false;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        }).error(function (err) {
+            return console.log(err);
+        });
+
+        this.$http.get(URL.base + '/api/v1/player/contests-entered', function (data) {
+            _this.contestsEntered = data.contests;
         }, {
             // Attach the JWT header
             headers: _auth2.default.getAuthHeader()
@@ -14887,7 +14898,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\">\n        <h1 class=\"pageHeader__header\">Enter a Contest</h1>\n        <h4 class=\"pageHeader__subheader\">\n            Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n        </h4>\n    </header>\n    <div class=\"contestList\">\n        <ul class=\"stripped-list\">\n            <li class=\"contestList__item\" v-for=\"contest in contestsList.contests\">\n                <a v-link=\"{ path: '/contest/' + contest.contest_id + '/players' }\" href=\"#\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-20\">\n                            <img class=\"contestList__img\" :src=\"URL.base + '/public/image/events/' + contest.event_image_file\" alt=\"{{ contest.event_name }} Image\">\n                        </div>\n                        <div class=\"col-xs-45 contestList__infoWarp\">\n                            <div class=\"contestList__date\">{{ contest.event_date }}</div>\n                            <div class=\"contestList__name\">{{ contest.event_short_name }}</div>\n                            <div class=\"contestList__type\">{{ contest.contest_type_name }}</div>\n                        </div>\n                        <div class=\"col-xs-20\">\n                            <div class=\"contestList__entriesTitle\">Entries</div>\n                            <div class=\"contestList__entries\">{{ contest.total_participants }}/{{ contest.max_participants }}</div>\n                        </div>\n                        <div class=\"col-xs-15\">\n                            <div class=\"contestList__buyinTitle\">Buy-In</div>\n                            <div class=\"contestList__buyin\">${{ contest.buy_in }}</div>\n                        </div>\n                    </div>\n                </a>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\">\n        <h1 class=\"pageHeader__header\">Enter a Contest</h1>\n        <h4 class=\"pageHeader__subheader\">\n            Over <span class=\"pageHeader--highlight\">{{ poolTotal }}</span> Total Prize Pool\n        </h4>\n    </header>\n    <div class=\"contestList\">\n        <ul class=\"stripped-list\">\n            <li class=\"contestList__item\" v-for=\"contest in contestsList.contests\">\n                <a v-if=\"contestsEntered.indexOf(parseInt(contest.contest_id, 10)) !== -1\" v-link=\"{ path: '/contest/' + contest.contest_id + '/picks' }\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-20\">\n                            <img class=\"contestList__img\" :src=\"URL.base + '/public/image/events/' + contest.event_image_file\" alt=\"{{ contest.event_name }} Image\">\n                        </div>\n                        <div class=\"col-xs-45 contestList__infoWarp\">\n                            <div class=\"contestList__date\">{{ contest.event_date }}</div>\n                            <div class=\"contestList__name\">{{ contest.event_short_name }}</div>\n                            <div class=\"contestList__type\">{{ contest.contest_type_name }}</div>\n                        </div>\n                        <div class=\"col-xs-20\">\n                            <div class=\"contestList__entriesTitle\">Entries</div>\n                            <div class=\"contestList__entries\">{{ contest.total_participants }}/{{ contest.max_participants }}</div>\n                        </div>\n                        <div class=\"col-xs-15\">\n                            <div class=\"contestList__buyinTitle\">Buy-In</div>\n                            <div class=\"contestList__buyin\">${{ contest.buy_in }}</div>\n                        </div>\n                    </div>\n                </a>\n                <a v-else=\"\" v-link=\"{ path: '/contest/' + contest.contest_id + '/players' }\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-20\">\n                            <img class=\"contestList__img\" :src=\"URL.base + '/public/image/events/' + contest.event_image_file\" alt=\"{{ contest.event_name }} Image\">\n                        </div>\n                        <div class=\"col-xs-45 contestList__infoWarp\">\n                            <div class=\"contestList__date\">{{ contest.event_date }}</div>\n                            <div class=\"contestList__name\">{{ contest.event_short_name }}</div>\n                            <div class=\"contestList__type\">{{ contest.contest_type_name }}</div>\n                        </div>\n                        <div class=\"col-xs-20\">\n                            <div class=\"contestList__entriesTitle\">Entries</div>\n                            <div class=\"contestList__entries\">{{ contest.total_participants }}/{{ contest.max_participants }}</div>\n                        </div>\n                        <div class=\"col-xs-15\">\n                            <div class=\"contestList__buyinTitle\">Buy-In</div>\n                            <div class=\"contestList__buyin\">${{ contest.buy_in }}</div>\n                        </div>\n                    </div>\n                </a>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -15157,7 +15168,7 @@ exports.default = {
                 return playerPick.fightId === e.target.dataset.fightId;
             };
 
-            if (this.playerPicks.length === 6) {
+            if (this.playerPicks.length === 5) {
                 if (this.playerPicks.findIndex(checkPick) !== -1) {
                     this.switchFight(e);
                     this.updatePicks({
@@ -15348,19 +15359,17 @@ exports.default = {
                 this.alert({
                     header: 'Heads Up',
                     subject: 'You need to pick more fighters to compete in this contest',
-                    body: '<div>Current Picks</div><div>' + this.playerPicks.length + '/5</div><div>Just a few more clicks...</div>',
+                    body: '<div class="highlight">Current Picks:</div><div class="highlight">' + this.playerPicks.length + '/5</div><div>Just a few more clicks...</div>',
                     action: true
                 });
-                // alert that you have only picked x number of fights
-                // allowed to pick 5 plus one alternate
-            } else if (this.playerPicks.length === 5) {
-                    this.alert({
-                        header: 'Warning',
-                        subject: 'Choose an Reserve Fight',
-                        body: 'You\'ve seleted ' + this.playerPicks.length + ' fights you may choose one more fight as an alternate in case one of your five selected fights is scratched.',
-                        action: true
-                    });
-                } else if (this.playerPicks.length > 5) {
+            } /*else if ( this.playerPicks.length === 5 ) {
+                this.alert({
+                    header: 'Warning',
+                    subject: 'Choose an Reserve Fight',
+                    body: 'You\'ve seleted ' + this.playerPicks.length + ' fights you may choose one more fight as an alternate in case one of your five selected fights is scratched.',
+                    action: true
+                });
+              } */else if (this.playerPicks.length === 5) {
                     compiledPicks = this.playerPicks.map(function (pick) {
                         var fightdata = localfightData[parseInt(pick.fightId, 10)];
 
@@ -15388,7 +15397,7 @@ exports.default = {
                         // display errors here
                         this.alert({
                             header: 'You Missed Something',
-                            subject: '',
+                            subject: 'Pick a Finish, Round and Minute for each Fight',
                             body: '<p>Looks like you forgot to select some potentially point increasing options in ' + errors.length + ' of your fights.</p>',
                             action: true
                         });

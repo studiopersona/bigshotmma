@@ -1,7 +1,7 @@
 .button {
 	background: transparent;
 	padding: 0.4em 2.5em;
-	font-size: 1.5em;
+	font-size: 1.4em;
 	font-weight: 700;
 	text-transform: uppercase;
 	color: $color-white;
@@ -37,6 +37,29 @@
 	&:hover {
 		background: $color-white;
 		color: $color-primary;
+	}
+
+	&[disabled] {
+		background: $color-gray-light;
+		color: $color-gray-mid;
+		cursor: default;
+	}
+
+	&[disabled]:hover {
+		background: $color-gray-light;
+		color: $color-gray-mid;
+	}
+}
+
+.button--green {
+	@extend .button;
+	color: $color-white;
+	background: $color-green;
+	border: 1px solid $color-green;
+
+	&:hover {
+		background: $color-white;
+		color: $color-green;
 	}
 
 	&[disabled] {

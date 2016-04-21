@@ -402,7 +402,7 @@
                         return playerPick.fightId === e.target.dataset.fightId;
                     };
 
-                if ( this.playerPicks.length === 6 ) {
+                if ( this.playerPicks.length === 5) {
                     if ( this.playerPicks.findIndex(checkPick) !== -1 ) {
                         this.switchFight(e);
                         this.updatePicks({
@@ -608,19 +608,17 @@
                     this.alert({
                         header: 'Heads Up',
                         subject: 'You need to pick more fighters to compete in this contest',
-                        body: '<div>Current Picks</div><div>' + this.playerPicks.length + '/5</div><div>Just a few more clicks...</div>',
+                        body: '<div class="highlight">Current Picks:</div><div class="highlight">' + this.playerPicks.length + '/5</div><div>Just a few more clicks...</div>',
                         action: true,
                     });
-                    // alert that you have only picked x number of fights
-                    // allowed to pick 5 plus one alternate
-                } else if ( this.playerPicks.length === 5 ) {
+                } /*else if ( this.playerPicks.length === 5 ) {
                     this.alert({
                         header: 'Warning',
                         subject: 'Choose an Reserve Fight',
                         body: 'You\'ve seleted ' + this.playerPicks.length + ' fights you may choose one more fight as an alternate in case one of your five selected fights is scratched.',
                         action: true
                     });
-                } else if ( this.playerPicks.length > 5 ) {
+                } */else if ( this.playerPicks.length === 5 ) {
                     compiledPicks = this.playerPicks.map(function(pick) {
                         var fightdata = localfightData[parseInt(pick.fightId, 10)];
 
@@ -648,7 +646,7 @@
                         // display errors here
                        this.alert({
                             header: 'You Missed Something',
-                            subject: '',
+                            subject: 'Pick a Finish, Round and Minute for each Fight',
                             body: '<p>Looks like you forgot to select some potentially point increasing options in ' + errors.length + ' of your fights.</p>',
                             action: true,
                        });

@@ -47,11 +47,14 @@ class AuthenticateController extends ApiController
         $credentials['password'] = Hash::make($request->password);
 
         try {
-            User::create($credentials);
+            $user = User::create($credentials);
+            $token = JWTAuth::fromUser($user);
         } catch (Illuminate\Database\QueryException $e) {
             return $this->respondUnkownError();
         } catch (\PDOException $e) {
             if ( $e->errorInfo[1] == 1062 ) return $this->respondAlreadyExists('The Email Address Provided is Already in Use');
         }
+
+        return response()->json(compact('token'));
     }
 }

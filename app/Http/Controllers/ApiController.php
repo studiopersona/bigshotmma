@@ -10,6 +10,11 @@ class ApiController extends Controller
 {
     private $statusCode = 200;
 
+    public function respond($data, $headers = [])
+    {
+        return response()->json($data, $this->getStatusCode(), $headers);
+    }
+
     public function getStatusCode()
     {
     	return $this->statusCode;
@@ -42,11 +47,6 @@ class ApiController extends Controller
     {
         $statusCode = $this->setStatusCode(412);
         return $this->respondWithError($message);
-    }
-
-    public function respond($data, $headers = [])
-    {
-    	return response()->json($data, $this->getStatusCode(), $headers);
     }
 
     public function respondWithError($message)

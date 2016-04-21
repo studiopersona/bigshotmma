@@ -4186,8 +4186,7 @@ a {
 .participantsList__record,
 .participantsList__wins {
   text-align: center;
-  font-size: 1.6rem;
-  line-height: 1.6; }
+  font-size: 1.3rem; }
 
 .participantsList__img img {
   width: 100%; }

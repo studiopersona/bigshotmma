@@ -226,9 +226,9 @@ class ContestsController extends ApiController
     private function getPlayerRecord($user_id)
     {
         return [
-            'wins' => 10,
-            'losses' => 20,
-            'win_percentage' => (10/20) * 100,
+            'wins' => 0,
+            'losses' => 0,
+            'win_percentage' => 0,
         ];
     }
 }

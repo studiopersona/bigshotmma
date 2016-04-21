@@ -4186,8 +4186,7 @@ a {
 .participantsList__record,
 .participantsList__wins {
   text-align: center;
-  font-size: 1.6rem;
-  line-height: 1.6; }
+  font-size: 1.3rem; }
 
 .participantsList__img img {
   width: 100%; }
@@ -4282,7 +4281,7 @@ a {
     padding: 0.9rem 0.5rem 0.5rem; }
 
 .fightsList__powerup {
-  width: 50%;
+  width: 40%;
   opacity: 0;
   visibility: hidden;
   position: absolute;
@@ -4472,7 +4471,6 @@ a {
   right: 0;
   top: 0;
   bottom: 0;
-  z-index: 200;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
   transition: -webkit-transform 0.2s ease;
@@ -4729,7 +4727,7 @@ a {
 .button, .button--block, .button--primary, .button--green {
   background: transparent;
   padding: 0.4em 2.5em;
-  font-size: 1.4em;
+  font-size: 1.5em;
   font-weight: 700;
   text-transform: uppercase;
   color: #fff;
