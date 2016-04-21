@@ -15017,10 +15017,10 @@ exports.default = {
             powerUpId: '',
             totalPowerUps: 0,
             playerPicks: [],
+            fightData: [],
             currentFightId: '',
             currentFighterId: '',
             currentFighterName: '',
-            fightData: [{ finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }],
             alertNotice: {
                 header: 'Alert',
                 subject: '',
@@ -15036,13 +15036,14 @@ exports.default = {
         };
     },
     created: function created() {
-        this.working = true;
-    },
-    ready: function ready() {
         var _this = this;
+
+        this.working = true;
 
         this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', function (data) {
             _this.fightsList = data.fights;
+            console.log(data.fights);
+            _this.initializeFightData(data.fights[0].fights);
             _this.working = false;
         }, {
             // Attach the JWT header
@@ -15050,16 +15051,19 @@ exports.default = {
         }).error(function (err) {
             return console.log(err);
         });
+    },
+    ready: function ready() {
+        var _this2 = this;
 
         this.$http.get(URL.base + '/api/v1/power-ups', function (data) {
-            _this.powerUps = data;
+            _this2.powerUps = data;
         }, {
             // Attach the JWT header
             headers: _auth2.default.getAuthHeader()
         });
 
         this.$http.get(URL.base + '/api/v1/finishes', function (data) {
-            _this.finishes = data;
+            _this2.finishes = data;
         }, {
             // Attach the JWT header
             headers: _auth2.default.getAuthHeader()
@@ -15068,6 +15072,19 @@ exports.default = {
 
 
     methods: {
+        initializeFightData: function initializeFightData(fights) {
+            var th = this;
+
+            fights.forEach(function (fight, i) {
+                th.fightData.$set(parseInt(fight.id, 10), {
+                    finishId: 0,
+                    round: 0,
+                    minute: 0,
+                    powerupId: 0,
+                    powerupImage: ''
+                });
+            });
+        },
         confirmPowerUp: function confirmPowerUp(e) {
             var newPowerUp;
             e.preventDefault();
@@ -15316,7 +15333,7 @@ exports.default = {
             this.currentFighterName = selectedFighter.firstname + ' ' + selectedFighter.lastname;
         },
         commitPicks: function commitPicks() {
-            var _this2 = this;
+            var _this3 = this;
 
             var localfightData = this.fightData,
                 localContestId = this.contestId,
@@ -15362,7 +15379,7 @@ exports.default = {
                     errors = this.validatePicks(compiledPicks);
                     if (!errors.length) {
                         this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, function (data) {
-                            if (data.success) _this2.$router.go({ path: '/contest/' + _this2.contestId + '/picks' });
+                            if (data.success) _this3.$router.go({ path: '/contest/' + _this3.contestId + '/picks' });
                         }, {
                             // Attach the JWT header
                             headers: _auth2.default.getAuthHeader()
