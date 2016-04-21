@@ -15020,7 +15020,7 @@ exports.default = {
             currentFightId: '',
             currentFighterId: '',
             currentFighterName: '',
-            fightData: [],
+            fightData: [{ finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }, { finishId: 0, round: 0, minute: 0, powerupId: 0, powerupImage: '' }],
             alertNotice: {
                 header: 'Alert',
                 subject: '',
@@ -15043,8 +15043,6 @@ exports.default = {
 
         this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', function (data) {
             _this.fightsList = data.fights;
-            // initial fight data
-            _this.initializeFightData(data.fights[0].fights);
             _this.working = false;
         }, {
             // Attach the JWT header
@@ -15070,19 +15068,6 @@ exports.default = {
 
 
     methods: {
-        initializeFightData: function initializeFightData(fights) {
-            var vm = this;
-
-            fights.forEach(function (fight, i) {
-                vm.fightData[parseInt(fight.id, 10)] = {
-                    finishId: 0,
-                    round: 0,
-                    minute: 0,
-                    powerupId: 0,
-                    powerupImage: ''
-                };
-            });
-        },
         confirmPowerUp: function confirmPowerUp(e) {
             var newPowerUp;
             e.preventDefault();
@@ -15282,16 +15267,8 @@ exports.default = {
         },
         selectFighter: function selectFighter(fighterId, fightId) {
             var fighterImageToSelect, fighterIndicatorToSelect, powerUpImageToSelect;
-            // if this is a new fight pick initalize the fight data
-            if (!this.fightData[parseInt(fightId, 10)]) {
-                this.fightData[parseInt(fightId, 10)] = {
-                    finishId: 0,
-                    round: 0,
-                    minute: 0,
-                    powerupId: 0,
-                    powerupImage: ''
-                };
-            }
+
+            console.log('selecting fighter');
             fighterImageToSelect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
             if (!fighterImageToSelect.classList.contains('selected')) {
                 fighterImageToSelect.classList.add('selected');
