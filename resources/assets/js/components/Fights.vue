@@ -161,7 +161,7 @@
                                             data-fight-id="{{ fight.id }}"
                                             alt="{{ powerUp.name }} Image"
                                         >
-                                        <span :style="{color: powerUp.color, fontSize: '1rem'}">{{ powerUp.name }}</span>
+                                        <span :style="{color: powerUp.color, fontSize: '0.9rem'}">{{ powerUp.name }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -261,24 +261,7 @@
                 currentFightId: '',
                 currentFighterId: '',
                 currentFighterName: '',
-                fightData:[
-                    {},
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                    { finishId: 0, round:0, minute:0, powerupId: 0, powerupImage: '' },
-                ],
+                fightData:[],
                 alertNotice: {
                     header: 'Alert',
                     subject: '',
@@ -301,6 +284,8 @@
         ready() {
             this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', (data) => {
                 this.fightsList = data.fights;
+                // initial fight data
+                this.initializeFightData(data.fights[0].fights);
                 this.working = false;
             }, {
                 // Attach the JWT header
@@ -324,6 +309,20 @@
         },
 
         methods: {
+            initializeFightData(fights) {
+                var vm = this;
+
+                fights.forEach(function(fight, i) {
+                    vm.fightData[parseInt(fight.id, 10)] = {
+                        finishId: 0,
+                        round: 0,
+                        minute: 0,
+                        powerupId: 0,
+                        powerupImage: '',
+                    };
+                });
+            },
+
             confirmPowerUp(e) {
                 var newPowerUp;
                 e.preventDefault();
@@ -541,8 +540,16 @@
                 var fighterImageToSelect,
                     fighterIndicatorToSelect,
                     powerUpImageToSelect;
-
-                console.log('selecting fighter');
+                // if this is a new fight pick initalize the fight data
+                if ( ! this.fightData[parseInt(fightId, 10)] ) {
+                    this.fightData[parseInt(fightId, 10)] = {
+                        finishId: 0,
+                        round: 0,
+                        minute: 0,
+                        powerupId: 0,
+                        powerupImage: '',
+                    };
+                }
                 fighterImageToSelect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
                 if ( ! fighterImageToSelect.classList.contains('selected') ) {
                     fighterImageToSelect.classList.add('selected');
@@ -647,8 +654,12 @@
                         });
                     } else {
                         // display errors here
-                        console.log(errors);
-                        alert('There are errors');
+                       this.alert({
+                            header: 'You Missed Something',
+                            subject: '',
+                            body: '<p>Looks like you forgot to select some potentially point increasing options in ' + errors.length + ' of your fights.</p>',
+                            action: true,
+                       });
                     }
                 }
             },
