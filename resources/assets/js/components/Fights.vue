@@ -93,7 +93,7 @@
                                     >
                                     <img
                                         class="fightsList__flag right"
-                                        :src="'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri"
+                                        :src="'public/image/flags/' + fight.fighters[1].nationality.country_flag_uri"
                                         alt="{{ fight.fighters[1].nationality.country_name }} Flag"
                                     >
                                     <img
