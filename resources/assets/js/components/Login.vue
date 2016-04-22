@@ -85,7 +85,6 @@
 
 		ready() {
 			this.working = false;
-			console.log(URL.base);
 		},
 
 		methods: {

@@ -7,7 +7,7 @@
         <div class="fightsList">
             <ul>
                 <li class="fightsList__item" v-for="fight in fightsList[0].fights">
-                    <div class="container-fluid fightsList__fightersWrap">
+                    <div class="container-fluid fightsList__fightersWrap" data-fight-id="{{ fight.id }}">
                         <div class="col-xs-50 fightsList__fighterStatsWarp">
                             <div
                                 class="fightsList__clickableArea"
@@ -115,6 +115,11 @@
                                 </div><!-- .fightsList__fighterImgWrap -->
                             </div><!-- .fightsList__fighterWrap -->
                         </div><!-- .fightsList__fighterStatsWarp -->
+                        <button @click="clearFight(fight.id, $event)"
+                                type="button"
+                                class="fightsList__clearButton"
+                                >X<span class="visuallyhidden">Clear</span>
+                        </button>
                     </div><!-- .fightsList__fightersWrap -->
                     <div class="fightsList__pick" id="{{ fight.id }}" data-fight-id="{{ fight.id }}">
                         <div class="container-fluid">
@@ -166,10 +171,10 @@
                                 </div>
                             </div>
                             <div class="col-xs-100 button-wrap">
-                                <button @click="clearFight(fight.id, $event)"
+                                <button @click="closeFight(fight.id, $event)"
                                         type="button"
-                                        class="button button--primary"
-                                >Clear</button>
+                                        class="button button--green"
+                                >Done</button>
                             </div>
                         </div>
                     </div>
@@ -181,7 +186,7 @@
                         type="button"
                         class="button button--primary"
                         @click="commitPicks"
-                    >Commit Picks</button>
+                    >Save Picks</button>
                 </div>
             </div>
             <div :class="loaderClasses">
@@ -400,7 +405,8 @@
             selectFight(e) {
                 var checkPick = function(playerPick) {
                         return playerPick.fightId === e.target.dataset.fightId;
-                    };
+                    },
+                    clearBtnNode;
 
                 if ( this.playerPicks.length === 5) {
                     if ( this.playerPicks.findIndex(checkPick) !== -1 ) {
@@ -412,12 +418,16 @@
                     } else {
                         this.alert({
                             header: 'Heads Up',
-                            body: 'You\'ve already selected the maximum number of fights. Please clear one of your selections if you would like to add this fight.',
+                            body: '<p>You\'ve already selected the maximum number of fights. Please clear one of your selections if you would like to add this fight.</p><p>You can clear a fight by tapping the <span class="fightsList__clearButtonExample">X</span> between the fighters.</p>',
                             subject: 'Too Many Fights Picked',
                             action: true,
                         });
                     }
                 } else {
+                    // show the clear button
+                    clearBtnNode = document.querySelector('div.fightsList__fightersWrap[data-fight-id="' + e.target.dataset.fightId + '"] .fightsList__clearButton');
+                    clearBtnNode.classList.add('show');
+
                     if ( this.currentFightId !== e.target.dataset.fightId ) {
                         this.switchFight(e);
                         this.updatePicks({
@@ -450,7 +460,7 @@
                 pickData = this.playerPicks.find(this.findPick);
                 // if a pic was already made for this fight
                 if ( pickData ) {
-                    // check pick fithter id with current fighter id
+                    // check pick fighter id with current fighter id
                     // change if different do nothing if its the same
                     if ( newData.fighterId !== '') {
                         console.log('new data not blank');
@@ -489,6 +499,16 @@
                 this.currentFightId = e.target.dataset.fightId;
             },
 
+            closeFight(fightId) {
+                var fightPickEl;
+
+                fightPickEl = document.querySelector('div.fightsList__pick[data-fight-id="' + fightId + '"]');
+                fightPickEl.classList.toggle('show');
+
+                this.currentFightId = '';
+                this.currentFighterId = '';
+            },
+
             clearFight(fightId, e) {
                 var findPick = function(playerPick) {
                         return parseInt(playerPick.fightId, 10) === parseInt(fightId, 10);
@@ -497,7 +517,12 @@
                     fighterIndicatorEls,
                     fightPickEl,
                     powerupIndicators,
-                    pickDataIndex;
+                    pickDataIndex,
+                    clearBtnNode;
+
+                // hide the clear button
+                clearBtnNode = document.querySelector('div.fightsList__fightersWrap[data-fight-id="' + fightId + '"] .fightsList__clearButton');
+                clearBtnNode.classList.remove('show');
 
                 // search for this fight in picks
                 pickDataIndex = this.playerPicks.findIndex(findPick);
@@ -525,7 +550,7 @@
                     fightersEls = document.querySelectorAll('div.fightsList__fighterImgWrap[data-fight-id="' + fightId + '"] .fightsList__fighter');
                     fighterIndicatorEls = document.querySelectorAll('div.fightsList__fighterImgWrap[data-fight-id="' + fightId + '"] .fightsList__selectedIndicator');
                     fightPickEl = document.querySelector('div.fightsList__pick[data-fight-id="' + fightId + '"]');
-                    fightPickEl.classList.toggle('show');
+                    fightPickEl.classList.remove('show');
                     for ( var i = 0; i < fightersEls.length; ++i ) {
                         fightersEls[i].classList.remove('selected');
                         fighterIndicatorEls[i].classList.remove('show');

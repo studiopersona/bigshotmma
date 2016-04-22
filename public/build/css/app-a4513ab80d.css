@@ -4245,33 +4245,16 @@ a {
 
 .fightsList__clearButton {
   position: absolute;
-  top: 36%;
+  top: 70%;
   left: 50%;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
-  z-index: 30;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 700;
   background: #e51937;
-  color: #fff;
-  border: 1px solid #fff;
-  border-radius: 50%;
-  padding: 0.3em 0.5em 0.3em;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease; }
-  .fightsList__clearButton.show {
-    visibility: visible;
-    opacity: 1; }
-
-.fightsList__clearButtonExample {
-  font-size: 1.3rem;
-  font-weight: 700;
-  background: #e51937;
-  color: #fff;
-  border: 1px solid #fff;
-  border-radius: 50%;
-  padding: 0.3em 0.5em 0.3em; }
+  color: #000;
+  border: 1px solid #000;
+  padding: 0.3em; }
 
 .fightsList__pick {
   padding: 0 1.5rem; }

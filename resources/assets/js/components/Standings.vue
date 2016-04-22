@@ -72,7 +72,7 @@
         </div>
         <div class="container-fluid">
             <div class="col-xs-100 button-wrap">
-                <a v-link="{ path: '/contest/' + contest.contest_id + '/picks' }" class="button button--primary">View Your Picks</a>
+                <a v-link="{ path: '/contest/' + contest.contest_id + '/picks' }" class="button button--primary">My Picks</a>
             </div>
         </div>
         <section :class="infoModalClasses">

@@ -11,7 +11,7 @@ export default {
 
     // User object will let us check authentication status
     user: {
-        authenticated: false
+        authenticated: true
     },
 
     // Send a request to the login URL and save the returned JWT
@@ -21,7 +21,6 @@ export default {
             localStorage.setItem('id_token', data.token);
 
             this.user.authenticated = true;
-
             // Redirect to a specified route
             if(redirect) {
                 router.go(redirect);
@@ -36,7 +35,6 @@ export default {
 
     signup(context, creds, redirect) {
         context.$http.post(SIGNUP_URL, creds, (data) => {
-            console.log(data);
             localStorage.setItem('id_token', data.token);
 
             this.user.authenticated = true;

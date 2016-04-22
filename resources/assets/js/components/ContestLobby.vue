@@ -75,6 +75,9 @@
             <div class="infoModal__rules">
                 {{{ infoModalContent.rules }}}
             </div>
+            <div class="button-wrap">
+                <button @click="infoModalClose" type="button" class="button button--green">Got It</button>
+            </div>
             <button @click="infoModalClose" type="button" class="infoModal__close">x</button>
         </section>
     </div>

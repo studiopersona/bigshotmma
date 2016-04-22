@@ -9,6 +9,7 @@ use Bsmma\User;
 use Bsmma\Pick;
 use Bsmma\Contest;
 use Bsmma\FightResult;
+use Bsmma\ContestParticipant;
 use Bsmma\divStrong\Transformers\PickTransformer;
 use Bsmma\divStrong\Transformers\PlayerPickTransformer;
 use Bsmma\divStrong\Transformers\ContestTransformer;
@@ -19,6 +20,7 @@ class PicksController extends ApiController
         Pick $pick,
         User $user,
         Contest $contest,
+        ContestParticipant $contestParticipant,
         FightResult $fightResult,
         PickTransformer $pickTransformer,
         PlayerPickTransformer $playerPickTransformer,
@@ -28,6 +30,7 @@ class PicksController extends ApiController
         $this->pick = $pick;
         $this->user = $user;
         $this->contest = $contest;
+        $this->contestParticipant = $contestParticipant;
         $this->pickTransformer = $pickTransformer;
         $this->playerPickTransformer = $playerPickTransformer;
         $this->contestTransformer = $contestTransformer;
@@ -93,6 +96,8 @@ class PicksController extends ApiController
 
             $this->pick->insert($data);
         }
+
+        $this->contestParticipant->create(['contest_id'=> $requestData['picks'][0]['contest_id'], 'user_id' => $user->id]);
 
         return $this->respond([
             'success' => true,

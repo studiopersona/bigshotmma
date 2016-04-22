@@ -208,7 +208,7 @@
                         type="button"
                         class="button button--primary"
                         v-link="{ path: '/contest/' + picksList[0].contest.id + '/standings' }"
-                    >View Standings</button>
+                    >Lobby</button>
                 </div>
             </div>
             <div :class="loaderClasses">
