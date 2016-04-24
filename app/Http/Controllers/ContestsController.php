@@ -199,7 +199,7 @@ class ContestsController extends ApiController
                         'event',
                         'users'
                     ])
-                    ->where('deadline', '>', date('Y-m-d H:i:s'));
+                    //->where('deadline', '>', date('Y-m-d H:i:s'));
 
         if ( ! is_null($playerId) )
         {
