@@ -81,6 +81,11 @@
 
 		ceated() {
 			this.working = true;
+			if ( ! auth.validate() ) {
+				auth.refresh(this, 'events');
+			} else {
+				route.go('/events');
+			}
 		},
 
 		ready() {

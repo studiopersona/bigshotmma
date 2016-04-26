@@ -64,6 +64,8 @@
 
 <script>
     import auth from '../auth';
+    import {router} from '../index';
+
     export default {
 
         props: ['working'],
@@ -78,30 +80,37 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
+                playerIsValid: true,
             }
         },
 
         created() {
             this.working = true;
+            if ( ! auth.validate() ) {
+                if ( ! auth.refresh(this) ) {
+                    router.go('login');
+                    this.playerIsValid = false;
+                }
+            }
         },
 
         ready() {
-            this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', (data) => {
-                this.contestsList = data;
-                this.working = false;
-            }, {
-                // Attach the JWT header
-                headers: auth.getAuthHeader()
-            }).error((err) => console.log(err))
+            if ( this.playerIsValid ) {
+                this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', (data) => {
+                    this.contestsList = data;
+                    this.working = false;
+                }, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).error((err) => console.log(err))
 
-            this.$http.get(URL.base + '/api/v1/player/contests-entered', (data) => {
-                this.contestsEntered = data.contests;
-            }, {
-                // Attach the JWT header
-                headers: auth.getAuthHeader()
-            }).error((err) => console.log(err))
-
-
+                this.$http.get(URL.base + '/api/v1/player/contests-entered', (data) => {
+                    this.contestsEntered = data.contests;
+                }, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).error((err) => console.log(err))
+            }
         },
 
         computed: {

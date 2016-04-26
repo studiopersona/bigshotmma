@@ -253,41 +253,50 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
+                playerIsValid: true,
             }
         },
 
         created() {
             this.working = true;
+            if ( ! auth.validate() ) {
+                if ( ! auth.refresh(this) ) {
+                    router.go('login');
+                    this.playerIsValid = false;
+                }
+            }
         },
 
         ready() {
-            //console.log(URL.base);
-            this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/picks', (data) => {
-                this.picksList = data.picks;
-                this.working = false;
+            if ( this.playerIsValid ) {
+                //console.log(URL.base);
+                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/picks', (data) => {
+                    this.picksList = data.picks;
+                    this.working = false;
 
-                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', (data) => {
-                    this.results = data.results;
-                    this.parseResults(data.results);
+                    this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', (data) => {
+                        this.results = data.results;
+                        this.parseResults(data.results);
+                    }, {
+                        // Attach the JWT header
+                        headers: auth.getAuthHeader()
+                    }).error((err) => {
+                        console.log(err);
+                    });
+
+                    this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings', (data) => {
+                        this.standings = data.data[0].standings;
+                        this.playerId = data.data[0].player;
+                        this.determineRank(data.data[0].standings);
+                    }, {
+                        // Attach the JWT header
+                        headers: auth.getAuthHeader()
+                    });
                 }, {
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
-                }).error((err) => {
-                    console.log(err);
-                });
-
-                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings', (data) => {
-                    this.standings = data.data[0].standings;
-                    this.playerId = data.data[0].player;
-                    this.determineRank(data.data[0].standings);
-                }, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                });
-            }, {
-                // Attach the JWT header
-                headers: auth.getAuthHeader()
-            }).error((err) => console.log(err))
+                }).error((err) => console.log(err))
+            }
         },
 
         methods: {

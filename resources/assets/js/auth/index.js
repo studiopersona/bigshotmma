@@ -6,6 +6,7 @@ import {router} from '../index';
 const API_URL = URL.base + '/api/v1/';
 const LOGIN_URL = API_URL + 'authenticate';
 const SIGNUP_URL = API_URL + 'register';
+const REFRESH_URL = API_URL + 'refresh';
 
 export default {
 
@@ -55,6 +56,23 @@ export default {
         this.user.authenticated = false;
     },
 
+    refresh(context, redirect) {
+        context.$http.post(REFRESH_URL, (data) => {
+            localStorage.setItem('id_token', data.token);
+            this.user.authenticated = true;
+            console.log('token refreshed');
+
+            if(redirect) {
+                router.go(redirect);
+            }
+
+        }, {
+            headers: this.getAuthHeader()
+        }).error((err) => {
+            return false;
+        });
+    },
+
     checkAuth() {
         var jwt = localStorage.getItem('id_token');
 
@@ -71,5 +89,24 @@ export default {
         return {
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')
         };
-    }
+    },
+
+    parseToken(token) {
+        var base64Url = token.split('.')[1],
+            base64 = base64Url.replace('-', '+').replace('_', '/');
+
+        return JSON.parse(window.atob(base64));
+    },
+
+    validate() {
+        var token = localStorage.getItem('id_token'),
+            params;
+
+        if ( token ) {
+            params = this.parseToken(token)
+            return Math.round(new Date().getTime() / 1000) <= params.exp;
+        } else {
+            return false;
+        }
+    },
 };

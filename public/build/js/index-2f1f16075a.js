@@ -14615,6 +14615,7 @@ var API_URL = URL.base + '/api/v1/'; // src/auth/index.js
 
 var LOGIN_URL = API_URL + 'authenticate';
 var SIGNUP_URL = API_URL + 'register';
+var REFRESH_URL = API_URL + 'refresh';
 
 exports.default = {
 
@@ -14665,6 +14666,23 @@ exports.default = {
         localStorage.removeItem('id_token');
         this.user.authenticated = false;
     },
+    refresh: function refresh(context, redirect) {
+        var _this3 = this;
+
+        context.$http.post(REFRESH_URL, function (data) {
+            localStorage.setItem('id_token', data.token);
+            _this3.user.authenticated = true;
+            console.log('token refreshed');
+
+            if (redirect) {
+                _index.router.go(redirect);
+            }
+        }, {
+            headers: this.getAuthHeader()
+        }).error(function (err) {
+            _index.router.go('login');
+        });
+    },
     checkAuth: function checkAuth() {
         var jwt = localStorage.getItem('id_token');
 
@@ -14681,10 +14699,51 @@ exports.default = {
         return {
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')
         };
+    },
+    parseToken: function parseToken(token) {
+        var base64Url = token.split('.')[1],
+            base64 = base64Url.replace('-', '+').replace('_', '/');
+
+        return JSON.parse(window.atob(base64));
+    },
+    validate: function validate() {
+        var token = localStorage.getItem('id_token'),
+            params;
+
+        if (token) {
+            params = this.parseToken(token);
+            return Math.round(new Date().getTime() / 1000) <= params.exp;
+        } else {
+            _index.router.go('login');
+            return true;
+        }
     }
 };
 
 },{"../index":43}],34:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _index = require('../index');
+
+exports.default = {
+	data: function data() {
+		return {};
+	},
+
+	created: function created() {
+		//if ( ! auth.validate() ) auth.refresh(this, 'events');
+	},
+
+
+	computed: {}
+};
+
+//import auth from '../auth';
+if (module.exports.__esModule) module.exports = module.exports.default
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <router-view></router-view>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
@@ -14697,7 +14756,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":32,"vue-hot-reload-api":6}],35:[function(require,module,exports){
+},{"../index":43,"vue":32,"vue-hot-reload-api":6}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15045,9 +15104,10 @@ exports.default = {
         };
     },
     created: function created() {
-        var _this = this;
-
         this.working = true;
+    },
+    ready: function ready() {
+        var _this = this;
 
         this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', function (data) {
             _this.fightsList = data.fights;
@@ -15060,19 +15120,16 @@ exports.default = {
         }).error(function (err) {
             return console.log(err);
         });
-    },
-    ready: function ready() {
-        var _this2 = this;
 
         this.$http.get(URL.base + '/api/v1/power-ups', function (data) {
-            _this2.powerUps = data;
+            _this.powerUps = data;
         }, {
             // Attach the JWT header
             headers: _auth2.default.getAuthHeader()
         });
 
         this.$http.get(URL.base + '/api/v1/finishes', function (data) {
-            _this2.finishes = data;
+            _this.finishes = data;
         }, {
             // Attach the JWT header
             headers: _auth2.default.getAuthHeader()
@@ -15361,7 +15418,7 @@ exports.default = {
             this.currentFighterName = selectedFighter.firstname + ' ' + selectedFighter.lastname;
         },
         commitPicks: function commitPicks() {
-            var _this3 = this;
+            var _this2 = this;
 
             var localfightData = this.fightData,
                 localContestId = this.contestId,
@@ -15405,7 +15462,7 @@ exports.default = {
                     errors = this.validatePicks(compiledPicks);
                     if (!errors.length) {
                         this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, function (data) {
-                            if (data.success) _this3.$router.go({ path: '/contest/' + _this3.contestId + '/picks' });
+                            if (data.success) _this2.$router.go({ path: '/contest/' + _this2.contestId + '/picks' });
                         }, {
                             // Attach the JWT header
                             headers: _auth2.default.getAuthHeader()
@@ -16034,6 +16091,10 @@ var _vueResource = require('vue-resource');
 
 var _vueResource2 = _interopRequireDefault(_vueResource);
 
+var _auth = require('./auth');
+
+var _auth2 = _interopRequireDefault(_auth);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _vue2.default.config.debug = false;
@@ -16042,6 +16103,22 @@ _vue2.default.use(_vueResource2.default);
 _vue2.default.use(_vueRouter2.default);
 
 var router = exports.router = new _vueRouter2.default();
+
+router.beforeEach(function (_ref) {
+  var to = _ref.to;
+  var next = _ref.next;
+
+  if (_auth2.default.validate()) {
+    if (to.path === '/login') {
+      router.replace('/events');
+    }
+    return true;
+  } else if (_auth2.default.refresh(router)) {
+    return true;
+  } else {
+    return false;
+  }
+});
 
 // Set up routing and match routes to components
 router.map({
@@ -16087,6 +16164,6 @@ router.redirect({
 // Start the app on the #app div
 router.start(_App2.default, '#app');
 
-},{"./components/App.vue":34,"./components/ContestLobby.vue":35,"./components/Contests.vue":36,"./components/Events.vue":37,"./components/Fights.vue":38,"./components/Login.vue":39,"./components/PlayerPicks.vue":40,"./components/Register.vue":41,"./components/Standings.vue":42,"vue":32,"vue-resource":20,"vue-router":31}]},{},[43]);
+},{"./auth":33,"./components/App.vue":34,"./components/ContestLobby.vue":35,"./components/Contests.vue":36,"./components/Events.vue":37,"./components/Fights.vue":38,"./components/Login.vue":39,"./components/PlayerPicks.vue":40,"./components/Register.vue":41,"./components/Standings.vue":42,"vue":32,"vue-resource":20,"vue-router":31}]},{},[43]);
 
 //# sourceMappingURL=index.js.map

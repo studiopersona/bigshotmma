@@ -14672,7 +14672,6 @@ exports.default = {
         context.$http.post(REFRESH_URL, function (data) {
             localStorage.setItem('id_token', data.token);
             _this3.user.authenticated = true;
-            console.log('token refreshed');
 
             if (redirect) {
                 _index.router.go(redirect);
@@ -14680,7 +14679,7 @@ exports.default = {
         }, {
             headers: this.getAuthHeader()
         }).error(function (err) {
-            return false;
+            _index.router.go('login');
         });
     },
     checkAuth: function checkAuth() {
@@ -14714,7 +14713,7 @@ exports.default = {
             params = this.parseToken(token);
             return Math.round(new Date().getTime() / 1000) <= params.exp;
         } else {
-            return false;
+            _index.router.go('login');
         }
     }
 };
@@ -14726,7 +14725,13 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _auth = require('../auth');
+
+var _auth2 = _interopRequireDefault(_auth);
+
 var _index = require('../index');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
 	data: function data() {
@@ -14740,8 +14745,6 @@ exports.default = {
 
 	computed: {}
 };
-
-//import auth from '../auth';
 if (module.exports.__esModule) module.exports = module.exports.default
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <router-view></router-view>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
@@ -14755,7 +14758,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../index":43,"vue":32,"vue-hot-reload-api":6}],35:[function(require,module,exports){
+},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14800,40 +14803,31 @@ exports.default = {
                 base: window.URL.base,
                 current: window.URL.current,
                 full: window.URL.full
-            },
-            playerIsValid: true
+            }
         };
     },
     created: function created() {
         this.working = true;
-        if (!_auth2.default.validate()) {
-            if (!_auth2.default.refresh(this)) {
-                router.go('login');
-                this.playerIsValid = false;
-            }
-        }
     },
     ready: function ready() {
         var _this = this;
 
-        if (this.playerIsValid) {
-            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', function (data) {
-                _this.participantsList = data.participants;
-                _this.working = false;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            }).error(function (err) {
-                return console.log(err);
-            });
+        this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', function (data) {
+            _this.participantsList = data.participants;
+            _this.working = false;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        }).error(function (err) {
+            return console.log(err);
+        });
 
-            this.$http.get(URL.base + '/api/v1/contest-types', function (data) {
-                _this.contestTypes = data;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            });
-        }
+        this.$http.get(URL.base + '/api/v1/contest-types', function (data) {
+            _this.contestTypes = data;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        });
     },
 
 
@@ -14902,8 +14896,6 @@ var _auth = require('../auth');
 
 var _auth2 = _interopRequireDefault(_auth);
 
-var _index = require('../index');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -14919,42 +14911,33 @@ exports.default = {
                 base: window.URL.base,
                 current: window.URL.current,
                 full: window.URL.full
-            },
-            playerIsValid: true
+            }
         };
     },
     created: function created() {
         this.working = true;
-        if (!_auth2.default.validate()) {
-            if (!_auth2.default.refresh(this)) {
-                _index.router.go('login');
-                this.playerIsValid = false;
-            }
-        }
     },
     ready: function ready() {
         var _this = this;
 
-        if (this.playerIsValid) {
-            this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', function (data) {
-                _this.contestsList = data;
-                _this.working = false;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            }).error(function (err) {
-                return console.log(err);
-            });
+        this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', function (data) {
+            _this.contestsList = data;
+            _this.working = false;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        }).error(function (err) {
+            return console.log(err);
+        });
 
-            this.$http.get(URL.base + '/api/v1/player/contests-entered', function (data) {
-                _this.contestsEntered = data.contests;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            }).error(function (err) {
-                return console.log(err);
-            });
-        }
+        this.$http.get(URL.base + '/api/v1/player/contests-entered', function (data) {
+            _this.contestsEntered = data.contests;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        }).error(function (err) {
+            return console.log(err);
+        });
     },
 
 
@@ -14986,7 +14969,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],37:[function(require,module,exports){
+},{"../auth":33,"vue":32,"vue-hot-reload-api":6}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15011,33 +14994,24 @@ exports.default = {
                 base: window.URL.base,
                 current: window.URL.current,
                 full: window.URL.full
-            },
-            playerIsValid: true
+            }
         };
     },
     created: function created() {
         this.working = true;
-        if (!_auth2.default.validate()) {
-            if (!_auth2.default.refresh(this)) {
-                router.go('login');
-                this.playerIsValid = false;
-            }
-        }
     },
     ready: function ready() {
         var _this = this;
 
-        if (this.playerIsValid) {
-            this.$http.get(URL.base + '/api/v1/events', function (data) {
-                _this.eventsList = data;
-                _this.working = false;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            }).error(function (err) {
-                return console.log(err);
-            });
-        }
+        this.$http.get(URL.base + '/api/v1/events', function (data) {
+            _this.eventsList = data;
+            _this.working = false;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        }).error(function (err) {
+            return console.log(err);
+        });
     },
 
 
@@ -15128,49 +15102,42 @@ exports.default = {
                 base: window.URL.base,
                 current: window.URL.current,
                 full: window.URL.full
-            },
-            playerIsValid: true
+            }
         };
     },
     created: function created() {
-        this.working = true;
-        if (!_auth2.default.validate()) {
-            if (!_auth2.default.refresh(this)) {
-                router.go('login');
-                this.playerIsValid = false;
-            }
-        }
-    },
-    ready: function ready() {
         var _this = this;
 
-        if (this.playerIsValid) {
-            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', function (data) {
-                _this.fightsList = data.fights;
-                console.log(data.fights);
-                _this.initializeFightData(data.fights[0].fights);
-                _this.working = false;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            }).error(function (err) {
-                return console.log(err);
-            });
+        this.working = true;
 
-            this.$http.get(URL.base + '/api/v1/power-ups', function (data) {
-                _this.powerUps = data;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            });
+        this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', function (data) {
+            _this.fightsList = data.fights;
+            console.log(data.fights);
+            _this.initializeFightData(data.fights[0].fights);
+            _this.working = false;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        }).error(function (err) {
+            return console.log(err);
+        });
+    },
+    ready: function ready() {
+        var _this2 = this;
 
-            this.$http.get(URL.base + '/api/v1/finishes', function (data) {
-                _this.finishes = data;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            });
-        }
+        this.$http.get(URL.base + '/api/v1/power-ups', function (data) {
+            _this2.powerUps = data;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        });
+
+        this.$http.get(URL.base + '/api/v1/finishes', function (data) {
+            _this2.finishes = data;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        });
     },
 
 
@@ -15455,7 +15422,7 @@ exports.default = {
             this.currentFighterName = selectedFighter.firstname + ' ' + selectedFighter.lastname;
         },
         commitPicks: function commitPicks() {
-            var _this2 = this;
+            var _this3 = this;
 
             var localfightData = this.fightData,
                 localContestId = this.contestId,
@@ -15499,7 +15466,7 @@ exports.default = {
                     errors = this.validatePicks(compiledPicks);
                     if (!errors.length) {
                         this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, function (data) {
-                            if (data.success) _this2.$router.go({ path: '/contest/' + _this2.contestId + '/picks' });
+                            if (data.success) _this3.$router.go({ path: '/contest/' + _this3.contestId + '/picks' });
                         }, {
                             // Attach the JWT header
                             headers: _auth2.default.getAuthHeader()
@@ -15615,11 +15582,6 @@ exports.default = {
 	},
 	ceated: function ceated() {
 		this.working = true;
-		if (!_auth2.default.validate()) {
-			_auth2.default.refresh(this, 'events');
-		} else {
-			route.go('/events');
-		}
 	},
 	ready: function ready() {
 		this.working = false;
@@ -15708,53 +15670,44 @@ exports.default = {
                 base: window.URL.base,
                 current: window.URL.current,
                 full: window.URL.full
-            },
-            playerIsValid: true
+            }
         };
     },
     created: function created() {
         this.working = true;
-        if (!_auth2.default.validate()) {
-            if (!_auth2.default.refresh(this)) {
-                router.go('login');
-                this.playerIsValid = false;
-            }
-        }
     },
     ready: function ready() {
         var _this = this;
 
-        if (this.playerIsValid) {
-            //console.log(URL.base);
-            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/picks', function (data) {
-                _this.picksList = data.picks;
-                _this.working = false;
+        //console.log(URL.base);
+        this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/picks', function (data) {
+            _this.picksList = data.picks;
+            _this.working = false;
 
-                _this.$http.get(URL.base + '/api/v1/contest/' + _this.$route.params.contest_id + '/results', function (data) {
-                    _this.results = data.results;
-                    _this.parseResults(data.results);
-                }, {
-                    // Attach the JWT header
-                    headers: _auth2.default.getAuthHeader()
-                }).error(function (err) {
-                    console.log(err);
-                });
-
-                _this.$http.get(URL.base + '/api/v1/contest/' + _this.$route.params.contest_id + '/standings', function (data) {
-                    _this.standings = data.data[0].standings;
-                    _this.playerId = data.data[0].player;
-                    _this.determineRank(data.data[0].standings);
-                }, {
-                    // Attach the JWT header
-                    headers: _auth2.default.getAuthHeader()
-                });
+            _this.$http.get(URL.base + '/api/v1/contest/' + _this.$route.params.contest_id + '/results', function (data) {
+                _this.results = data.results;
+                _this.parseResults(data.results);
             }, {
                 // Attach the JWT header
                 headers: _auth2.default.getAuthHeader()
             }).error(function (err) {
-                return console.log(err);
+                console.log(err);
             });
-        }
+
+            _this.$http.get(URL.base + '/api/v1/contest/' + _this.$route.params.contest_id + '/standings', function (data) {
+                _this.standings = data.data[0].standings;
+                _this.playerId = data.data[0].player;
+                _this.determineRank(data.data[0].standings);
+            }, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            });
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        }).error(function (err) {
+            return console.log(err);
+        });
     },
 
 
@@ -15992,41 +15945,33 @@ exports.default = {
             base: window.URL.base,
             current: window.URL.current,
             full: window.URL.full
-        }), (0, _defineProperty3.default)(_ref, 'playerIsValid', true), _ref;
+        }), _ref;
     },
     created: function created() {
         this.working = true;
-        if (!_auth2.default.validate()) {
-            if (!_auth2.default.refresh(this)) {
-                router.go('login');
-                this.playerIsValid = false;
-            }
-        }
     },
     ready: function ready() {
         var _this = this;
 
-        if (this.playerIsValid) {
-            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings-list', function (data) {
-                _this.standingsList = data.data[0].standings;
-                _this.playerId = data.data[0].player;
-                _this.contest = data.data[0].contest[0];
-                _this.determineRank(data.data[0].standings);
-                _this.working = false;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            }).error(function (err) {
-                return console.log(err);
-            });
+        this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings-list', function (data) {
+            _this.standingsList = data.data[0].standings;
+            _this.playerId = data.data[0].player;
+            _this.contest = data.data[0].contest[0];
+            _this.determineRank(data.data[0].standings);
+            _this.working = false;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        }).error(function (err) {
+            return console.log(err);
+        });
 
-            this.$http.get(URL.base + '/api/v1/contest-types', function (data) {
-                _this.contestTypes = data;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            });
-        }
+        this.$http.get(URL.base + '/api/v1/contest-types', function (data) {
+            _this.contestTypes = data;
+        }, {
+            // Attach the JWT header
+            headers: _auth2.default.getAuthHeader()
+        });
     },
 
 
@@ -16150,6 +16095,10 @@ var _vueResource = require('vue-resource');
 
 var _vueResource2 = _interopRequireDefault(_vueResource);
 
+var _auth = require('./auth');
+
+var _auth2 = _interopRequireDefault(_auth);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _vue2.default.config.debug = false;
@@ -16203,6 +16152,6 @@ router.redirect({
 // Start the app on the #app div
 router.start(_App2.default, '#app');
 
-},{"./components/App.vue":34,"./components/ContestLobby.vue":35,"./components/Contests.vue":36,"./components/Events.vue":37,"./components/Fights.vue":38,"./components/Login.vue":39,"./components/PlayerPicks.vue":40,"./components/Register.vue":41,"./components/Standings.vue":42,"vue":32,"vue-resource":20,"vue-router":31}]},{},[43]);
+},{"./auth":33,"./components/App.vue":34,"./components/ContestLobby.vue":35,"./components/Contests.vue":36,"./components/Events.vue":37,"./components/Fights.vue":38,"./components/Login.vue":39,"./components/PlayerPicks.vue":40,"./components/Register.vue":41,"./components/Standings.vue":42,"vue":32,"vue-resource":20,"vue-router":31}]},{},[43]);
 
 //# sourceMappingURL=index.js.map

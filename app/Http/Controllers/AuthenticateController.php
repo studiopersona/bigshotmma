@@ -18,7 +18,7 @@ class AuthenticateController extends ApiController
         // Apply the jwt.auth middleware to all methods in this controller
         // except for the authenticate method. We don't want to prevent
         // the user from retrieving their token if they don't already have it
-        $this->middleware('jwt.auth', ['except' => ['authenticate','register']]);
+        $this->middleware('jwt.auth', ['except' => ['authenticate','register', 'refresh']]);
     }
 
     public function authenticate(Request $request)
@@ -53,6 +53,21 @@ class AuthenticateController extends ApiController
             return $this->respondUnkownError();
         } catch (\PDOException $e) {
             if ( $e->errorInfo[1] == 1062 ) return $this->respondAlreadyExists('The Email Address Provided is Already in Use');
+        }
+
+        return response()->json(compact('token'));
+    }
+
+    public function refresh()
+    {
+        $tokenOld = JWTAuth::getToken();
+
+        try {
+            $token = JWTAuth::refresh($tokenOld);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return $this->respondTokenExpired();
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return $this->respondTokenExpired('No token sent with request');
         }
 
         return response()->json(compact('token'));

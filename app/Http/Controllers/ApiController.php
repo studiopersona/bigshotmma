@@ -25,6 +25,12 @@ class ApiController extends Controller
     	$this->statusCode = $statusCode;
     }
 
+    public function respondTokenExpired($message = 'Token expired and cannot be refreshed')
+    {
+        $statusCode = $this->setStatusCode(401);
+        return $this->respondWithError($message);
+    }
+
     public function respondInvaildCredentials($message = 'Not Authorized')
     {
         $statusCode = $this->setStatusCode(401);
