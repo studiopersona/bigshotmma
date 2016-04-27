@@ -1,6 +1,7 @@
 // src/auth/index.js
 
 import {router} from '../index';
+import D from '../libs/d';
 
 // URL and endpoint constants
 const API_URL = URL.base + '/api/v1/';
@@ -56,32 +57,20 @@ export default {
         this.user.authenticated = false;
     },
 
-    refresh(context, redirect) {
-        context.$http.post(REFRESH_URL, (data) => {
-            localStorage.setItem('id_token', data.token);
-            this.user.authenticated = true;
-            console.log('token refreshed');
+    validate() {
+        var token = localStorage.getItem('id_token'),
+            params;
 
-            if(redirect) {
-                router.go(redirect);
-            }
-
-        }, {
-            headers: this.getAuthHeader()
-        }).error((err) => {
+        if ( token ) {
+            params = this.parseToken(token)
+            return Math.round(new Date().getTime() / 1000) <= params.exp;
+        } else {
             return false;
-        });
+        }
     },
 
-    checkAuth() {
-        var jwt = localStorage.getItem('id_token');
+    refresh(context, redirect) {
 
-        if(jwt) {
-            this.user.authenticated = true;
-        }
-        else {
-            this.user.authenticated = false;
-        }
     },
 
     // The object to be passed as a header for authenticated requests
@@ -96,17 +85,5 @@ export default {
             base64 = base64Url.replace('-', '+').replace('_', '/');
 
         return JSON.parse(window.atob(base64));
-    },
-
-    validate() {
-        var token = localStorage.getItem('id_token'),
-            params;
-
-        if ( token ) {
-            params = this.parseToken(token)
-            return Math.round(new Date().getTime() / 1000) <= params.exp;
-        } else {
-            return false;
-        }
     },
 };

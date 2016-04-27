@@ -80,22 +80,15 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
-                playerIsValid: true,
             }
         },
 
         created() {
             this.working = true;
-            if ( ! auth.validate() ) {
-                if ( ! auth.refresh(this) ) {
-                    router.go('login');
-                    this.playerIsValid = false;
-                }
-            }
         },
 
         ready() {
-            if ( this.playerIsValid ) {
+
                 this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', (data) => {
                     this.contestsList = data;
                     this.working = false;
@@ -110,7 +103,6 @@
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
                 }).error((err) => console.log(err))
-            }
         },
 
         computed: {
@@ -123,7 +115,6 @@
             // Check the users auth status before
             // allowing navigation to the route
             canActivate() {
-                return auth.user.authenticated
             }
         }
     };

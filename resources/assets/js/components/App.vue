@@ -12,6 +12,10 @@
 		data: function() {
 			return {
 
+				validate () {
+					if ( ! auth.validate() ) auth.refresh(this);
+				},
+
 			};
 		},
 

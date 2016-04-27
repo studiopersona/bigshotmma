@@ -14677,6 +14677,8 @@ exports.default = {
             if (redirect) {
                 _index.router.go(redirect);
             }
+
+            return true;
         }, {
             headers: this.getAuthHeader()
         }).error(function (err) {
@@ -14766,6 +14768,8 @@ var _auth = require('../auth');
 
 var _auth2 = _interopRequireDefault(_auth);
 
+var _index = require('../index');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -14808,7 +14812,7 @@ exports.default = {
         this.working = true;
         if (!_auth2.default.validate()) {
             if (!_auth2.default.refresh(this)) {
-                router.go('login');
+                _index.router.go('login');
                 this.playerIsValid = false;
             }
         }
@@ -14891,7 +14895,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"vue":32,"vue-hot-reload-api":6}],36:[function(require,module,exports){
+},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14997,6 +15001,8 @@ var _auth = require('../auth');
 
 var _auth2 = _interopRequireDefault(_auth);
 
+var _index = require('../index');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -15017,12 +15023,6 @@ exports.default = {
     },
     created: function created() {
         this.working = true;
-        if (!_auth2.default.validate()) {
-            if (!_auth2.default.refresh(this)) {
-                router.go('login');
-                this.playerIsValid = false;
-            }
-        }
     },
     ready: function ready() {
         var _this = this;
@@ -15054,7 +15054,16 @@ exports.default = {
         // allowing navigation to the route
 
         canActivate: function canActivate() {
-            return _auth2.default.user.authenticated;
+            if (!_auth2.default.validate()) {
+                if (!_auth2.default.refresh(this)) {
+                    _index.router.go('login');
+                    this.playerIsValid = false;
+
+                    return false;
+                }
+            } else {
+                return true;
+            }
         }
     }
 };
@@ -15071,7 +15080,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"vue":32,"vue-hot-reload-api":6}],38:[function(require,module,exports){
+},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15081,6 +15090,8 @@ Object.defineProperty(exports, "__esModule", {
 var _auth = require('../auth');
 
 var _auth2 = _interopRequireDefault(_auth);
+
+var _index = require('../index');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15136,7 +15147,7 @@ exports.default = {
         this.working = true;
         if (!_auth2.default.validate()) {
             if (!_auth2.default.refresh(this)) {
-                router.go('login');
+                _index.router.go('login');
                 this.playerIsValid = false;
             }
         }
@@ -15579,7 +15590,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"vue":32,"vue-hot-reload-api":6}],39:[function(require,module,exports){
+},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15615,14 +15626,18 @@ exports.default = {
 	},
 	ceated: function ceated() {
 		this.working = true;
-		if (!_auth2.default.validate()) {
-			_auth2.default.refresh(this, 'events');
-		} else {
-			route.go('/events');
-		}
+		console.log('login created');
 	},
 	ready: function ready() {
+		if (!_auth2.default.validate()) {
+			console.log('cant auth login');
+			_auth2.default.refresh(this, 'events');
+		} else {
+			console.log('can auth in login');
+			route.go('/events');
+		}
 		this.working = false;
+		console.log('login ready');
 	},
 
 
@@ -15678,6 +15693,8 @@ var _auth = require('../auth');
 
 var _auth2 = _interopRequireDefault(_auth);
 
+var _index = require('../index');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -15716,7 +15733,8 @@ exports.default = {
         this.working = true;
         if (!_auth2.default.validate()) {
             if (!_auth2.default.refresh(this)) {
-                router.go('login');
+                console.log('going here');
+                _index.router.go('login');
                 this.playerIsValid = false;
             }
         }
@@ -15875,7 +15893,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"vue":32,"vue-hot-reload-api":6}],41:[function(require,module,exports){
+},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15967,6 +15985,8 @@ var _auth = require('../auth');
 
 var _auth2 = _interopRequireDefault(_auth);
 
+var _index = require('../index');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -15998,7 +16018,8 @@ exports.default = {
         this.working = true;
         if (!_auth2.default.validate()) {
             if (!_auth2.default.refresh(this)) {
-                router.go('login');
+                console.log('going here');
+                _index.router.go('login');
                 this.playerIsValid = false;
             }
         }
@@ -16094,7 +16115,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"babel-runtime/helpers/defineProperty":2,"vue":32,"vue-hot-reload-api":6}],43:[function(require,module,exports){
+},{"../auth":33,"../index":43,"babel-runtime/helpers/defineProperty":2,"vue":32,"vue-hot-reload-api":6}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

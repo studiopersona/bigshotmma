@@ -85,6 +85,7 @@
 
 <script>
     import auth from '../auth';
+    import {router} from '../index';
     export default {
 
         props: ['working'],
@@ -124,12 +125,6 @@
 
         created() {
             this.working = true;
-            if ( ! auth.validate() ) {
-                if ( ! auth.refresh(this) ) {
-                    router.go('login');
-                    this.playerIsValid = false;
-                }
-            }
         },
 
         ready() {
@@ -192,7 +187,6 @@
             // Check the users auth status before
             // allowing navigation to the route
             canActivate() {
-                return auth.user.authenticated
             }
         }
     };

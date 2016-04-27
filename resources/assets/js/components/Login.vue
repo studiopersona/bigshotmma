@@ -56,7 +56,9 @@
 </template>
 
   <script>
-  	import auth from '../auth'
+  	import auth from '../auth';
+    import {router} from '../index';
+
 	export default {
 
   		props: ['working'],
@@ -81,14 +83,14 @@
 
 		ceated() {
 			this.working = true;
-			if ( ! auth.validate() ) {
-				auth.refresh(this, 'events');
-			} else {
-				route.go('/events');
-			}
 		},
 
 		ready() {
+			if ( ! auth.validate() ) {
+				auth.refresh(this, 'events');
+			} else {
+				router.go('/events');
+			}
 			this.working = false;
 		},
 

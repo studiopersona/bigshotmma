@@ -224,6 +224,7 @@
 
 <script>
     import auth from '../auth';
+    import {router} from '../index';
     export default {
 
         props: ['working'],
@@ -259,12 +260,6 @@
 
         created() {
             this.working = true;
-            if ( ! auth.validate() ) {
-                if ( ! auth.refresh(this) ) {
-                    router.go('login');
-                    this.playerIsValid = false;
-                }
-            }
         },
 
         ready() {
@@ -382,8 +377,8 @@
             determineRank(standings) {
                 var vm = this,
                     findPlayer = function(standing) {
-                        console.log('standing player id: ', parseInt(standing.player_id, 10));
-                        console.log('playerId: ', vm.playerId)
+                        // console.log('standing player id: ', parseInt(standing.player_id, 10));
+                        // console.log('playerId: ', vm.playerId)
                         return parseInt(standing.player_id, 10) === parseInt(vm.playerId, 10);
                     };
 
@@ -401,7 +396,6 @@
             // Check the users auth status before
             // allowing navigation to the route
             canActivate() {
-                return auth.user.authenticated
             }
         }
     };

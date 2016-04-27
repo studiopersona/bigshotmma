@@ -33,9 +33,11 @@
 
 <script>
     import auth from '../auth';
+    import {router} from '../index';
+
     export default {
 
-        props: ['working'],
+        props: ['working', 'validate'],
 
         data() {
             return {
@@ -52,27 +54,43 @@
 
         created() {
             this.working = true;
-            if ( ! auth.validate() ) {
-                if ( ! auth.refresh(this) ) {
-                    router.go('login');
-                    this.playerIsValid = false;
-                }
-            }
         },
 
         ready() {
-            if ( this.playerIsValid ) {
-                this.$http.get( URL.base + '/api/v1/events', (data) => {
-                    this.eventsList = data;
-                    this.working = false;
-                }, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                }).error((err) => console.log(err))
+            if ( ! auth.validate() ) {
+                this.tokenRefresh();
+            } else {
+                this.fetch();
             }
         },
 
         methods: {
+            tokenRefresh() {
+                var vm = this;
+
+                this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    localStorage.setItem('id_token', response.data.token);
+                    vm.fetch();
+                }, function(err) {
+                    router.go('login');
+                });
+            },
+
+            fetch() {
+                this.$http.get( URL.base + '/api/v1/events', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(
+                    function(response) {
+                        this.eventsList = response.data;
+                        this.working = false;
+                    },
+                    function(err) {
+                        console.log(err);
+                });
+            },
         },
 
         computed: {
@@ -85,7 +103,7 @@
             // Check the users auth status before
             // allowing navigation to the route
             canActivate() {
-                return auth.user.authenticated
+
             }
         }
     };

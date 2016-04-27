@@ -13,7 +13,6 @@ class ContestParticipantsController extends ApiController
     public function __construct(ContestParticipant $contestParticipant)
     {
     	$this->contestParticipant = $contestParticipant;
-        $this->middleware('jwt.auth');
     }
 
     public function getByPlayer()
