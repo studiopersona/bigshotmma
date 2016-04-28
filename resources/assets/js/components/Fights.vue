@@ -24,22 +24,22 @@
                                         data-fighter-id="{{ fight.fighters[0].id }}"
                                     >
                                     <img
-                                        class="fightsList__flag left"
-                                        :src="'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri"
-                                        :show
-                                        alt="{{ fight.fighters[0].nationality.country_name }} Flag"
-                                    >
-                                    <img
                                         class="fightsList__powerup left"
                                         :src="'public/image/powerups/' + fightData[fight.id].powerupImage"
-                                        data-fighter-id="{{ fight.fighters[0].id}}"
+                                        data-fighter-id="{{ fight.fighters[0].id }}"
                                         data-fight-id="{{ fight.id }}"
                                         @click="removePowerUp(fight.id, $event)"
                                     >
+                                    <button @click="clearFight(fight.id, fight.fighters[0].id, $event)"
+                                            type="button"
+                                            class="fightsList__clearButton left"
+                                            data-fighter-id="{{fight.fighters[0].id}}"
+                                            >X<span class="visuallyhidden">Clear</span>
+                                    </button>
                                     <div class="fightsList__selectedIndicatorWrap">
                                         <div :class="['fightsList__selectedIndicator', (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'favorite' : '']" data-fighter-id="{{ fight.fighters[0].id }}">
                                             <span>
-                                                {{ (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'Favorite +3' : 'Underdog +5' }}
+                                                {{ (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'Favorite (+3)' : 'Underdog (+5)' }}
                                             </span>
                                         </div>
                                     </div>
@@ -92,65 +92,94 @@
                                         data-fighter-id="{{ fight.fighters[1].id }}"
                                     >
                                     <img
-                                        class="fightsList__flag right"
-                                        :src="'public/image/flags/' + fight.fighters[1].nationality.country_flag_uri"
-                                        alt="{{ fight.fighters[1].nationality.country_name }} Flag"
-                                    >
-                                    <img
                                         class="fightsList__powerup right"
                                         :src="'public/image/powerups/' + fightData[fight.id].powerupImage"
-                                        data-fighter-id="{{ fight.fighters[1].id}}"
+                                        data-fighter-id="{{ fight.fighters[1].id }}"
                                         data-fight-id="{{ fight.id }}"
                                         @click="removePowerUp(fight.id, $event)"
                                     >
-                                     <div class="fightsList__selectedIndicatorWrap">
+                                    <button @click="clearFight(fight.id, fight.fighters[1].id, $event)"
+                                            type="button"
+                                            class="fightsList__clearButton right"
+                                            data-fighter-id="{{fight.fighters[1].id}}"
+                                            >X<span class="visuallyhidden">Clear</span>
+                                    </button>
+                                    <div class="fightsList__selectedIndicatorWrap">
                                         <div
                                             :class="['fightsList__selectedIndicator', (fight.fighters[1].pivot.odds > fight.fighters[0].pivot.odds) ? 'favorite' : '']"
                                             data-fighter-id="{{ fight.fighters[1].id }}">
                                             <span>
-                                                {{ (parseInt(fight.fighters[1].pivot.odds, 10) > parseInt(fight.fighters[0].pivot.odds, 10)) ? 'Favorite +3' : 'Underdog +5' }}
+                                                {{ (parseInt(fight.fighters[1].pivot.odds, 10) > parseInt(fight.fighters[0].pivot.odds, 10)) ? 'Favorite (+3)' : 'Underdog (+5)' }}
                                             </span>
                                         </div>
                                     </div>
                                 </div><!-- .fightsList__fighterImgWrap -->
                             </div><!-- .fightsList__fighterWrap -->
                         </div><!-- .fightsList__fighterStatsWarp -->
-                        <button @click="clearFight(fight.id, $event)"
-                                type="button"
-                                class="fightsList__clearButton"
-                                >X<span class="visuallyhidden">Clear</span>
-                        </button>
                     </div><!-- .fightsList__fightersWrap -->
                     <div class="fightsList__pick" id="{{ fight.id }}" data-fight-id="{{ fight.id }}">
                         <div class="container-fluid">
                             <div class="col-xs-100">
-                                <div class="fightsList__pickHeader">How will {{ currentFighterName }} win?</div>
+                                <div class="fightsList__pickHeader">How will {{ currentFighterName }} win? <span class="fightsList__pointsIndicator"></span></div>
                             </div>
+                            <!-- finish selectors -->
                             <div class="col-xs-100">
-                                <select v-model="fightData[fight.id].finishId">
-                                    <option value="0">Choose Finish (+5)</option>
-                                    <option v-for="finish in finishes" value="{{ finish.id }}">{{ finish.name }} (+{{ finish.points }})</option>
-                                </select>
+                                <label
+                                    v-for="finish in finishes"
+                                    @click.prevent="selectButton('finish', finish.id, $event)"
+                                    for="finish{{finish.id}}"
+                                    class="fightsList__pickButton"
+                                >
+                                    <input
+                                        v-model="fightData[parseInt(fight.id, 10)].finishId"
+                                        type="radio"
+                                        value="{{ finish.id }}"
+                                        name="finish"
+                                        id="finish{{ finish.id }}"
+                                        data-points="{{ finish.points }}"
+                                    >
+                                    <span data-fight-id="{{ fight.id }}">{{ finish.name }}</span>
+                                </label>
                             </div>
+                            <!-- round selector -->
                             <div class="col-xs-100">
-                                <select v-model="fightData[fight.id].round">
-                                    <option value="0">Choose Round (+2)</option>
-                                    <option value="1">Round 1 (+2)</option>
-                                    <option value="2">Round 2 (+2)</option>
-                                    <option value="3">Round 3 (+2)</option>
-                                    <option value="4">Round 4 (+2)</option>
-                                    <option value="5">Round 5 (+2)</option>
-                                </select>
+                                <div class="fightsList__pickHeader">Which round? <span class="fightsList__pointsIndicator"></span></div>
+                                <label
+                                    v-for="round in 5"
+                                    @click.prevent="selectButton('round', round, $event)"
+                                    for="round{{round}}"
+                                    class="fightsList__pickButton"
+                                >
+                                    <input
+                                        v-model="fightData[parseInt(fight.id, 10)].round"
+                                        type="radio"
+                                        value="{{ round + 1 }}"
+                                        name="round"
+                                        id="round{{ round }}"
+                                        data-points="2"
+                                    >
+                                    <span data-fight-id="{{ fight.id }}">{{ round + 1 }}</span>
+                                </label>
                             </div>
+                            <!-- minute selectors -->
                             <div class="col-xs-100">
-                                <select v-model="fightData[fight.id].minute">
-                                    <option value="0">Choose Minute (+1)</option>
-                                    <option value="1">Minute 1 (+1)</option>
-                                    <option value="2">Minute 2 (+1)</option>
-                                    <option value="3">Minute 3 (+1)</option>
-                                    <option value="4">Minute 4 (+1)</option>
-                                    <option value="5">Minute 5 (+1)</option>
-                                </select>
+                                <div class="fightsList__pickHeader">Which minute? <span class="fightsList__pointsIndicator"></span></div>
+                                <label
+                                    v-for="minute in 5"
+                                    @click.prevent="selectButton('minute', minute, $event)"
+                                    for="minute{{minute}}"
+                                    class="fightsList__pickButton"
+                                >
+                                    <input
+                                        v-model="fightData[parseInt(fight.id, 10)].minute"
+                                        type="radio"
+                                        value="{{ minute + 1 }}"
+                                        name="minute"
+                                        id="minute{{ minute }}"
+                                        data-points="1"
+                                    >
+                                    <span data-fight-id="{{ fight.id }}">{{ minute + 1 }}</span>
+                                </label>
                             </div>
                             <div class="col-xs-100">
                                 <div class="fightsList__pickHeader">Power-up (optional)</div>
@@ -235,6 +264,8 @@
 <script>
     import auth from '../auth';
     import {router} from '../index';
+    import D from '../libs/d.js';
+
     export default {
 
         props: ['working'],
@@ -280,7 +311,6 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
-                playerIsValid: true,
             }
         },
 
@@ -289,34 +319,54 @@
         },
 
         ready() {
-            if ( this.playerIsValid ) {
-                this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', (data) => {
-                    this.fightsList = data.fights;
-                    console.log(data.fights);
-                    this.initializeFightData(data.fights[0].fights);
-                    this.working = false;
-                }, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                }).error((err) => console.log(err))
-
-                this.$http.get(URL.base + '/api/v1/power-ups', (data) => {
-                    this.powerUps = data;
-                }, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                })
-
-                this.$http.get(URL.base + '/api/v1/finishes', (data) => {
-                    this.finishes = data;
-                }, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                })
+            if ( ! auth.validate() ) {
+                this.tokenRefresh();
+            } else {
+                this.fetch();
             }
         },
 
         methods: {
+            tokenRefresh() {
+                var vm = this;
+
+                this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    localStorage.setItem('id_token', response.data.token);
+                    vm.fetch();
+                }, function(err) {
+                    router.go('login');
+                });
+            },
+
+            fetch() {
+                this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    this.fightsList = response.data.fights;
+                    this.initializeFightData(response.data.fights[0].fights);
+                    this.working = false;
+                }, function(err) {
+                    console.log(err);
+                });
+
+                this.$http.get(URL.base + '/api/v1/power-ups', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    this.powerUps = response.data;
+                });
+
+                this.$http.get(URL.base + '/api/v1/finishes', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    this.finishes = response.data;
+                });
+            },
+
             initializeFightData(fights) {
                 var th = this;
 
@@ -405,6 +455,35 @@
                 this.totalPowerUps--;
             },
 
+            removeShowOnButtons(buttons) {
+                var deferred = D();
+
+                for (var i=0; i < buttons.length; ++i) {
+                    buttons[i].classList.remove('show');
+                }
+
+                deferred.resolve();
+
+                return deferred.promise;
+            },
+
+            selectButton(name, id, e) {
+                var siblingButtons = document.querySelectorAll('input[name="' + name + '"] + span');
+
+                this.removeShowOnButtons(siblingButtons).then(function() {
+                    e.target.classList.add('show');
+                });
+
+                if ( name === 'finish' && parseInt(id, 10) === 3 ) this.setDecision(e.target.dataset.fightId);
+            },
+
+            setDecision(fightId) {
+                if ( fightId ) {
+                    this.fightData[parseInt(fightId, 10)].round = 5;
+                    this.fightData[parseInt(fightId, 10)].minute = 5;
+                }
+            },
+
             selectFight(e) {
                 var checkPick = function(playerPick) {
                         return playerPick.fightId === e.target.dataset.fightId;
@@ -428,7 +507,7 @@
                     }
                 } else {
                     // show the clear button
-                    clearBtnNode = document.querySelector('div.fightsList__fightersWrap[data-fight-id="' + e.target.dataset.fightId + '"] .fightsList__clearButton');
+                    clearBtnNode = document.querySelector('.fightsList__clearButton[data-fighter-id="' + e.target.dataset.fighterId + '"]');
                     clearBtnNode.classList.add('show');
 
                     if ( this.currentFightId !== e.target.dataset.fightId ) {
@@ -521,11 +600,13 @@
                     fightPickEl,
                     powerupIndicators,
                     pickDataIndex,
-                    clearBtnNode;
+                    clearBtnNodes;
 
                 // hide the clear button
-                clearBtnNode = document.querySelector('div.fightsList__fightersWrap[data-fight-id="' + fightId + '"] .fightsList__clearButton');
-                clearBtnNode.classList.remove('show');
+                clearBtnNodes = document.querySelectorAll('div.fightsList__fightersWrap[data-fight-id="' + fightId + '"] .fightsList__clearButton');
+                for (var i=0; i < clearBtnNodes.length; ++i) {
+                    clearBtnNodes[i].classList.remove('show')
+                }
 
                 // search for this fight in picks
                 pickDataIndex = this.playerPicks.findIndex(findPick);
@@ -592,7 +673,8 @@
             deselectFighter(fighterId) {
                 var fighterImageToDeselect,
                     fighterIndicatorToDeselect,
-                    powerUpImageToDeselect;
+                    powerUpImageToDeselect,
+                    clearBtnToDeselect;
 
 
                 fighterImageToDeselect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
@@ -602,6 +684,8 @@
                     fighterIndicatorToDeselect.classList.remove('show');
                     powerUpImageToDeselect = document.querySelector('img.fightsList__powerup[data-fighter-id="' + fighterId + '"]');
                     powerUpImageToDeselect.classList.remove('show');
+                    clearBtnToDeselect = document.querySelector('.fightsList__clearButton[data-fighter-id="' + fighterId + '"]');
+                    clearBtnToDeselect.classList.remove('show');
                 }
             },
 

@@ -87,7 +87,7 @@
 
 		ready() {
 			if ( ! auth.validate() ) {
-				auth.refresh(this, 'events');
+				this.tokenRefresh();
 			} else {
 				router.go('/events');
 			}
@@ -95,6 +95,19 @@
 		},
 
 		methods: {
+			tokenRefresh() {
+                var vm = this;
+
+                this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    localStorage.setItem('id_token', response.data.token);
+                    router.go('/events');
+                }, function(err) {
+                    router.go('login');
+                });
+            },
+
 			submit() {
 				var credentials = {
 					email: this.credentials.email,

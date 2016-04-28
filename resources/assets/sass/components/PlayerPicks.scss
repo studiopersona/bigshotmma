@@ -6,6 +6,7 @@
 
 .fightPicksList__item {
 	padding: 0.9rem 0 0.5rem;
+	cursor: pointer;
 }
 
 .fightPicksList__item.show .fightPicksList__details  {
@@ -51,7 +52,7 @@
 	}
 }
 
-.fighPicksList__selectionResults {
+.fightPicksList__selectionResults {
 	font-size: 1rem;
 	margin: 0.3rem 0 0.15rem 1rem;
 }

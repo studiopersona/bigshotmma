@@ -11,50 +11,47 @@ const REFRESH_URL = API_URL + 'refresh';
 
 export default {
 
-    // User object will let us check authentication status
-    user: {
-        authenticated: true
-    },
-
-    // Send a request to the login URL and save the returned JWT
     login(context, creds, redirect) {
         context.working = true;
-        context.$http.post(LOGIN_URL, creds, (data) => {
-            localStorage.setItem('id_token', data.token);
+        context.$http.post(LOGIN_URL, creds)
+            .then(function(response) {
+                localStorage.setItem('id_token', response.data.token);
 
-            this.user.authenticated = true;
-            // Redirect to a specified route
-            if(redirect) {
-                router.go(redirect);
-            }
-
-        }).error((err) => {
-            context.error = err.error.message;
-            context.alertType = 'error';
-            context.working = false;
-        });
+                // Redirect to a specified route
+                if(redirect) {
+                    router.go(redirect);
+                }
+            })
+            .catch(function(err) {
+                if (err.data ) {
+                    context.error = err.data.error.message;
+                    context.alertType = 'error';
+                    context.working = false;
+                }
+                console.log(err);
+            });
     },
 
     signup(context, creds, redirect) {
-        context.$http.post(SIGNUP_URL, creds, (data) => {
-            localStorage.setItem('id_token', data.token);
+        context.$http.post(SIGNUP_URL, creds)
+            .then(function(response) {
+                localStorage.setItem('id_token', response.data.token);
 
-            this.user.authenticated = true;
-
-            if(redirect) {
-                router.go(redirect);
-            }
-
-        }).error((err) => {
-            context.error = err.error.message;
-            context.alertType = 'error';
-        });
+                if(redirect) {
+                    router.go(redirect);
+                }
+            })
+            .catch(function(err) {
+                if ( err.data ) {
+                    context.error = err.data.error.message;
+                    context.alertType = 'error';
+                }
+                console.log(err);
+            });
     },
 
-    // To log out, we just need to remove the token
     logout() {
         localStorage.removeItem('id_token');
-        this.user.authenticated = false;
     },
 
     validate() {
@@ -67,10 +64,6 @@ export default {
         } else {
             return false;
         }
-    },
-
-    refresh(context, redirect) {
-
     },
 
     // The object to be passed as a header for authenticated requests

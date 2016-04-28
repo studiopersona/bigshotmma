@@ -11,20 +11,13 @@
 	export default {
 		data: function() {
 			return {
-
-				validate () {
-					if ( ! auth.validate() ) auth.refresh(this);
-				},
-
 			};
 		},
 
 		created() {
-			//if ( ! auth.validate() ) auth.refresh(this, 'events');
 		},
 
 		computed: {
-
 		},
 	};
 </script>

@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title">Buy in:</span> ${{ participantsList[0].contest.buy_in }}
+                        <span class="contestDetails__title">Entry Fee:</span> ${{ participantsList[0].contest.buy_in }}
                     </div>
                     <div class="col-xs-50 text-right">
                         <span class="contestDetails__title">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}
@@ -119,7 +119,6 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
-                playerIsValid: true,
             }
         },
 
@@ -128,25 +127,46 @@
         },
 
         ready() {
-            if ( this.playerIsValid ) {
-                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', (data) => {
-                    this.participantsList = data.participants;
-                    this.working = false;
-                }, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                }).error((err) => console.log(err))
-
-                this.$http.get( URL.base + '/api/v1/contest-types', (data) => {
-                    this.contestTypes = data;
-                }, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                })
+            if ( ! auth.validate() ) {
+                this.tokenRefresh();
+            } else {
+                this.fetch();
             }
         },
 
         methods: {
+            tokenRefresh() {
+                var vm = this;
+
+                this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    localStorage.setItem('id_token', response.data.token);
+                    vm.fetch();
+                }, function(err) {
+                    router.go('login');
+                });
+            },
+
+            fetch() {
+                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    this.participantsList = response.data.participants;
+                    this.working = false;
+                }, function(err) {
+                    console.log(err);
+                });
+
+                this.$http.get( URL.base + '/api/v1/contest-types', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    this.contestTypes = response.data;
+                });
+            },
+
             showContestRules(e) {
                 var newType;
                 e.preventDefault();

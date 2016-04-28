@@ -88,21 +88,47 @@
         },
 
         ready() {
+            if ( ! auth.validate() ) {
+                this.tokenRefresh();
+            } else {
+                this.fetch();
+            }
+        },
 
-                this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', (data) => {
-                    this.contestsList = data;
+        methods: {
+            tokenRefresh() {
+                var vm = this;
+
+                this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    localStorage.setItem('id_token', response.data.token);
+                    vm.fetch();
+                }, function(err) {
+                    router.go('login');
+                });
+            },
+
+            fetch() {
+                this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    this.contestsList = response.data;
                     this.working = false;
-                }, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                }).error((err) => console.log(err))
+                }, function(err) {
+                    console.log(err);
+                });
 
-                this.$http.get(URL.base + '/api/v1/player/contests-entered', (data) => {
-                    this.contestsEntered = data.contests;
-                }, {
+                this.$http.get(URL.base + '/api/v1/player/contests-entered', {}, {
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
-                }).error((err) => console.log(err))
+                }).then(function(response) {
+                    this.contestsEntered = response.data.contests;
+                }, function(err) {
+                    console.log(err);
+                });
+            },
         },
 
         computed: {

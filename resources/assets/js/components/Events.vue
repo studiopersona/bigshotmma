@@ -37,7 +37,7 @@
 
     export default {
 
-        props: ['working', 'validate'],
+        props: ['working'],
 
         data() {
             return {

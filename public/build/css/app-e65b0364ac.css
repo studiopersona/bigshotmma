@@ -4293,7 +4293,7 @@ a {
 .fightsList__pickHeader {
   font-size: 1.8rem;
   font-weight: 700;
-  margin: 2.5rem 0 1rem; }
+  margin: 1.5rem 0; }
 
 .fightsList__item {
   background-color: #eee;
@@ -4397,13 +4397,11 @@ a {
   display: inline;
   cursor: pointer;
   line-height: 2.5;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 700;
   text-transform: uppercase;
-  margin-right: 0.4rem;
+  margin-right: 0.5rem;
   /* never forget focus styling */ }
-  .fightsList__pickButton:last-child {
-    margin-right: 0; }
   .fightsList__pickButton [type="radio"] {
     border: 0;
     clip: rect(0 0 0 0);
@@ -4415,7 +4413,7 @@ a {
     width: 1px; }
   .fightsList__pickButton [type="radio"] + span {
     display: inline-block;
-    padding: 0 1em;
+    padding: 0 0.7em;
     color: #757575;
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f0f0f0+0,ebebeb+15,eaebed+18,eaeae8+21,e4e4e4+39,e4e4e6+42,e0e0e0+55,dfe0e2+58,dedede+61,d2d3d5+97,cecfd1+100 */
     background: #f0f0f0;
@@ -4428,9 +4426,10 @@ a {
     /* IE6-9 */
     border-radius: 0 0 8px 8px;
     box-shadow: 0 5px 0 #b2b2b2; }
-  .fightsList__pickButton [type="radio"] + span.show {
+  .fightsList__pickButton [type="radio"]:checked + span,
+  .fightsList__pickButton [type="radio"]:focus + span {
     background: #56D03F;
-    box-shadow: 0 5px 0 #45BB31;
+    box-shadow-color: #45BB31;
     color: #fff; }
 
 .fightPicksList__details {

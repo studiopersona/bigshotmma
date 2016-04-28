@@ -2,17 +2,17 @@
     <div :working="working">
         <header class="pageHeader" :working.sync="working">
             <h1 class="pageHeader__header">Picks</h1>
-            <h4 class="pageHeader__subheader">{{ picksList[0].event.event_short_name }}</h4>
+            <h4 class="pageHeader__subheader">{{ picksList[0].event.event_short_name }} / <a v-link="{ path: '/contest/' + picksList[0].contest.id + '/results' }">Results</a> </h4>
         </header>
         <div class="contestDetails">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title">Buy in:</span> ${{ picksList[0].contest.buy_in }}
+                        <span class="contestDetails__title">Entry Fee:</span> ${{ picksList[0].contest.buy_in }}
                     </div>
                     <div class="col-xs-50 text-right">
                         <span class="contestDetails__title">Standing:</span> <span v-if="results.length">{{ playerRanking }}/{{ standings.length }}</span>
-                        <span v-else>No Results Reported</span>
+                        <span v-else>N/A</span>
                     </div>
                 </div>
                 <div class="row">
@@ -20,7 +20,7 @@
                         <span class="contestDetails__title">Prize Pool:</span> ${{ picksList[0].contest.prize_pool  }}
                     </div>
                     <div class="col-xs-50 text-right">
-                        <span class="contestDetails__title">Your Winnigs:</span> $0
+                        <span class="contestDetails__title">Your Winnings:</span> $0
                     </div>
                 </div>
             </div>
@@ -47,17 +47,17 @@
                         </div>
                         <div class="col-xs-15">
                             <div class="fightPicksList__title">Result</div>
-                            <div v-if="!results.length" class="fightPicksList__stat">---</div>
+                            <div v-if="!results.length" class="fightPicksList__stat">--</div>
                             <div v-else :class="['fightPicksList__stat', outcome[pick.fight_id].fighter ? 'correct' : '']">{{ outcome[pick.fight_id].fighter ? 'W' : 'L' }}</div>
                         </div>
                         <div class="col-xs-15">
                             <div class="fightPicksList__title">Finish</div>
-                            <div v-if="!results.length" class="fightPicksList__stat">---</div>
+                            <div v-if="!results.length" class="fightPicksList__stat">--</div>
                             <div v-else :class="['fightPicksList__stat', outcome[pick.fight_id].finish_id ? 'correct' : '']">{{ outcome[pick.fight_id].finish_abbr }}</div>
                         </div>
                         <div class="col-xs-15">
                             <div class="fightPicksList__title">Points</div>
-                            <div v-if="!results.length" class="fightPicksList__stat">---</div>
+                            <div v-if="!results.length" class="fightPicksList__stat">--</div>
                             <div v-else :class="['fightPicksList__stat', outcome[pick.fight_id].points > 0 ? 'correct' : '']">{{ outcome[pick.fight_id].points }}</div>
                         </div>
                     </div>
@@ -81,16 +81,16 @@
                                 <div class="col-xs-75">
                                     <h4 v-if="(parseInt(pick.fighter.odds, 10) > 0)" class="fightPicksList__selectionTitle">Favorite to Win</h4>
                                     <h4 v-else  class="fightPicksList__selectionTitle">Underdog to Win</h4>
-                                    <p class="fighPicksList__selectionResults" v-if="results.length">
+                                    <p class="fightPicksList__selectionResults" v-if="results.length">
                                         <span v-if="outcome[pick.fight_id].fighter">You chose the winning fighter</span>
                                         <span v-else>You didn't chose the winning figher</span>
                                     </p>
-                                    <p class="fighPicksList__selectionResults" v-else>
+                                    <p class="fightPicksList__selectionResults" v-else>
                                         Results not entered yet
                                     </p>
                                 </div>
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__points">
-                                    ---
+                                    --
                                 </div>
                                 <div v-else :class="['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].fighter ? 'correct' : '']">
                                     +{{ outcome[pick.fight_id].fighterPoints }}
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="col-xs-75">
                                     <h4 class="fightPicksList__selectionTitle">{{ pick.finish.finish_type }}</h4>
-                                    <p class="fighPicksList__selectionResults" v-if="results.length">
+                                    <p class="fightPicksList__selectionResults" v-if="results.length">
                                         <span v-if="outcome[pick.fight_id].finish_id">You chose the winning finish</span>
                                         <span v-else>You didn't choose the winning finish</span>
                                     </p>
@@ -112,7 +112,7 @@
                                     </p>
                                 </div>
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__points">
-                                    ---
+                                    --
                                 </div>
                                 <div v-else :class="['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].finish_id ? 'correct' : '']">
                                     <span v-if="outcome[pick.fight_id].finish_id">+5</span>
@@ -126,16 +126,16 @@
                                 </div>
                                 <div class="col-xs-75">
                                     <h4 class="fightPicksList__selectionTitle">Round {{ numberNames[parseInt(pick.round, 10) - 1] }}</h4>
-                                    <p class="fighPicksList__selectionResults" v-if="results.length">
+                                    <p class="fightPicksList__selectionResults" v-if="results.length">
                                         <span v-if="outcome[pick.fight_id].round">You chose the winning round</span>
                                         <span v-else>You didn't choose the winning round</span>
                                     </p>
-                                    <p class="fighPicksList__selectionResults" v-else>
+                                    <p class="fightPicksList__selectionResults" v-else>
                                         Results not entered yet
                                     </p>
                                 </div>
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__points">
-                                    ---
+                                    --
                                 </div>
                                 <div v-else :class="['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].round ? 'correct' : '']">
                                     <span v-if="outcome[pick.fight_id].round">+2</span>
@@ -149,16 +149,16 @@
                                 </div>
                                 <div class="col-xs-75">
                                     <h4 class="fightPicksList__selectionTitle">Minute {{ numberNames[parseInt(pick.minute, 10) - 1] }}</h4>
-                                    <p class="fighPicksList__selectionResults" v-if="results.length">
+                                    <p class="fightPicksList__selectionResults" v-if="results.length">
                                         <span v-if="outcome[pick.fight_id].minute">You chose the winning minute</span>
                                         <span v-else>You didn't chose the winning minute</span>
                                     </p>
-                                    <p class="fighPicksList__selectionResults" v-else>
+                                    <p class="fightPicksList__selectionResults" v-else>
                                         Results not entered yet
                                     </p>
                                 </div>
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__points">
-                                    ---
+                                    --
                                 </div>
                                 <div v-else :class="['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].minute ? 'correct' : '']">
                                     <span v-if="outcome[pick.fight_id].minute">+1</span>
@@ -172,16 +172,16 @@
                                 </div>
                                 <div class="col-xs-75">
                                     <h4 class="fightPicksList__powerUpName" :style="{color: pick.power_up.color}">{{ pick.power_up.power_up_name }}</h4>
-                                    <p class="fighPicksList__selectionResults" v-show="results.length">
+                                    <p class="fightPicksList__selectionResults" v-show="results.length">
                                         <span v-if="parseInt(outcome[pick.fight_id].power_up_points, 10) > 0">You chose a winning power up</span>
                                         <span v-else>You're fighter did not achieve the power up</span>
                                     </p>
-                                    <p class="fighPicksList__selectionResults" v-else>
+                                    <p class="fightPicksList__selectionResults" v-else>
                                         Results not entered yet
                                     </p>
                                 </div>
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__points" :style="{color: pick.power_up.color}">
-                                    ---
+                                    --
                                 </div>
                                 <div    v-else :class="['col-xs-15', 'fightPicksList__points', parseInt(outcome[pick.fight_id].power_up_points, 10) > 0 ? 'correct' : 'penalty']" style="{color: pick.power_up.color}">
                                     {{ outcome[pick.fight_id].power_up_points }}
@@ -193,7 +193,7 @@
                                     Total
                                 </div>
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__totalValue">
-                                    ---
+                                    --
                                 </div>
                                 <div v-else class="col-xs-15 fightPicksList__totalValue">
                                     {{ outcome[pick.fight_id].points }}
@@ -254,7 +254,6 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
-                playerIsValid: true,
             }
         },
 
@@ -263,38 +262,61 @@
         },
 
         ready() {
-            if ( this.playerIsValid ) {
-                //console.log(URL.base);
-                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/picks', (data) => {
-                    this.picksList = data.picks;
-                    this.working = false;
-
-                    this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', (data) => {
-                        this.results = data.results;
-                        this.parseResults(data.results);
-                    }, {
-                        // Attach the JWT header
-                        headers: auth.getAuthHeader()
-                    }).error((err) => {
-                        console.log(err);
-                    });
-
-                    this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings', (data) => {
-                        this.standings = data.data[0].standings;
-                        this.playerId = data.data[0].player;
-                        this.determineRank(data.data[0].standings);
-                    }, {
-                        // Attach the JWT header
-                        headers: auth.getAuthHeader()
-                    });
-                }, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                }).error((err) => console.log(err))
+            if ( ! auth.validate() ) {
+                this.tokenRefresh();
+            } else {
+                this.fetch();
             }
         },
 
         methods: {
+            tokenRefresh() {
+                var vm = this;
+
+                this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    localStorage.setItem('id_token', response.data.token);
+                    vm.fetch();
+                }, function(err) {
+                    router.go('login');
+                });
+            },
+
+            fetch() {
+                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/picks', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    this.picksList = response.data.picks;
+                    this.working = false;
+
+                    this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', {}, {
+                        // Attach the JWT header
+                        headers: auth.getAuthHeader()
+                    }).then(function(response) {
+                        this.results = response.data.results;
+                        this.parseResults(response.data.results);
+                    }, function(err) {
+                        console.log(err);
+                    });
+
+                    this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings', {}, {
+                        // Attach the JWT header
+                        headers: auth.getAuthHeader()
+                    }).then(function(response) {
+                        this.standings = response.data.data[0].standings;
+                        this.playerId = response.data.data[0].player;
+                        this.determineRank(response.data.data[0].standings);
+                    }, function(err) {
+                        console.log(err);
+                    });
+
+                }, function(err) {
+                    console.log(err);
+                });
+            },
+
             toggleDetails(pickId, e) {
                 e.preventDefault();
                 var pickToToggle = document.querySelector('li.fightPicksList__item[data-pick-id="' + pickId + '"]');

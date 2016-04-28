@@ -4430,7 +4430,7 @@ a {
     box-shadow: 0 5px 0 #b2b2b2; }
   .fightsList__pickButton [type="radio"] + span.show {
     background: #56D03F;
-    box-shadow: 0 5px 0 #45BB31;
+    box-shadow-color: #45BB31;
     color: #fff; }
 
 .fightPicksList__details {

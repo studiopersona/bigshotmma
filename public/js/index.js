@@ -14625,53 +14625,41 @@ var SIGNUP_URL = API_URL + 'register';
 var REFRESH_URL = API_URL + 'refresh';
 
 exports.default = {
-
-    // User object will let us check authentication status
-    user: {
-        authenticated: true
-    },
-
-    // Send a request to the login URL and save the returned JWT
     login: function login(context, creds, redirect) {
-        var _this = this;
-
         context.working = true;
-        context.$http.post(LOGIN_URL, creds, function (data) {
-            localStorage.setItem('id_token', data.token);
+        context.$http.post(LOGIN_URL, creds).then(function (response) {
+            localStorage.setItem('id_token', response.data.token);
 
-            _this.user.authenticated = true;
             // Redirect to a specified route
             if (redirect) {
                 _index.router.go(redirect);
             }
-        }).error(function (err) {
-            context.error = err.error.message;
-            context.alertType = 'error';
-            context.working = false;
+        }).catch(function (err) {
+            if (err.data) {
+                context.error = err.data.error.message;
+                context.alertType = 'error';
+                context.working = false;
+            }
+            console.log(err);
         });
     },
     signup: function signup(context, creds, redirect) {
-        var _this2 = this;
-
-        context.$http.post(SIGNUP_URL, creds, function (data) {
-            localStorage.setItem('id_token', data.token);
-
-            _this2.user.authenticated = true;
+        context.$http.post(SIGNUP_URL, creds).then(function (response) {
+            localStorage.setItem('id_token', response.data.token);
 
             if (redirect) {
                 _index.router.go(redirect);
             }
-        }).error(function (err) {
-            context.error = err.error.message;
-            context.alertType = 'error';
+        }).catch(function (err) {
+            if (err.data) {
+                context.error = err.data.error.message;
+                context.alertType = 'error';
+            }
+            console.log(err);
         });
     },
-
-
-    // To log out, we just need to remove the token
     logout: function logout() {
         localStorage.removeItem('id_token');
-        this.user.authenticated = false;
     },
     validate: function validate() {
         var token = localStorage.getItem('id_token'),
@@ -14684,7 +14672,6 @@ exports.default = {
             return false;
         }
     },
-    refresh: function refresh(context, redirect) {},
 
 
     // The object to be passed as a header for authenticated requests
@@ -14701,7 +14688,7 @@ exports.default = {
     }
 };
 
-},{"../index":43,"../libs/d":44}],34:[function(require,module,exports){
+},{"../index":44,"../libs/d":45}],34:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14712,16 +14699,10 @@ var _index = require('../index');
 
 exports.default = {
 	data: function data() {
-		return {
-			validate: function validate() {
-				if (!auth.validate()) auth.refresh(this);
-			}
-		};
+		return {};
 	},
 
-	created: function created() {
-		//if ( ! auth.validate() ) auth.refresh(this, 'events');
-	},
+	created: function created() {},
 
 
 	computed: {}
@@ -14741,7 +14722,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../index":43,"vue":32,"vue-hot-reload-api":6}],35:[function(require,module,exports){
+},{"../index":44,"vue":32,"vue-hot-reload-api":6}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14788,38 +14769,52 @@ exports.default = {
                 base: window.URL.base,
                 current: window.URL.current,
                 full: window.URL.full
-            },
-            playerIsValid: true
+            }
         };
     },
     created: function created() {
         this.working = true;
     },
     ready: function ready() {
-        var _this = this;
-
-        if (this.playerIsValid) {
-            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', function (data) {
-                _this.participantsList = data.participants;
-                _this.working = false;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            }).error(function (err) {
-                return console.log(err);
-            });
-
-            this.$http.get(URL.base + '/api/v1/contest-types', function (data) {
-                _this.contestTypes = data;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            });
+        if (!_auth2.default.validate()) {
+            this.tokenRefresh();
+        } else {
+            this.fetch();
         }
     },
 
 
     methods: {
+        tokenRefresh: function tokenRefresh() {
+            var vm = this;
+
+            this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                localStorage.setItem('id_token', response.data.token);
+                vm.fetch();
+            }, function (err) {
+                _index.router.go('login');
+            });
+        },
+        fetch: function fetch() {
+            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.participantsList = response.data.participants;
+                this.working = false;
+            }, function (err) {
+                console.log(err);
+            });
+
+            this.$http.get(URL.base + '/api/v1/contest-types', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.contestTypes = response.data;
+            });
+        },
         showContestRules: function showContestRules(e) {
             var newType;
             e.preventDefault();
@@ -14859,7 +14854,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Contest Lobby</h1>\n        <h4 class=\"pageHeader__subheader\">\n            {{ participantsList[0].contest.event_short_name }} - {{ participantsList[0].contest.event_date }}\n        </h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Buy in:</span> ${{ participantsList[0].contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                <span class=\"contestDetails__title\">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}\n                </div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ participantsList[0].contest.contest_type_id }}\">\n                        {{ participantsList[0].contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"participantsList\">\n        <ul class=\"stripped-list\">\n            <li class=\"participantsList__item\" v-for=\"participant in participantsList[0].participants\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-15 participantsList__img\">\n                        <img src=\"public/image/avatar/male.jpg\">\n                    </div>\n                    <div class=\"col-xs-40\">\n                        <div class=\"participantsList__itemTitle\">&nbsp;</div>\n                        <div class=\"participantsList__name\">\n                            {{ participant.player_name }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-25\">\n                        <div class=\"participantsList__itemTitle\">Record</div>\n                        <div class=\"participantsList__record\">\n                            {{ participant.record.wins }} - {{ participant.record.losses }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-20\">\n                        <div class=\"participantsList__itemTitle\">Win %</div>\n                        <div class=\"participantsList__wins\">\n                            {{ participant.record.win_percentage }}%\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <div class=\"container-fluid\">\n        <div class=\"col-xs-100 button-wrap\">\n            <a v-link=\"{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }\" class=\"button button--primary\">Enter</a>\n        </div>\n    </div>\n    <section :class=\"infoModalClasses\">\n        <h3 class=\"infoModal__title\">{{ infoModalContent.title }}</h3>\n        <img class=\"infoModal__image\" :src=\"URL.base + '/public/image/info/' + infoModalContent.image\" alt=\"{{ infoModalContent.title }} Image\">\n        <div class=\"infoModal__rules\">\n            {{{ infoModalContent.rules }}}\n        </div>\n        <div class=\"button-wrap\">\n            <button @click=\"infoModalClose\" type=\"button\" class=\"button button--green\">Got It</button>\n        </div>\n        <button @click=\"infoModalClose\" type=\"button\" class=\"infoModal__close\">x</button>\n    </section>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Contest Lobby</h1>\n        <h4 class=\"pageHeader__subheader\">\n            {{ participantsList[0].contest.event_short_name }} - {{ participantsList[0].contest.event_date }}\n        </h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Entry Fee:</span> ${{ participantsList[0].contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                <span class=\"contestDetails__title\">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}\n                </div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ participantsList[0].contest.contest_type_id }}\">\n                        {{ participantsList[0].contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"participantsList\">\n        <ul class=\"stripped-list\">\n            <li class=\"participantsList__item\" v-for=\"participant in participantsList[0].participants\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-15 participantsList__img\">\n                        <img src=\"public/image/avatar/male.jpg\">\n                    </div>\n                    <div class=\"col-xs-40\">\n                        <div class=\"participantsList__itemTitle\">&nbsp;</div>\n                        <div class=\"participantsList__name\">\n                            {{ participant.player_name }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-25\">\n                        <div class=\"participantsList__itemTitle\">Record</div>\n                        <div class=\"participantsList__record\">\n                            {{ participant.record.wins }} - {{ participant.record.losses }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-20\">\n                        <div class=\"participantsList__itemTitle\">Win %</div>\n                        <div class=\"participantsList__wins\">\n                            {{ participant.record.win_percentage }}%\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <div class=\"container-fluid\">\n        <div class=\"col-xs-100 button-wrap\">\n            <a v-link=\"{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }\" class=\"button button--primary\">Enter</a>\n        </div>\n    </div>\n    <section :class=\"infoModalClasses\">\n        <h3 class=\"infoModal__title\">{{ infoModalContent.title }}</h3>\n        <img class=\"infoModal__image\" :src=\"URL.base + '/public/image/info/' + infoModalContent.image\" alt=\"{{ infoModalContent.title }} Image\">\n        <div class=\"infoModal__rules\">\n            {{{ infoModalContent.rules }}}\n        </div>\n        <div class=\"button-wrap\">\n            <button @click=\"infoModalClose\" type=\"button\" class=\"button button--green\">Got It</button>\n        </div>\n        <button @click=\"infoModalClose\" type=\"button\" class=\"infoModal__close\">x</button>\n    </section>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -14871,7 +14866,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],36:[function(require,module,exports){
+},{"../auth":33,"../index":44,"vue":32,"vue-hot-reload-api":6}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14906,28 +14901,48 @@ exports.default = {
         this.working = true;
     },
     ready: function ready() {
-        var _this = this;
-
-        this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', function (data) {
-            _this.contestsList = data;
-            _this.working = false;
-        }, {
-            // Attach the JWT header
-            headers: _auth2.default.getAuthHeader()
-        }).error(function (err) {
-            return console.log(err);
-        });
-
-        this.$http.get(URL.base + '/api/v1/player/contests-entered', function (data) {
-            _this.contestsEntered = data.contests;
-        }, {
-            // Attach the JWT header
-            headers: _auth2.default.getAuthHeader()
-        }).error(function (err) {
-            return console.log(err);
-        });
+        if (!_auth2.default.validate()) {
+            this.tokenRefresh();
+        } else {
+            this.fetch();
+        }
     },
 
+
+    methods: {
+        tokenRefresh: function tokenRefresh() {
+            var vm = this;
+
+            this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                localStorage.setItem('id_token', response.data.token);
+                vm.fetch();
+            }, function (err) {
+                _index.router.go('login');
+            });
+        },
+        fetch: function fetch() {
+            this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.contestsList = response.data;
+                this.working = false;
+            }, function (err) {
+                console.log(err);
+            });
+
+            this.$http.get(URL.base + '/api/v1/player/contests-entered', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.contestsEntered = response.data.contests;
+            }, function (err) {
+                console.log(err);
+            });
+        }
+    },
 
     computed: {
         loaderClasses: function loaderClasses() {
@@ -14955,7 +14970,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],37:[function(require,module,exports){
+},{"../auth":33,"../index":44,"vue":32,"vue-hot-reload-api":6}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14972,7 +14987,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
 
-    props: ['working', 'validate'],
+    props: ['working'],
 
     data: function data() {
         return {
@@ -15050,7 +15065,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],38:[function(require,module,exports){
+},{"../auth":33,"../index":44,"vue":32,"vue-hot-reload-api":6}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15062,6 +15077,10 @@ var _auth = require('../auth');
 var _auth2 = _interopRequireDefault(_auth);
 
 var _index = require('../index');
+
+var _d = require('../libs/d.js');
+
+var _d2 = _interopRequireDefault(_d);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15109,47 +15128,60 @@ exports.default = {
                 base: window.URL.base,
                 current: window.URL.current,
                 full: window.URL.full
-            },
-            playerIsValid: true
+            }
         };
     },
     created: function created() {
         this.working = true;
     },
     ready: function ready() {
-        var _this = this;
-
-        if (this.playerIsValid) {
-            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', function (data) {
-                _this.fightsList = data.fights;
-                console.log(data.fights);
-                _this.initializeFightData(data.fights[0].fights);
-                _this.working = false;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            }).error(function (err) {
-                return console.log(err);
-            });
-
-            this.$http.get(URL.base + '/api/v1/power-ups', function (data) {
-                _this.powerUps = data;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            });
-
-            this.$http.get(URL.base + '/api/v1/finishes', function (data) {
-                _this.finishes = data;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            });
+        if (!_auth2.default.validate()) {
+            this.tokenRefresh();
+        } else {
+            this.fetch();
         }
     },
 
 
     methods: {
+        tokenRefresh: function tokenRefresh() {
+            var vm = this;
+
+            this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                localStorage.setItem('id_token', response.data.token);
+                vm.fetch();
+            }, function (err) {
+                _index.router.go('login');
+            });
+        },
+        fetch: function fetch() {
+            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.fightsList = response.data.fights;
+                this.initializeFightData(response.data.fights[0].fights);
+                this.working = false;
+            }, function (err) {
+                console.log(err);
+            });
+
+            this.$http.get(URL.base + '/api/v1/power-ups', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.powerUps = response.data;
+            });
+
+            this.$http.get(URL.base + '/api/v1/finishes', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.finishes = response.data;
+            });
+        },
         initializeFightData: function initializeFightData(fights) {
             var th = this;
 
@@ -15230,6 +15262,32 @@ exports.default = {
 
             this.totalPowerUps--;
         },
+        removeShowOnButtons: function removeShowOnButtons(buttons) {
+            var deferred = (0, _d2.default)();
+
+            for (var i = 0; i < buttons.length; ++i) {
+                buttons[i].classList.remove('show');
+            }
+
+            deferred.resolve();
+
+            return deferred.promise;
+        },
+        selectButton: function selectButton(name, id, e) {
+            var siblingButtons = document.querySelectorAll('input[name="' + name + '"] + span');
+
+            this.removeShowOnButtons(siblingButtons).then(function () {
+                e.target.classList.add('show');
+            });
+
+            if (name === 'finish' && parseInt(id, 10) === 3) this.setDecision(e.target.dataset.fightId);
+        },
+        setDecision: function setDecision(fightId) {
+            if (fightId) {
+                this.fightData[parseInt(fightId, 10)].round = 5;
+                this.fightData[parseInt(fightId, 10)].minute = 5;
+            }
+        },
         selectFight: function selectFight(e) {
             var checkPick = function checkPick(playerPick) {
                 return playerPick.fightId === e.target.dataset.fightId;
@@ -15253,7 +15311,7 @@ exports.default = {
                 }
             } else {
                 // show the clear button
-                clearBtnNode = document.querySelector('div.fightsList__fightersWrap[data-fight-id="' + e.target.dataset.fightId + '"] .fightsList__clearButton');
+                clearBtnNode = document.querySelector('.fightsList__clearButton[data-fighter-id="' + e.target.dataset.fighterId + '"]');
                 clearBtnNode.classList.add('show');
 
                 if (this.currentFightId !== e.target.dataset.fightId) {
@@ -15338,11 +15396,13 @@ exports.default = {
                 fightPickEl,
                 powerupIndicators,
                 pickDataIndex,
-                clearBtnNode;
+                clearBtnNodes;
 
             // hide the clear button
-            clearBtnNode = document.querySelector('div.fightsList__fightersWrap[data-fight-id="' + fightId + '"] .fightsList__clearButton');
-            clearBtnNode.classList.remove('show');
+            clearBtnNodes = document.querySelectorAll('div.fightsList__fightersWrap[data-fight-id="' + fightId + '"] .fightsList__clearButton');
+            for (var i = 0; i < clearBtnNodes.length; ++i) {
+                clearBtnNodes[i].classList.remove('show');
+            }
 
             // search for this fight in picks
             pickDataIndex = this.playerPicks.findIndex(findPick);
@@ -15402,7 +15462,7 @@ exports.default = {
             }
         },
         deselectFighter: function deselectFighter(fighterId) {
-            var fighterImageToDeselect, fighterIndicatorToDeselect, powerUpImageToDeselect;
+            var fighterImageToDeselect, fighterIndicatorToDeselect, powerUpImageToDeselect, clearBtnToDeselect;
 
             fighterImageToDeselect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
             if (fighterImageToDeselect.classList.contains('selected')) {
@@ -15411,6 +15471,8 @@ exports.default = {
                 fighterIndicatorToDeselect.classList.remove('show');
                 powerUpImageToDeselect = document.querySelector('img.fightsList__powerup[data-fighter-id="' + fighterId + '"]');
                 powerUpImageToDeselect.classList.remove('show');
+                clearBtnToDeselect = document.querySelector('.fightsList__clearButton[data-fighter-id="' + fighterId + '"]');
+                clearBtnToDeselect.classList.remove('show');
             }
         },
         fighterName: function fighterName() {
@@ -15430,7 +15492,7 @@ exports.default = {
             this.currentFighterName = selectedFighter.firstname + ' ' + selectedFighter.lastname;
         },
         commitPicks: function commitPicks() {
-            var _this2 = this;
+            var _this = this;
 
             var localfightData = this.fightData,
                 localContestId = this.contestId,
@@ -15474,7 +15536,7 @@ exports.default = {
                     errors = this.validatePicks(compiledPicks);
                     if (!errors.length) {
                         this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, function (data) {
-                            if (data.success) _this2.$router.go({ path: '/contest/' + _this2.contestId + '/picks' });
+                            if (data.success) _this.$router.go({ path: '/contest/' + _this.contestId + '/picks' });
                         }, {
                             // Attach the JWT header
                             headers: _auth2.default.getAuthHeader()
@@ -15540,7 +15602,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Fighters {{ playerPicks.length }}/5 Chosen</h1>\n        <h4 class=\"pageHeader__subheader\">{{ totalPowerUps }}/3 Power-ups Used</h4>\n    </header>\n    <div class=\"fightsList\">\n        <ul>\n            <li class=\"fightsList__item\" v-for=\"fight in fightsList[0].fights\">\n                <div class=\"container-fluid fightsList__fightersWrap\" data-fight-id=\"{{ fight.id }}\">\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFight\" data-fighter-id=\"{{ fight.fighters[0].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-40 fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (fight.fighters[0].pivot.odds > fight.fighters[1].pivot.odds) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[0].fighter_image_name\" alt=\"{{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                <img class=\"fightsList__flag left\" :src=\"'public/image/flags/' + fight.fighters[0].nationality.country_flag_uri\" :show=\"\" alt=\"{{ fight.fighters[0].nationality.country_name }} Flag\">\n                                <img class=\"fightsList__powerup left\" :src=\"'public/image/powerups/' + fightData[fight.id].powerupImage\" data-fighter-id=\"{{ fight.fighters[0].id}}\" data-fight-id=\"{{ fight.id }}\" @click=\"removePowerUp(fight.id, $event)\">\n                                <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div :class=\"['fightsList__selectedIndicator', (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'favorite' : '']\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                        <span>\n                                            {{ (parseInt(fight.fighters[0].pivot.odds, 10) &gt; parseInt(fight.fighters[1].pivot.odds, 10)) ? 'Favorite +3' : 'Underdog +5' }}\n                                        </span>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"col-xs-60\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[0].height_ft }}' {{ fight.fighters[0].height_in }}\"\n                                {{ fight.fighters[0].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[0].wins }} - {{ fight.fighters[0].loses }} - {{ fight.fighters[0].draws }}\n                            </div>\n                            <div :class=\"['fightsList__spread', fight.fighters[0].pivot.odds > 0 ? 'favorite' : '']\">\n                                {{ fight.fighters[0].pivot.odds }}\n                            </div>\n                        </div>\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFight\" data-fighter-id=\"{{ fight.fighters[1].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-60 right\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[1].height_ft }}' {{ fight.fighters[1].height_in }}\"\n                                {{ fight.fighters[1].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[1].wins }} - {{ fight.fighters[1].loses }} - {{ fight.fighters[1].draws }}\n                            </div>\n                            <div :class=\"['fightsList__spread', fight.fighters[1].pivot.odds > 0 ? 'favorite' : '']\">\n                                {{ fight.fighters[1].pivot.odds }}\n                            </div>\n                        </div>\n                        <div class=\"col-xs-40  fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (parseInt(fight.fighters[1].pivot.odds, 10) > parseInt(fight.fighters[0].pivot.odds, 10)) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[1].fighter_image_name\" alt=\"{{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                <img class=\"fightsList__flag right\" :src=\"'public/image/flags/' + fight.fighters[1].nationality.country_flag_uri\" alt=\"{{ fight.fighters[1].nationality.country_name }} Flag\">\n                                <img class=\"fightsList__powerup right\" :src=\"'public/image/powerups/' + fightData[fight.id].powerupImage\" data-fighter-id=\"{{ fight.fighters[1].id}}\" data-fight-id=\"{{ fight.id }}\" @click=\"removePowerUp(fight.id, $event)\">\n                                 <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div :class=\"['fightsList__selectedIndicator', (fight.fighters[1].pivot.odds > fight.fighters[0].pivot.odds) ? 'favorite' : '']\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                        <span>\n                                            {{ (parseInt(fight.fighters[1].pivot.odds, 10) &gt; parseInt(fight.fighters[0].pivot.odds, 10)) ? 'Favorite +3' : 'Underdog +5' }}\n                                        </span>\n                                    </div>\n                                </div>\n                            </div><!-- .fightsList__fighterImgWrap -->\n                        </div><!-- .fightsList__fighterWrap -->\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                    <button @click=\"clearFight(fight.id, $event)\" type=\"button\" class=\"fightsList__clearButton\">X<span class=\"visuallyhidden\">Clear</span>\n                    </button>\n                </div><!-- .fightsList__fightersWrap -->\n                <div class=\"fightsList__pick\" id=\"{{ fight.id }}\" data-fight-id=\"{{ fight.id }}\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">How will {{ currentFighterName }} win?</div>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select v-model=\"fightData[fight.id].finishId\">\n                                <option value=\"0\">Choose Finish (+5)</option>\n                                <option v-for=\"finish in finishes\" value=\"{{ finish.id }}\">{{ finish.name }} (+{{ finish.points }})</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select v-model=\"fightData[fight.id].round\">\n                                <option value=\"0\">Choose Round (+2)</option>\n                                <option value=\"1\">Round 1 (+2)</option>\n                                <option value=\"2\">Round 2 (+2)</option>\n                                <option value=\"3\">Round 3 (+2)</option>\n                                <option value=\"4\">Round 4 (+2)</option>\n                                <option value=\"5\">Round 5 (+2)</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select v-model=\"fightData[fight.id].minute\">\n                                <option value=\"0\">Choose Minute (+1)</option>\n                                <option value=\"1\">Minute 1 (+1)</option>\n                                <option value=\"2\">Minute 2 (+1)</option>\n                                <option value=\"3\">Minute 3 (+1)</option>\n                                <option value=\"4\">Minute 4 (+1)</option>\n                                <option value=\"5\">Minute 5 (+1)</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">Power-up (optional)</div>\n                        </div>\n                        <div class=\"col-xs-100 powerUpsList\">\n                            <div class=\"col-xs-23 col-xs-offset-2\" v-for=\"powerUp in powerUps\">\n                                <button class=\"powerUpList__btn\" type=\"button\">\n                                    <span class=\"visuallyhidden\">{{ powerUp.name }}</span>\n                                    <img :src=\"'public/image/powerups/' + powerUp.image_name\" @click=\"confirmPowerUp\" data-power-up=\"{{ powerUp.power_up_id }}\" data-fight-id=\"{{ fight.id }}\" alt=\"{{ powerUp.name }} Image\">\n                                    <span :style=\"{color: powerUp.color, fontSize: '0.9rem'}\">{{ powerUp.name }}</span>\n                                </button>\n                            </div>\n                        </div>\n                        <div class=\"col-xs-100 button-wrap\">\n                            <button @click=\"closeFight(fight.id, $event)\" type=\"button\" class=\"button button--green\">Done</button>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n                <button type=\"button\" class=\"button button--primary\" @click=\"commitPicks\">Save Picks</button>\n            </div>\n        </div>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <section :class=\"powerUpModalClasses\">\n        <h3 class=\"powerUpModal__title\" :style=\"{color: selectedPowerUp.color}\">{{ selectedPowerUp.title }}</h3>\n        <img class=\"powerUpModal__image\" :src=\"'public/image/powerups/' + selectedPowerUp.image_name\" alt=\"{{ selectedPowerUp.title }}\">\n        <div class=\"powerUpModal__description\">\n            {{{ selectedPowerUp.description }}}\n        </div>\n        <div class=\"powerUpModal__points\" :style=\"{color: selectedPowerUp.color}\">\n            +{{ selectedPowerUp.bonus_points }} points\n        </div>\n        <div class=\"powerUpModal__apply\">\n            <p class=\"powerUpModal__apply--big\">Apply this power up?</p>\n            <p :style=\"{color: selectedPowerUp.color}\">Failure results in a -{{ selectedPowerUp.penalty_points }} penalty</p>\n        </div>\n        <div class=\"powerUpModal__confirm\">\n            <button @click=\"powerUpModalClose\" class=\"powerUpModal__confirm--no\">No</button>\n            <button @click=\"selectPowerUp(selectedPowerUp.fightId, selectedPowerUp.id, selectedPowerUp.image_name, $event)\" class=\"powerUpModal__confirm--yes\">Yes</button>\n        </div>\n        <button @click=\"powerUpModalClose\" type=\"button\" class=\"powerUpModal__close\">x</button>\n    </section>\n    <section :class=\"alertNoticeClasses\">\n        <div>\n            <h2 class=\"alertNotice__header\">{{ alertNotice.header }}</h2>\n            <div class=\"alertNotice__subject\">{{ alertNotice.subject }}</div>\n            <div class=\"alertNotice__body\">\n                {{{ alertNotice.body }}}\n            </div>\n            <button @click=\"alertNoticeClose\" type=\"button\" class=\"alertModal__close\">x</button>\n        </div>\n        <div v-if=\"alertNotice.action\" class=\"button-wrap\">\n            <button @click=\"alertNoticeClose\" type=\"button\" class=\"button button--green\">Got It</button>\n        </div>\n    </section>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Fighters {{ playerPicks.length }}/5 Chosen</h1>\n        <h4 class=\"pageHeader__subheader\">{{ totalPowerUps }}/3 Power-ups Used</h4>\n    </header>\n    <div class=\"fightsList\">\n        <ul>\n            <li class=\"fightsList__item\" v-for=\"fight in fightsList[0].fights\">\n                <div class=\"container-fluid fightsList__fightersWrap\" data-fight-id=\"{{ fight.id }}\">\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFight\" data-fighter-id=\"{{ fight.fighters[0].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-40 fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (fight.fighters[0].pivot.odds > fight.fighters[1].pivot.odds) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[0].fighter_image_name\" alt=\"{{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                <img class=\"fightsList__powerup left\" :src=\"'public/image/powerups/' + fightData[fight.id].powerupImage\" data-fighter-id=\"{{ fight.fighters[0].id }}\" data-fight-id=\"{{ fight.id }}\" @click=\"removePowerUp(fight.id, $event)\">\n                                <button @click=\"clearFight(fight.id, fight.fighters[0].id, $event)\" type=\"button\" class=\"fightsList__clearButton left\" data-fighter-id=\"{{fight.fighters[0].id}}\">X<span class=\"visuallyhidden\">Clear</span>\n                                </button>\n                                <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div :class=\"['fightsList__selectedIndicator', (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'favorite' : '']\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                        <span>\n                                            {{ (parseInt(fight.fighters[0].pivot.odds, 10) &gt; parseInt(fight.fighters[1].pivot.odds, 10)) ? 'Favorite (+3)' : 'Underdog (+5)' }}\n                                        </span>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"col-xs-60\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[0].height_ft }}' {{ fight.fighters[0].height_in }}\"\n                                {{ fight.fighters[0].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[0].wins }} - {{ fight.fighters[0].loses }} - {{ fight.fighters[0].draws }}\n                            </div>\n                            <div :class=\"['fightsList__spread', fight.fighters[0].pivot.odds > 0 ? 'favorite' : '']\">\n                                {{ fight.fighters[0].pivot.odds }}\n                            </div>\n                        </div>\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFight\" data-fighter-id=\"{{ fight.fighters[1].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-60 right\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[1].height_ft }}' {{ fight.fighters[1].height_in }}\"\n                                {{ fight.fighters[1].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[1].wins }} - {{ fight.fighters[1].loses }} - {{ fight.fighters[1].draws }}\n                            </div>\n                            <div :class=\"['fightsList__spread', fight.fighters[1].pivot.odds > 0 ? 'favorite' : '']\">\n                                {{ fight.fighters[1].pivot.odds }}\n                            </div>\n                        </div>\n                        <div class=\"col-xs-40  fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (parseInt(fight.fighters[1].pivot.odds, 10) > parseInt(fight.fighters[0].pivot.odds, 10)) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[1].fighter_image_name\" alt=\"{{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                <img class=\"fightsList__powerup right\" :src=\"'public/image/powerups/' + fightData[fight.id].powerupImage\" data-fighter-id=\"{{ fight.fighters[1].id }}\" data-fight-id=\"{{ fight.id }}\" @click=\"removePowerUp(fight.id, $event)\">\n                                <button @click=\"clearFight(fight.id, fight.fighters[1].id, $event)\" type=\"button\" class=\"fightsList__clearButton right\" data-fighter-id=\"{{fight.fighters[1].id}}\">X<span class=\"visuallyhidden\">Clear</span>\n                                </button>\n                                <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div :class=\"['fightsList__selectedIndicator', (fight.fighters[1].pivot.odds > fight.fighters[0].pivot.odds) ? 'favorite' : '']\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                        <span>\n                                            {{ (parseInt(fight.fighters[1].pivot.odds, 10) &gt; parseInt(fight.fighters[0].pivot.odds, 10)) ? 'Favorite (+3)' : 'Underdog (+5)' }}\n                                        </span>\n                                    </div>\n                                </div>\n                            </div><!-- .fightsList__fighterImgWrap -->\n                        </div><!-- .fightsList__fighterWrap -->\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                </div><!-- .fightsList__fightersWrap -->\n                <div class=\"fightsList__pick\" id=\"{{ fight.id }}\" data-fight-id=\"{{ fight.id }}\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">How will {{ currentFighterName }} win? <span class=\"fightsList__pointsIndicator\"></span></div>\n                        </div>\n                        <!-- finish selectors -->\n                        <div class=\"col-xs-100\">\n                            <label v-for=\"finish in finishes\" @click.prevent=\"selectButton('finish', finish.id, $event)\" for=\"finish{{finish.id}}\" class=\"fightsList__pickButton\">\n                                <input v-model=\"fightData[parseInt(fight.id, 10)].finishId\" type=\"radio\" value=\"{{ finish.id }}\" name=\"finish\" id=\"finish{{ finish.id }}\" data-points=\"{{ finish.points }}\">\n                                <span data-fight-id=\"{{ fight.id }}\">{{ finish.name }}</span>\n                            </label>\n                        </div>\n                        <!-- round selector -->\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">Which round? <span class=\"fightsList__pointsIndicator\"></span></div>\n                            <label v-for=\"round in 5\" @click.prevent=\"selectButton('round', round, $event)\" for=\"round{{round}}\" class=\"fightsList__pickButton\">\n                                <input v-model=\"fightData[parseInt(fight.id, 10)].round\" type=\"radio\" value=\"{{ round + 1 }}\" name=\"round\" id=\"round{{ round }}\" data-points=\"2\">\n                                <span data-fight-id=\"{{ fight.id }}\">{{ round + 1 }}</span>\n                            </label>\n                        </div>\n                        <!-- minute selectors -->\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">Which minute? <span class=\"fightsList__pointsIndicator\"></span></div>\n                            <label v-for=\"minute in 5\" @click.prevent=\"selectButton('minute', minute, $event)\" for=\"minute{{minute}}\" class=\"fightsList__pickButton\">\n                                <input v-model=\"fightData[parseInt(fight.id, 10)].minute\" type=\"radio\" value=\"{{ minute + 1 }}\" name=\"minute\" id=\"minute{{ minute }}\" data-points=\"1\">\n                                <span data-fight-id=\"{{ fight.id }}\">{{ minute + 1 }}</span>\n                            </label>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">Power-up (optional)</div>\n                        </div>\n                        <div class=\"col-xs-100 powerUpsList\">\n                            <div class=\"col-xs-23 col-xs-offset-2\" v-for=\"powerUp in powerUps\">\n                                <button class=\"powerUpList__btn\" type=\"button\">\n                                    <span class=\"visuallyhidden\">{{ powerUp.name }}</span>\n                                    <img :src=\"'public/image/powerups/' + powerUp.image_name\" @click=\"confirmPowerUp\" data-power-up=\"{{ powerUp.power_up_id }}\" data-fight-id=\"{{ fight.id }}\" alt=\"{{ powerUp.name }} Image\">\n                                    <span :style=\"{color: powerUp.color, fontSize: '0.9rem'}\">{{ powerUp.name }}</span>\n                                </button>\n                            </div>\n                        </div>\n                        <div class=\"col-xs-100 button-wrap\">\n                            <button @click=\"closeFight(fight.id, $event)\" type=\"button\" class=\"button button--green\">Done</button>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n                <button type=\"button\" class=\"button button--primary\" @click=\"commitPicks\">Save Picks</button>\n            </div>\n        </div>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <section :class=\"powerUpModalClasses\">\n        <h3 class=\"powerUpModal__title\" :style=\"{color: selectedPowerUp.color}\">{{ selectedPowerUp.title }}</h3>\n        <img class=\"powerUpModal__image\" :src=\"'public/image/powerups/' + selectedPowerUp.image_name\" alt=\"{{ selectedPowerUp.title }}\">\n        <div class=\"powerUpModal__description\">\n            {{{ selectedPowerUp.description }}}\n        </div>\n        <div class=\"powerUpModal__points\" :style=\"{color: selectedPowerUp.color}\">\n            +{{ selectedPowerUp.bonus_points }} points\n        </div>\n        <div class=\"powerUpModal__apply\">\n            <p class=\"powerUpModal__apply--big\">Apply this power up?</p>\n            <p :style=\"{color: selectedPowerUp.color}\">Failure results in a -{{ selectedPowerUp.penalty_points }} penalty</p>\n        </div>\n        <div class=\"powerUpModal__confirm\">\n            <button @click=\"powerUpModalClose\" class=\"powerUpModal__confirm--no\">No</button>\n            <button @click=\"selectPowerUp(selectedPowerUp.fightId, selectedPowerUp.id, selectedPowerUp.image_name, $event)\" class=\"powerUpModal__confirm--yes\">Yes</button>\n        </div>\n        <button @click=\"powerUpModalClose\" type=\"button\" class=\"powerUpModal__close\">x</button>\n    </section>\n    <section :class=\"alertNoticeClasses\">\n        <div>\n            <h2 class=\"alertNotice__header\">{{ alertNotice.header }}</h2>\n            <div class=\"alertNotice__subject\">{{ alertNotice.subject }}</div>\n            <div class=\"alertNotice__body\">\n                {{{ alertNotice.body }}}\n            </div>\n            <button @click=\"alertNoticeClose\" type=\"button\" class=\"alertModal__close\">x</button>\n        </div>\n        <div v-if=\"alertNotice.action\" class=\"button-wrap\">\n            <button @click=\"alertNoticeClose\" type=\"button\" class=\"button button--green\">Got It</button>\n        </div>\n    </section>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -15552,7 +15614,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],39:[function(require,module,exports){
+},{"../auth":33,"../index":44,"../libs/d.js":45,"vue":32,"vue-hot-reload-api":6}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15593,7 +15655,7 @@ exports.default = {
 	},
 	ready: function ready() {
 		if (!_auth2.default.validate()) {
-			_auth2.default.refresh(this, 'events');
+			this.tokenRefresh();
 		} else {
 			_index.router.go('/events');
 		}
@@ -15602,6 +15664,18 @@ exports.default = {
 
 
 	methods: {
+		tokenRefresh: function tokenRefresh() {
+			var vm = this;
+
+			this.$http.post(URL.base + '/api/v1/refresh', {}, {
+				headers: _auth2.default.getAuthHeader()
+			}).then(function (response) {
+				localStorage.setItem('id_token', response.data.token);
+				_index.router.go('/events');
+			}, function (err) {
+				_index.router.go('login');
+			});
+		},
 		submit: function submit() {
 			var credentials = {
 				email: this.credentials.email,
@@ -15642,7 +15716,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],40:[function(require,module,exports){
+},{"../auth":33,"../index":44,"vue":32,"vue-hot-reload-api":6}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15685,51 +15759,66 @@ exports.default = {
                 base: window.URL.base,
                 current: window.URL.current,
                 full: window.URL.full
-            },
-            playerIsValid: true
+            }
         };
     },
     created: function created() {
         this.working = true;
     },
     ready: function ready() {
-        var _this = this;
-
-        if (this.playerIsValid) {
-            //console.log(URL.base);
-            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/picks', function (data) {
-                _this.picksList = data.picks;
-                _this.working = false;
-
-                _this.$http.get(URL.base + '/api/v1/contest/' + _this.$route.params.contest_id + '/results', function (data) {
-                    _this.results = data.results;
-                    _this.parseResults(data.results);
-                }, {
-                    // Attach the JWT header
-                    headers: _auth2.default.getAuthHeader()
-                }).error(function (err) {
-                    console.log(err);
-                });
-
-                _this.$http.get(URL.base + '/api/v1/contest/' + _this.$route.params.contest_id + '/standings', function (data) {
-                    _this.standings = data.data[0].standings;
-                    _this.playerId = data.data[0].player;
-                    _this.determineRank(data.data[0].standings);
-                }, {
-                    // Attach the JWT header
-                    headers: _auth2.default.getAuthHeader()
-                });
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            }).error(function (err) {
-                return console.log(err);
-            });
+        if (!_auth2.default.validate()) {
+            this.tokenRefresh();
+        } else {
+            this.fetch();
         }
     },
 
 
     methods: {
+        tokenRefresh: function tokenRefresh() {
+            var vm = this;
+
+            this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                localStorage.setItem('id_token', response.data.token);
+                vm.fetch();
+            }, function (err) {
+                _index.router.go('login');
+            });
+        },
+        fetch: function fetch() {
+            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/picks', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.picksList = response.data.picks;
+                this.working = false;
+
+                this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', {}, {
+                    // Attach the JWT header
+                    headers: _auth2.default.getAuthHeader()
+                }).then(function (response) {
+                    this.results = response.data.results;
+                    this.parseResults(response.data.results);
+                }, function (err) {
+                    console.log(err);
+                });
+
+                this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings', {}, {
+                    // Attach the JWT header
+                    headers: _auth2.default.getAuthHeader()
+                }).then(function (response) {
+                    this.standings = response.data.data[0].standings;
+                    this.playerId = response.data.data[0].player;
+                    this.determineRank(response.data.data[0].standings);
+                }, function (err) {
+                    console.log(err);
+                });
+            }, function (err) {
+                console.log(err);
+            });
+        },
         toggleDetails: function toggleDetails(pickId, e) {
             e.preventDefault();
             var pickToToggle = document.querySelector('li.fightPicksList__item[data-pick-id="' + pickId + '"]');
@@ -15832,7 +15921,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Picks</h1>\n        <h4 class=\"pageHeader__subheader\">{{ picksList[0].event.event_short_name }}</h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Buy in:</span> ${{ picksList[0].contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Standing:</span> <span v-if=\"results.length\">{{ playerRanking }}/{{ standings.length }}</span>\n                    <span v-else=\"\">No Results Reported</span>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Prize Pool:</span> ${{ picksList[0].contest.prize_pool  }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Your Winnigs:</span> $0\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"fightPicksList\">\n        <ul class=\"stripped-list\">\n            <li class=\"fightPicksList__item\" @click=\"toggleDetails(pick.pick_id, $event)\" v-for=\"pick in picksList\" data-pick-id=\"{{ pick.pick_id }}\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-15\">\n                        <img class=\"fightPicksList__image\" :src=\"'public/image/fighters/' +  pick.fighter.image\">\n                    </div>\n                    <div class=\"col-xs-40\">\n                        <div class=\"fightPicksList__fighterName\">\n                            {{ pick.fighter.name }}\n                        </div>\n                        <div :class=\"['fightPicksList__odds', (parseInt(pick.fighter.odds, 10) > 0) ? 'favorite' : '' ]\">\n                            {{ pick.fighter.odds  }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\">Result</div>\n                        <div v-if=\"!results.length\" class=\"fightPicksList__stat\">---</div>\n                        <div v-else=\"\" :class=\"['fightPicksList__stat', outcome[pick.fight_id].fighter ? 'correct' : '']\">{{ outcome[pick.fight_id].fighter ? 'W' : 'L' }}</div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\">Finish</div>\n                        <div v-if=\"!results.length\" class=\"fightPicksList__stat\">---</div>\n                        <div v-else=\"\" :class=\"['fightPicksList__stat', outcome[pick.fight_id].finish_id ? 'correct' : '']\">{{ outcome[pick.fight_id].finish_abbr }}</div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\">Points</div>\n                        <div v-if=\"!results.length\" class=\"fightPicksList__stat\">---</div>\n                        <div v-else=\"\" :class=\"['fightPicksList__stat', outcome[pick.fight_id].points > 0 ? 'correct' : '']\">{{ outcome[pick.fight_id].points }}</div>\n                    </div>\n                </div>\n                <div class=\"fightPicksList__details\">\n                    <div class=\"container-fluid\">\n                        <div v-if=\"!results.length\" class=\"col-xs-100 fightPicksList__resultString\">\n                            Fight Results Not Available\n                        </div>\n                        <div v-else=\"\" class=\"col-xs-70 col-xs-push-15 fightPicksList__resultString\">\n                            {{ pick.fighter.name }} <span v-if=\"outcome[pick.fight_id].fighter\">wins</span><span v-else=\"\">loses</span> via {{ outcome[pick.fight_id].finish_abbr }}\n                            in Round {{ outcome[pick.fight_id].roundResult }} at {{ outcome[pick.fight_id].totalTime }}\n                        </div>\n                        <div class=\"col-xs-100 fightPicksList__choicesTitle\">\n                            Your Choices\n                        </div>\n                        <!-- figher row -->\n                        <div class=\"col-xs-100 fightPicksList__row\">\n                            <div class=\"col-xs-10 fightPicksList__icon\">\n                                <img src=\"public/image/icons/star.png\">\n                            </div>\n                            <div class=\"col-xs-75\">\n                                <h4 v-if=\"(parseInt(pick.fighter.odds, 10) > 0)\" class=\"fightPicksList__selectionTitle\">Favorite to Win</h4>\n                                <h4 v-else=\"\" class=\"fightPicksList__selectionTitle\">Underdog to Win</h4>\n                                <p class=\"fighPicksList__selectionResults\" v-if=\"results.length\">\n                                    <span v-if=\"outcome[pick.fight_id].fighter\">You chose the winning fighter</span>\n                                    <span v-else=\"\">You didn't chose the winning figher</span>\n                                </p>\n                                <p class=\"fighPicksList__selectionResults\" v-else=\"\">\n                                    Results not entered yet\n                                </p>\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__points\">\n                                ---\n                            </div>\n                            <div v-else=\"\" :class=\"['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].fighter ? 'correct' : '']\">\n                                +{{ outcome[pick.fight_id].fighterPoints }}\n                            </div>\n                        </div>\n                        <!-- finish row -->\n                        <div class=\"col-xs-100 fightPicksList__row\">\n                            <div class=\"col-xs-10 fightPicksList__icon\">\n                                <img src=\"public/image/icons/fist.png\">\n                            </div>\n                            <div class=\"col-xs-75\">\n                                <h4 class=\"fightPicksList__selectionTitle\">{{ pick.finish.finish_type }}</h4>\n                                <p class=\"fighPicksList__selectionResults\" v-if=\"results.length\">\n                                    <span v-if=\"outcome[pick.fight_id].finish_id\">You chose the winning finish</span>\n                                    <span v-else=\"\">You didn't choose the winning finish</span>\n                                </p>\n                                <p class=\"fightPicksList__selectionResults\" v-else=\"\">\n                                    Results not entered yet\n                                </p>\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__points\">\n                                ---\n                            </div>\n                            <div v-else=\"\" :class=\"['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].finish_id ? 'correct' : '']\">\n                                <span v-if=\"outcome[pick.fight_id].finish_id\">+5</span>\n                                <span v-else=\"\">0</span>\n                            </div>\n                        </div>\n                        <!-- round row -->\n                        <div class=\"col-xs-100 fightPicksList__row\">\n                            <div class=\"col-xs-10 fightPicksList__icon\">\n                                <img src=\"public/image/icons/bell.png\">\n                            </div>\n                            <div class=\"col-xs-75\">\n                                <h4 class=\"fightPicksList__selectionTitle\">Round {{ numberNames[parseInt(pick.round, 10) - 1] }}</h4>\n                                <p class=\"fighPicksList__selectionResults\" v-if=\"results.length\">\n                                    <span v-if=\"outcome[pick.fight_id].round\">You chose the winning round</span>\n                                    <span v-else=\"\">You didn't choose the winning round</span>\n                                </p>\n                                <p class=\"fighPicksList__selectionResults\" v-else=\"\">\n                                    Results not entered yet\n                                </p>\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__points\">\n                                ---\n                            </div>\n                            <div v-else=\"\" :class=\"['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].round ? 'correct' : '']\">\n                                <span v-if=\"outcome[pick.fight_id].round\">+2</span>\n                                <span v-else=\"\">0</span>\n                            </div>\n                        </div>\n                        <!-- minute row -->\n                        <div class=\"col-xs-100 fightPicksList__row\">\n                            <div class=\"col-xs-10 fightPicksList__icon\">\n                                <img src=\"public/image/icons/stopwatch.png\">\n                            </div>\n                            <div class=\"col-xs-75\">\n                                <h4 class=\"fightPicksList__selectionTitle\">Minute {{ numberNames[parseInt(pick.minute, 10) - 1] }}</h4>\n                                <p class=\"fighPicksList__selectionResults\" v-if=\"results.length\">\n                                    <span v-if=\"outcome[pick.fight_id].minute\">You chose the winning minute</span>\n                                    <span v-else=\"\">You didn't chose the winning minute</span>\n                                </p>\n                                <p class=\"fighPicksList__selectionResults\" v-else=\"\">\n                                    Results not entered yet\n                                </p>\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__points\">\n                                ---\n                            </div>\n                            <div v-else=\"\" :class=\"['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].minute ? 'correct' : '']\">\n                                <span v-if=\"outcome[pick.fight_id].minute\">+1</span>\n                                <span v-else=\"\">0</span>\n                            </div>\n                        </div>\n                        <!-- power up row -->\n                        <div v-if=\"pick.power_up.image\" class=\"col-xs-100 fightPicksList__row\">\n                            <div class=\"col-xs-10 fightPicksList__icon\">\n                                <img :src=\"'public/image/powerups/' + pick.power_up.image\">\n                            </div>\n                            <div class=\"col-xs-75\">\n                                <h4 class=\"fightPicksList__powerUpName\" :style=\"{color: pick.power_up.color}\">{{ pick.power_up.power_up_name }}</h4>\n                                <p class=\"fighPicksList__selectionResults\" v-show=\"results.length\">\n                                    <span v-if=\"parseInt(outcome[pick.fight_id].power_up_points, 10) > 0\">You chose a winning power up</span>\n                                    <span v-else=\"\">You're fighter did not achieve the power up</span>\n                                </p>\n                                <p class=\"fighPicksList__selectionResults\" v-else=\"\">\n                                    Results not entered yet\n                                </p>\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__points\" :style=\"{color: pick.power_up.color}\">\n                                ---\n                            </div>\n                            <div v-else=\"\" :class=\"['col-xs-15', 'fightPicksList__points', parseInt(outcome[pick.fight_id].power_up_points, 10) > 0 ? 'correct' : 'penalty']\" style=\"{color: pick.power_up.color}\">\n                                {{ outcome[pick.fight_id].power_up_points }}\n                            </div>\n                        </div>\n                        <!-- ponits total -->\n                        <div class=\"col-xs-100 fightPicksList__totalWrap\">\n                            <div class=\"col-xs-85 fightPicksList__totalTitle\">\n                                Total\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__totalValue\">\n                                ---\n                            </div>\n                            <div v-else=\"\" class=\"col-xs-15 fightPicksList__totalValue\">\n                                {{ outcome[pick.fight_id].points }}\n                        </div>\n                    </div>\n                </div>\n            </div></li>\n        </ul>\n        <div v-if=\"results.length\" class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n                <button type=\"button\" class=\"button button--primary\" v-link=\"{ path: '/contest/' + picksList[0].contest.id + '/standings' }\">Lobby</button>\n            </div>\n        </div>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Picks</h1>\n        <h4 class=\"pageHeader__subheader\">{{ picksList[0].event.event_short_name }} / <a v-link=\"{ path: '/contest/' + picksList[0].contest.id + '/results' }\">Results</a> </h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Entry Fee:</span> ${{ picksList[0].contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Standing:</span> <span v-if=\"results.length\">{{ playerRanking }}/{{ standings.length }}</span>\n                    <span v-else=\"\">N/A</span>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Prize Pool:</span> ${{ picksList[0].contest.prize_pool  }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Your Winnings:</span> $0\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"fightPicksList\">\n        <ul class=\"stripped-list\">\n            <li class=\"fightPicksList__item\" @click=\"toggleDetails(pick.pick_id, $event)\" v-for=\"pick in picksList\" data-pick-id=\"{{ pick.pick_id }}\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-15\">\n                        <img class=\"fightPicksList__image\" :src=\"'public/image/fighters/' +  pick.fighter.image\">\n                    </div>\n                    <div class=\"col-xs-40\">\n                        <div class=\"fightPicksList__fighterName\">\n                            {{ pick.fighter.name }}\n                        </div>\n                        <div :class=\"['fightPicksList__odds', (parseInt(pick.fighter.odds, 10) > 0) ? 'favorite' : '' ]\">\n                            {{ pick.fighter.odds  }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\">Result</div>\n                        <div v-if=\"!results.length\" class=\"fightPicksList__stat\">--</div>\n                        <div v-else=\"\" :class=\"['fightPicksList__stat', outcome[pick.fight_id].fighter ? 'correct' : '']\">{{ outcome[pick.fight_id].fighter ? 'W' : 'L' }}</div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\">Finish</div>\n                        <div v-if=\"!results.length\" class=\"fightPicksList__stat\">--</div>\n                        <div v-else=\"\" :class=\"['fightPicksList__stat', outcome[pick.fight_id].finish_id ? 'correct' : '']\">{{ outcome[pick.fight_id].finish_abbr }}</div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"fightPicksList__title\">Points</div>\n                        <div v-if=\"!results.length\" class=\"fightPicksList__stat\">--</div>\n                        <div v-else=\"\" :class=\"['fightPicksList__stat', outcome[pick.fight_id].points > 0 ? 'correct' : '']\">{{ outcome[pick.fight_id].points }}</div>\n                    </div>\n                </div>\n                <div class=\"fightPicksList__details\">\n                    <div class=\"container-fluid\">\n                        <div v-if=\"!results.length\" class=\"col-xs-100 fightPicksList__resultString\">\n                            Fight Results Not Available\n                        </div>\n                        <div v-else=\"\" class=\"col-xs-70 col-xs-push-15 fightPicksList__resultString\">\n                            {{ pick.fighter.name }} <span v-if=\"outcome[pick.fight_id].fighter\">wins</span><span v-else=\"\">loses</span> via {{ outcome[pick.fight_id].finish_abbr }}\n                            in Round {{ outcome[pick.fight_id].roundResult }} at {{ outcome[pick.fight_id].totalTime }}\n                        </div>\n                        <div class=\"col-xs-100 fightPicksList__choicesTitle\">\n                            Your Choices\n                        </div>\n                        <!-- figher row -->\n                        <div class=\"col-xs-100 fightPicksList__row\">\n                            <div class=\"col-xs-10 fightPicksList__icon\">\n                                <img src=\"public/image/icons/star.png\">\n                            </div>\n                            <div class=\"col-xs-75\">\n                                <h4 v-if=\"(parseInt(pick.fighter.odds, 10) > 0)\" class=\"fightPicksList__selectionTitle\">Favorite to Win</h4>\n                                <h4 v-else=\"\" class=\"fightPicksList__selectionTitle\">Underdog to Win</h4>\n                                <p class=\"fightPicksList__selectionResults\" v-if=\"results.length\">\n                                    <span v-if=\"outcome[pick.fight_id].fighter\">You chose the winning fighter</span>\n                                    <span v-else=\"\">You didn't chose the winning figher</span>\n                                </p>\n                                <p class=\"fightPicksList__selectionResults\" v-else=\"\">\n                                    Results not entered yet\n                                </p>\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__points\">\n                                --\n                            </div>\n                            <div v-else=\"\" :class=\"['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].fighter ? 'correct' : '']\">\n                                +{{ outcome[pick.fight_id].fighterPoints }}\n                            </div>\n                        </div>\n                        <!-- finish row -->\n                        <div class=\"col-xs-100 fightPicksList__row\">\n                            <div class=\"col-xs-10 fightPicksList__icon\">\n                                <img src=\"public/image/icons/fist.png\">\n                            </div>\n                            <div class=\"col-xs-75\">\n                                <h4 class=\"fightPicksList__selectionTitle\">{{ pick.finish.finish_type }}</h4>\n                                <p class=\"fightPicksList__selectionResults\" v-if=\"results.length\">\n                                    <span v-if=\"outcome[pick.fight_id].finish_id\">You chose the winning finish</span>\n                                    <span v-else=\"\">You didn't choose the winning finish</span>\n                                </p>\n                                <p class=\"fightPicksList__selectionResults\" v-else=\"\">\n                                    Results not entered yet\n                                </p>\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__points\">\n                                --\n                            </div>\n                            <div v-else=\"\" :class=\"['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].finish_id ? 'correct' : '']\">\n                                <span v-if=\"outcome[pick.fight_id].finish_id\">+5</span>\n                                <span v-else=\"\">0</span>\n                            </div>\n                        </div>\n                        <!-- round row -->\n                        <div class=\"col-xs-100 fightPicksList__row\">\n                            <div class=\"col-xs-10 fightPicksList__icon\">\n                                <img src=\"public/image/icons/bell.png\">\n                            </div>\n                            <div class=\"col-xs-75\">\n                                <h4 class=\"fightPicksList__selectionTitle\">Round {{ numberNames[parseInt(pick.round, 10) - 1] }}</h4>\n                                <p class=\"fightPicksList__selectionResults\" v-if=\"results.length\">\n                                    <span v-if=\"outcome[pick.fight_id].round\">You chose the winning round</span>\n                                    <span v-else=\"\">You didn't choose the winning round</span>\n                                </p>\n                                <p class=\"fightPicksList__selectionResults\" v-else=\"\">\n                                    Results not entered yet\n                                </p>\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__points\">\n                                --\n                            </div>\n                            <div v-else=\"\" :class=\"['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].round ? 'correct' : '']\">\n                                <span v-if=\"outcome[pick.fight_id].round\">+2</span>\n                                <span v-else=\"\">0</span>\n                            </div>\n                        </div>\n                        <!-- minute row -->\n                        <div class=\"col-xs-100 fightPicksList__row\">\n                            <div class=\"col-xs-10 fightPicksList__icon\">\n                                <img src=\"public/image/icons/stopwatch.png\">\n                            </div>\n                            <div class=\"col-xs-75\">\n                                <h4 class=\"fightPicksList__selectionTitle\">Minute {{ numberNames[parseInt(pick.minute, 10) - 1] }}</h4>\n                                <p class=\"fightPicksList__selectionResults\" v-if=\"results.length\">\n                                    <span v-if=\"outcome[pick.fight_id].minute\">You chose the winning minute</span>\n                                    <span v-else=\"\">You didn't chose the winning minute</span>\n                                </p>\n                                <p class=\"fightPicksList__selectionResults\" v-else=\"\">\n                                    Results not entered yet\n                                </p>\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__points\">\n                                --\n                            </div>\n                            <div v-else=\"\" :class=\"['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].minute ? 'correct' : '']\">\n                                <span v-if=\"outcome[pick.fight_id].minute\">+1</span>\n                                <span v-else=\"\">0</span>\n                            </div>\n                        </div>\n                        <!-- power up row -->\n                        <div v-if=\"pick.power_up.image\" class=\"col-xs-100 fightPicksList__row\">\n                            <div class=\"col-xs-10 fightPicksList__icon\">\n                                <img :src=\"'public/image/powerups/' + pick.power_up.image\">\n                            </div>\n                            <div class=\"col-xs-75\">\n                                <h4 class=\"fightPicksList__powerUpName\" :style=\"{color: pick.power_up.color}\">{{ pick.power_up.power_up_name }}</h4>\n                                <p class=\"fightPicksList__selectionResults\" v-show=\"results.length\">\n                                    <span v-if=\"parseInt(outcome[pick.fight_id].power_up_points, 10) > 0\">You chose a winning power up</span>\n                                    <span v-else=\"\">You're fighter did not achieve the power up</span>\n                                </p>\n                                <p class=\"fightPicksList__selectionResults\" v-else=\"\">\n                                    Results not entered yet\n                                </p>\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__points\" :style=\"{color: pick.power_up.color}\">\n                                --\n                            </div>\n                            <div v-else=\"\" :class=\"['col-xs-15', 'fightPicksList__points', parseInt(outcome[pick.fight_id].power_up_points, 10) > 0 ? 'correct' : 'penalty']\" style=\"{color: pick.power_up.color}\">\n                                {{ outcome[pick.fight_id].power_up_points }}\n                            </div>\n                        </div>\n                        <!-- ponits total -->\n                        <div class=\"col-xs-100 fightPicksList__totalWrap\">\n                            <div class=\"col-xs-85 fightPicksList__totalTitle\">\n                                Total\n                            </div>\n                            <div v-if=\"!results.length\" class=\"col-xs-15 fightPicksList__totalValue\">\n                                --\n                            </div>\n                            <div v-else=\"\" class=\"col-xs-15 fightPicksList__totalValue\">\n                                {{ outcome[pick.fight_id].points }}\n                        </div>\n                    </div>\n                </div>\n            </div></li>\n        </ul>\n        <div v-if=\"results.length\" class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n                <button type=\"button\" class=\"button button--primary\" v-link=\"{ path: '/contest/' + picksList[0].contest.id + '/standings' }\">Lobby</button>\n            </div>\n        </div>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -15844,7 +15933,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":43,"vue":32,"vue-hot-reload-api":6}],41:[function(require,module,exports){
+},{"../auth":33,"../index":44,"vue":32,"vue-hot-reload-api":6}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15928,6 +16017,141 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _auth = require('../auth');
+
+var _auth2 = _interopRequireDefault(_auth);
+
+var _index = require('../index');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+
+    props: ['working'],
+
+    data: function data() {
+        return {
+            fightsList: [{
+                fights: [],
+                event: {
+                    event_short_name: ''
+                }
+            }],
+            powerUps: {},
+            finishes: {},
+            working: false,
+            powerUpModalClasses: ['powerUpModal'],
+            fightData: [],
+            contestId: this.$route.params.contest_id,
+            URL: {
+                base: window.URL.base,
+                current: window.URL.current,
+                full: window.URL.full
+            }
+        };
+    },
+    created: function created() {
+        this.working = true;
+    },
+    ready: function ready() {
+        if (!_auth2.default.validate()) {
+            this.tokenRefresh();
+        } else {
+            this.fetch();
+        }
+    },
+
+
+    methods: {
+        tokenRefresh: function tokenRefresh() {
+            var vm = this;
+
+            this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                localStorage.setItem('id_token', response.data.token);
+                vm.fetch();
+            }, function (err) {
+                _index.router.go('login');
+            });
+        },
+        fetch: function fetch() {
+            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.fightsList = response.data.fights;
+                this.working = false;
+            }, function (err) {
+                console.log(err);
+            });
+
+            this.$http.get(URL.base + '/api/v1/power-ups', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.powerUps = response.data;
+            });
+
+            this.$http.get(URL.base + '/api/v1/finishes', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.finishes = response.data;
+            });
+        },
+        findPowerUp: function findPowerUp(powerUp) {
+            return powerUp.power_up_id === parseInt(this.powerUpId, 10);
+        },
+        selectFight: function selectFight(e) {},
+        switchFight: function switchFight(e) {
+            var fightToClose, fightToOpen;
+
+            fightToClose = document.querySelector('div.fightsList__pick[data-fight-id="' + this.currentFightId + '"]');
+            if (fightToClose) fightToClose.classList.toggle('show');
+
+            fightToOpen = document.querySelector('div.fightsList__pick[data-fight-id="' + e.target.dataset.fightId + '"]');
+            fightToOpen.classList.toggle('show');
+            // update currentFightId
+            this.currentFightId = e.target.dataset.fightId;
+        },
+        closeFight: function closeFight(fightId) {
+            var fightPickEl;
+
+            fightPickEl = document.querySelector('div.fightsList__pick[data-fight-id="' + fightId + '"]');
+            fightPickEl.classList.toggle('show');
+
+            this.currentFightId = '';
+            this.currentFighterId = '';
+        }
+    },
+
+    computed: {
+        loaderClasses: function loaderClasses() {
+            return this.working ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Fighters {{ playerPicks.length }}/5 Chosen</h1>\n        <h4 class=\"pageHeader__subheader\">{{ totalPowerUps }}/3 Power-ups Used</h4>\n    </header>\n    <div class=\"fightsList\">\n        <ul>\n            <li class=\"fightsList__item\" v-for=\"fight in fightsList[0].fights\">\n                <div class=\"container-fluid fightsList__fightersWrap\" data-fight-id=\"{{ fight.id }}\">\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFight\" data-fighter-id=\"{{ fight.fighters[0].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-40 fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (fight.fighters[0].pivot.odds > fight.fighters[1].pivot.odds) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[0].fighter_image_name\" alt=\"{{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                <img class=\"fightsList__powerup left\" :src=\"'public/image/powerups/' + fightData[fight.id].powerupImage\" data-fighter-id=\"{{ fight.fighters[0].id}}\" data-fight-id=\"{{ fight.id }}\" @click=\"removePowerUp(fight.id, $event)\">\n                                <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div :class=\"['fightsList__selectedIndicator', (parseInt(fight.fighters[0].pivot.odds, 10) > parseInt(fight.fighters[1].pivot.odds, 10)) ? 'favorite' : '']\" data-fighter-id=\"{{ fight.fighters[0].id }}\">\n                                        <span>\n                                            {{ (parseInt(fight.fighters[0].pivot.odds, 10) &gt; parseInt(fight.fighters[1].pivot.odds, 10)) ? 'Favorite (+3)' : 'Underdog (+5)' }}\n                                        </span>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"col-xs-60\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[0].firstname }} {{ fight.fighters[0].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[0].height_ft }}' {{ fight.fighters[0].height_in }}\"\n                                {{ fight.fighters[0].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[0].wins }} - {{ fight.fighters[0].loses }} - {{ fight.fighters[0].draws }}\n                            </div>\n                            <div :class=\"['fightsList__spread', fight.fighters[0].pivot.odds > 0 ? 'favorite' : '']\">\n                                {{ fight.fighters[0].pivot.odds }}\n                            </div>\n                        </div>\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                    <div class=\"col-xs-50 fightsList__fighterStatsWarp\">\n                        <div class=\"fightsList__clickableArea\" @click.stop.prevent=\"selectFight\" data-fighter-id=\"{{ fight.fighters[1].id }}\" data-fight-id=\"{{ fight.id }}\"></div>\n                        <div class=\"col-xs-60 right\">\n                            <div class=\"fightsList__fighterName\">\n                                {{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }}\n                            </div>\n                            <div class=\"fightsList__fighterHeight\">\n                                {{ fight.fighters[1].height_ft }}' {{ fight.fighters[1].height_in }}\"\n                                {{ fight.fighters[1].weight_lbs }}lbs.\n                            </div>\n                            <div class=\"fightsList__fighterRecord\">\n                                {{ fight.fighters[1].wins }} - {{ fight.fighters[1].loses }} - {{ fight.fighters[1].draws }}\n                            </div>\n                            <div :class=\"['fightsList__spread', fight.fighters[1].pivot.odds > 0 ? 'favorite' : '']\">\n                                {{ fight.fighters[1].pivot.odds }}\n                            </div>\n                        </div>\n                        <div class=\"col-xs-40  fightsList__fighterWrap\">\n                            <div class=\"fightsList__fighterImgWrap\" data-fight-id=\"{{ fight.id }}\">\n                                <img :class=\"['fightsList__fighter', (parseInt(fight.fighters[1].pivot.odds, 10) > parseInt(fight.fighters[0].pivot.odds, 10)) ? 'favorite' : '']\" :src=\"'public/image/fighters/' + fight.fighters[1].fighter_image_name\" alt=\"{{ fight.fighters[1].firstname }} {{ fight.fighters[1].lastname }} Image\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                <img class=\"fightsList__powerup right\" :src=\"'public/image/powerups/' + fightData[fight.id].powerupImage\" data-fighter-id=\"{{ fight.fighters[1].id}}\" data-fight-id=\"{{ fight.id }}\" @click=\"removePowerUp(fight.id, $event)\">\n                                 <div class=\"fightsList__selectedIndicatorWrap\">\n                                    <div :class=\"['fightsList__selectedIndicator', (fight.fighters[1].pivot.odds > fight.fighters[0].pivot.odds) ? 'favorite' : '']\" data-fighter-id=\"{{ fight.fighters[1].id }}\">\n                                        <span>\n                                            {{ (parseInt(fight.fighters[1].pivot.odds, 10) &gt; parseInt(fight.fighters[0].pivot.odds, 10)) ? 'Favorite (+3)' : 'Underdog (+5)' }}\n                                        </span>\n                                    </div>\n                                </div>\n                            </div><!-- .fightsList__fighterImgWrap -->\n                        </div><!-- .fightsList__fighterWrap -->\n                    </div><!-- .fightsList__fighterStatsWarp -->\n                    <button @click=\"clearFight(fight.id, $event)\" type=\"button\" class=\"fightsList__clearButton\">X<span class=\"visuallyhidden\">Clear</span>\n                    </button>\n                </div><!-- .fightsList__fightersWrap -->\n                <div class=\"fightsList__pick\" id=\"{{ fight.id }}\" data-fight-id=\"{{ fight.id }}\">\n                    <div class=\"container-fluid\">\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">How will {{ currentFighterName }} win?</div>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select v-model=\"fightData[fight.id].finishId\">\n                                <option value=\"0\">Choose Finish (+5)</option>\n                                <option v-for=\"finish in finishes\" value=\"{{ finish.id }}\">{{ finish.name }} (+{{ finish.points }})</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select v-model=\"fightData[fight.id].round\">\n                                <option value=\"0\">Choose Round (+2)</option>\n                                <option value=\"1\">Round 1 (+2)</option>\n                                <option value=\"2\">Round 2 (+2)</option>\n                                <option value=\"3\">Round 3 (+2)</option>\n                                <option value=\"4\">Round 4 (+2)</option>\n                                <option value=\"5\">Round 5 (+2)</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <select v-model=\"fightData[fight.id].minute\">\n                                <option value=\"0\">Choose Minute (+1)</option>\n                                <option value=\"1\">Minute 1 (+1)</option>\n                                <option value=\"2\">Minute 2 (+1)</option>\n                                <option value=\"3\">Minute 3 (+1)</option>\n                                <option value=\"4\">Minute 4 (+1)</option>\n                                <option value=\"5\">Minute 5 (+1)</option>\n                            </select>\n                        </div>\n                        <div class=\"col-xs-100\">\n                            <div class=\"fightsList__pickHeader\">Power-up (optional)</div>\n                        </div>\n                        <div class=\"col-xs-100 powerUpsList\">\n                            <div class=\"col-xs-23 col-xs-offset-2\" v-for=\"powerUp in powerUps\">\n                                <button class=\"powerUpList__btn\" type=\"button\">\n                                    <span class=\"visuallyhidden\">{{ powerUp.name }}</span>\n                                    <img :src=\"'public/image/powerups/' + powerUp.image_name\" @click=\"confirmPowerUp\" data-power-up=\"{{ powerUp.power_up_id }}\" data-fight-id=\"{{ fight.id }}\" alt=\"{{ powerUp.name }} Image\">\n                                    <span :style=\"{color: powerUp.color, fontSize: '0.9rem'}\">{{ powerUp.name }}</span>\n                                </button>\n                            </div>\n                        </div>\n                        <div class=\"col-xs-100 button-wrap\">\n                            <button @click=\"closeFight(fight.id, $event)\" type=\"button\" class=\"button button--green\">Done</button>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n                <button type=\"button\" class=\"button button--primary\" @click=\"commitPicks\">Save Picks</button>\n            </div>\n        </div>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <section :class=\"powerUpModalClasses\">\n        <h3 class=\"powerUpModal__title\" :style=\"{color: selectedPowerUp.color}\">{{ selectedPowerUp.title }}</h3>\n        <img class=\"powerUpModal__image\" :src=\"'public/image/powerups/' + selectedPowerUp.image_name\" alt=\"{{ selectedPowerUp.title }}\">\n        <div class=\"powerUpModal__description\">\n            {{{ selectedPowerUp.description }}}\n        </div>\n        <div class=\"powerUpModal__points\" :style=\"{color: selectedPowerUp.color}\">\n            +{{ selectedPowerUp.bonus_points }} points\n        </div>\n        <div class=\"powerUpModal__apply\">\n            <p class=\"powerUpModal__apply--big\">Apply this power up?</p>\n            <p :style=\"{color: selectedPowerUp.color}\">Failure results in a -{{ selectedPowerUp.penalty_points }} penalty</p>\n        </div>\n        <div class=\"powerUpModal__confirm\">\n            <button @click=\"powerUpModalClose\" class=\"powerUpModal__confirm--no\">No</button>\n            <button @click=\"selectPowerUp(selectedPowerUp.fightId, selectedPowerUp.id, selectedPowerUp.image_name, $event)\" class=\"powerUpModal__confirm--yes\">Yes</button>\n        </div>\n        <button @click=\"powerUpModalClose\" type=\"button\" class=\"powerUpModal__close\">x</button>\n    </section>\n    <section :class=\"alertNoticeClasses\">\n        <div>\n            <h2 class=\"alertNotice__header\">{{ alertNotice.header }}</h2>\n            <div class=\"alertNotice__subject\">{{ alertNotice.subject }}</div>\n            <div class=\"alertNotice__body\">\n                {{{ alertNotice.body }}}\n            </div>\n            <button @click=\"alertNoticeClose\" type=\"button\" class=\"alertModal__close\">x</button>\n        </div>\n        <div v-if=\"alertNotice.action\" class=\"button-wrap\">\n            <button @click=\"alertNoticeClose\" type=\"button\" class=\"button button--green\">Got It</button>\n        </div>\n    </section>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/var/www/html/bsmma/resources/assets/js/components/Results.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../auth":33,"../index":44,"vue":32,"vue-hot-reload-api":6}],43:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
 var _defineProperty3 = _interopRequireDefault(_defineProperty2);
@@ -15963,39 +16187,56 @@ exports.default = {
             base: window.URL.base,
             current: window.URL.current,
             full: window.URL.full
-        }), (0, _defineProperty3.default)(_ref, 'playerIsValid', true), _ref;
+        }), _ref;
     },
     created: function created() {
         this.working = true;
     },
     ready: function ready() {
-        var _this = this;
-
-        if (this.playerIsValid) {
-            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings-list', function (data) {
-                _this.standingsList = data.data[0].standings;
-                _this.playerId = data.data[0].player;
-                _this.contest = data.data[0].contest[0];
-                _this.determineRank(data.data[0].standings);
-                _this.working = false;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            }).error(function (err) {
-                return console.log(err);
-            });
-
-            this.$http.get(URL.base + '/api/v1/contest-types', function (data) {
-                _this.contestTypes = data;
-            }, {
-                // Attach the JWT header
-                headers: _auth2.default.getAuthHeader()
-            });
+        if (!_auth2.default.validate()) {
+            this.tokenRefresh();
+        } else {
+            this.fetch();
         }
     },
 
 
     methods: {
+        tokenRefresh: function tokenRefresh() {
+            var vm = this;
+
+            this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                localStorage.setItem('id_token', response.data.token);
+                vm.fetch();
+            }, function (err) {
+                _index.router.go('login');
+            });
+        },
+        fetch: function fetch() {
+            this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings-list', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.standingsList = response.data.data[0].standings;
+                this.playerId = response.data.data[0].player;
+                this.contest = response.data.data[0].contest[0];
+                this.determineRank(response.data.data[0].standings);
+                this.working = false;
+            }, function (err) {
+                console.log(err);
+            });
+
+            this.$http.get(URL.base + '/api/v1/contest-types', {}, {
+                // Attach the JWT header
+                headers: _auth2.default.getAuthHeader()
+            }).then(function (response) {
+                this.contestTypes = response.data;
+            }, function (err) {
+                console.log(err);
+            });
+        },
         showContestRules: function showContestRules(e) {
             var newType;
             e.preventDefault();
@@ -16045,7 +16286,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Contest Standings</h1>\n        <h4 class=\"pageHeader__subheader\">\n            {{ contest.event_short_name }} - {{ contest.event_date }}\n        </h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Buy in:</span> ${{ contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Rank:</span> {{ playerRanking }}/{{ standingsList.length }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                <span class=\"contestDetails__title\">Prize Pool:</span> ${{ (parseInt(contest.buy_in, 10) * standingsList.length) * .9 }}\n                </div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ contest.contest_type_id }}\">\n                        {{ contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"participantsList\">\n        <ul class=\"stripped-list\">\n            <li class=\"participantsList__item\" v-for=\"participant in standingsList\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-15 participantsList__img\">\n                        <img src=\"public/image/avatar/male.jpg\">\n                    </div>\n                    <div class=\"col-xs-35\">\n                        <div class=\"participantsList__itemTitle\">&nbsp;</div>\n                        <div class=\"participantsList__name\">\n                            {{ participant.player_name }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"participantsList__itemTitle\">Rank</div>\n                        <div class=\"standingsList__rank\">\n                            {{ $index + 1 }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"participantsList__itemTitle\">Points</div>\n                        <div class=\"standingsList__points\">\n                            {{ participant.total }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-20\">\n                        <div class=\"participantsList__itemTitle\">Fights</div>\n                        <div class=\"standingsList__wins\">\n                            {{ participant.fights_won }}/5\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <div class=\"container-fluid\">\n        <div class=\"col-xs-100 button-wrap\">\n            <a v-link=\"{ path: '/contest/' + contest.contest_id + '/picks' }\" class=\"button button--primary\">My Picks</a>\n        </div>\n    </div>\n    <section :class=\"infoModalClasses\">\n        <h3 class=\"infoModal__title\">{{ infoModalContent.title }}</h3>\n        <img class=\"infoModal__image\" :src=\"URL.base + '/public/image/info/' + infoModalContent.image\" alt=\"{{ infoModalContent.title }} Image\">\n        <div class=\"infoModal__rules\">\n            {{{ infoModalContent.rules }}}\n        </div>\n        <button @click=\"infoModalClose\" type=\"button\" class=\"infoModal__close\">x</button>\n    </section>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Contest Standings</h1>\n        <h4 class=\"pageHeader__subheader\">\n            {{ contest.event_short_name }} - {{ contest.event_date }}\n        </h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Entry Fee:</span> ${{ contest.buy_in }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Rank:</span> {{ playerRanking }}/{{ standingsList.length }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                <span class=\"contestDetails__title\">Prize Pool:</span> ${{ (parseInt(contest.buy_in, 10) * standingsList.length) * .9 }}\n                </div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ contest.contest_type_id }}\">\n                        {{ contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"participantsList\">\n        <ul class=\"stripped-list\">\n            <li class=\"participantsList__item\" v-for=\"participant in standingsList\">\n                <div class=\"container-fluid\">\n                    <div class=\"col-xs-15 participantsList__img\">\n                        <img src=\"public/image/avatar/male.jpg\">\n                    </div>\n                    <div class=\"col-xs-35\">\n                        <div class=\"participantsList__itemTitle\">&nbsp;</div>\n                        <div class=\"participantsList__name\">\n                            {{ participant.player_name }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"participantsList__itemTitle\">Rank</div>\n                        <div class=\"standingsList__rank\">\n                            {{ $index + 1 }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-15\">\n                        <div class=\"participantsList__itemTitle\">Points</div>\n                        <div class=\"standingsList__points\">\n                            {{ participant.total }}\n                        </div>\n                    </div>\n                    <div class=\"col-xs-20\">\n                        <div class=\"participantsList__itemTitle\">Fights</div>\n                        <div class=\"standingsList__wins\">\n                            {{ participant.fights_won }}/5\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <div class=\"container-fluid\">\n        <div class=\"col-xs-100 button-wrap\">\n            <a v-link=\"{ path: '/contest/' + contest.contest_id + '/picks' }\" class=\"button button--primary\">My Picks</a>\n        </div>\n    </div>\n    <section :class=\"infoModalClasses\">\n        <h3 class=\"infoModal__title\">{{ infoModalContent.title }}</h3>\n        <img class=\"infoModal__image\" :src=\"URL.base + '/public/image/info/' + infoModalContent.image\" alt=\"{{ infoModalContent.title }} Image\">\n        <div class=\"infoModal__rules\">\n            {{{ infoModalContent.rules }}}\n        </div>\n        <button @click=\"infoModalClose\" type=\"button\" class=\"infoModal__close\">x</button>\n    </section>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -16057,7 +16298,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":43,"babel-runtime/helpers/defineProperty":2,"vue":32,"vue-hot-reload-api":6}],43:[function(require,module,exports){
+},{"../auth":33,"../index":44,"babel-runtime/helpers/defineProperty":2,"vue":32,"vue-hot-reload-api":6}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16104,6 +16345,10 @@ var _PlayerPicks2 = _interopRequireDefault(_PlayerPicks);
 var _Standings = require('./components/Standings.vue');
 
 var _Standings2 = _interopRequireDefault(_Standings);
+
+var _Results = require('./components/Results.vue');
+
+var _Results2 = _interopRequireDefault(_Results);
 
 var _vueRouter = require('vue-router');
 
@@ -16154,6 +16399,10 @@ router.map({
 
   '/contest/:contest_id/standings': {
     component: _Standings2.default
+  },
+
+  '/contest/:contest_id/results': {
+    component: _Results2.default
   }
 
 });
@@ -16166,7 +16415,7 @@ router.redirect({
 // Start the app on the #app div
 router.start(_App2.default, '#app');
 
-},{"./components/App.vue":34,"./components/ContestLobby.vue":35,"./components/Contests.vue":36,"./components/Events.vue":37,"./components/Fights.vue":38,"./components/Login.vue":39,"./components/PlayerPicks.vue":40,"./components/Register.vue":41,"./components/Standings.vue":42,"vue":32,"vue-resource":20,"vue-router":31}],44:[function(require,module,exports){
+},{"./components/App.vue":34,"./components/ContestLobby.vue":35,"./components/Contests.vue":36,"./components/Events.vue":37,"./components/Fights.vue":38,"./components/Login.vue":39,"./components/PlayerPicks.vue":40,"./components/Register.vue":41,"./components/Results.vue":42,"./components/Standings.vue":43,"vue":32,"vue-resource":20,"vue-router":31}],45:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -16685,6 +16934,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })();
 
 }).call(this,require('_process'))
-},{"_process":5}]},{},[43]);
+},{"_process":5}]},{},[44]);
 
 //# sourceMappingURL=index.js.map

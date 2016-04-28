@@ -30,6 +30,8 @@ class ContestsController extends ApiController
         $this->contestTransformer = $contestTransformer;
         $this->playerTransformer = $playerTransformer;
         $this->fightTransformer = $fightTransformer;
+
+        $this->middleware('jwt.auth');
     }
 
     /**

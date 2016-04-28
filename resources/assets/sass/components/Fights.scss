@@ -32,9 +32,7 @@
 
 .fightsList__clearButton {
 	position: absolute;
-	top: 36%;
-	left: 50%;
-	transform: translateX(-50%);
+	top: -7px;
 	z-index: 30;
 
 	font-size: 1.3rem;
@@ -49,6 +47,14 @@
 	opacity: 0;
 
 	transition: opacity 0.3s ease;
+
+	&.left {
+		right: -6px;
+	}
+
+	&.right {
+		left: -6px;
+	}
 
 	&.show {
 		visibility: visible;
@@ -87,7 +93,7 @@
 .fightsList__pickHeader {
 	font-size: 1.8rem;
 	font-weight: 700;
-	margin: 1.5rem 0;
+	margin: 2.5rem 0 1rem;
 }
 
 .fightsList__item {
@@ -131,11 +137,11 @@
 	transition: opacity 0.3s ease;
 
 	&.left {
-		right: -6px;
+		left: -6px;
 	}
 
 	&.right {
-		left: -6px;
+		right: -6px;
 	}
 
 	&.show {
@@ -149,7 +155,7 @@
 .fightsList__fighterRecord,
 .fightsList__spread {
 	font-size: 1.1rem;
-	padding-left: 0.5rem;
+	padding: 0 0.5rem;
 }
 
 .fightsList__spread {
@@ -229,5 +235,56 @@
 
 	img {
 		width: 100%;
+	}
+}
+
+// buttons -----------------------------
+
+
+/* One radio button per line */
+.fightsList__pickButton {
+  display: inline;
+  cursor: pointer;
+  line-height: 2.5;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-right: 0.4rem;
+
+  	&:last-child {
+  		margin-right: 0;
+  	}
+
+	[type="radio"] {
+		border: 0;
+  		clip: rect(0 0 0 0);
+	  	height: 1px; margin: -1px;
+	  	overflow: hidden;
+	  	padding: 0;
+	  	position: absolute;
+	  	width: 1px;
+	}
+
+	[type="radio"] + span {
+		display: inline-block;
+	  	padding: 0 1em;
+	  	color: #757575;
+	  	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f0f0f0+0,ebebeb+15,eaebed+18,eaeae8+21,e4e4e4+39,e4e4e6+42,e0e0e0+55,dfe0e2+58,dedede+61,d2d3d5+97,cecfd1+100 */
+		background: #f0f0f0; /* Old browsers */
+		background: -moz-linear-gradient(top,  #f0f0f0 0%, #ebebeb 15%, #eaebed 18%, #eaeae8 21%, #e4e4e4 39%, #e4e4e6 42%, #e0e0e0 55%, #dfe0e2 58%, #dedede 61%, #d2d3d5 97%, #cecfd1 100%); /* FF3.6-15 */
+		background: -webkit-linear-gradient(top,  #f0f0f0 0%,#ebebeb 15%,#eaebed 18%,#eaeae8 21%,#e4e4e4 39%,#e4e4e6 42%,#e0e0e0 55%,#dfe0e2 58%,#dedede 61%,#d2d3d5 97%,#cecfd1 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to bottom,  #f0f0f0 0%,#ebebeb 15%,#eaebed 18%,#eaeae8 21%,#e4e4e4 39%,#e4e4e6 42%,#e0e0e0 55%,#dfe0e2 58%,#dedede 61%,#d2d3d5 97%,#cecfd1 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f0f0', endColorstr='#cecfd1',GradientType=0 ); /* IE6-9 */
+
+		border-radius: 0 0 8px 8px;
+		box-shadow: 0 5px 0 #b2b2b2;
+	}
+
+
+	/* never forget focus styling */
+	[type="radio"] + span.show {
+		background: #56D03F;
+		box-shadow: 0 5px 0 #45BB31;
+		color: $color-white;
 	}
 }

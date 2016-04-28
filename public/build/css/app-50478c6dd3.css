@@ -4293,7 +4293,7 @@ a {
 .fightsList__pickHeader {
   font-size: 1.8rem;
   font-weight: 700;
-  margin: 2.5rem 0 1rem; }
+  margin: 1.5rem 0; }
 
 .fightsList__item {
   background-color: #eee;
@@ -4394,16 +4394,13 @@ a {
 
 /* One radio button per line */
 .fightsList__pickButton {
-  display: inline;
+  display: block;
   cursor: pointer;
   line-height: 2.5;
-  font-size: 1.2rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-right: 0.4rem;
+  font-size: 1.5em;
+  /* the basic, unchecked style */
+  /* the checked style using the :checked pseudo class */
   /* never forget focus styling */ }
-  .fightsList__pickButton:last-child {
-    margin-right: 0; }
   .fightsList__pickButton [type="radio"] {
     border: 0;
     clip: rect(0 0 0 0);
@@ -4414,24 +4411,26 @@ a {
     position: absolute;
     width: 1px; }
   .fightsList__pickButton [type="radio"] + span {
+    display: block; }
+  .fightsList__pickButton [type="radio"] + span:before {
+    content: '';
     display: inline-block;
-    padding: 0 1em;
-    color: #757575;
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f0f0f0+0,ebebeb+15,eaebed+18,eaeae8+21,e4e4e4+39,e4e4e6+42,e0e0e0+55,dfe0e2+58,dedede+61,d2d3d5+97,cecfd1+100 */
-    background: #f0f0f0;
-    /* Old browsers */
-    /* FF3.6-15 */
-    /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #f0f0f0 0%, #ebebeb 15%, #eaebed 18%, #eaeae8 21%, #e4e4e4 39%, #e4e4e6 42%, #e0e0e0 55%, #dfe0e2 58%, #dedede 61%, #d2d3d5 97%, #cecfd1 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f0f0', endColorstr='#cecfd1',GradientType=0 );
-    /* IE6-9 */
-    border-radius: 0 0 8px 8px;
-    box-shadow: 0 5px 0 #b2b2b2; }
-  .fightsList__pickButton [type="radio"] + span.show {
-    background: #56D03F;
-    box-shadow: 0 5px 0 #45BB31;
-    color: #fff; }
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.25em;
+    border-radius: 1em;
+    border: 0.125em solid #fff;
+    box-shadow: 0 0 0 0.15em #000;
+    margin-right: 0.75em;
+    transition: 0.5s ease all; }
+  .fightsList__pickButton [type="radio"]:checked + span:before {
+    background: green;
+    box-shadow: 0 0 0 0.25em #000; }
+  .fightsList__pickButton [type="radio"]:focus + span:after {
+    content: '\0020\2190';
+    font-size: 1.5em;
+    line-height: 1;
+    vertical-align: -0.125em; }
 
 .fightPicksList__details {
   height: 0;
