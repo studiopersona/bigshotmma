@@ -29,7 +29,7 @@
             <ul class="stripped-list">
                 <li
                     class="fightPicksList__item"
-                    @click="toggleDetails(pick.pick_id, $event)"
+                    @click.prevent="toggleDetails(pick.pick_id)"
                     v-for="pick in picksList"
                     data-pick-id="{{ pick.pick_id }}"
                 >
@@ -317,11 +317,8 @@
                 });
             },
 
-            toggleDetails(pickId, e) {
-                e.preventDefault();
-                var pickToToggle = document.querySelector('li.fightPicksList__item[data-pick-id="' + pickId + '"]');
-
-                pickToToggle.classList.toggle('show');
+            toggleDetails(pickId) {
+               document.querySelector('li.fightPicksList__item[data-pick-id="' + pickId + '"]').classList.toggle('show');
             },
 
             parseResults(results) {

@@ -1,0 +1,25 @@
+.resultsList__outcomeString {
+	font-size: 1rem;
+	padding: 0.5rem 1rem 1rem;
+	background: $color-white;
+
+	&.left {
+		text-align: left;
+	}
+
+	&.right {
+		text-align: right;
+	}
+}
+
+.resultsList__item.fightsList__item {
+
+	.fightPicksList__selectionTitle {
+		line-height: 2;
+	}
+	.fightsList__pick {
+		&.show {
+			min-height: calc(1vw * 60);
+		}
+	}
+}

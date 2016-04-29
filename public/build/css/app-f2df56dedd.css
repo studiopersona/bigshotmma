@@ -4297,7 +4297,7 @@ a {
     margin-bottom: 1.25rem; }
 
 .fightsList__pickHeader {
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   font-weight: 700;
   margin: 2.5rem 0 1rem; }
 
@@ -4306,6 +4306,8 @@ a {
   padding-top: 1rem; }
   .fightsList__item:first-child {
     padding-top: 0; }
+  .fightsList__item:nth-child(2n) {
+    background-color: #fff; }
   .fightsList__item .fightsList__pick {
     background-color: #fff;
     border-bottom: 4px solid #eee;
@@ -4313,7 +4315,7 @@ a {
     overflow: hidden;
     transition: height 0.3s ease; }
     .fightsList__item .fightsList__pick.show {
-      min-height: calc(1vw * 194); }
+      min-height: calc(1vw * 178); }
   .fightsList__item .fightsList__fightersWrap {
     padding: 0.9rem 0.5rem 0.5rem;
     position: relative; }
@@ -4338,17 +4340,11 @@ a {
 .fightsList__fighterHeight,
 .fightsList__fighterRecord,
 .fightsList__spread {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   padding: 0 0.5rem; }
 
-.fightsList__fighterName {
-  margin-top: 0.5rem;
-  white-space: nowrap; }
-
 .fightsList__spread {
-  color: #e51937;
-  font-size: 1.6rem;
-  margin-top: 0.5rem; }
+  color: #e51937; }
   .fightsList__spread.favorite {
     color: #2dbe0c; }
 
@@ -4360,13 +4356,13 @@ a {
 
 .fightsList__selectedIndicator {
   position: absolute;
-  bottom: -1.8rem;
+  bottom: -0.9rem;
   left: 0;
   font-size: 0.7rem;
   text-transform: uppercase;
   background: #e51937;
   color: #fff;
-  padding: 0.7rem 0;
+  padding: 0.5rem 0;
   text-align: center;
   width: 100%;
   opacity: 0;
@@ -4551,21 +4547,6 @@ a {
   text-align: center;
   margin-top: 0.5rem; }
 
-.resultsList__outcomeString {
-  font-size: 1rem;
-  padding: 0.5rem 1rem 1rem;
-  background: #fff; }
-  .resultsList__outcomeString.left {
-    text-align: left; }
-  .resultsList__outcomeString.right {
-    text-align: right; }
-
-.resultsList__item.fightsList__item .fightPicksList__selectionTitle {
-  line-height: 2; }
-
-.resultsList__item.fightsList__item .fightsList__pick.show {
-  min-height: calc(1vw * 60); }
-
 .infoModal {
   position: fixed;
   left: 0;
@@ -4749,9 +4730,6 @@ a {
     font-size: 2.4rem;
     color: #2dbe0c;
     text-transform: uppercase; }
-  .alertNotice__body .larger {
-    font-size: 5.3rem;
-    margin-top: -1.5rem; }
 
 .form input,
 .form select,

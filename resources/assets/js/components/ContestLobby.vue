@@ -3,7 +3,7 @@
         <header class="pageHeader" :working.sync="working">
             <h1 class="pageHeader__header">Contest Lobby</h1>
             <h4 class="pageHeader__subheader">
-                {{ participantsList[0].contest.event_short_name }} - {{ participantsList[0].contest.event_date }}
+                {{ participantsList[0].contest.event_short_name }} / <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/results' }">Results</a>
             </h4>
         </header>
         <div class="contestDetails">

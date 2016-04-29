@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AddAbbrColumnToFinishes' => $baseDir . '/database/migrations/2016_04_15_174037_add_abbr_column_to_finishes.php',
     'AddColumnsToEvents' => $baseDir . '/database/migrations/2016_03_29_201437_add_columns_to_events.php',
     'AddColumnsToFighters' => $baseDir . '/database/migrations/2016_03_29_204951_add_columns_to_fighters.php',
     'AddColumnsToPowerUps' => $baseDir . '/database/migrations/2016_03_29_200849_add_columns_to_power_ups.php',
@@ -23,8 +24,10 @@ return array(
     'AddPointColumnToFinishes' => $baseDir . '/database/migrations/2016_03_29_211905_add_point_column_to_finishes.php',
     'AddPowerUpIdColumnToFightResults' => $baseDir . '/database/migrations/2016_04_01_172222_add_power_up_id_column_to_fight_results.php',
     'AddPowerUpIdColumnToPicks' => $baseDir . '/database/migrations/2016_04_01_170945_add_power_up_id_column_to_picks.php',
+    'AddRoundsToFights' => $baseDir . '/database/migrations/2016_04_18_193249_add_rounds_to_fights.php',
     'AlterFightsTableAndAddPivotTable' => $baseDir . '/database/migrations/2016_03_31_175728_alter_fights_table_and_add_pivot_table.php',
     'ChangeNameOfPicksToPowerUps' => $baseDir . '/database/migrations/2016_03_31_175321_change_name_of_picks_to_power_ups.php',
+    'ChangeTotalTimeToTypeTimeFightResults' => $baseDir . '/database/migrations/2016_04_15_212331_change_total_time_to_type_time_fight_results.php',
     'CreateContestParticipantsTable' => $baseDir . '/database/migrations/2016_03_25_15_create_contest_participants_table.php',
     'CreateContestTypesTable' => $baseDir . '/database/migrations/2016_03_25_07_create_contest_types_table.php',
     'CreateContestsTable' => $baseDir . '/database/migrations/2016_03_25_10_create_contests_table.php',

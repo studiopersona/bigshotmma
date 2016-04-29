@@ -4297,7 +4297,7 @@ a {
     margin-bottom: 1.25rem; }
 
 .fightsList__pickHeader {
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   font-weight: 700;
   margin: 2.5rem 0 1rem; }
 
@@ -4313,7 +4313,7 @@ a {
     overflow: hidden;
     transition: height 0.3s ease; }
     .fightsList__item .fightsList__pick.show {
-      min-height: calc(1vw * 194); }
+      min-height: calc(1vw * 178); }
   .fightsList__item .fightsList__fightersWrap {
     padding: 0.9rem 0.5rem 0.5rem;
     position: relative; }

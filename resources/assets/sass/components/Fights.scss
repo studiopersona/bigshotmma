@@ -91,7 +91,7 @@
 }
 
 .fightsList__pickHeader {
-	font-size: 1.8rem;
+	font-size: 1.7rem;
 	font-weight: 700;
 	margin: 2.5rem 0 1rem;
 }
@@ -104,10 +104,6 @@
 		padding-top: 0;
 	}
 
-	&:nth-child(2n) {
-		background-color: $color-white;
-	}
-
 	.fightsList__pick {
 		background-color: $color-white;
 		border-bottom: 4px solid $color-gray-light;
@@ -116,7 +112,7 @@
 		transition: height 0.3s ease;
 
 		&.show {
-			min-height: calc(1vw * 178);
+			min-height: calc(1vw * 194);
 		}
 	}
 
@@ -154,12 +150,19 @@
 .fightsList__fighterHeight,
 .fightsList__fighterRecord,
 .fightsList__spread {
-	font-size: 1.1rem;
+	font-size: 0.9rem;
 	padding: 0 0.5rem;
+}
+
+.fightsList__fighterName {
+	margin-top: 0.5rem;
+	white-space: nowrap;
 }
 
 .fightsList__spread {
 	color: $color-red;
+	font-size: 1.6rem;
+	margin-top: 0.5rem;
 
 	&.favorite {
 		color: $color-green;
@@ -176,13 +179,13 @@
 
 .fightsList__selectedIndicator {
 	position: absolute;
-	bottom: -0.9rem;
+	bottom: -1.8rem;
 	left: 0;
 	font-size: 0.7rem;
 	text-transform: uppercase;
 	background: $color-red;
 	color: $color-white;
-	padding: 0.5rem 0;
+	padding: 0.7rem 0;
 	text-align: center;
 	width: 100%;
 	opacity: 0;

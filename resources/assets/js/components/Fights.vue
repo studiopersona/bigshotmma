@@ -1,11 +1,11 @@
 <template>
     <div :working="working">
         <header class="pageHeader" :working.sync="working">
-            <h1 class="pageHeader__header">Fighters {{ playerPicks.length }}/5 Chosen</h1>
-            <h4 class="pageHeader__subheader">{{ totalPowerUps }}/3 Power-ups Used</h4>
+            <h1 class="pageHeader__header">Pick Fighter {{ playerPicks.length }}/5</h1>
+            <h4 class="pageHeader__subheader">Power Ups: {{ totalPowerUps }}/3 <!--<img class="pageHeader__icon" :src="URL.base + '/public/image/icons/star.png'">--></h4>
         </header>
         <div class="fightsList">
-            <ul>
+            <ul class="stripped-list">
                 <li class="fightsList__item" v-for="fight in fightsList[0].fights">
                     <div class="container-fluid fightsList__fightersWrap" data-fight-id="{{ fight.id }}">
                         <div class="col-xs-50 fightsList__fighterStatsWarp">
@@ -126,7 +126,7 @@
                             <div class="col-xs-100">
                                 <label
                                     v-for="finish in finishes"
-                                    @click.prevent="selectButton('finish', finish.id, $event)"
+                                    @click.prevent="selectDecision(fight.id, finish.id, $event)"
                                     for="finish{{finish.id}}"
                                     class="fightsList__pickButton"
                                 >
@@ -146,8 +146,8 @@
                                 <div class="fightsList__pickHeader">Which round? <span class="fightsList__pointsIndicator"></span></div>
                                 <label
                                     v-for="round in 5"
-                                    @click.prevent="selectButton('round', round, $event)"
-                                    for="round{{round}}"
+                                    @click.prevent="selectRound(fight.id, round + 1, $event)"
+                                    for="round{{round + 1}}"
                                     class="fightsList__pickButton"
                                 >
                                     <input
@@ -155,7 +155,7 @@
                                         type="radio"
                                         value="{{ round + 1 }}"
                                         name="round"
-                                        id="round{{ round }}"
+                                        id="round{{ round + 1 }}"
                                         data-points="2"
                                     >
                                     <span data-fight-id="{{ fight.id }}">{{ round + 1 }}</span>
@@ -166,8 +166,8 @@
                                 <div class="fightsList__pickHeader">Which minute? <span class="fightsList__pointsIndicator"></span></div>
                                 <label
                                     v-for="minute in 5"
-                                    @click.prevent="selectButton('minute', minute, $event)"
-                                    for="minute{{minute}}"
+                                    @click.prevent="selectMinute(fight.id, minute + 1, $event)"
+                                    for="minute{{ minute + 1 }}"
                                     class="fightsList__pickButton"
                                 >
                                     <input
@@ -175,7 +175,7 @@
                                         type="radio"
                                         value="{{ minute + 1 }}"
                                         name="minute"
-                                        id="minute{{ minute }}"
+                                        id="minute{{ minute + 1 }}"
                                         data-points="1"
                                     >
                                     <span data-fight-id="{{ fight.id }}">{{ minute + 1 }}</span>
@@ -467,14 +467,50 @@
                 return deferred.promise;
             },
 
-            selectButton(name, id, e) {
-                var siblingButtons = document.querySelectorAll('input[name="' + name + '"] + span');
+            selectDecision(fightId, id, e) {
+                var siblingButtons = document.querySelectorAll('input[name="finish"] + span');
 
-                this.removeShowOnButtons(siblingButtons).then(function() {
-                    e.target.classList.add('show');
-                });
+                if ( parseInt(id, 10) === 3 ) {
+                    this.fightData[parseInt(fightId, 10)].round = 5;
+                    this.fightData[parseInt(fightId, 10)].minute = 5;
 
-                if ( name === 'finish' && parseInt(id, 10) === 3 ) this.setDecision(e.target.dataset.fightId);
+                    this.removeShowOnButtons(document.querySelectorAll('label.fightsList__pickButton > span')).then(function() {
+                        e.target.classList.add('show');
+                        document.querySelector('label[for="round5"] span[data-fight-id="' + fightId + '"]').classList.add('show');
+                        document.querySelector('label[for="minute5"] span[data-fight-id="' + fightId + '"]').classList.add('show');
+                    });
+
+                } else {
+                    this.removeShowOnButtons(siblingButtons).then(function() {
+                        e.target.classList.add('show');
+                    });
+                }
+
+                this.fightData[parseInt(fightId, 10)].finishId = id;
+            },
+
+            selectRound(fightId, id, e) {
+                var siblingButtons = document.querySelectorAll('input[name="round"] + span');
+
+                if ( this.fightData[parseInt(fightId, 10)].finishId !== 3 ) {
+                    this.removeShowOnButtons(siblingButtons).then(function() {
+                        e.target.classList.add('show');
+                    });
+
+                    this.fightData[parseInt(fightId, 10)].round = id;
+                }
+            },
+
+            selectMinute(fightId, id, e) {
+                var siblingButtons = document.querySelectorAll('input[name="minute"] + span');
+
+                if ( this.fightData[parseInt(fightId, 10)].finishId !== 3 ) {
+                    this.removeShowOnButtons(siblingButtons).then(function() {
+                        e.target.classList.add('show');
+                    });
+
+                    this.fightData[parseInt(fightId, 10)].minute = id;
+                }
             },
 
             setDecision(fightId) {
@@ -650,7 +686,6 @@
                     fighterIndicatorToSelect,
                     powerUpImageToSelect;
 
-                console.log('selecting fighter');
                 fighterImageToSelect = document.querySelector('img.fightsList__fighter[data-fighter-id="' + fighterId + '"]');
                 if ( ! fighterImageToSelect.classList.contains('selected') ) {
                     fighterImageToSelect.classList.add('selected');
@@ -720,7 +755,7 @@
                     this.alert({
                         header: 'Heads Up',
                         subject: 'You need to pick more fighters to compete in this contest',
-                        body: '<div class="highlight">Current Picks:</div><div class="highlight">' + this.playerPicks.length + '/5</div><div>Just a few more clicks...</div>',
+                        body: '<div class="highlight">Current Picks</div><div class="highlight larger">' + this.playerPicks.length + '/5</div><div>Just a few more clicks...</div>',
                         action: true,
                     });
                 } /*else if ( this.playerPicks.length === 5 ) {
