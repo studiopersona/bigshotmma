@@ -159,6 +159,11 @@
                 </div>
             </div>
         </div>
+        <div class="container-fluid">
+            <div class="col-xs-100 button-wrap">
+                <a v-link="{ path: '/contest/' + contestId + '/picks' }" class="button button--primary">My Picks</a>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -175,6 +180,7 @@
                 event: {},
                 powerUps: {},
                 finishes: {},
+                contestId: 0,
                 numberNames: ['One', 'Two', 'Three', 'Four', 'Five'],
                 working: false,
                 contestId: this.$route.params.contest_id,
@@ -220,6 +226,7 @@
                     console.log(response.data.results);
                     this.resultsList = response.data.results;
                     this.event = response.data.results[0].fightResults.fight.event;
+                    this.contestId = response.data.results[0].fightResults.contest_id;
                     this.working = false;
                 }, function(err) {
                     console.log(err);
