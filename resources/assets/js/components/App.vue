@@ -6,8 +6,8 @@
         <router-view></router-view>
         <nav class="appDashboard">
         	 <ul>
-        	 	<li><a v-link="{ path: '/player/contests' }">Contests</a></li>
-        	 	<li><a v-link="{ path: '/rules' }">Rules</a></li>
+        	 	<li><a v-link="{ path: '/player/contests' }" @click="toggleMenu">Contests</a></li>
+        	 	<li><a v-link="{ path: '/rules' }" @click="toggleMenu">Rules</a></li>
         	 	<!--<li><a v-link="{ path: '/profile' }">Profile</a></li>-->
         	 </ul>
         </nav>

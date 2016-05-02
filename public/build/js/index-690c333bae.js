@@ -14716,7 +14716,7 @@ exports.default = {
 
 //import auth from '../auth';
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<div class=\"appHeader\">\n        <button type=\"button\" @click=\"toggleMenu\" class=\"appHeader__menuBtn\">Dashboard <img :src=\"'public/image/menu-icon.png'\"></button>\n    </div>\n    <router-view></router-view>\n    <nav class=\"appDashboard\">\n    \t <ul>\n    \t \t<li><a v-link=\"{ path: '/player/contests' }\">Contests</a></li>\n    \t \t<li><a v-link=\"{ path: '/rules' }\">Rules</a></li>\n    \t \t<!--<li><a v-link=\"{ path: '/profile' }\">Profile</a></li>-->\n    \t </ul>\n    </nav>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<div class=\"appHeader\">\n        <button type=\"button\" @click=\"toggleMenu\" class=\"appHeader__menuBtn\">Dashboard <img :src=\"'public/image/menu-icon.png'\"></button>\n    </div>\n    <router-view></router-view>\n    <nav class=\"appDashboard\">\n    \t <ul>\n    \t \t<li><a v-link=\"{ path: '/player/contests' }\" @click=\"toggleMenu\">Contests</a></li>\n    \t \t<li><a v-link=\"{ path: '/rules' }\" @click=\"toggleMenu\">Rules</a></li>\n    \t \t<!--<li><a v-link=\"{ path: '/profile' }\">Profile</a></li>-->\n    \t </ul>\n    </nav>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
