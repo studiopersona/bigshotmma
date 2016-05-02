@@ -4050,16 +4050,16 @@ a {
 #app {
   max-width: 600px;
   margin: 0 auto;
-  padding-top: 90px; }
+  padding-top: 80px; }
 
 .pageHeader {
   position: fixed;
-  top: 26px;
+  top: 0;
   z-index: 100;
   height: 82px;
   width: 100%;
   max-width: 600px;
-  padding-top: 0.5rem;
+  padding-top: 1.5rem;
   box-sizing: border-box;
   background: #fff;
   text-align: center; }
@@ -4080,26 +4080,6 @@ a {
   vertical-align: middle;
   display: inline-block;
   margin-top: -0.35em; }
-
-.appHeader {
-  text-align: right;
-  padding: 0.5rem 1rem 0 0;
-  margin-bottom: 0.5rem;
-  position: fixed;
-  top: 0;
-  z-index: 100;
-  width: 100%;
-  height: 36px;
-  box-sizing: border-box; }
-
-.appHeader__menuBtn {
-  background: transparent;
-  border: none;
-  color: #e51937; }
-  .appHeader__menuBtn img {
-    vertical-align: middle;
-    margin-top: -3px;
-    margin-left: 0.2rem; }
 
 .loginForm,
 .registerForm {
@@ -4323,19 +4303,18 @@ a {
 
 .fightsList__finishPointsIndicator,
 .fightsList__roundPointsIndicator,
-.fightsList__minutePointsIndicator,
-.fightsList__powerupPointsIndicator {
+.fightsList__minutePointsIndicator {
   font-size: 1.2rem;
   color: #ccc;
   text-align: right;
-  padding: 0.3rem 1rem 0 0;
+  padding-right: 1rem;
   opacity: 0;
   transition: opacity 0.3s ease;
-  float: right; }
+  float: right;
+  text-align: middle; }
   .fightsList__finishPointsIndicator.show,
   .fightsList__roundPointsIndicator.show,
-  .fightsList__minutePointsIndicator.show,
-  .fightsList__powerupPointsIndicator.show {
+  .fightsList__minutePointsIndicator.show {
     opacity: 1; }
 
 .fightsList__item {
@@ -4790,23 +4769,6 @@ a {
     font-size: 5.3rem;
     margin-top: -1.5rem; }
 
-.appDashboard {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 500;
-  width: 50%;
-  -webkit-transform: translate3d(-100%, 0, 0);
-  transform: translate3d(-100%, 0, 0);
-  transition: -webkit-transform 0.3s ease;
-  transition: transform 0.3s ease;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); }
-  .appDashboard.show {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0); }
-
 .form input,
 .form select,
 .form textarea {
@@ -5019,10 +4981,6 @@ a {
   background-color: #eee; }
   .stripped-list > li:nth-child(2n) {
     background-color: #fff; }
-
-.noResults {
-  padding: 0 1.5rem;
-  text-align: center; }
 
 /**
  * Clearfix helper

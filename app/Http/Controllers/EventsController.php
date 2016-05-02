@@ -26,8 +26,13 @@ class EventsController extends ApiController
      */
     public function index()
     {
+        $events = $this->event
+                    ->with('promoter')
+                    ->where('date_time', '>', date('Y-m-d H:i:s', strtotime('-1 week')))
+                    ->get();
+
         return $this->respond([
-            'events' => $this->eventTransformer->transformCollection($this->event->with('promoter')->get()->toArray()),
+            'events' => $this->eventTransformer->transformCollection($events->toArray()),
         ]);
     }
 

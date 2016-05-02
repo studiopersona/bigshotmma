@@ -96,6 +96,23 @@
 	margin: 2.5rem 0 1rem;
 }
 
+.fightsList__finishPointsIndicator,
+.fightsList__roundPointsIndicator,
+.fightsList__minutePointsIndicator,
+.fightsList__powerupPointsIndicator {
+	font-size: 1.2rem;
+	color: $color-gray-mid;
+	text-align: right;
+	padding: 0.3rem 1rem 0 0;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	float: right;
+
+	&.show {
+		opacity: 1;
+	}
+}
+
 .fightsList__item {
 	background-color: $color-gray-light;
 	padding-top: 1rem;

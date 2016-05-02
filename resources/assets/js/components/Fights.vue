@@ -57,7 +57,7 @@
                                     {{ fight.fighters[0].wins }} - {{ fight.fighters[0].loses }} - {{ fight.fighters[0].draws }}
                                 </div>
                                 <div :class="['fightsList__spread', fight.fighters[0].pivot.odds > 0 ? 'favorite' : '']">
-                                    {{ fight.fighters[0].pivot.odds }}
+                                    {{ fight.fighters[0].pivot.odds > 0 ? '-' : '+' }}{{ fight.fighters[0].pivot.odds > 0 ? fight.fighters[0].pivot.odds : parseInt(fight.fighters[0].pivot.odds/-1, 10) }}
                                 </div>
                             </div>
                         </div><!-- .fightsList__fighterStatsWarp -->
@@ -80,7 +80,7 @@
                                     {{ fight.fighters[1].wins }} - {{ fight.fighters[1].loses }} - {{ fight.fighters[1].draws }}
                                 </div>
                                 <div :class="['fightsList__spread', fight.fighters[1].pivot.odds > 0 ? 'favorite' : '']">
-                                    {{ fight.fighters[1].pivot.odds }}
+                                    {{ fight.fighters[1].pivot.odds > 0 ? '-' : '+' }}{{ fight.fighters[1].pivot.odds > 0 ? fight.fighters[1].pivot.odds : parseInt(fight.fighters[1].pivot.odds/-1, 10) }}
                                 </div>
                             </div>
                             <div class="col-xs-40  fightsList__fighterWrap">
@@ -120,7 +120,7 @@
                     <div class="fightsList__pick" id="{{ fight.id }}" data-fight-id="{{ fight.id }}">
                         <div class="container-fluid">
                             <div class="col-xs-100">
-                                <div class="fightsList__pickHeader">How will {{ currentFighterName }} win? <span class="fightsList__pointsIndicator"></span></div>
+                                <div class="fightsList__pickHeader">How will {{ currentFighterName }} win? <span class="fightsList__finishPointsIndicator">+{{ finishPoints }} Points</span></div>
                             </div>
                             <!-- finish selectors -->
                             <div class="col-xs-100">
@@ -143,9 +143,9 @@
                             </div>
                             <!-- round selector -->
                             <div class="col-xs-100">
-                                <div class="fightsList__pickHeader">Which round? <span class="fightsList__pointsIndicator"></span></div>
+                                <div class="fightsList__pickHeader">Which round? <span class="fightsList__roundPointsIndicator">+{{ roundPoints }} Points</span></div>
                                 <label
-                                    v-for="round in 5"
+                                    v-for="round in parseInt(fight.rounds, 10)"
                                     @click.prevent="selectRound(fight.id, round + 1, $event)"
                                     for="round{{round + 1}}"
                                     class="fightsList__pickButton"
@@ -163,7 +163,7 @@
                             </div>
                             <!-- minute selectors -->
                             <div class="col-xs-100">
-                                <div class="fightsList__pickHeader">Which minute? <span class="fightsList__pointsIndicator"></span></div>
+                                <div class="fightsList__pickHeader">Which minute? <span class="fightsList__minutePointsIndicator">+{{ minutePoints }} Point</span></div>
                                 <label
                                     v-for="minute in 5"
                                     @click.prevent="selectMinute(fight.id, minute + 1, $event)"
@@ -182,7 +182,7 @@
                                 </label>
                             </div>
                             <div class="col-xs-100">
-                                <div class="fightsList__pickHeader">Power-up (optional)</div>
+                                <div class="fightsList__pickHeader">Power-up (optional) <span class="fightsList__powerupPointsIndicator">+{{ powerupPoints }} Points</span></div>
                             </div>
                             <div class="col-xs-100 powerUpsList">
                                 <div class="col-xs-23 col-xs-offset-2" v-for="powerUp in powerUps">
@@ -265,6 +265,7 @@
     import auth from '../auth';
     import {router} from '../index';
     import D from '../libs/d.js';
+    import animatedScrollTo from '../libs/animatedScrollTo.js';
 
     export default {
 
@@ -296,6 +297,10 @@
                 totalPowerUps: 0,
                 playerPicks: [],
                 fightData: [],
+                finishPoints: 0,
+                roundPoints: 2,
+                minutePoints: 1,
+                powerupPoints: 0,
                 currentFightId: '',
                 currentFighterId: '',
                 currentFighterName: '',
@@ -345,6 +350,7 @@
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
+                    // console.log(response.data.fights);
                     this.fightsList = response.data.fights;
                     this.initializeFightData(response.data.fights[0].fights);
                     this.working = false;
@@ -357,6 +363,7 @@
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
                     this.powerUps = response.data;
+                    // console.log(this.powerUps);
                 });
 
                 this.$http.get(URL.base + '/api/v1/finishes', {}, {
@@ -408,7 +415,11 @@
                 var findFight = function(playerPick) {
                         return parseInt(playerPick.fightId, 10) === parseInt(fightId, 10);
                     },
+                    findPowerUp = function(powerup) {
+                        return parseInt(powerup.power_up_id, 10) === parseInt(powerUpId, 10);
+                    },
                     fightPick,
+                    powerupData,
                     puIndicatorImage;
 
                 if ( this.totalPowerUps < 3 ) {
@@ -416,6 +427,11 @@
                     this.fightData[fightId].powerupId = powerUpId;
                     this.fightData[fightId].powerupImage = powerUpImage;
                     this.powerUpModalClose(e);
+                    // sjow the poinst indicator
+                    document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__powerupPointsIndicator').classList.add('show');
+                    powerupData = this.powerUps.find(findPowerUp);
+                    // console.log(powerupData);
+                    this.powerupPoints = powerupData.bonus_points;
                     // find fighter choosen for the fight and add show class to powerup image indicator
                     fightPick = this.playerPicks.find(findFight);
                     puIndicatorImage = document.querySelector('img.fightsList__powerup[data-fight-id="' + fightId +'"][data-fighter-id="' + fightPick.fighterId + '"]');
@@ -446,6 +462,9 @@
                 this.fightData[fightId].powerupId = 0;
                 this.powerupImage = '';
 
+                // remove points indicator
+                document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__powerupPointsIndicator').classList.remove('show');
+
                 // remove the show class form powerup images
                 powerupImageIndicator = document.querySelectorAll('img.fightsList__powerup[data-fight-id="' + fightId + '"]');
                 for (var i = 0; i < powerupImageIndicator.length; ++i) {
@@ -468,17 +487,35 @@
             },
 
             selectDecision(fightId, id, e) {
-                var siblingButtons = document.querySelectorAll('input[name="finish"] + span');
+                var siblingButtons = document.querySelectorAll('input[name="finish"] + span'),
+                    findFight = function(fight) {
+                        return fight.id === fightId;
+                    },
+                    findFinish = function(finish) {
+                        return parseInt(finish.id, 10) === parseInt(id, 10);
+                    },
+                    fightData,
+                    finishData;
+
+                finishData = this.finishes.find(findFinish);
+                this.finishPoints = finishData.points;
+                document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__finishPointsIndicator').classList.add('show');
 
                 if ( parseInt(id, 10) === 3 ) {
-                    this.fightData[parseInt(fightId, 10)].round = 5;
+                    fightData = this.fightsList[0].fights.find(findFight);
+                    // console.log(finishData);
+                    this.fightData[parseInt(fightId, 10)].round = parseInt(fightData.rounds, 10);
                     this.fightData[parseInt(fightId, 10)].minute = 5;
 
                     this.removeShowOnButtons(document.querySelectorAll('label.fightsList__pickButton > span')).then(function() {
                         e.target.classList.add('show');
-                        document.querySelector('label[for="round5"] span[data-fight-id="' + fightId + '"]').classList.add('show');
+                        // need to change the round selector to work with the number of rpunds form the database
+                        document.querySelector('label[for="round' + fightData.rounds + '"] span[data-fight-id="' + fightId + '"]').classList.add('show');
                         document.querySelector('label[for="minute5"] span[data-fight-id="' + fightId + '"]').classList.add('show');
                     });
+
+                    document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__roundPointsIndicator').classList.add('show');
+                    document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__minutePointsIndicator').classList.add('show');
 
                 } else {
                     this.removeShowOnButtons(siblingButtons).then(function() {
@@ -492,6 +529,8 @@
             selectRound(fightId, id, e) {
                 var siblingButtons = document.querySelectorAll('input[name="round"] + span');
 
+                document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__roundPointsIndicator').classList.add('show');
+
                 if ( this.fightData[parseInt(fightId, 10)].finishId !== 3 ) {
                     this.removeShowOnButtons(siblingButtons).then(function() {
                         e.target.classList.add('show');
@@ -504,19 +543,14 @@
             selectMinute(fightId, id, e) {
                 var siblingButtons = document.querySelectorAll('input[name="minute"] + span');
 
+                document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__minutePointsIndicator').classList.add('show');
+
                 if ( this.fightData[parseInt(fightId, 10)].finishId !== 3 ) {
                     this.removeShowOnButtons(siblingButtons).then(function() {
                         e.target.classList.add('show');
                     });
 
                     this.fightData[parseInt(fightId, 10)].minute = id;
-                }
-            },
-
-            setDecision(fightId) {
-                if ( fightId ) {
-                    this.fightData[parseInt(fightId, 10)].round = 5;
-                    this.fightData[parseInt(fightId, 10)].minute = 5;
                 }
             },
 
@@ -536,7 +570,7 @@
                     } else {
                         this.alert({
                             header: 'Heads Up',
-                            body: '<p>You\'ve already selected the maximum number of fights. Please clear one of your selections if you would like to add this fight.</p><p>You can clear a fight by tapping the <span class="fightsList__clearButtonExample">X</span> between the fighters.</p>',
+                            body: '<p>You\'ve already selected the maximum number of fights. Please clear one of your selections if you would like to add this fight.</p><p>You can clear a fight by tapping the <span class="fightsList__clearButtonExample">X</span> that appears over a selected fighter.</p>',
                             subject: 'Too Many Fights Picked',
                             action: true,
                         });
@@ -573,7 +607,7 @@
                 var pickData,
                     pickDataIndex = -1;
 
-                console.log('updating picks');
+                // console.log('updating picks');
                 // search for this fight in picks
                 pickData = this.playerPicks.find(this.findPick);
                 // if a pic was already made for this fight
@@ -581,7 +615,7 @@
                     // check pick fighter id with current fighter id
                     // change if different do nothing if its the same
                     if ( newData.fighterId !== '') {
-                        console.log('new data not blank');
+                        // console.log('new data not blank');
                         if ( pickData.fighterId !== newData.fighterId ) {
                             this.deselectFighter(pickData.fighterId);
 
@@ -622,6 +656,12 @@
 
                 fightPickEl = document.querySelector('div.fightsList__pick[data-fight-id="' + fightId + '"]');
                 fightPickEl.classList.toggle('show');
+
+                var position = this.getPosition(fightPickEl);
+                // console.log(position);
+                animatedScrollTo(document.body, position.y, 300, function() {
+                    // console.log('animate end');
+                });
 
                 this.currentFightId = '';
                 this.currentFighterId = '';
@@ -738,7 +778,7 @@
                 selectedFight = this.fightsList[0].fights.find(findFight);
                 selectedFighter = selectedFight.fighters.find(findFighter);
 
-                this.currentFighterName = selectedFighter.firstname + ' ' + selectedFighter.lastname;
+                this.currentFighterName = selectedFighter.firstname; // + ' ' + selectedFighter.lastname;
             },
 
             commitPicks() {
@@ -836,6 +876,33 @@
                 e.preventDefault();
 
                 this.alertNoticeClasses = ['alertNotice'];
+            },
+
+            getPosition(el) {
+                var xPos = 0;
+                var yPos = 0;
+
+                while (el) {
+                    if (el.tagName == "BODY") {
+                        // deal with browser quirks with body/window/document and page scroll
+                        var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+                        var yScroll = el.scrollTop || document.documentElement.scrollTop;
+
+                        xPos += (el.offsetLeft - xScroll + el.clientLeft);
+                        yPos += (el.offsetTop - yScroll + el.clientTop);
+                    } else {
+                        // for all other non-BODY elements
+                        xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+                        yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+                    }
+
+                    el = el.offsetParent;
+                }
+
+                return {
+                    x: xPos,
+                    y: yPos
+                };
             },
         },
 

@@ -1,6 +1,16 @@
 <template>
     <div>
+    	<div class="appHeader">
+            <button type="button" @click="toggleMenu" class="appHeader__menuBtn">Dashboard <img :src="'public/image/menu-icon.png'"></button>
+        </div>
         <router-view></router-view>
+        <nav class="appDashboard">
+        	 <ul>
+        	 	<li><a v-link="{ path: '/player/contests' }">Contests</a></li>
+        	 	<li><a v-link="{ path: '/rules' }">Rules</a></li>
+        	 	<!--<li><a v-link="{ path: '/profile' }">Profile</a></li>-->
+        	 </ul>
+        </nav>
     </div>
 </template>
 
@@ -15,6 +25,12 @@
 		},
 
 		created() {
+		},
+
+		methods: {
+			toggleMenu() {
+				document.querySelector('.appDashboard').classList.toggle('show');
+			},
 		},
 
 		computed: {

@@ -4050,7 +4050,7 @@ a {
 #app {
   max-width: 600px;
   margin: 0 auto;
-  padding-top: 90px; }
+  padding-top: 80px; }
 
 .pageHeader {
   position: fixed;
@@ -4089,8 +4089,7 @@ a {
   top: 0;
   z-index: 100;
   width: 100%;
-  height: 36px;
-  box-sizing: border-box; }
+  height: 30px; }
 
 .appHeader__menuBtn {
   background: transparent;
@@ -4098,8 +4097,7 @@ a {
   color: #e51937; }
   .appHeader__menuBtn img {
     vertical-align: middle;
-    margin-top: -3px;
-    margin-left: 0.2rem; }
+    margin-top: -3px; }
 
 .loginForm,
 .registerForm {
@@ -4789,23 +4787,6 @@ a {
   .alertNotice__body .larger {
     font-size: 5.3rem;
     margin-top: -1.5rem; }
-
-.appDashboard {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 500;
-  width: 50%;
-  -webkit-transform: translate3d(-100%, 0, 0);
-  transform: translate3d(-100%, 0, 0);
-  transition: -webkit-transform 0.3s ease;
-  transition: transform 0.3s ease;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); }
-  .appDashboard.show {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0); }
 
 .form input,
 .form select,

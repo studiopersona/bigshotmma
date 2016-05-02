@@ -1,5 +1,6 @@
 var elixir = require('laravel-elixir');
 require('laravel-elixir-vueify');
+require('laravel-elixir-livereload');
 
 /*
  |--------------------------------------------------------------------------
@@ -15,6 +16,6 @@ require('laravel-elixir-vueify');
 elixir.config.js.browserify.watchify.options.poll = true;
 
 elixir(function(mix) {
-    mix.sass('app.scss').version('public/css/app.css');
-    mix.browserify('index.js').version('public/js/index.js');
+    mix.sass('app.scss').version('public/css/app.css').livereload();
+    mix.browserify('index.js').version('public/js/index.js').livereload();
 });

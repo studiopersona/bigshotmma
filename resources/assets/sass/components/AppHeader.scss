@@ -1,11 +1,11 @@
 .pageHeader {
 	position: fixed;
-	top: 0;
+	top: 26px;
 	z-index: 100;
 	height: 82px;
 	width: 100%;
 	max-width: 600px;
-	padding-top: 1.5rem;
+	padding-top: 0.5rem;
 	box-sizing: border-box;
 	background: $color-white;
 	text-align: center;
@@ -29,4 +29,28 @@
 	vertical-align: middle;
 	display: inline-block;
 	margin-top: -0.35em;
+}
+
+.appHeader {
+	text-align: right;
+	padding: 0.5rem 1rem 0 0;
+	margin-bottom: 0.5rem;
+	position: fixed;
+	top: 0;
+	z-index: 100;
+	width: 100%;
+	height: 36px;
+	box-sizing: border-box;
+}
+
+.appHeader__menuBtn {
+	background: transparent;
+	border: none;
+	color: $color-red;
+
+	img {
+		vertical-align: middle;
+		margin-top: -3px;
+		margin-left: 0.2rem;
+	}
 }

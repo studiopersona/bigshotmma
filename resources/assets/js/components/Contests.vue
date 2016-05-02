@@ -7,7 +7,7 @@
             </h4>
         </header>
         <div class="contestList">
-            <ul class="stripped-list">
+            <ul v-if="contestsList.contests.length > 0" class="stripped-list">
                 <li class="contestList__item" v-for="contest in contestsList.contests">
                     <a v-if="contestsEntered.indexOf(parseInt(contest.contest_id, 10)) !== -1" v-link="{ path: '/contest/' + contest.contest_id + '/picks' }">
                         <div class="container-fluid">
@@ -50,6 +50,9 @@
                         </div>
                     </a>
                 </li>
+            </ul>
+            <ul v-else>
+                <li class="noResults">There are no contests currently avaiable for this event.</li>
             </ul>
             <div :class="loaderClasses">
                 <div class="js-global-loader loader">
@@ -118,6 +121,7 @@
                     this.working = false;
                 }, function(err) {
                     console.log(err);
+                    this.working = false;
                 });
 
                 this.$http.get(URL.base + '/api/v1/player/contests-entered', {}, {
