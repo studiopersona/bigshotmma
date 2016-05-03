@@ -37,7 +37,7 @@
 
     export default {
 
-        props: ['working'],
+        props: ['working', 'loggedIn'],
 
         data() {
             return {
@@ -60,6 +60,7 @@
                 this.tokenRefresh();
             } else {
                 this.fetch();
+                this.$root.loggedIn = true;
             }
         },
 
@@ -72,6 +73,7 @@
                 }).then(function(response) {
                     localStorage.setItem('id_token', response.data.token);
                     vm.fetch();
+                    vm.$root.loggedIn = true;
                 }, function(err) {
                     router.go('login');
                 });

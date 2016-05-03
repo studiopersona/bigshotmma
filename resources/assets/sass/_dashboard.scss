@@ -1,16 +1,63 @@
 .appDashboard {
 	position: fixed;
-	top: 0;
+	top: 33px;
 	bottom: 0;
 	left: 0;
+	right: 0;
 	z-index: 500;
-	width: 50%;
 	transform: translate3d(-100%, 0, 0);
 	transition: transform 0.3s ease;
 	background: $color-white;
-	box-shadow: 1px 0 4px rgba(0,0,0, 0.5);
+	padding: 1rem;
+	text-align: center;
 
 	&.show {
 		transform: translate3d(0,0,0);
+	}
+
+	.pageHeader {
+		top: 0;
+		width: 97%;
+	}
+}
+
+.appDashboard__list {
+	margin-top: 74px;
+}
+
+.appDashboard__linkWrap {
+	width: 48%;
+	float: left;
+	margin-right: 2%;
+	text-align: center;
+
+	&:nth-child(2n) {
+		margin-right: 0;
+	}
+
+	&:nth-child(2n + 1) {
+		clear: left;
+	}
+}
+
+.appDashboard__link {
+	padding: 1rem;
+	margin: 0 0 4%;
+	background: #A70300;
+	color: $color-white;
+	display: block;
+	text-align: center;
+	text-transform: uppercase;
+	text-decoration: none;
+
+	&:hover {
+		color: $color-white;
+		opacity: 0.8;
+	}
+
+	img {
+		display: block;
+		width: 65%;
+		margin: 0 auto 1rem;
 	}
 }

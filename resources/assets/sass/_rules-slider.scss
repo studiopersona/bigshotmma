@@ -1,0 +1,95 @@
+.rulesSlider {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 250;
+	background: rgba(0,0,0, 0.9);
+	transition: transform 0.3s ease;
+	transform: translate3d(100%, 0, 0);
+	overflow: hidden;
+	font-size: 1.6rem;
+	font-weight: 700;
+	color: $color-white;
+	text-align: center;
+
+	&.show {
+		transform: translate3d(0,0,0);
+	}
+}
+
+.rulesSlider__slide {
+	position: absolute;
+	left: 0;
+	top: 0;
+	transform: translate3d(100%, 0, 0);
+	transition: transform 0.3s ease;
+	height: auto;
+	padding: 5.5rem 2rem;
+
+	&.current {
+		transform: translate3d(0,0,0);
+	}
+}
+
+.rulesSlider__close {
+	position: absolute;
+    top: 0.8rem;
+    right: 1rem;
+    font-size: 2rem;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    color: $color-white;
+    border: 4px solid;
+    border-radius: 50%;
+    padding: 0 0.9rem 0.2rem;
+}
+
+.rulesSlider__title {
+	font-size: 3.2rem;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+}
+
+.rulesSlider__icon {
+	margin-bottom: 1.5rem;
+}
+
+.rulesSlider__description {
+	font-size: 2rem;
+
+	> div,
+	> p {
+		margin-bottom: 2.2rem;
+	}
+
+	.highlight {
+		font-size: 2.4rem;
+		color: $color-green;
+		text-transform: uppercase;
+	}
+
+	.larger {
+		font-size: 5.3rem;
+		margin-top: -1.5rem;
+	}
+}
+
+.rulesSlider__indicator {
+	width: 20px;
+	height: 20px;
+	border: 2px solid $color-white;
+	border-radius: 50%;
+	display: inline-block;
+	margin-right: 0.5rem;
+
+	&.current {
+		background-color: $color-green;
+	}
+
+	&:last-child {
+		margin-right: 0;
+	}
+}

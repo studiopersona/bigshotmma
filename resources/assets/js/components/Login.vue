@@ -1,5 +1,5 @@
 <template>
-	<div :working="working">
+	<div :working="working" :loggedIn.sync="false">
 		<header class="pageHeader">
 			<h1 class="pageHeader__header">Player Login</h1>
 			<h4 class="pageHeader__subheader">

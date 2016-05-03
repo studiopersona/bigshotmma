@@ -9,7 +9,6 @@ import Fights from './components/Fights.vue';
 import PlayerPicks from './components/PlayerPicks.vue';
 import Standings from './components/Standings.vue';
 import Results from './components/Results.vue';
-import Rules from './components/Rules.vue';
 import PlayerContests from './components/PlayerContests.vue';
 
 import VueRouter from 'vue-router';
@@ -24,7 +23,7 @@ export var router = new VueRouter();
 
 // Set up routing and match routes to components
 router.map({
-   '/login': {
+  '/login': {
     component: Login
   },
 
@@ -62,10 +61,6 @@ router.map({
 
   '/contest/:contest_id/results': {
     component: Results
-  },
-
-  '/rules': {
-    component: Rules
   },
 
 });

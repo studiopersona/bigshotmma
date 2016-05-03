@@ -44,6 +44,7 @@ class PicksController extends ApiController
      */
     public function index()
     {
+        // !!!!! getAuthUser is not complete !!!!
         $picks = $this->pick->with([
                     'contest.event.fights.fighters',
                     'fight',

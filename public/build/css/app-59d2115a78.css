@@ -4090,8 +4090,7 @@ a {
   z-index: 100;
   width: 100%;
   height: 36px;
-  box-sizing: border-box;
-  background: #fff; }
+  box-sizing: border-box; }
 
 .appHeader__menuBtn {
   background: transparent;
