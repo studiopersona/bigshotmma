@@ -115,7 +115,8 @@
                                     --
                                 </div>
                                 <div v-else :class="['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].finish_id ? 'correct' : '']">
-                                    <span v-if="outcome[pick.fight_id].finish_id">+5</span>
+                                    <span v-if="outcome[pick.fight_id].finish_id && outcome[pick.fight_id].finish === 3">+7</span>
+                                    <span v-if="outcome[pick.fight_id].finish_id && outcome[pick.fight_id].finish !== 3">+10</span>
                                     <span v-else>0</span>
                                 </div>
                             </div>
@@ -244,6 +245,7 @@
                 results: [],
                 outcome: [],
                 standings: [],
+                finishes: [],
                 totalPoints: 0,
                 working: false,
                 playerId: 0,
@@ -312,6 +314,14 @@
                         console.log(err);
                     });
 
+                    this.$http.get(URL.base + '/api/v1/finishes', {}, {
+                        // Attach the JWT header
+                        headers: auth.getAuthHeader()
+                    }).then(function(response) {
+                        this.finishes = response.data;
+                        console.log(this.finishes);
+                    });
+
                 }, function(err) {
                     console.log(err);
                 });
@@ -324,6 +334,7 @@
             parseResults(results) {
                 var fightPicks,
                     powerUpResult,
+                    finishResult,
                     vm = this;
 
                 results.forEach(function(obj, i) {
@@ -343,6 +354,7 @@
                     }
 
                     vm.outcome[obj.fightResults.fight_id].finish_id = ( parseInt(obj.fightResults.finish_id, 10) === parseInt(fightPicks.finish.finish_id, 10) ) ? 1 : 0;
+                    vm.outcome[obj.fightResults.fight_id].finish = parseInt(obj.fightResults.finish_id, 10);
                     vm.outcome[obj.fightResults.fight_id].finish_abbr = obj.fightResults.finish.abbr;
                     vm.outcome[obj.fightResults.fight_id].round = ( parseInt(obj.fightResults.round, 10) === parseInt(fightPicks.round, 10) ) ? 1 : 0;
                     vm.outcome[obj.fightResults.fight_id].minute = ( parseInt(obj.fightResults.minute, 10) === parseInt(fightPicks.minute, 10) ) ? 1 : 0;
@@ -371,7 +383,8 @@
             },
 
             tallyPoints(outcome) {
-                var vm = this;
+                var vm = this,
+                    finishData;
 
                 outcome.forEach(function (item, i) {
                     outcome[i].points = 0;
@@ -383,7 +396,15 @@
                             outcome[i].points += 5;
                         }
                     }
-                    if ( item.finish_id ) outcome[i].points += 5;
+                    // add correct number of points for finish type
+                    if ( item.finish_id ) {
+                        finishData = vm.finishes.find(function(finish) {
+                            return item.finish_id === finish.id;
+                        });
+                        console.log(finishData);
+                        outcome[i].points += parseInt(finishData.points, 10);
+                    }
+
                     if ( item.minute ) outcome[i].points += 1;
                     if ( item.round ) outcome[i].points += 2;
 
