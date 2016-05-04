@@ -4607,6 +4607,7 @@ a {
   min-height: calc(1vw * 60); }
 
 .resultsList__powerUpsTitle {
+  text-decoration: underline;
   margin-bottom: 1rem; }
 
 .resultsList__noPowerUps {

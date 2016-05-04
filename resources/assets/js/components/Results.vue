@@ -80,7 +80,6 @@
                         </div><!-- .fightsList__fighterStatsWarp -->
                     </div><!-- .fightsList__fightersWrap -->
                     <div :class="['resultsList__outcomeString', (parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10)) ? 'right' : 'left']">
-                        {{ parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10) ? result.fightResults.fight.fighters[0].firstname : result.fightResults.fight.fighters[1].firstname }}
                         {{ parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10) ? result.fightResults.fight.fighters[0].lastname : result.fightResults.fight.fighters[1].lastname }}
                         wins via
                         {{ result.fightResults.finish.abbr }}
@@ -89,7 +88,7 @@
                     </div>
                     <div class="fightsList__pick" id="{{ result.fightResults.id }}" data-fight-id="{{ result.fightResults.fight_id }}">
                         <div class="container-fluid">
-                            <div class="col-xs-100 fightPicksList__row">
+                            <!--<div class="col-xs-100 fightPicksList__row">
                                 <div class="col-xs-10 fightPicksList__icon">
                                     <img src="public/image/icons/star.png">
                                 </div>
@@ -99,7 +98,7 @@
                                 </div>
                             </div>
                             <!-- finish row -->
-                            <div class="col-xs-100 fightPicksList__row">
+                            <!--<div class="col-xs-100 fightPicksList__row">
                                 <div class="col-xs-10 fightPicksList__icon">
                                     <img src="public/image/icons/fist.png">
                                 </div>
@@ -108,7 +107,7 @@
                                 </div>
                             </div>
                             <!-- round row -->
-                            <div class="col-xs-100 fightPicksList__row">
+                            <!--<div class="col-xs-100 fightPicksList__row">
                                 <div class="col-xs-10 fightPicksList__icon">
                                     <img src="public/image/icons/bell.png">
                                 </div>
@@ -117,7 +116,7 @@
                                 </div>
                             </div>
                             <!-- minute row -->
-                            <div class="col-xs-100 fightPicksList__row">
+                            <!--<div class="col-xs-100 fightPicksList__row">
                                 <div class="col-xs-10 fightPicksList__icon">
                                     <img src="public/image/icons/stopwatch.png">
                                 </div>
@@ -126,27 +125,18 @@
                                 </div>
                             </div>
                             <!-- power up row -->
-                            <!--<div v-if="pick.power_up.image" class="col-xs-100 fightPicksList__row">
-                                <div class="col-xs-10 fightPicksList__icon">
-                                    <img :src="'public/image/powerups/' + pick.power_up.image">
+                            <div class="col-xs-100 fightPicksList__row">
+                                <div class="col-xs-100 resultsList__powerUpsTitle">
+                                    Power Ups Achieved by {{ parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10) ? result.fightResults.fight.fighters[0].lastname : result.fightResults.fight.fighters[1].lastname }}
                                 </div>
-                                <div class="col-xs-75">
-                                    <h4 class="fightPicksList__powerUpName" :style="{color: pick.power_up.color}">{{ pick.power_up.power_up_name }}</h4>
-                                    <p class="fightPicksList__selectionResults" v-show="results.length">
-                                        <span v-if="parseInt(outcome[pick.fight_id].power_up_points, 10) > 0">You chose a winning power up</span>
-                                        <span v-else>You're fighter did not achieve the power up</span>
-                                    </p>
-                                    <p class="fightPicksList__selectionResults" v-else>
-                                        Results not entered yet
-                                    </p>
+                                <div v-if="! result.fightResults.power_ups.length" class="col-xs-100 resultsList__noPowerUps">
+                                    {{ parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10) ? result.fightResults.fight.fighters[0].lastname : result.fightResults.fight.fighters[1].lastname }} did not achieve any power ups during this match.
                                 </div>
-                                <div v-if="!results.length" class="col-xs-15 fightPicksList__points" :style="{color: pick.power_up.color}">
-                                    --
+                                <div v-else v-for="powerup in result.fightResults.power_ups" :class="['col-xs-20', 'resultsList__powerUps']">
+                                    <img :src="URL.base + '/public/image/powerups/' + powerup.power_up_image_name">
+                                    <div :style="{color: powerup.power_up_color}">{{ powerup.power_up_name }}</div>
                                 </div>
-                                <div    v-else :class="['col-xs-15', 'fightPicksList__points', parseInt(outcome[pick.fight_id].power_up_points, 10) > 0 ? 'correct' : 'penalty']" style="{color: pick.power_up.color}">
-                                    {{ outcome[pick.fight_id].power_up_points }}
-                                </div>
-                            </div>-->
+                            </div>
                         </div>
                     </div>
                 </li>

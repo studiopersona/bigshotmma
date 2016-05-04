@@ -4607,6 +4607,7 @@ a {
   min-height: calc(1vw * 60); }
 
 .resultsList__powerUpsTitle {
+  text-decoration: underline;
   margin-bottom: 1rem; }
 
 .resultsList__noPowerUps {
@@ -4616,8 +4617,7 @@ a {
   font-size: 1rem;
   text-align: center; }
   .resultsList__powerUps img {
-    width: 90%;
-    margin: 0 auto; }
+    width: 100%; }
 
 .infoModal {
   position: fixed;

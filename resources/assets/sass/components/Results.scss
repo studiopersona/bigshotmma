@@ -23,3 +23,21 @@
 		}
 	}
 }
+
+.resultsList__powerUpsTitle {
+	margin-bottom: 1rem;
+}
+
+.resultsList__noPowerUps {
+	font-size: 1.1rem;
+}
+
+.resultsList__powerUps {
+	font-size: 1rem;
+	text-align: center;
+
+	img {
+		width: 90%;
+		margin: 0 auto;
+	}
+}
