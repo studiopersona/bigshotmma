@@ -41,7 +41,7 @@
                             <div class="fightPicksList__fighterName">
                                 {{ pick.fighter.name }}
                             </div>
-                            <div :class="['fightPicksList__odds', (parseInt(pick.fighter.odds, 10) > 0) ? 'favorite' : '' ]">
+                            <div :class="['fightPicksList__odds', (parseInt(pick.fighter.odds, 10) < 0) ? 'favorite' : '' ]">
                                 {{ pick.fighter.odds  }}
                             </div>
                         </div>

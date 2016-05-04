@@ -675,6 +675,8 @@
                     fighterIndicatorEls,
                     fightPickEl,
                     powerupIndicators,
+                    pickIndicators,
+                    pointIndicators,
                     pickDataIndex,
                     clearBtnNodes;
 
@@ -715,6 +717,17 @@
                         fightersEls[i].classList.remove('selected');
                         fighterIndicatorEls[i].classList.remove('show');
                     };
+                    // remove highlight on any finish, round or minute chosen
+                    pickIndicators = document.querySelectorAll('span[data-fight-id="' + fightId + '"]');
+                    for ( var i = 0; i < pickIndicators.length; ++i ) {
+                        pickIndicators[i].classList.remove('show');
+                    };
+                    // remove point indicators
+                    document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] span.fightsList__finishPointsIndicator').classList.remove('show');
+                    document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] span.fightsList__roundPointsIndicator').classList.remove('show');
+                    document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] span.fightsList__minutePointsIndicator').classList.remove('show');
+                    document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] span.fightsList__powerupPointsIndicator').classList.remove('show');
+
                     this.currentFightId = '';
                     this.currentFighterId = '';
                 }

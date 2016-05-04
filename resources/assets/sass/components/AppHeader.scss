@@ -33,7 +33,7 @@
 
 .appHeader {
 	text-align: right;
-	padding: 0.5rem 1rem 0 0;
+	padding: 0.5rem 0.5rem 0 0;
 	margin-bottom: 0.5rem;
 	position: fixed;
 	top: 0;
@@ -44,16 +44,23 @@
 	background: $color-white;
 }
 
-.appHeader__menuBtn {
+.appHeader__menuBtn,
+.appHeader__backBtn {
 	background: transparent;
 	border: none;
 	color: $color-red;
 	position: relative;
 	z-index: 600;
+	float: right;
 
 	img {
 		vertical-align: middle;
 		margin-top: -3px;
 		margin-left: 0.2rem;
 	}
+}
+
+.appHeader__backBtn {
+	float: left;
+	margin-left: 0.5rem
 }

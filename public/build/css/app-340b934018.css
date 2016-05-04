@@ -4083,7 +4083,7 @@ a {
 
 .appHeader {
   text-align: right;
-  padding: 0.5rem 0.5rem 0 0;
+  padding: 0.5rem 1rem 0 0;
   margin-bottom: 0.5rem;
   position: fixed;
   top: 0;
@@ -4108,8 +4108,7 @@ a {
     margin-left: 0.2rem; }
 
 .appHeader__backBtn {
-  float: left;
-  margin-left: 0.5rem; }
+  float: right; }
 
 .loginForm,
 .registerForm {

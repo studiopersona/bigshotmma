@@ -1,6 +1,7 @@
 <template>
     <div>
     	<div v-if="loggedIn" class="appHeader">
+            <!--<a v-link="" class="appHeader__backBtn"><img :src="'public/image/icons/back.png'"> Back</a>-->
             <button type="button" @click="toggleMenu" class="appHeader__menuBtn">Dashboard <img :src="'public/image/menu-icon.png'"></button>
         </div>
         <router-view></router-view>

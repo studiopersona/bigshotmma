@@ -12,10 +12,11 @@ const REFRESH_URL = API_URL + 'refresh';
 export default {
 
     login(context, creds, redirect) {
+        var storage = new this.Storage();
         context.working = true;
         context.$http.post(LOGIN_URL, creds)
             .then(function(response) {
-                localStorage.setItem('id_token', response.data.token);
+                storage.setItem('id_token', response.data.token);
 
                 // Redirect to a specified route
                 if(redirect) {
@@ -33,9 +34,11 @@ export default {
     },
 
     signup(context, creds, redirect) {
+        var storage = new this.Storage();
+
         context.$http.post(SIGNUP_URL, creds)
             .then(function(response) {
-                localStorage.setItem('id_token', response.data.token);
+                storage.setItem('id_token', response.data.token);
 
                 if(redirect) {
                     router.go(redirect);
@@ -51,11 +54,14 @@ export default {
     },
 
     logout() {
-        localStorage.removeItem('id_token');
+        var storage = new this.Storage();
+
+        storage.removeItem('id_token');
     },
 
     validate() {
-        var token = localStorage.getItem('id_token'),
+        var storage = new this.Storage(),
+            token = storage.getItem('id_token'),
             params;
 
         if ( token ) {
@@ -68,8 +74,10 @@ export default {
 
     // The object to be passed as a header for authenticated requests
     getAuthHeader() {
+        var storage = new this.Storage();
+
         return {
-            'Authorization': 'Bearer ' + localStorage.getItem('id_token')
+            'Authorization': 'Bearer ' + storage.getItem('id_token')
         };
     },
 
@@ -78,5 +86,34 @@ export default {
             base64 = base64Url.replace('-', '+').replace('_', '/');
 
         return JSON.parse(window.atob(base64));
+    },
+
+    Storage(){
+        var storage = {
+            type: "localStorage",
+            setItem: function setItem(key, value){
+                if(!window.localStorage || !window.sessionStorage) {
+                    throw new Error("really old browser");
+                }
+                try {
+                    localStorage.setItem(key, value);
+                }catch(err) {
+                    try { //this should always work
+                        storage.type = "sessionStorage";
+                        sessionStorage.setItem(key, value);
+                    }catch(sessErr) {
+                        //do we dare try cookies?
+                        throw sessErr;
+                    }
+                }
+            },
+            getItem: function getItem(key) {
+                  return window[storage.type].getItem(key);
+            },
+            removeItem: function removeItem(key) {
+                  return window[storage.type].removeItem(key);
+            }
+        };
+        return storage;
     },
 };
