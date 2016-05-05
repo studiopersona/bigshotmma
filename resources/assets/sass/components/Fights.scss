@@ -257,6 +257,22 @@
 	img {
 		width: 90%;
 	}
+
+	span {
+		font-size: 0.7rem;
+	}
+}
+
+@media screen and (min-width: 340px) {
+	.powerUpList__btn {
+
+		span {
+			font-size: 0.9rem;
+		}
+	}
+}
+
+
 }
 
 // buttons -----------------------------

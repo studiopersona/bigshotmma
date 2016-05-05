@@ -195,7 +195,7 @@
                                             data-fight-id="{{ fight.id }}"
                                             alt="{{ powerUp.name }} Image"
                                         >
-                                        <span :style="{color: powerUp.color, fontSize: '0.8rem'}">{{ powerUp.name }}</span>
+                                        <span :style="{color: powerUp.color}">{{ powerUp.name }}</span>
                                     </button>
                                 </div>
                             </div>
