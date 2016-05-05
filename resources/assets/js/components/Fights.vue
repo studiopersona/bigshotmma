@@ -613,8 +613,6 @@
 
                 // console.log('updating picks');
                 // search for this fight in picks
-                console.log(this.findPick);
-                console.log(this.palyerPicks);
                 pickData = this.playerPicks.find(this.findPick);
                 // if a pic was already made for this fight
                 if ( pickData ) {
