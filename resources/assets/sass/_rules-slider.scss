@@ -5,9 +5,11 @@
 	top: 0;
 	bottom: 0;
 	z-index: 250;
+	width: 100%;
+	max-width: 600px;
 	background: rgba(0,0,0, 0.9);
 	transition: transform 0.3s ease;
-	transform: translate3d(100%, 0, 0);
+	transform: translate3d(200%, 0, 0);
 	overflow: hidden;
 	font-size: 1.6rem;
 	font-weight: 700;
@@ -30,10 +32,12 @@
 	position: absolute;
 	left: 0;
 	top: 0;
-	transform: translate3d(100%, 0, 0);
+	transform: translate3d(150%, 0, 0);
 	transition: transform 0.3s ease;
 	height: auto;
 	padding: 5.5rem 2rem;
+	width: 100%;
+	max-width: 600px;
 
 	&.current {
 		transform: translate3d(0,0,0);
@@ -74,15 +78,42 @@
 	}
 
 	table {
-		width: 90%;
+		width: 100%;
 		max-width: 400px;
 		margin: 1.5em auto .75em auto;
 		border-collapse: collapse;
 		text-align: left;
+		font-size: 1rem;
+
+		tbody tr {
+			background: #535456;
+			border-bottom: 10px solid #000;
+			border-top: 10px solid #000;
+			padding: 1em 0;
+		}
+
+		th {
+			text-transform: uppercase;
+			text-align: left;
+			padding: 0.5rem 1rem;
+
+			&.center {
+				text-align: center;
+			}
+		}
+
+		tbody td {
+			padding: 6px;
+			font-weight: normal !important;
+
+			&.points {
+				text-align: center;
+			}
+		}
 	}
 
 	.powerups-list {
-		font-size: 1rem;
+		font-size: 0.8rem;
 		text-transform: uppercase;
 
 		.row {

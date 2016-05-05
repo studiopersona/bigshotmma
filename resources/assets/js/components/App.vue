@@ -80,25 +80,25 @@
             <div :class="['playSlider__slide', currentHowToPlaySlide === 1 ? 'current' : '']">
                 <h3 class="rulesSlider__title">Scoring</h3>
                 <div class="rulesSlider__description">
-                    <p>Points are earned by naking correct choices:</p>
+                    <p>Points are earned by making correct choices:</p>
                     <table>
                         <thead>
                             <tr>
-                                <th style="padding:0 10px;">Result</th>
-                                <th style="padding:0 10px;">Choices</th>
+                                <th>Result</th>
+                                <th>Choices</th>
                                 <th class="center">Points</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>Winning Fighter</td>
-                                <td>Underdog / Favorite</td>
-                                <td class="points"><strong>5 / 3</strong></td>
+                                <td>Underdog<br>Favorite</td>
+                                <td class="points"><strong>5<br>3</strong></td>
                             </tr>
                             <tr>
                                 <td>Correct Finish</td>
-                                <td>TKO/KO, Submission, Decision</td>
-                                <td class="points"><strong>5</strong></td>
+                                <td>TKO/KO, Submission<br>Decision</td>
+                                <td class="points"><strong>10<br>7</strong></td>
                             </tr>
                             <tr>
                                 <td>Correct Round</td>

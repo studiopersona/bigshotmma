@@ -4898,13 +4898,11 @@ a {
   top: 0;
   bottom: 0;
   z-index: 250;
-  width: 100%;
-  max-width: 600px;
   background: rgba(0, 0, 0, 0.9);
   transition: -webkit-transform 0.3s ease;
   transition: transform 0.3s ease;
-  -webkit-transform: translate3d(200%, 0, 0);
-  transform: translate3d(200%, 0, 0);
+  -webkit-transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0);
   overflow: hidden;
   font-size: 1.6rem;
   font-weight: 700;
@@ -4929,7 +4927,6 @@ a {
   transition: transform 0.3s ease;
   height: auto;
   padding: 5.5rem 2rem;
-  width: 100%;
   max-width: 600px; }
   .rulesSlider__slide.current,
   .playSlider__slide.current {
@@ -5143,9 +5140,8 @@ a {
     color: #ccc; }
 
 .button-wrap {
-  margin: 2.5rem auto 0;
+  margin-top: 2.5rem;
   text-align: center;
-  width: 100%;
   max-width: 600px; }
 
 .logo {
