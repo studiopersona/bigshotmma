@@ -4447,7 +4447,7 @@ a {
   background: transparent;
   border: none; }
   .powerUpList__btn img {
-    width: 90%; }
+    width: 100%; }
 
 /* One radio button per line */
 .fightsList__pickButton {
@@ -4893,10 +4893,6 @@ a {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
-@media screen and (max-height: 540px) {
-  .rulesSlider {
-    overflow: scroll; } }
-
 .rulesSlider__slide,
 .playSlider__slide {
   position: absolute;
@@ -4912,6 +4908,10 @@ a {
   .playSlider__slide.current {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
+
+@media screen and (max-height: 540px) {
+  .rulesSlider {
+    overflow: scroll; } }
 
 .rulesSlider__close {
   position: absolute;

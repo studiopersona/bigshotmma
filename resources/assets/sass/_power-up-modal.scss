@@ -18,6 +18,12 @@
 	}
 }
 
+@media screen and (max-height: 540px ) {
+	.powerUpModal {
+		overflow: scroll;
+	}
+}
+
 .powerUpModal__close {
 	position: absolute;
     top: 0.8rem;

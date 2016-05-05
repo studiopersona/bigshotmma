@@ -17,13 +17,13 @@
         	 			Contests
         	 		</a>
         	 	</li>
-                <li class="appDashboard__linkWrap">
+               <li class="appDashboard__linkWrap">
                     <a class="appDashboard__link appDashboard__link--rules" @click="showHowToPlay">
                         <img src="public/image/dashboard/rules.png">
                         How to Play
                     </a>
                 </li>
-        	 	<li class="appDashboard__linkWrap">
+        	 	 <!--<li class="appDashboard__linkWrap">
         	 		<a class="appDashboard__link appDashboard__link--rules" @click="showContestTypes">
         	 			<img src="public/image/dashboard/rules.png">
         	 			Contest Types
@@ -34,7 +34,7 @@
         	 			<img src="public/image/dashboard/profile.png">
         	 			Profile
         	 		</a>
-        	 	</li>
+        	 	</li>-->
         	 </ul>
         </nav>
         <section id="rulesSlider" class="rulesSlider">

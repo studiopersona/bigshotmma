@@ -4447,7 +4447,7 @@ a {
   background: transparent;
   border: none; }
   .powerUpList__btn img {
-    width: 90%; }
+    width: 100%; }
 
 /* One radio button per line */
 .fightsList__pickButton {
@@ -4691,10 +4691,6 @@ a {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
-@media screen and (max-height: 540px) {
-  .powerUpModal {
-    overflow: scroll; } }
-
 .powerUpModal__close {
   position: absolute;
   top: 0.8rem;
@@ -4781,10 +4777,6 @@ a {
     transform: translate3d(0, 0, 0); }
   .alertNotice p {
     margin: 0 0 2rem; }
-
-@media screen and (max-height: 540px) {
-  .alertNotice {
-    overflow: scroll; } }
 
 .alertModal__close {
   position: absolute;
@@ -4893,10 +4885,6 @@ a {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
-@media screen and (max-height: 540px) {
-  .rulesSlider {
-    overflow: scroll; } }
-
 .rulesSlider__slide,
 .playSlider__slide {
   position: absolute;
@@ -4912,6 +4900,12 @@ a {
   .playSlider__slide.current {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
+
+@media screen and (max-height: 540px) {
+  .rulesSlider__slide,
+  .playSlider__slide {
+    position: absolute;
+    overflow: scroll; } }
 
 .rulesSlider__close {
   position: absolute;

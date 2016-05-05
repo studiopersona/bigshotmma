@@ -26,6 +26,12 @@
 	}
 }
 
+@media screen and (max-height: 540px ) {
+	.alertNotice {
+		overflow: scroll;
+	}
+}
+
 .alertModal__close {
 	position: absolute;
     top: 0.8rem;

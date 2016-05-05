@@ -4447,7 +4447,7 @@ a {
   background: transparent;
   border: none; }
   .powerUpList__btn img {
-    width: 90%; }
+    width: 100%; }
 
 /* One radio button per line */
 .fightsList__pickButton {

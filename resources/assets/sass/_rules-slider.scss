@@ -19,6 +19,12 @@
 	}
 }
 
+@media screen and (max-height: 540px ) {
+	.rulesSlider {
+		overflow: scroll;
+	}
+}
+
 .rulesSlider__slide,
 .playSlider__slide {
 	position: absolute;
