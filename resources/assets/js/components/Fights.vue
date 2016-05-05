@@ -185,7 +185,7 @@
                                 <div class="fightsList__pickHeader">Power-up (optional) <span class="fightsList__powerupPointsIndicator">+{{ powerupPoints }} Points</span></div>
                             </div>
                             <div class="col-xs-100 powerUpsList">
-                                <div class="col-xs-23 col-xs-offset-2" v-for="powerUp in powerUps">
+                                <div class="col-xs-24 col-xs-offset-1" v-for="powerUp in powerUps">
                                     <button class="powerUpList__btn" type="button">
                                         <span class="visuallyhidden">{{ powerUp.name }}</span>
                                         <img
