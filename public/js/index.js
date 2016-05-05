@@ -5,7 +5,7 @@ module.exports = { "default": require("core-js/library/fn/object/define-property
 
 exports.__esModule = true;
 
-var _defineProperty = require("../core-js/object/define-property");
+var _defineProperty = require("babel-runtime/core-js/object/define-property");
 
 var _defineProperty2 = _interopRequireDefault(_defineProperty);
 
@@ -25,26 +25,196 @@ exports.default = function (obj, key, value) {
 
   return obj;
 };
-},{"../core-js/object/define-property":1}],3:[function(require,module,exports){
-var $ = require('../../modules/$');
+},{"babel-runtime/core-js/object/define-property":1}],3:[function(require,module,exports){
+require('../../modules/es6.object.define-property');
+var $Object = require('../../modules/_core').Object;
 module.exports = function defineProperty(it, key, desc){
-  return $.setDesc(it, key, desc);
+  return $Object.defineProperty(it, key, desc);
 };
-},{"../../modules/$":4}],4:[function(require,module,exports){
-var $Object = Object;
-module.exports = {
-  create:     $Object.create,
-  getProto:   $Object.getPrototypeOf,
-  isEnum:     {}.propertyIsEnumerable,
-  getDesc:    $Object.getOwnPropertyDescriptor,
-  setDesc:    $Object.defineProperty,
-  setDescs:   $Object.defineProperties,
-  getKeys:    $Object.keys,
-  getNames:   $Object.getOwnPropertyNames,
-  getSymbols: $Object.getOwnPropertySymbols,
-  each:       [].forEach
+},{"../../modules/_core":6,"../../modules/es6.object.define-property":19}],4:[function(require,module,exports){
+module.exports = function(it){
+  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+  return it;
 };
 },{}],5:[function(require,module,exports){
+var isObject = require('./_is-object');
+module.exports = function(it){
+  if(!isObject(it))throw TypeError(it + ' is not an object!');
+  return it;
+};
+},{"./_is-object":15}],6:[function(require,module,exports){
+var core = module.exports = {version: '2.3.0'};
+if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+},{}],7:[function(require,module,exports){
+// optional / simple context binding
+var aFunction = require('./_a-function');
+module.exports = function(fn, that, length){
+  aFunction(fn);
+  if(that === undefined)return fn;
+  switch(length){
+    case 1: return function(a){
+      return fn.call(that, a);
+    };
+    case 2: return function(a, b){
+      return fn.call(that, a, b);
+    };
+    case 3: return function(a, b, c){
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function(/* ...args */){
+    return fn.apply(that, arguments);
+  };
+};
+},{"./_a-function":4}],8:[function(require,module,exports){
+// Thank's IE8 for his funny defineProperty
+module.exports = !require('./_fails')(function(){
+  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_fails":11}],9:[function(require,module,exports){
+var isObject = require('./_is-object')
+  , document = require('./_global').document
+  // in old IE typeof document.createElement is 'object'
+  , is = isObject(document) && isObject(document.createElement);
+module.exports = function(it){
+  return is ? document.createElement(it) : {};
+};
+},{"./_global":12,"./_is-object":15}],10:[function(require,module,exports){
+var global    = require('./_global')
+  , core      = require('./_core')
+  , ctx       = require('./_ctx')
+  , hide      = require('./_hide')
+  , PROTOTYPE = 'prototype';
+
+var $export = function(type, name, source){
+  var IS_FORCED = type & $export.F
+    , IS_GLOBAL = type & $export.G
+    , IS_STATIC = type & $export.S
+    , IS_PROTO  = type & $export.P
+    , IS_BIND   = type & $export.B
+    , IS_WRAP   = type & $export.W
+    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+    , expProto  = exports[PROTOTYPE]
+    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+    , key, own, out;
+  if(IS_GLOBAL)source = name;
+  for(key in source){
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    if(own && key in exports)continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function(C){
+      var F = function(a, b, c){
+        if(this instanceof C){
+          switch(arguments.length){
+            case 0: return new C;
+            case 1: return new C(a);
+            case 2: return new C(a, b);
+          } return new C(a, b, c);
+        } return C.apply(this, arguments);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+    if(IS_PROTO){
+      (exports.virtual || (exports.virtual = {}))[key] = out;
+      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
+    }
+  }
+};
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library` 
+module.exports = $export;
+},{"./_core":6,"./_ctx":7,"./_global":12,"./_hide":13}],11:[function(require,module,exports){
+module.exports = function(exec){
+  try {
+    return !!exec();
+  } catch(e){
+    return true;
+  }
+};
+},{}],12:[function(require,module,exports){
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+},{}],13:[function(require,module,exports){
+var dP         = require('./_object-dp')
+  , createDesc = require('./_property-desc');
+module.exports = require('./_descriptors') ? function(object, key, value){
+  return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+},{"./_descriptors":8,"./_object-dp":16,"./_property-desc":17}],14:[function(require,module,exports){
+module.exports = !require('./_descriptors') && !require('./_fails')(function(){
+  return Object.defineProperty(require('./_dom-create')('div'), 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_descriptors":8,"./_dom-create":9,"./_fails":11}],15:[function(require,module,exports){
+module.exports = function(it){
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+},{}],16:[function(require,module,exports){
+var anObject       = require('./_an-object')
+  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
+  , toPrimitive    = require('./_to-primitive')
+  , dP             = Object.defineProperty;
+
+exports.f = require('./_descriptors') ? Object.defineProperty : function defineProperty(O, P, Attributes){
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if(IE8_DOM_DEFINE)try {
+    return dP(O, P, Attributes);
+  } catch(e){ /* empty */ }
+  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
+  if('value' in Attributes)O[P] = Attributes.value;
+  return O;
+};
+},{"./_an-object":5,"./_descriptors":8,"./_ie8-dom-define":14,"./_to-primitive":18}],17:[function(require,module,exports){
+module.exports = function(bitmap, value){
+  return {
+    enumerable  : !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable    : !(bitmap & 4),
+    value       : value
+  };
+};
+},{}],18:[function(require,module,exports){
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = require('./_is-object');
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function(it, S){
+  if(!isObject(it))return it;
+  var fn, val;
+  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+},{"./_is-object":15}],19:[function(require,module,exports){
+var $export = require('./_export');
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
+},{"./_descriptors":8,"./_export":10,"./_object-dp":16}],20:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -137,7 +307,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],6:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var Vue // late bind
 var map = Object.create(null)
 var shimmed = false
@@ -437,7 +607,7 @@ function format (id) {
   return id.match(/[^\/]+\.vue$/)[0]
 }
 
-},{}],7:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /**
  * Before Interceptor.
  */
@@ -457,7 +627,7 @@ module.exports = {
 
 };
 
-},{"../util":30}],8:[function(require,module,exports){
+},{"../util":45}],23:[function(require,module,exports){
 /**
  * Base client.
  */
@@ -524,7 +694,7 @@ function parseHeaders(str) {
     return headers;
 }
 
-},{"../../promise":23,"../../util":30,"./xhr":11}],9:[function(require,module,exports){
+},{"../../promise":38,"../../util":45,"./xhr":26}],24:[function(require,module,exports){
 /**
  * JSONP client.
  */
@@ -574,7 +744,7 @@ module.exports = function (request) {
     });
 };
 
-},{"../../promise":23,"../../util":30}],10:[function(require,module,exports){
+},{"../../promise":38,"../../util":45}],25:[function(require,module,exports){
 /**
  * XDomain client (Internet Explorer).
  */
@@ -613,7 +783,7 @@ module.exports = function (request) {
     });
 };
 
-},{"../../promise":23,"../../util":30}],11:[function(require,module,exports){
+},{"../../promise":38,"../../util":45}],26:[function(require,module,exports){
 /**
  * XMLHttp client.
  */
@@ -665,7 +835,7 @@ module.exports = function (request) {
     });
 };
 
-},{"../../promise":23,"../../util":30}],12:[function(require,module,exports){
+},{"../../promise":38,"../../util":45}],27:[function(require,module,exports){
 /**
  * CORS Interceptor.
  */
@@ -704,7 +874,7 @@ function crossOrigin(request) {
     return (requestUrl.protocol !== originUrl.protocol || requestUrl.host !== originUrl.host);
 }
 
-},{"../util":30,"./client/xdr":10}],13:[function(require,module,exports){
+},{"../util":45,"./client/xdr":25}],28:[function(require,module,exports){
 /**
  * Header Interceptor.
  */
@@ -732,7 +902,7 @@ module.exports = {
 
 };
 
-},{"../util":30}],14:[function(require,module,exports){
+},{"../util":45}],29:[function(require,module,exports){
 /**
  * Service for sending network requests.
  */
@@ -832,7 +1002,7 @@ Http.headers = {
 
 module.exports = _.http = Http;
 
-},{"../promise":23,"../util":30,"./before":7,"./client":8,"./cors":12,"./header":13,"./interceptor":15,"./jsonp":16,"./method":17,"./mime":18,"./timeout":19}],15:[function(require,module,exports){
+},{"../promise":38,"../util":45,"./before":22,"./client":23,"./cors":27,"./header":28,"./interceptor":30,"./jsonp":31,"./method":32,"./mime":33,"./timeout":34}],30:[function(require,module,exports){
 /**
  * Interceptor factory.
  */
@@ -879,7 +1049,7 @@ function when(value, fulfilled, rejected) {
     return promise.then(fulfilled, rejected);
 }
 
-},{"../promise":23,"../util":30}],16:[function(require,module,exports){
+},{"../promise":38,"../util":45}],31:[function(require,module,exports){
 /**
  * JSONP Interceptor.
  */
@@ -899,7 +1069,7 @@ module.exports = {
 
 };
 
-},{"./client/jsonp":9}],17:[function(require,module,exports){
+},{"./client/jsonp":24}],32:[function(require,module,exports){
 /**
  * HTTP method override Interceptor.
  */
@@ -918,7 +1088,7 @@ module.exports = {
 
 };
 
-},{}],18:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /**
  * Mime Interceptor.
  */
@@ -956,7 +1126,7 @@ module.exports = {
 
 };
 
-},{"../util":30}],19:[function(require,module,exports){
+},{"../util":45}],34:[function(require,module,exports){
 /**
  * Timeout Interceptor.
  */
@@ -988,7 +1158,7 @@ module.exports = function () {
     };
 };
 
-},{}],20:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 /**
  * Install plugin.
  */
@@ -1043,7 +1213,7 @@ if (window.Vue) {
 
 module.exports = install;
 
-},{"./http":14,"./promise":23,"./resource":24,"./url":25,"./util":30}],21:[function(require,module,exports){
+},{"./http":29,"./promise":38,"./resource":39,"./url":40,"./util":45}],36:[function(require,module,exports){
 /**
  * Promises/A+ polyfill v1.1.4 (https://github.com/bramstein/promis)
  */
@@ -1224,7 +1394,7 @@ p.catch = function (onRejected) {
 
 module.exports = Promise;
 
-},{"../util":30}],22:[function(require,module,exports){
+},{"../util":45}],37:[function(require,module,exports){
 /**
  * URL Template v2.0.6 (https://github.com/bramstein/url-template)
  */
@@ -1376,7 +1546,7 @@ exports.encodeReserved = function (str) {
     }).join('');
 };
 
-},{}],23:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /**
  * Promise adapter.
  */
@@ -1487,7 +1657,7 @@ p.always = function (callback) {
 
 module.exports = Promise;
 
-},{"./lib/promise":21,"./util":30}],24:[function(require,module,exports){
+},{"./lib/promise":36,"./util":45}],39:[function(require,module,exports){
 /**
  * Service for interacting with RESTful services.
  */
@@ -1599,7 +1769,7 @@ Resource.actions = {
 
 module.exports = _.resource = Resource;
 
-},{"./util":30}],25:[function(require,module,exports){
+},{"./util":45}],40:[function(require,module,exports){
 /**
  * Service for URL templating.
  */
@@ -1731,7 +1901,7 @@ function serialize(params, obj, scope) {
 
 module.exports = _.url = Url;
 
-},{"../util":30,"./legacy":26,"./query":27,"./root":28,"./template":29}],26:[function(require,module,exports){
+},{"../util":45,"./legacy":41,"./query":42,"./root":43,"./template":44}],41:[function(require,module,exports){
 /**
  * Legacy Transform.
  */
@@ -1779,7 +1949,7 @@ function encodeUriQuery(value, spaces) {
         replace(/%20/g, (spaces ? '%20' : '+'));
 }
 
-},{"../util":30}],27:[function(require,module,exports){
+},{"../util":45}],42:[function(require,module,exports){
 /**
  * Query Parameter Transform.
  */
@@ -1805,7 +1975,7 @@ module.exports = function (options, next) {
     return url;
 };
 
-},{"../util":30}],28:[function(require,module,exports){
+},{"../util":45}],43:[function(require,module,exports){
 /**
  * Root Prefix Transform.
  */
@@ -1823,7 +1993,7 @@ module.exports = function (options, next) {
     return url;
 };
 
-},{"../util":30}],29:[function(require,module,exports){
+},{"../util":45}],44:[function(require,module,exports){
 /**
  * URL Template (RFC 6570) Transform.
  */
@@ -1841,7 +2011,7 @@ module.exports = function (options) {
     return url;
 };
 
-},{"../lib/url-template":22}],30:[function(require,module,exports){
+},{"../lib/url-template":37}],45:[function(require,module,exports){
 /**
  * Utility functions.
  */
@@ -1965,7 +2135,7 @@ function merge(target, source, deep) {
     }
 }
 
-},{}],31:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /*!
  * vue-router v0.7.13
  * (c) 2016 Evan You
@@ -4675,7 +4845,7 @@ function merge(target, source, deep) {
   return Router;
 
 }));
-},{}],32:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v1.0.21
@@ -14601,7 +14771,7 @@ setTimeout(function () {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":5}],33:[function(require,module,exports){
+},{"_process":20}],48:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14725,7 +14895,7 @@ exports.default = {
     }
 };
 
-},{"../index":45,"../libs/d":47}],34:[function(require,module,exports){
+},{"../index":60,"../libs/d":62}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14820,14 +14990,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/App.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\App.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":45,"vue":32,"vue-hot-reload-api":6}],35:[function(require,module,exports){
+},{"../auth":48,"../index":60,"vue":47,"vue-hot-reload-api":21}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14964,14 +15134,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/ContestLobby.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\ContestLobby.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":45,"vue":32,"vue-hot-reload-api":6}],36:[function(require,module,exports){
+},{"../auth":48,"../index":60,"vue":47,"vue-hot-reload-api":21}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15069,14 +15239,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Contests.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Contests.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":45,"vue":32,"vue-hot-reload-api":6}],37:[function(require,module,exports){
+},{"../auth":48,"../index":60,"vue":47,"vue-hot-reload-api":21}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15159,14 +15329,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Events.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Events.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":45,"vue":32,"vue-hot-reload-api":6}],38:[function(require,module,exports){
+},{"../auth":48,"../index":60,"vue":47,"vue-hot-reload-api":21}],53:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15506,6 +15676,9 @@ exports.default = {
                 fighterId: newData.fighterId
             });
         },
+        findPick: function findPick(playerPick) {
+            return playerPick.fightId === this.currentFightId;
+        },
         updatePicks: function updatePicks(newData) {
             var pickData,
                 pickDataIndex = -1;
@@ -15535,9 +15708,6 @@ exports.default = {
                 this.addPick(newData);
                 this.selectFighter(newData.fighterId, newData.fightId);
             }
-        },
-        findPick: function findPick(playerPick) {
-            return playerPick.fightId === this.currentFightId;
         },
         switchFight: function switchFight(e) {
             var fightToClose, fightToOpen;
@@ -15823,14 +15993,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Fights.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Fights.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":45,"../libs/animatedScrollTo.js":46,"../libs/d.js":47,"vue":32,"vue-hot-reload-api":6}],39:[function(require,module,exports){
+},{"../auth":48,"../index":60,"../libs/animatedScrollTo.js":61,"../libs/d.js":62,"vue":47,"vue-hot-reload-api":21}],54:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15925,14 +16095,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Login.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Login.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":45,"vue":32,"vue-hot-reload-api":6}],40:[function(require,module,exports){
+},{"../auth":48,"../index":60,"vue":47,"vue-hot-reload-api":21}],55:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16023,14 +16193,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/PlayerContests.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\PlayerContests.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":45,"vue":32,"vue-hot-reload-api":6}],41:[function(require,module,exports){
+},{"../auth":48,"../index":60,"vue":47,"vue-hot-reload-api":21}],56:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16257,14 +16427,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/PlayerPicks.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\PlayerPicks.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":45,"vue":32,"vue-hot-reload-api":6}],42:[function(require,module,exports){
+},{"../auth":48,"../index":60,"vue":47,"vue-hot-reload-api":21}],57:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16334,14 +16504,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Register.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Register.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"vue":32,"vue-hot-reload-api":6}],43:[function(require,module,exports){
+},{"../auth":48,"vue":47,"vue-hot-reload-api":21}],58:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16454,14 +16624,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Results.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Results.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":45,"babel-runtime/helpers/defineProperty":2,"vue":32,"vue-hot-reload-api":6}],44:[function(require,module,exports){
+},{"../auth":48,"../index":60,"babel-runtime/helpers/defineProperty":2,"vue":47,"vue-hot-reload-api":21}],59:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16607,14 +16777,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/var/www/html/bsmma/resources/assets/js/components/Standings.vue"
+  var id = "c:\\Program Files (x86)\\Ampps\\www\\bsmma\\resources\\assets\\js\\components\\Standings.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":33,"../index":45,"babel-runtime/helpers/defineProperty":2,"vue":32,"vue-hot-reload-api":6}],45:[function(require,module,exports){
+},{"../auth":48,"../index":60,"babel-runtime/helpers/defineProperty":2,"vue":47,"vue-hot-reload-api":21}],60:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16739,7 +16909,7 @@ router.redirect({
 // Start the app on the #app div
 router.start(_App2.default, '#app');
 
-},{"./components/App.vue":34,"./components/ContestLobby.vue":35,"./components/Contests.vue":36,"./components/Events.vue":37,"./components/Fights.vue":38,"./components/Login.vue":39,"./components/PlayerContests.vue":40,"./components/PlayerPicks.vue":41,"./components/Register.vue":42,"./components/Results.vue":43,"./components/Standings.vue":44,"vue":32,"vue-resource":20,"vue-router":31}],46:[function(require,module,exports){
+},{"./components/App.vue":49,"./components/ContestLobby.vue":50,"./components/Contests.vue":51,"./components/Events.vue":52,"./components/Fights.vue":53,"./components/Login.vue":54,"./components/PlayerContests.vue":55,"./components/PlayerPicks.vue":56,"./components/Register.vue":57,"./components/Results.vue":58,"./components/Standings.vue":59,"vue":47,"vue-resource":35,"vue-router":46}],61:[function(require,module,exports){
 'use strict';
 
 (function (window) {
@@ -16799,7 +16969,7 @@ router.start(_App2.default, '#app');
     }
 })(window);
 
-},{}],47:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -17318,6 +17488,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })();
 
 }).call(this,require('_process'))
-},{"_process":5}]},{},[45]);
+},{"_process":20}]},{},[60]);
 
 //# sourceMappingURL=index.js.map

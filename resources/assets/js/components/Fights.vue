@@ -603,6 +603,10 @@
                 });
             },
 
+            findPick(playerPick) {
+                return playerPick.fightId === this.currentFightId;
+            },
+
             updatePicks(newData) {
                 var pickData,
                     pickDataIndex = -1;
@@ -632,10 +636,6 @@
                     this.addPick(newData);
                     this.selectFighter(newData.fighterId, newData.fightId);
                 }
-            },
-
-            findPick(playerPick) {
-                return playerPick.fightId === this.currentFightId;
             },
 
             switchFight(e) {
