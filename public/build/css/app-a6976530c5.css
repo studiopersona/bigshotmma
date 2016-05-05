@@ -4800,7 +4800,7 @@ a {
 
 @media screen and (max-height: 540px) {
   .alertNotice {
-    overflow-y: scroll; } }
+    overflow: scroll; } }
 
 .alertModal__close {
   position: absolute;
