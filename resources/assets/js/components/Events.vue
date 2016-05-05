@@ -3,7 +3,7 @@
         <header class="pageHeader">
             <h1 class="pageHeader__header">Choose an Event</h1>
             <h4 class="pageHeader__subheader">
-                Over <span class="pageHeader--highlight">{{ poolTotal }}</span> Total Prize Pool
+                Total Prize Pool $<span class="pageHeader--highlight">{{ poolTotal }}</span>
             </h4>
         </header>
         <div class="container-fluid">
@@ -42,6 +42,7 @@
         data() {
             return {
                 eventsList: { 'events':[] },
+                poolTotal: 0,
                 working: false,
                 URL: {
                     base: window.URL.base,

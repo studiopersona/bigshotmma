@@ -4917,31 +4917,22 @@ a {
 .rulesSlider__title {
   font-size: 3.2rem;
   text-transform: uppercase;
-  margin-bottom: 3rem; }
+  margin-bottom: 2rem; }
 
 .rulesSlider__icon {
-  margin-bottom: 2.5rem; }
+  margin-bottom: 1.5rem; }
 
 .rulesSlider__description {
   font-size: 2rem; }
   .rulesSlider__description > div,
   .rulesSlider__description > p {
-    margin-bottom: 2.2rem;
-    line-height: 1.4; }
+    margin-bottom: 2.2rem; }
   .rulesSlider__description table {
     width: 90%;
     max-width: 400px;
     margin: 1.5em auto .75em auto;
     border-collapse: collapse;
     text-align: left; }
-  .rulesSlider__description .powerups-list {
-    font-size: 1rem;
-    text-transform: uppercase; }
-    .rulesSlider__description .powerups-list .row {
-      margin-bottom: 1.5rem; }
-    .rulesSlider__description .powerups-list img {
-      width: 75%;
-      margin: 0 auto; }
   .rulesSlider__description .highlight {
     font-size: 2.4rem;
     color: #2dbe0c;

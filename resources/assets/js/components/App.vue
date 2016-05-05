@@ -17,10 +17,16 @@
         	 			Contests
         	 		</a>
         	 	</li>
+                <li class="appDashboard__linkWrap">
+                    <a class="appDashboard__link appDashboard__link--rules" @click="showHowToPlay">
+                        <img src="public/image/dashboard/rules.png">
+                        How to Play
+                    </a>
+                </li>
         	 	<li class="appDashboard__linkWrap">
-        	 		<a class="appDashboard__link appDashboard__link--rules" @click="showRules">
+        	 		<a class="appDashboard__link appDashboard__link--rules" @click="showContestTypes">
         	 			<img src="public/image/dashboard/rules.png">
-        	 			Rules
+        	 			Contest Types
         	 		</a>
         	 	</li>
         	 	<li class="appDashboard__linkWrap">
@@ -46,11 +52,137 @@
         			<span data-slide-number="2" :class="['rulesSlider__indicator', $index === 2 ? 'current' : '']"></span>
         		</div>
         		<div class="button-wrap">
-	                <button @click.prevent="changeSlide($index, $event)" type="button" class="button button--green">Got It</button>
+	                <button @click.prevent="changeSlide($index, '.rulesSlider__slide', 'currentRulesSlide', '#rulesSlider', $event)" type="button" class="button button--green">Got It</button>
 	            </div>
-	            <button @click="rulesSliderClose" type="button" class="alertModal__close">x</button>
+	            <button @click="sliderClose('#rulesSlider')" type="button" class="alertModal__close">x</button>
 	        </div>
 	    </section>
+        <section id="howToPlaySlider" class="rulesSlider">
+            <div :class="['playSlider__slide', currentHowToPlaySlide === 0 ? 'current' : '']">
+                <h3 class="rulesSlider__title">How to Play</h3>
+                <div class="rulesSlider__icon">
+                    <img :src="URL.base + '/public/image/info/fighter.png'">
+                </div>
+                <div class="rulesSlider__description">
+                    <p>Each player picks a total of five (5) fighters from the event lineup and decides how &amp; when each fight will end.</p>
+                    <!--<p>In the event of an injury, one "Reserve" fighter is set as a backup.</p>-->
+                </div>
+                <div class="rulesSlider__positionIndicator">
+                    <span class="rulesSlider__indicator current"></span>
+                    <span class="rulesSlider__indicator"></span>
+                    <span class="rulesSlider__indicator"></span>
+                </div>
+                <div class="button-wrap">
+                    <button @click.prevent="changeSlide(0, '.playSlider__slide', 'currentHowToPlaySlide', '#howToPlaySlider', $event)" type="button" class="button button--green">Got It</button>
+                </div>
+                <button @click="sliderClose('#howToPlaySlider')" type="button" class="alertModal__close">x</button>
+            </div>
+            <div :class="['playSlider__slide', currentHowToPlaySlide === 1 ? 'current' : '']">
+                <h3 class="rulesSlider__title">Scoring</h3>
+                <div class="rulesSlider__description">
+                    <p>Points are earned by naking correct choices:</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="padding:0 10px;">Result</th>
+                                <th style="padding:0 10px;">Choices</th>
+                                <th class="center">Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Winning Fighter</td>
+                                <td>Underdog / Favorite</td>
+                                <td class="points"><strong>5 / 3</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Correct Finish</td>
+                                <td>TKO/KO, Submission, Decision</td>
+                                <td class="points"><strong>5</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Correct Round</td>
+                                <td>1,2,3 (4,5 if applicable)</td>
+                                <td class="points"><strong>2</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Correct Minute</td>
+                                <td>1,2,3,4,5</td>
+                                <td class="points"><strong>1</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Draw</td>
+                                <td>Should never happen</td>
+                                <td class="points"><strong>0</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--<p>In the event of an injury, one "Reserve" fighter is set as a backup.</p>-->
+                </div>
+                <div class="rulesSlider__positionIndicator">
+                    <span class="rulesSlider__indicator"></span>
+                    <span class="rulesSlider__indicator current"></span>
+                    <span class="rulesSlider__indicator"></span>
+                </div>
+                <div class="button-wrap">
+                    <button @click.prevent="changeSlide(1, '.playSlider__slide', 'currentHowToPlaySlide', '#howToPlaySlider', $event)" type="button" class="button button--green">Got It</button>
+                </div>
+                <button @click="sliderClose('#howToPlaySlider')" type="button" class="alertModal__close">x</button>
+            </div>
+            <div :class="['playSlider__slide', currentHowToPlaySlide === 2 ? 'current' : '']">
+                <h3 class="rulesSlider__title">Power Ups</h3>
+                <div class="rulesSlider__description">
+                    <p>Apply up to three (3) per contest, one (1) per fight to score bonus points.</p>
+                    <div class="container-fluid powerups-list">
+                        <div class="row">
+                            <div class="col-xs-25">
+                                <img :src="URL.base + '/public/image/powerups/bonecrusher.png'">
+                                <div style="color: #90a5d4">Bonecrusher</div>
+                            </div>
+                            <div class="col-xs-25">
+                                <img :src="URL.base + '/public/image/powerups/cindarella.png'">
+                                <div style="color: #dd03ff">Cindarella</div>
+                            </div>
+                            <div class="col-xs-25">
+                                <img :src="URL.base + '/public/image/powerups/danielsan.png'">
+                                <div style="color: #ff2203">Danielsan</div>
+                            </div>
+                            <div class="col-xs-25">
+                                <img :src="URL.base + '/public/image/powerups/minuteman.png'">
+                                <div style="color: #fd880a">Minuteman</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-25">
+                                <img :src="URL.base + '/public/image/powerups/slater.png'">
+                                <div style="color: #f8d86b">Slater</div>
+                            </div>
+                            <div class="col-xs-25">
+                                <img :src="URL.base + '/public/image/powerups/bunyan.png'">
+                                <div style="color: #0377ff">Bunyan</div>
+                            </div>
+                            <div class="col-xs-25">
+                                <img :src="URL.base + '/public/image/powerups/flawless.png'">
+                                <div style="color: #03ff1b">Flawless</div>
+                            </div>
+                            <div class="col-xs-25">
+                                <img :src="URL.base + '/public/image/powerups/debo.png'">
+                                <div style="color: #ce8534">Debo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rulesSlider__positionIndicator">
+                    <span class="rulesSlider__indicator"></span>
+                    <span class="rulesSlider__indicator"></span>
+                    <span class="rulesSlider__indicator current"></span>
+                </div>
+                <div class="button-wrap">
+                    <button @click.prevent="changeSlide(2, '.playSlider__slide', 'currentHowToPlaySlide', '#howToPlaySlider', $event)" type="button" class="button button--green">Got It</button>
+                </div>
+                <button @click="sliderClose('#howToPlaySlider')" type="button" class="alertModal__close">x</button>
+            </div>
+        </section>
     </div>
 </template>
 
@@ -64,6 +196,7 @@
 			return {
 				contestTypes: [],
 				currentRulesSlide: 0,
+                currentHowToPlaySlide: 0,
 				loggedIn: false,
 				playersName: '',
 				URL: {
@@ -107,22 +240,27 @@
 				document.querySelector('.appDashboard').classList.toggle('show');
 			},
 
-			showRules() {
+			showContestTypes() {
 				document.querySelector('.appDashboard').classList.toggle('show');
 				document.querySelector('#rulesSlider').classList.toggle('show');
 			},
 
-			changeSlide(index, e) {
-				if ( index < document.querySelectorAll('.rulesSlider__slide').length - 1 ) {
-					this.currentRulesSlide = index + 1;
+            showHowToPlay() {
+                document.querySelector('.appDashboard').classList.toggle('show');
+                document.querySelector('#howToPlaySlider').classList.toggle('show');
+            },
+
+			changeSlide(index, selector, position, sliderSelector, e) {
+				if ( index < document.querySelectorAll(selector).length - 1 ) {
+					this[position] = index + 1;
 				} else {
-					this.rulesSliderClose();
-					this.currentRulesSlide = 0;
+					this.sliderClose(sliderSelector);
+					this[position] = 0;
 				}
 			},
 
-			rulesSliderClose() {
-				document.querySelector('#rulesSlider').classList.toggle('show');
+			sliderClose(selector) {
+				document.querySelector(selector).classList.toggle('show');
 			},
 
 			logout() {
