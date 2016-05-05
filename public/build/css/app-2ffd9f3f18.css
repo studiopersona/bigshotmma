@@ -4360,6 +4360,7 @@ a {
     overflow: hidden;
     transition: height 0.3s ease; }
     .fightsList__item .fightsList__pick.show {
+      min-height: 77rem;
       min-height: calc(1vw * 194); }
   .fightsList__item .fightsList__fightersWrap {
     padding: 0.9rem 0.5rem 0.5rem;
@@ -4447,7 +4448,7 @@ a {
   background: transparent;
   border: none; }
   .powerUpList__btn img {
-    width: 100%; }
+    width: 90%; }
 
 /* One radio button per line */
 .fightsList__pickButton {
@@ -4500,6 +4501,7 @@ a {
   cursor: pointer; }
 
 .fightPicksList__item.show .fightPicksList__details {
+  min-height: 60rem;
   min-height: calc(1vw * 116); }
 
 .fightPicksList__image,
@@ -4611,6 +4613,7 @@ a {
   line-height: 2; }
 
 .resultsList__item.fightsList__item .fightsList__pick.show {
+  min-height: 30rem;
   min-height: calc(1vw * 60); }
 
 .resultsList__powerUpsTitle {
@@ -4690,6 +4693,10 @@ a {
   .powerUpModal.show {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
+
+@media screen and (max-height: 540px) {
+  .powerUpModal {
+    overflow: scroll; } }
 
 .powerUpModal__close {
   position: absolute;
@@ -4777,6 +4784,10 @@ a {
     transform: translate3d(0, 0, 0); }
   .alertNotice p {
     margin: 0 0 2rem; }
+
+@media screen and (max-height: 540px) {
+  .alertNotice {
+    overflow: scroll; } }
 
 .alertModal__close {
   position: absolute;
@@ -4885,6 +4896,10 @@ a {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
+@media screen and (max-height: 540px) {
+  .rulesSlider {
+    overflow: scroll; } }
+
 .rulesSlider__slide,
 .playSlider__slide {
   position: absolute;
@@ -4917,16 +4932,17 @@ a {
 .rulesSlider__title {
   font-size: 3.2rem;
   text-transform: uppercase;
-  margin-bottom: 2rem; }
+  margin-bottom: 3rem; }
 
 .rulesSlider__icon {
-  margin-bottom: 1.5rem; }
+  margin-bottom: 2.5rem; }
 
 .rulesSlider__description {
   font-size: 2rem; }
   .rulesSlider__description > div,
   .rulesSlider__description > p {
-    margin-bottom: 2.2rem; }
+    margin-bottom: 2.2rem;
+    line-height: 1.4; }
   .rulesSlider__description table {
     width: 90%;
     max-width: 400px;
@@ -4934,11 +4950,13 @@ a {
     border-collapse: collapse;
     text-align: left; }
   .rulesSlider__description .powerups-list {
-    font-size: 1.1rem; }
+    font-size: 1rem;
+    text-transform: uppercase; }
     .rulesSlider__description .powerups-list .row {
       margin-bottom: 1.5rem; }
     .rulesSlider__description .powerups-list img {
-      width: 75%; }
+      width: 75%;
+      margin: 0 auto; }
   .rulesSlider__description .highlight {
     font-size: 2.4rem;
     color: #2dbe0c;
