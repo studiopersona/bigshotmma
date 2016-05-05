@@ -19,6 +19,7 @@
 	}
 	.fightsList__pick {
 		&.show {
+			min-height: 30rem;
 			min-height: calc(1vw * 60);
 		}
 	}

@@ -4360,6 +4360,7 @@ a {
     overflow: hidden;
     transition: height 0.3s ease; }
     .fightsList__item .fightsList__pick.show {
+      min-height: 30rem;
       min-height: calc(1vw * 194); }
   .fightsList__item .fightsList__fightersWrap {
     padding: 0.9rem 0.5rem 0.5rem;
@@ -4500,6 +4501,7 @@ a {
   cursor: pointer; }
 
 .fightPicksList__item.show .fightPicksList__details {
+  min-height: 30rem;
   min-height: calc(1vw * 116); }
 
 .fightPicksList__image,
@@ -4611,6 +4613,7 @@ a {
   line-height: 2; }
 
 .resultsList__item.fightsList__item .fightsList__pick.show {
+  min-height: 30rem;
   min-height: calc(1vw * 60); }
 
 .resultsList__powerUpsTitle {
