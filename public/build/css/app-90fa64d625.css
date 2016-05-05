@@ -4256,9 +4256,8 @@ a {
   background: #fff; }
 
 .fightsList {
-  position: relative; }
-  .fightsList.save-btn-visible {
-    margin-bottom: 6rem; }
+  position: relative;
+  margin-bottom: 6rem; }
   .fightsList > div .button-wrap {
     position: fixed;
     bottom: 0;

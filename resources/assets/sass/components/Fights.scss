@@ -1,6 +1,9 @@
 .fightsList {
 	position: relative;
-	margin-bottom: 6rem;
+
+	&.save-btn-visible {
+		margin-bottom: 6rem;
+	}
 
 	> div .button-wrap {
 		position: fixed;
@@ -9,6 +12,12 @@
 		margin-top: 2.5rem;
 		padding: 1.5rem 0;
 		background: $color-white;
+		transform: translate3d(0, 100%, 0);
+		transition: transform 0.3s ease;
+
+		&.show {
+			transform: translate3d(0,0,0);
+		}
 	}
 }
 
@@ -274,8 +283,6 @@
 
 // buttons -----------------------------
 
-
-/* One radio button per line */
 .fightsList__pickButton {
   display: inline;
   cursor: pointer;

@@ -210,7 +210,7 @@
                 </li>
             </ul>
             <div class="container-fluid">
-                <div class="col-xs-100 button-wrap">
+                <div id="save-button-wrap" class="col-xs-100 button-wrap">
                     <button
                         type="button"
                         class="button button--primary"
@@ -559,6 +559,11 @@
                         return playerPick.fightId === e.target.dataset.fightId;
                     },
                     clearBtnNode;
+
+                if ( this.playerPicks.length === 4 ) {
+                    document.querySelector('#save-button-wrap').classList.add('show');
+                    document.querySelector('.fightsList').classList.add('save-btn-visible');
+                }
 
                 if ( this.playerPicks.length === 5) {
                     if ( this.playerPicks.findIndex(checkPick) !== -1 ) {
