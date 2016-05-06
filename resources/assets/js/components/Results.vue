@@ -5,7 +5,16 @@
             <h4 class="pageHeader__subheader">{{ event.event_name }}</h4>
         </header>
         <div v-if="! resultsList.length">
-            <p>No event results have been recorded at this time.</p>
+            <div class="fightsList">
+                <p>No event results have been recorded at this time.</p>
+                <div :class="loaderClasses">
+                    <div class="js-global-loader loader">
+                        <svg viewBox="0 0 32 32" width="32" height="32">
+                            <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
+                        </svg>
+                    </div>
+                </div>
+            </div>
         </div>
         <div v-else>
             <div class="fightsList">
