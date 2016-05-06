@@ -79,7 +79,7 @@
                                     <img src="public/image/icons/star.png">
                                 </div>
                                 <div class="col-xs-75">
-                                    <h4 v-if="(parseInt(pick.fighter.odds, 10) > 0)" class="fightPicksList__selectionTitle">Favorite to Win</h4>
+                                    <h4 v-if="(parseInt(pick.fighter.odds, 10) < 0)" class="fightPicksList__selectionTitle">Favorite to Win</h4>
                                     <h4 v-else  class="fightPicksList__selectionTitle">Underdog to Win</h4>
                                     <p class="fightPicksList__selectionResults" v-if="results.length">
                                         <span v-if="outcome[pick.fight_id].fighter">You chose the winning fighter</span>
@@ -93,7 +93,7 @@
                                     --
                                 </div>
                                 <div v-else :class="['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].fighter ? 'correct' : '']">
-                                    +{{ outcome[pick.fight_id].fighterPoints }}
+                                    {{ outcome[pick.fight_id].fighter ? '+' : ''}}{{ outcome[pick.fight_id].fighterPoints }}
                                 </div>
                             </div>
                             <!-- finish row -->
@@ -341,44 +341,69 @@
                     fightPicks = vm.picksList.find(function(pick) {
                         return parseInt(pick.fight_id, 10) === parseInt(obj.fightResults.fight_id, 10);
                     });
+                    // console.log('fight picks: ', fightPicks);
+                    // console.log('obj: ', obj);
+                    // console.log('outcome: ', vm.outcome);
                     vm.outcome[obj.fightResults.fight_id] = {};
-                    vm.outcome[obj.fightResults.fight_id].fighter = ( parseInt(obj.fightResults.winning_fighter_id, 10) === parseInt(fightPicks.fighter.winning_fighter_id, 10) ) ? 1 : 0;
-                    vm.outcome[obj.fightResults.fight_id].fighterFavorite = ( parseInt(fightPicks.fighter.odds, 10) > 0 ) ? 1 : 0;
+                    console.log('fight id from fight results: ', parseInt(obj.fightResults.fight_id, 10));
+                    console.log('pick list: ', vm.picksList);
+                    if ( fightPicks ) {
+                        if ( parseInt(obj.fightResults.winning_fighter_id, 10) === parseInt(fightPicks.fighter.winning_fighter_id, 10) ) {
+                            console.log('got the winning fighter');
+                            vm.outcome[obj.fightResults.fight_id].fighter = 1;
+                            vm.outcome[obj.fightResults.fight_id].fighterFavorite = ( parseInt(fightPicks.fighter.odds, 10) < 0 ) ? 1 : 0;
 
-                    if ( parseInt(obj.fightResults.winning_fighter_id, 10) && parseInt(fightPicks.fighter.odds, 10) > 0 ) {
-                        vm.outcome[obj.fightResults.fight_id].fighterPoints = 3;
-                    } else if ( parseInt(obj.fightResults.winning_fighter_id, 10) && parseInt(fightPicks.fighter.odds, 10) < 0 ) {
-                        vm.outcome[obj.fightResults.fight_id].fighterPoints = 5;
-                    } else {
-                        vm.outcome[obj.fightResults.fight_id].fighterPoints = 0;
-                    }
+                            if ( parseInt(obj.fightResults.winning_fighter_id, 10) && parseInt(fightPicks.fighter.odds, 10) < 0 ) {
+                                vm.outcome[obj.fightResults.fight_id].fighterPoints = 3;
+                            } else if ( parseInt(obj.fightResults.winning_fighter_id, 10) && parseInt(fightPicks.fighter.odds, 10) > 0 ) {
+                                vm.outcome[obj.fightResults.fight_id].fighterPoints = 5;
+                            } else {
+                                vm.outcome[obj.fightResults.fight_id].fighterPoints = 0;
+                            }
 
-                    vm.outcome[obj.fightResults.fight_id].finish_id = ( parseInt(obj.fightResults.finish_id, 10) === parseInt(fightPicks.finish.finish_id, 10) ) ? 1 : 0;
-                    vm.outcome[obj.fightResults.fight_id].finish = parseInt(obj.fightResults.finish_id, 10);
-                    vm.outcome[obj.fightResults.fight_id].finish_abbr = obj.fightResults.finish.abbr;
-                    vm.outcome[obj.fightResults.fight_id].round = ( parseInt(obj.fightResults.round, 10) === parseInt(fightPicks.round, 10) ) ? 1 : 0;
-                    vm.outcome[obj.fightResults.fight_id].minute = ( parseInt(obj.fightResults.minute, 10) === parseInt(fightPicks.minute, 10) ) ? 1 : 0;
+                            vm.outcome[obj.fightResults.fight_id].finish_id = ( parseInt(obj.fightResults.finish_id, 10) === parseInt(fightPicks.finish.finish_id, 10) ) ? 1 : 0;
+                            vm.outcome[obj.fightResults.fight_id].finish = parseInt(obj.fightResults.finish_id, 10);
+                            vm.outcome[obj.fightResults.fight_id].finish_abbr = obj.fightResults.finish.abbr;
+                            vm.outcome[obj.fightResults.fight_id].round = ( parseInt(obj.fightResults.round, 10) === parseInt(fightPicks.round, 10) ) ? 1 : 0;
+                            vm.outcome[obj.fightResults.fight_id].minute = ( parseInt(obj.fightResults.minute, 10) === parseInt(fightPicks.minute, 10) ) ? 1 : 0;
 
-                    vm.outcome[obj.fightResults.fight_id].roundResult = obj.fightResults.round;
-                    vm.outcome[obj.fightResults.fight_id].minuteResult = obj.fightResults.minute;
-                    vm.outcome[obj.fightResults.fight_id].totalTime = obj.totalTime;
+                            vm.outcome[obj.fightResults.fight_id].roundResult = obj.fightResults.round;
+                            vm.outcome[obj.fightResults.fight_id].minuteResult = obj.fightResults.minute;
+                            vm.outcome[obj.fightResults.fight_id].totalTime = obj.totalTime;
 
-                    if ( fightPicks.power_up.power_up_id ) {
-                        powerUpResult = obj.fightResults.power_ups.findIndex(function(pu) {
-                            return ( parseInt(fightPicks.power_up.power_up_id, 10)  === parseInt(pu.power_up_id, 10) );
-                        });
+                            if ( fightPicks.power_up.power_up_id ) {
+                                powerUpResult = obj.fightResults.power_ups.findIndex(function(pu) {
+                                    return ( parseInt(fightPicks.power_up.power_up_id, 10)  === parseInt(pu.power_up_id, 10) );
+                                });
 
-                        if ( powerUpResult !== -1 ) {
-                            vm.outcome[obj.fightResults.fight_id].power_up = 1;
-                            vm.outcome[obj.fightResults.fight_id].power_up_points = parseInt(fightPicks.power_up.bonus_points, 10);
+                                if ( powerUpResult !== -1 ) {
+                                    vm.outcome[obj.fightResults.fight_id].power_up = 1;
+                                    vm.outcome[obj.fightResults.fight_id].power_up_points = parseInt(fightPicks.power_up.bonus_points, 10);
+                                } else {
+                                    vm.outcome[obj.fightResults.fight_id].power_up = 1;
+                                    vm.outcome[obj.fightResults.fight_id].power_up_points = -parseInt(fightPicks.power_up.penalty_points, 10);
+                                }
+                            } else {
+                                vm.outcome[obj.fightResults.fight_id].power_up = 0;
+                            }
                         } else {
-                            vm.outcome[obj.fightResults.fight_id].power_up = 1;
-                            vm.outcome[obj.fightResults.fight_id].power_up_points = -parseInt(fightPicks.power_up.penalty_points, 10);
+                            vm.outcome[obj.fightResults.fight_id] = {
+                                fighter: 0,
+                                fighterPoints: 0,
+                                finish_id: 0,
+                                finish: parseInt(obj.fightResults.finish_id, 10),
+                                finish_abbr: obj.fightResults.finish.abbr,
+                                round: 0,
+                                minute: 0,
+                                roundResult: obj.fightResults.round,
+                                minuteResult: obj.fightResults.minute,
+                                totalTime: obj.totalTime,
+                                power_up: 0
+                            };
                         }
-                    } else {
-                        vm.outcome[obj.fightResults.fight_id].power_up = 0;
                     }
                 });
+                console.log('outcome from here: ', this.outcome);
                 this.tallyPoints(this.outcome);
             },
 
@@ -386,7 +411,9 @@
                 var vm = this,
                     finishData;
 
+                console.log('outcome before tally: ', outcome);
                 outcome.forEach(function (item, i) {
+                    console.log('tallying points');
                     outcome[i].points = 0;
                     // +5 for underdog, +3 for favorite
                     if ( item.fighter ) {
@@ -412,6 +439,7 @@
 
                     vm.totalPoints += outcome[i].points;
                 });
+                console.log('outcome after tally: ', this.outcome);
             },
 
             determineRank(standings) {
