@@ -3,7 +3,7 @@
         <header class="pageHeader">
             <h1 class="pageHeader__header">Enter a Contest</h1>
             <h4 class="pageHeader__subheader">
-                Over <span class="pageHeader--highlight">{{ poolTotal }}</span> Total Prize Pool
+                Total Prize Pool ${{ poolTotal }}
             </h4>
         </header>
         <div class="contestList">
@@ -78,6 +78,7 @@
                 contestsList: { 'contests':{} },
                 contestsEntered: [],
                 working: false,
+                poolTotal: 0,
                 URL: {
                     base: window.URL.base,
                     current: window.URL.current,
