@@ -199,6 +199,9 @@
                 currentHowToPlaySlide: 0,
 				loggedIn: false,
 				playersName: '',
+                appDashboardClassList: [],
+                rulesSliderClassList: [],
+                howToPlayClassList: [],
 				URL: {
                     base: window.URL.base,
                     current: window.URL.current,
@@ -233,21 +236,24 @@
 
 		ready() {
 			if ( auth.validate() ) this.loggedIn = true;
+            this.appDashboardClassList = document.querySelector('.appDashboard').classList;
+            this.rulesSliderClassList = document.querySelector('#rulesSlider').classList;
+            this.howToPlayClassList = document.querySelector('#howToPlaySlider').classList;
 		},
 
 		methods: {
 			toggleMenu() {
-				document.querySelector('.appDashboard').classList.toggle('show');
+				this.appDashboardClassList.toggle('show');
 			},
 
 			showContestTypes() {
-				document.querySelector('.appDashboard').classList.toggle('show');
-				document.querySelector('#rulesSlider').classList.toggle('show');
+				this.appDashboardClassList.toggle('show');
+				this.rulesSliderClassList.toggle('show');
 			},
 
             showHowToPlay() {
-                document.querySelector('.appDashboard').classList.toggle('show');
-                document.querySelector('#howToPlaySlider').classList.toggle('show');
+                this.appDashboardClassList.toggle('show');
+                this.howToPlayClassList.toggle('show');
             },
 
 			changeSlide(index, selector, position, sliderSelector, e) {
@@ -261,6 +267,7 @@
 
 			sliderClose(selector) {
 				document.querySelector(selector).classList.toggle('show');
+                this.appDashboardClassList.toggle('show');
 			},
 
 			logout() {
@@ -269,9 +276,6 @@
 				this.toggleMenu();
 				this.loggedIn = false;
 			},
-		},
-
-		computed: {
 		},
 	};
 </script>

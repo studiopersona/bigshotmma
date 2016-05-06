@@ -4514,7 +4514,6 @@ a {
     color: #fff; }
 
 .fightPicksList {
-  position: relative;
   margin-bottom: 6rem; }
   .fightPicksList > div .button-wrap {
     position: fixed;

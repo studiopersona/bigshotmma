@@ -4633,6 +4633,17 @@ a {
   text-align: center;
   margin-top: 0.5rem; }
 
+.resultsList {
+  position: relative;
+  margin-bottom: 6rem; }
+  .resultsList > div .button-wrap {
+    position: fixed;
+    bottom: 0;
+    z-index: 30;
+    margin-top: 2.5rem;
+    padding: 1.5rem 0;
+    background: #fff; }
+
 .resultsList__outcomeString {
   font-size: 1rem;
   padding: 0.5rem 1rem 1rem;
