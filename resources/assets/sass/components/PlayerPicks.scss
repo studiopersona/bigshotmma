@@ -1,3 +1,16 @@
+.fightPicksList {
+	margin-bottom: 6rem;
+
+	> div .button-wrap {
+		position: fixed;
+		bottom: 0;
+		z-index: 30;
+		margin-top: 2.5rem;
+		padding: 1.5rem 0;
+		background: $color-white;
+	}
+}
+
 .fightPicksList__details {
 	height: 0;
 	overflow: hidden;

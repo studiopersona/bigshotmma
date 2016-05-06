@@ -62,17 +62,17 @@
                     </div>
                 </li>
             </ul>
+            <div class="container-fluid">
+                <div class="col-xs-100 button-wrap">
+                    <a v-link="{ path: '/contest/' + contest.contest_id + '/picks' }" class="button button--primary">My Picks</a>
+                </div>
+            </div>
             <div :class="loaderClasses">
                 <div class="js-global-loader loader">
                     <svg viewBox="0 0 32 32" width="32" height="32">
                         <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
                     </svg>
                 </div>
-            </div>
-        </div>
-        <div class="container-fluid">
-            <div class="col-xs-100 button-wrap">
-                <a v-link="{ path: '/contest/' + contest.contest_id + '/picks' }" class="button button--primary">My Picks</a>
             </div>
         </div>
         <section :class="infoModalClasses">
