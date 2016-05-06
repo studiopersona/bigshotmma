@@ -200,7 +200,7 @@ class ContestsController extends ApiController
                         'event.fights.fighters',
                         'event',
                         'users'
-                    ]);
+                    ])
                     ->where('deadline', '>', date('Y-m-d H:i:s', strtotime('-1 week')));
 
         if ( ! is_null($playerId) )
