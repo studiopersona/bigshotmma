@@ -487,7 +487,7 @@
             },
 
             selectDecision(fightId, id, e) {
-                var siblingButtons = document.querySelectorAll('input[name="finish"] + span'),
+                var siblingButtons = document.querySelectorAll('.fightsList__pick[data-fight-id="' + fightId + '"] input[name="finish"] + span'),
                     findFight = function(fight) {
                         return fight.id === fightId;
                     },
@@ -507,7 +507,7 @@
                     this.fightData[parseInt(fightId, 10)].round = parseInt(fightData.rounds, 10);
                     this.fightData[parseInt(fightId, 10)].minute = 5;
 
-                    this.removeShowOnButtons(document.querySelectorAll('label.fightsList__pickButton > span')).then(function() {
+                    this.removeShowOnButtons(document.querySelectorAll('.fightsList__pick[data-fight-id="' + fightId + '"] label.fightsList__pickButton > span')).then(function() {
                         e.target.classList.add('show');
                         // need to change the round selector to work with the number of rpunds form the database
                         document.querySelector('label[for="round' + fightData.rounds + '"] span[data-fight-id="' + fightId + '"]').classList.add('show');
@@ -527,7 +527,7 @@
             },
 
             selectRound(fightId, id, e) {
-                var siblingButtons = document.querySelectorAll('input[name="round"] + span');
+                var siblingButtons = document.querySelectorAll('.fightsList__pick[data-fight-id="' + fightId + '"] input[name="round"] + span');
 
                 document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__roundPointsIndicator').classList.add('show');
 
@@ -541,7 +541,7 @@
             },
 
             selectMinute(fightId, id, e) {
-                var siblingButtons = document.querySelectorAll('input[name="minute"] + span');
+                var siblingButtons = document.querySelectorAll('.fightsList__pick[data-fight-id="' + fightId + '"] input[name="minute"] + span');
 
                 document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__minutePointsIndicator').classList.add('show');
 

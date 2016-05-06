@@ -183,36 +183,39 @@ class PicksController extends ApiController
                             // was the winning fighter the favorite or the underdog
                             foreach ($pick['fight']['fighters'] as $fighter) {
                                 if ( (int)$fighter['id'] === (int)$pick['winning_fighter_id'] ) {
-                                    if ( (int)$fighter['pivot']['odds'] > 0 ) {
+                                    if ( (int)$fighter['pivot']['odds'] < 0 ) {
                                         $tally += 3;
                                     } else {
                                         $tally += 5;
                                     }
                                 }
                             }
-                        }
-                        // did the player have a power-up applied to this fight
-                        if ( ! is_null($pick['power_up_id']) ) {
-                            // if there were no power ups achieved during the fight apply penalty
-                            if ( empty($result['power_ups']) ) {
-                                $tally -= (int)$pick['power_up']['penalty_points'];
-                            } else {
-                                // if the power up chosen was achieved add bonus points
-                                $power_up_achieved = false;
-                                foreach ( $result['power_ups'] as $power_up ) {
-                                    if ( (int)$power_up['id'] === (int)$pick['power_up_id'] ) {
-                                        $tally += (int)$pick['power_up']['bonus_points'];
-                                        $power_up_achieved = true;
-                                    }
-                                }
-                                // if the power up applied was not in the list apply penalty
-                                if ( ! $power_up_achieved ) $tally -= (int)$pick['power_up']['penalty_points'];
-                            }
-                        }
 
-                        if ( (int)$pick['finish_id'] === (int)$result['finish_id'] ) $tally += 5;
-                        if ( (int)$pick['round'] === (int)$result['round'] ) $tally += 2;
-                        if ( (int)$pick['minute'] === (int)$result['minute'] ) $tally += 1;
+                            // did the player have a power-up applied to this fight
+                            if ( ! is_null($pick['power_up_id']) ) {
+                                // if there were no power ups achieved during the fight apply penalty
+                                if ( empty($result['power_ups']) ) {
+                                    $tally -= (int)$pick['power_up']['penalty_points'];
+                                } else {
+                                    // if the power up chosen was achieved add bonus points
+                                    $power_up_achieved = false;
+                                    foreach ( $result['power_ups'] as $power_up ) {
+                                        if ( (int)$power_up['id'] === (int)$pick['power_up_id'] ) {
+                                            $tally += (int)$pick['power_up']['bonus_points'];
+                                            $power_up_achieved = true;
+                                        }
+                                    }
+                                    // if the power up applied was not in the list apply penalty
+                                    if ( ! $power_up_achieved ) $tally -= (int)$pick['power_up']['penalty_points'];
+                                }
+                            }
+
+                            if ( (int)$pick['finish_id'] === (int)$result['finish_id'] ) $tally += 5;
+                            if ( (int)$pick['round'] === (int)$result['round'] ) $tally += 2;
+                            if ( (int)$pick['minute'] === (int)$result['minute'] ) $tally += 1;
+                        } else {
+                            $tally += 0;
+                        }
                     };
                 }
             }
@@ -294,7 +297,7 @@ class PicksController extends ApiController
                             {
                                 if ( (int)$fighter['id'] === (int)$pick['winning_fighter_id'] )
                                 {
-                                    if ( (int)$fighter['pivot']['odds'] > 0 )
+                                    if ( (int)$fighter['pivot']['odds'] < 0 )
                                     {
                                         $tally += 3;
                                     } else
@@ -303,34 +306,37 @@ class PicksController extends ApiController
                                     }
                                 }
                             }
-                        }
-                        // did the player have a power-up applied to this fight
-                        if ( ! is_null($pick['power_up_id']) )
-                        {
-                            // if there were no power ups achieved during the fight apply penalty
-                            if ( empty($result['power_ups']) )
-                            {
-                                $tally -= (int)$pick['power_up']['penalty_points'];
-                            } else
-                            {
-                                // if the power up chosen was achieved add bonus points
-                                $power_up_achieved = false;
-                                foreach ( $result['power_ups'] as $power_up )
-                                {
-                                    if ( (int)$power_up['id'] === (int)$pick['power_up_id'] )
-                                    {
-                                        $tally += (int)$pick['power_up']['bonus_points'];
-                                        $power_up_achieved = true;
-                                    }
-                                }
-                                // if the power up applied was not in the list apply penalty
-                                if ( ! $power_up_achieved ) $tally -= (int)$pick['power_up']['penalty_points'];
-                            }
-                        }
 
-                        if ( (int)$pick['finish_id'] === (int)$result['finish_id'] ) $tally += 5;
-                        if ( (int)$pick['round'] === (int)$result['round'] ) $tally += 2;
-                        if ( (int)$pick['minute'] === (int)$result['minute'] ) $tally += 1;
+                            // did the player have a power-up applied to this fight
+                            if ( ! is_null($pick['power_up_id']) )
+                            {
+                                // if there were no power ups achieved during the fight apply penalty
+                                if ( empty($result['power_ups']) )
+                                {
+                                    $tally -= (int)$pick['power_up']['penalty_points'];
+                                } else
+                                {
+                                    // if the power up chosen was achieved add bonus points
+                                    $power_up_achieved = false;
+                                    foreach ( $result['power_ups'] as $power_up )
+                                    {
+                                        if ( (int)$power_up['id'] === (int)$pick['power_up_id'] )
+                                        {
+                                            $tally += (int)$pick['power_up']['bonus_points'];
+                                            $power_up_achieved = true;
+                                        }
+                                    }
+                                    // if the power up applied was not in the list apply penalty
+                                    if ( ! $power_up_achieved ) $tally -= (int)$pick['power_up']['penalty_points'];
+                                }
+                            }
+
+                            if ( (int)$pick['finish_id'] === (int)$result['finish_id'] ) $tally += 5;
+                            if ( (int)$pick['round'] === (int)$result['round'] ) $tally += 2;
+                            if ( (int)$pick['minute'] === (int)$result['minute'] ) $tally += 1;
+                        } else {
+                            $tally += 0;
+                        }
                     };
                 }
             }
@@ -340,6 +346,7 @@ class PicksController extends ApiController
                 'total' => $tally,
                 'fights_won' => $winning_fights,
             ];
+
         }
 
         $standings = array_reverse(array_values(array_sort($standings, function ($value)
