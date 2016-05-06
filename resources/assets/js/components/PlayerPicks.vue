@@ -1,7 +1,7 @@
 <template>
     <div :working="working">
         <header class="pageHeader" :working.sync="working">
-            <h1 class="pageHeader__header">Picks</h1>
+            <h1 class="pageHeader__header">{{ $root.playersName }}'s Picks</h1>
             <h4 class="pageHeader__subheader">{{ picksList[0].event.event_short_name }} / <a v-link="{ path: '/contest/' + picksList[0].contest.id + '/results' }">Results</a> </h4>
         </header>
         <div class="contestDetails">
@@ -319,7 +319,7 @@
                         headers: auth.getAuthHeader()
                     }).then(function(response) {
                         this.finishes = response.data;
-                        console.log(this.finishes);
+                        // console.log(this.finishes);
                     });
 
                 }, function(err) {
@@ -345,11 +345,11 @@
                     // console.log('obj: ', obj);
                     // console.log('outcome: ', vm.outcome);
                     vm.outcome[obj.fightResults.fight_id] = {};
-                    console.log('fight id from fight results: ', parseInt(obj.fightResults.fight_id, 10));
-                    console.log('pick list: ', vm.picksList);
+                    // console.log('fight id from fight results: ', parseInt(obj.fightResults.fight_id, 10));
+                    // console.log('pick list: ', vm.picksList);
                     if ( fightPicks ) {
                         if ( parseInt(obj.fightResults.winning_fighter_id, 10) === parseInt(fightPicks.fighter.winning_fighter_id, 10) ) {
-                            console.log('got the winning fighter');
+                            // console.log('got the winning fighter');
                             vm.outcome[obj.fightResults.fight_id].fighter = 1;
                             vm.outcome[obj.fightResults.fight_id].fighterFavorite = ( parseInt(fightPicks.fighter.odds, 10) < 0 ) ? 1 : 0;
 
@@ -403,7 +403,7 @@
                         }
                     }
                 });
-                console.log('outcome from here: ', this.outcome);
+                // console.log('outcome from here: ', this.outcome);
                 this.tallyPoints(this.outcome);
             },
 
@@ -411,9 +411,9 @@
                 var vm = this,
                     finishData;
 
-                console.log('outcome before tally: ', outcome);
+                // console.log('outcome before tally: ', outcome);
                 outcome.forEach(function (item, i) {
-                    console.log('tallying points');
+                    // console.log('tallying points');
                     outcome[i].points = 0;
                     // +5 for underdog, +3 for favorite
                     if ( item.fighter ) {
@@ -428,7 +428,7 @@
                         finishData = vm.finishes.find(function(finish) {
                             return item.finish_id === finish.id;
                         });
-                        console.log(finishData);
+                        // console.log(finishData);
                         outcome[i].points += parseInt(finishData.points, 10);
                     }
 
@@ -439,7 +439,7 @@
 
                     vm.totalPoints += outcome[i].points;
                 });
-                console.log('outcome after tally: ', this.outcome);
+                // console.log('outcome after tally: ', this.outcome);
             },
 
             determineRank(standings) {
@@ -459,12 +459,5 @@
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
             },
         },
-
-        route: {
-            // Check the users auth status before
-            // allowing navigation to the route
-            canActivate() {
-            }
-        }
     };
 </script>
