@@ -17,7 +17,7 @@
             </div>
         </div>
         <div v-else>
-            <div class="fightsList">
+            <div class="resultsList">
                 <ul>
                     <li class="fightsList__item resultsList__item" @click.prevent="toggleFight(result.fightResults.fight_id)" v-for="result in resultsList">
                         <div class="container-fluid fightsList__fightersWrap" data-fight-id="{{ result.fightResults.fight_id }}">
