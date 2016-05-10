@@ -44,29 +44,29 @@
                         <div class="col-xs-25">
                             <div class="participantsList__itemTitle">Record</div>
                             <div class="participantsList__record">
-                                {{ participant.record.wins }} - {{ participant.record.losses }}
+                                {{ participant.record.correctPicks }} - {{ participant.record.incorrectPicks }}
                             </div>
                         </div>
                         <div class="col-xs-20">
                             <div class="participantsList__itemTitle">Win %</div>
                             <div class="participantsList__wins">
-                                {{ participant.record.win_percentage }}%
+                                {{ participant.record.percent }}%
                             </div>
                         </div>
                     </div>
                 </li>
             </ul>
+            <div class="container-fluid">
+                <div class="col-xs-100 button-wrap">
+                    <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }" class="button button--primary">Enter</a>
+                </div>
+            </div>
             <div :class="loaderClasses">
                 <div class="js-global-loader loader">
                     <svg viewBox="0 0 32 32" width="32" height="32">
                         <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
                     </svg>
                 </div>
-            </div>
-        </div>
-        <div class="container-fluid">
-            <div class="col-xs-100 button-wrap">
-                <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }" class="button button--primary">Enter</a>
             </div>
         </div>
         <section :class="infoModalClasses">
@@ -104,6 +104,7 @@
                         contest_id: '',
                     },
                 }],
+                playerRecords: [],
                 contestTypes: {},
                 contestTypeId: '',
                 infoModalContent: {
@@ -165,6 +166,15 @@
                 }).then(function(response) {
                     this.contestTypes = response.data;
                 });
+
+                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players-records', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    console.log(response.data);
+                    this.playerRecords = response.data.data;
+                    this.parsePlayerRecords();
+                });
             },
 
             showContestRules(e) {
@@ -194,6 +204,30 @@
                 e.preventDefault();
 
                 this.infoModalClasses = ['infoModal'];
+            },
+
+            parsePlayerRecords() {
+                var vm = this;
+
+                this.playerRecords.forEach(function(player, index) {
+                    var findPlayer = function(player) {
+                        console.log('player_id: ', player.id);
+                        console.log('currentPlayerId: ', currentPlayerId);
+                        return parseInt(player.id, 10) === parseInt(currentPlayerId, 10);
+                    },
+                    match,
+                    currentPlayerId;
+
+                    currentPlayerId = player.id;
+                    match  = vm.participantsList[0].participants.find(findPlayer);
+                    match.record = {
+                        correctPicks: player.record.correctPicks,
+                        incorrectPicks: player.record.incorrectPicks,
+                        percent: Math.round(( parseInt(player.record.correctPicks, 10)/parseInt(player.record.totalPicks, 10) ) * 100),
+                    };
+                });
+
+                console.log(this.participantsList[0].participants);
             },
         },
 

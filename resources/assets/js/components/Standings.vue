@@ -150,7 +150,7 @@
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
-                    console.log(response.data);
+                    // console.log(response.data);
                     this.standingsList = response.data.data[0].standings;
                     this.playerId = response.data.data[0].player;
                     // this.contest = response.data.data[0].contest[0];
@@ -173,7 +173,7 @@
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
-                    console.log(response);
+                    // console.log(response);
                     this.contest = response.data.contest[0];
                 }, function(err) {
                     console.log(err);

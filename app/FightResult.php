@@ -35,4 +35,9 @@ class FightResult extends Model
     {
         return $this->hasMany('Bsmma\Contest');
     }
+
+    public function pick()
+    {
+        return $this->hasOne('Bsmma\Pick', 'fight_id', 'fight_id');
+    }
 }

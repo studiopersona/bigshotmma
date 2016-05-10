@@ -22,7 +22,7 @@ class Pick extends Model
 
     public function fightResult()
     {
-        return $this->belongsTo('Bsmma\FightResult');
+        return $this->hasOne('Bsmma\FightResult', 'fight_id', 'fight_id');
     }
 
     public function fight()

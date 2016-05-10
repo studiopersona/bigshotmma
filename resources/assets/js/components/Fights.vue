@@ -575,11 +575,14 @@
                     } else {
                         this.alert({
                             header: 'Heads Up',
-                            body: '<p>You\'ve already selected the maximum number of fights. Please clear one of your selections if you would like to add this fight.</p><p>You can clear a fight by tapping the <span class="fightsList__clearButtonExample">X</span> that appears over a selected fighter.</p>',
+                            body: '<p>You have already five (5) fighters, which is the limit. Clear an existing pick by tapping the <span class="fightsList__clearButtonExample">X</span> icon, then you can make another pick.</p>',
                             subject: 'Too Many Fights Picked',
                             action: true,
                         });
                     }
+                    // show the clear button
+                    clearBtnNode = document.querySelector('.fightsList__clearButton[data-fighter-id="' + e.target.dataset.fighterId + '"]');
+                    clearBtnNode.classList.add('show');
                 } else {
                     // show the clear button
                     clearBtnNode = document.querySelector('.fightsList__clearButton[data-fighter-id="' + e.target.dataset.fighterId + '"]');
@@ -929,12 +932,5 @@
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
             },
         },
-
-        route: {
-            // Check the users auth status before
-            // allowing navigation to the route
-            canActivate() {
-            }
-        }
     };
 </script>

@@ -8,12 +8,14 @@ use Bsmma\Http\Requests;
 use Bsmma\User;
 use Bsmma\Pick;
 use Bsmma\Contest;
+use Bsmma\Event;
 use Bsmma\FightResult;
 use Bsmma\ContestParticipant;
 use Bsmma\divStrong\Transformers\PickTransformer;
 use Bsmma\divStrong\Transformers\PlayerPickTransformer;
 use Bsmma\divStrong\Transformers\ContestTransformer;
 use Bsmma\divStrong\Scoring\FightScoring;
+use Bsmma\divStrong\Reports\PlayerRecords;
 
 class PicksController extends ApiController
 {
@@ -21,23 +23,27 @@ class PicksController extends ApiController
         Pick $pick,
         User $user,
         Contest $contest,
+        Event $event,
         ContestParticipant $contestParticipant,
         FightResult $fightResult,
         PickTransformer $pickTransformer,
         PlayerPickTransformer $playerPickTransformer,
         ContestTransformer $contestTransformer,
-        FightScoring $fightScoring
+        FightScoring $fightScoring,
+        PlayerRecords $playerRecords
     )
     {
         $this->pick = $pick;
         $this->user = $user;
         $this->contest = $contest;
+        $this->event = $event;
         $this->contestParticipant = $contestParticipant;
         $this->pickTransformer = $pickTransformer;
         $this->playerPickTransformer = $playerPickTransformer;
         $this->contestTransformer = $contestTransformer;
         $this->fightResult = $fightResult;
         $this->fightScoring = $fightScoring;
+        $this->playerRecords = $playerRecords;
     }
 
     /**
@@ -168,7 +174,9 @@ class PicksController extends ApiController
             $playerPicks = $playerPicks->toArray();
             $contestResults = $contestResults->toArray();
 
+            // cycle through all the players picks and determine scores
             foreach ( $playerPicks as $key => $pick ) {
+                // if we're not still on the same user reset things
                 if ( (int)$current_user_id !== (int)$pick['user_id'] ) {
                     $current_user_id = (int)$pick['user_id'];
                     $tally = 0;
@@ -180,6 +188,7 @@ class PicksController extends ApiController
                 }
 
                 foreach ( $contestResults as $result ) {
+                    // did the player pick the winning fighter
                     if ( (int)$result['fight_id'] === (int)$pick['fight_id'] ) {
                         if ( (int)$result['winning_fighter_id'] === (int)$pick['winning_fighter_id'] ) {
                             $this->fightScoring->determineFighterPoints((int)$result['winning_fighter_id'], (int)$pick['winning_fighter_id'], $pick['fight']['fighters']);
@@ -196,11 +205,11 @@ class PicksController extends ApiController
                 $standings[$index]['totalPoints'] = $tally;
             }
         }
-
+        // order the standings array from highest score to lowest score
         $standings = array_reverse(array_values(array_sort($standings, function ($value) {
             return $value['totalPoints'];
         })));
-
+        // if the request also wants user info
         if ( $withUsersInfo ) {
             foreach( $standings as $key => $value )
             {
@@ -215,6 +224,47 @@ class PicksController extends ApiController
         ];
 
         return $this->respond(['data' => [$data]]);
+    }
+
+    public function playersRecords($contestId)
+    {
+        $playerRecords = [];
+
+        $players = $this->contestParticipant
+                    ->select('user_id')
+                    ->where('contest_id', $contestId)
+                    ->orderBy('user_id')
+                    ->get()
+                    ->toArray();
+
+        foreach( $players as $player ) {
+            $playerRecords[] = [
+                'record' => $this->playerRecords->getPlayerPickRecord($player['user_id'], $contestId),
+                'id' => $player['user_id']
+            ];
+        }
+
+        return $this->respond(['data' => $playerRecords]);
+    }
+
+    public function quitContest($contestId)
+    {
+        $user = \JWTAuth::parseToken()->authenticate();
+
+        $this->contestParticipant
+            ->where('user_id', $user->id)
+            ->where('contest_id', $contestId)
+            ->delete();
+
+        $this->pick->where('user_id', $user->id)
+            ->where('contest_id', $contestId)
+            ->delete();
+
+        $contest = $this->contest->select('event_id')
+                    ->where('id', $contestId)
+                    ->first();
+
+        return $this->respond(['data' => ['eventId' => $contest->event_id]]);
     }
 
     /**

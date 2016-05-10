@@ -208,6 +208,15 @@
                     >Lobby</button>
                 </div>
             </div>
+            <div v-else class="container-fluid">
+                <div class="col-xs-100 button-wrap">
+                    <button
+                        type="button"
+                        class="button button--primary"
+                        @click.prevent="quitContest(picksList[0].contest.id, $event)"
+                    >Quit</button>
+                </div>
+            </div>
             <div :class="loaderClasses">
                 <div class="js-global-loader loader">
                     <svg viewBox="0 0 32 32" width="32" height="32">
@@ -400,43 +409,8 @@
                         }
                     }
                 });
-                console.log('outcome: ', this.outcome);
+                // console.log('outcome: ', this.outcome);
                 // this.tallyPoints(this.outcome);
-            },
-
-            tallyPoints(outcome) {
-                var vm = this,
-                    finishData;
-
-                // console.log('outcome before tally: ', outcome);
-                outcome.forEach(function (item, i) {
-                    // console.log('tallying points');
-                    outcome[i].points = 0;
-                    // +5 for underdog, +3 for favorite
-                    if ( item.fighter ) {
-                        if (item.fighterFavorite ) {
-                            outcome[i].points += 3;
-                        } else {
-                            outcome[i].points += 5;
-                        }
-                    }
-                    // add correct number of points for finish type
-                    if ( item.finish_id ) {
-                        finishData = vm.finishes.find(function(finish) {
-                            return item.finish_id === finish.id;
-                        });
-                        // console.log(finishData);
-                        outcome[i].points += parseInt(finishData.points, 10);
-                    }
-
-                    if ( item.minute ) outcome[i].points += 1;
-                    if ( item.round ) outcome[i].points += 2;
-
-                    if ( item.power_up ) outcome[i].points += item.power_up_points;
-
-                    vm.totalPoints += outcome[i].points;
-                });
-                // console.log('outcome after tally: ', this.outcome);
             },
 
             determineRank(standings) {
@@ -448,6 +422,16 @@
                     };
 
                 this.playerRanking = ( standings.findIndex(findPlayer) + 1 );
+            },
+
+            quitContest(contestId, e) {
+                this.$http.get(URL.base + '/api/v1/contest/' + contestId +'/quit', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    console.log(response);
+                    router.go('/event/' + response.data.data.eventId + '/contests');
+                });
             },
         },
 
