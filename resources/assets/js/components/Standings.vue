@@ -50,13 +50,13 @@
                         <div class="col-xs-15">
                             <div class="participantsList__itemTitle">Points</div>
                             <div class="standingsList__points">
-                                {{ participant.total }}
+                                {{ participant.totalPoints }}
                             </div>
                         </div>
                         <div class="col-xs-20">
                             <div class="participantsList__itemTitle">Fights</div>
                             <div class="standingsList__wins">
-                                {{ participant.fights_won }}/5
+                                {{ participant.fightsReported }}/5
                             </div>
                         </div>
                     </div>
@@ -146,13 +146,14 @@
             },
 
             fetch() {
-                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings-list', {}, {
+                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings/1', {}, {
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
+                    console.log(response.data);
                     this.standingsList = response.data.data[0].standings;
                     this.playerId = response.data.data[0].player;
-                    this.contest = response.data.data[0].contest[0];
+                    // this.contest = response.data.data[0].contest[0];
                     this.determineRank(response.data.data[0].standings);
                     this.working = false;
                 }, function(err) {
@@ -164,6 +165,16 @@
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
                     this.contestTypes = response.data;
+                }, function(err) {
+                    console.log(err);
+                });
+
+                this.$http.get( URL.base + '/api/v1/contests/' + this.$route.params.contest_id, {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    console.log(response);
+                    this.contest = response.data.contest[0];
                 }, function(err) {
                     console.log(err);
                 });
@@ -215,12 +226,5 @@
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
             },
         },
-
-        route: {
-            // Check the users auth status before
-            // allowing navigation to the route
-            canActivate() {
-            }
-        }
     };
 </script>

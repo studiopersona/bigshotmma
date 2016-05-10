@@ -145,6 +145,7 @@ class ContestsController extends ApiController
                         'event',
                         'contestType',
                         'event.fights.fighters',
+                        'users'
                     ])
                     ->where('id', $id)
                     ->get();

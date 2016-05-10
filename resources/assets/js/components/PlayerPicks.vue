@@ -58,7 +58,7 @@
                         <div class="col-xs-15">
                             <div class="fightPicksList__title">Points</div>
                             <div v-if="!results.length" class="fightPicksList__stat">--</div>
-                            <div v-else :class="['fightPicksList__stat', outcome[pick.fight_id].points > 0 ? 'correct' : '']">{{ outcome[pick.fight_id].points }}</div>
+                            <div v-else :class="['fightPicksList__stat', outcome[pick.fight_id].points > 0 ? 'correct' : '']">{{ outcome[pick.fight_id].total_points }}</div>
                         </div>
                     </div>
                     <div class="fightPicksList__details">
@@ -93,7 +93,7 @@
                                     --
                                 </div>
                                 <div v-else :class="['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].fighter ? 'correct' : '']">
-                                    {{ outcome[pick.fight_id].fighter ? '+' : ''}}{{ outcome[pick.fight_id].fighterPoints }}
+                                    {{ outcome[pick.fight_id].fighterPoints > 0 ? '+' : ''}}{{ outcome[pick.fight_id].fighterPoints }}
                                 </div>
                             </div>
                             <!-- finish row -->
@@ -115,9 +115,7 @@
                                     --
                                 </div>
                                 <div v-else :class="['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].finish_id ? 'correct' : '']">
-                                    <span v-if="outcome[pick.fight_id].finish_id && outcome[pick.fight_id].finish === 3">+7</span>
-                                    <span v-if="outcome[pick.fight_id].finish_id && outcome[pick.fight_id].finish !== 3">+10</span>
-                                    <span v-else>0</span>
+                                    <span>{{ outcome[pick.fight_id].finish_points > 0 ? '+' : ''}}{{ outcome[pick.fight_id].finish_points }}</span>
                                 </div>
                             </div>
                             <!-- round row -->
@@ -139,8 +137,7 @@
                                     --
                                 </div>
                                 <div v-else :class="['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].round ? 'correct' : '']">
-                                    <span v-if="outcome[pick.fight_id].round">+2</span>
-                                    <span v-else>0</span>
+                                    <span>{{ outcome[pick.fight_id].round_points > 0 ? '+' : ''}}{{ outcome[pick.fight_id].round_points  }}</span>
                                 </div>
                             </div>
                             <!-- minute row -->
@@ -162,8 +159,7 @@
                                     --
                                 </div>
                                 <div v-else :class="['col-xs-15', 'fightPicksList__points', outcome[pick.fight_id].minute ? 'correct' : '']">
-                                    <span v-if="outcome[pick.fight_id].minute">+1</span>
-                                    <span v-else>0</span>
+                                    <span>{{ outcome[pick.fight_id].minute_points > 0 ? '+' : ''}}{{ outcome[pick.fight_id].minute_points }}</span>
                                 </div>
                             </div>
                             <!-- power up row -->
@@ -185,7 +181,7 @@
                                     --
                                 </div>
                                 <div    v-else :class="['col-xs-15', 'fightPicksList__points', parseInt(outcome[pick.fight_id].power_up_points, 10) > 0 ? 'correct' : 'penalty']" style="{color: pick.power_up.color}">
-                                    {{ outcome[pick.fight_id].power_up_points }}
+                                    {{ outcome[pick.fight_id].power_up_points > 0 ? '+' : ''}}{{ outcome[pick.fight_id].power_up_points }}
                                 </div>
                             </div>
                             <!-- ponits total -->
@@ -197,7 +193,7 @@
                                     --
                                 </div>
                                 <div v-else class="col-xs-15 fightPicksList__totalValue">
-                                    {{ outcome[pick.fight_id].points }}
+                                    {{ outcome[pick.fight_id].total_points }}
                             </div>
                         </div>
                     </div>
@@ -350,27 +346,27 @@
                     if ( fightPicks ) {
                         if ( parseInt(obj.fightResults.winning_fighter_id, 10) === parseInt(fightPicks.fighter.winning_fighter_id, 10) ) {
                             // console.log('got the winning fighter');
+                            // figher results
                             vm.outcome[obj.fightResults.fight_id].fighter = 1;
                             vm.outcome[obj.fightResults.fight_id].fighterFavorite = ( parseInt(fightPicks.fighter.odds, 10) < 0 ) ? 1 : 0;
-
-                            if ( parseInt(obj.fightResults.winning_fighter_id, 10) && parseInt(fightPicks.fighter.odds, 10) < 0 ) {
-                                vm.outcome[obj.fightResults.fight_id].fighterPoints = 3;
-                            } else if ( parseInt(obj.fightResults.winning_fighter_id, 10) && parseInt(fightPicks.fighter.odds, 10) > 0 ) {
-                                vm.outcome[obj.fightResults.fight_id].fighterPoints = 5;
-                            } else {
-                                vm.outcome[obj.fightResults.fight_id].fighterPoints = 0;
-                            }
-
+                            vm.outcome[obj.fightResults.fight_id].fighterPoints = fightPicks.fighter.points;
+                            // finish results
                             vm.outcome[obj.fightResults.fight_id].finish_id = ( parseInt(obj.fightResults.finish_id, 10) === parseInt(fightPicks.finish.finish_id, 10) ) ? 1 : 0;
                             vm.outcome[obj.fightResults.fight_id].finish = parseInt(obj.fightResults.finish_id, 10);
                             vm.outcome[obj.fightResults.fight_id].finish_abbr = obj.fightResults.finish.abbr;
-                            vm.outcome[obj.fightResults.fight_id].round = ( parseInt(obj.fightResults.round, 10) === parseInt(fightPicks.round, 10) ) ? 1 : 0;
-                            vm.outcome[obj.fightResults.fight_id].minute = ( parseInt(obj.fightResults.minute, 10) === parseInt(fightPicks.minute, 10) ) ? 1 : 0;
-
+                            vm.outcome[obj.fightResults.fight_id].finish_points = fightPicks.finish.points;
+                            // round resluts
+                            vm.outcome[obj.fightResults.fight_id].round = ( parseInt(obj.fightResults.round, 10) === parseInt(fightPicks.round.selected, 10) ) ? 1 : 0;
+                            vm.outcome[obj.fightResults.fight_id].round_points = fightPicks.round.points;
                             vm.outcome[obj.fightResults.fight_id].roundResult = obj.fightResults.round;
+                            // minute results
+                            vm.outcome[obj.fightResults.fight_id].minute = ( parseInt(obj.fightResults.minute, 10) === parseInt(fightPicks.minute.selected, 10) ) ? 1 : 0;
+                            vm.outcome[obj.fightResults.fight_id].minute_points = fightPicks.minute.points;
                             vm.outcome[obj.fightResults.fight_id].minuteResult = obj.fightResults.minute;
-                            vm.outcome[obj.fightResults.fight_id].totalTime = obj.totalTime;
 
+                            vm.outcome[obj.fightResults.fight_id].totalTime = obj.totalTime;
+                            vm.outcome[obj.fightResults.fight_id].total_points = fightPicks.totalPoints;
+                            // power up points
                             if ( fightPicks.power_up.power_up_id ) {
                                 powerUpResult = obj.fightResults.power_ups.findIndex(function(pu) {
                                     return ( parseInt(fightPicks.power_up.power_up_id, 10)  === parseInt(pu.power_up_id, 10) );
@@ -398,13 +394,14 @@
                                 roundResult: obj.fightResults.round,
                                 minuteResult: obj.fightResults.minute,
                                 totalTime: obj.totalTime,
-                                power_up: 0
+                                power_up: 0,
+                                total_points: 0,
                             };
                         }
                     }
                 });
-                // console.log('outcome from here: ', this.outcome);
-                this.tallyPoints(this.outcome);
+                console.log('outcome: ', this.outcome);
+                // this.tallyPoints(this.outcome);
             },
 
             tallyPoints(outcome) {

@@ -13,6 +13,7 @@ use Bsmma\ContestParticipant;
 use Bsmma\divStrong\Transformers\PickTransformer;
 use Bsmma\divStrong\Transformers\PlayerPickTransformer;
 use Bsmma\divStrong\Transformers\ContestTransformer;
+use Bsmma\divStrong\Scoring\FightScoring;
 
 class PicksController extends ApiController
 {
@@ -24,7 +25,8 @@ class PicksController extends ApiController
         FightResult $fightResult,
         PickTransformer $pickTransformer,
         PlayerPickTransformer $playerPickTransformer,
-        ContestTransformer $contestTransformer
+        ContestTransformer $contestTransformer,
+        FightScoring $fightScoring
     )
     {
         $this->pick = $pick;
@@ -35,6 +37,7 @@ class PicksController extends ApiController
         $this->playerPickTransformer = $playerPickTransformer;
         $this->contestTransformer = $contestTransformer;
         $this->fightResult = $fightResult;
+        $this->fightScoring = $fightScoring;
     }
 
     /**
@@ -144,12 +147,12 @@ class PicksController extends ApiController
         ]);
     }
 
-    public function getPlayerStandings($contest_id)
+    public function getStandings($contest_id, $withUsersInfo = 0)
     {
         $user = \JWTAuth::parseToken()->authenticate();
 
         $standings = [];
-        $picks = $this->pick->where('contest_id', $contest_id)
+        $playerPicks = $this->pick->where('contest_id', $contest_id)
                     ->with('fight.fighters', 'powerUp')
                     ->orderBy('user_id')
                     ->get();
@@ -158,212 +161,57 @@ class PicksController extends ApiController
                             ->with('powerUps')
                             ->get();
 
-        if ( ! $picks->isEmpty() ) {
+        if ( ! $playerPicks->isEmpty() ) {
             $current_user_id = 0;
+            $index = 0;
             $tally = 0;
-            $picks = $picks->toArray();
+            $playerPicks = $playerPicks->toArray();
             $contestResults = $contestResults->toArray();
 
-            foreach ( $picks as $key => $pick ) {
-                if ( $current_user_id !== (int)$pick['user_id'] ) {
-                    if ( $current_user_id !== 0 ) {
-                        $standings[] = [
-                            'player_id' => $current_user_id,
-                            'total' => $tally,
-                        ];
-                    }
+            foreach ( $playerPicks as $key => $pick ) {
+                if ( (int)$current_user_id !== (int)$pick['user_id'] ) {
                     $current_user_id = (int)$pick['user_id'];
                     $tally = 0;
+                    $index += 1;
+                    $standings[$index] = [
+                        'playerId' => (int)$pick['user_id'],
+                        'fightsReported' => 0
+                    ];
                 }
 
                 foreach ( $contestResults as $result ) {
                     if ( (int)$result['fight_id'] === (int)$pick['fight_id'] ) {
-                        // did player pick the winning fighter
                         if ( (int)$result['winning_fighter_id'] === (int)$pick['winning_fighter_id'] ) {
-                            // was the winning fighter the favorite or the underdog
-                            foreach ($pick['fight']['fighters'] as $fighter) {
-                                if ( (int)$fighter['id'] === (int)$pick['winning_fighter_id'] ) {
-                                    if ( (int)$fighter['pivot']['odds'] < 0 ) {
-                                        $tally += 3;
-                                    } else {
-                                        $tally += 5;
-                                    }
-                                }
-                            }
-
-                            // did the player have a power-up applied to this fight
-                            if ( ! is_null($pick['power_up_id']) ) {
-                                // if there were no power ups achieved during the fight apply penalty
-                                if ( empty($result['power_ups']) ) {
-                                    $tally -= (int)$pick['power_up']['penalty_points'];
-                                } else {
-                                    // if the power up chosen was achieved add bonus points
-                                    $power_up_achieved = false;
-                                    foreach ( $result['power_ups'] as $power_up ) {
-                                        if ( (int)$power_up['id'] === (int)$pick['power_up_id'] ) {
-                                            $tally += (int)$pick['power_up']['bonus_points'];
-                                            $power_up_achieved = true;
-                                        }
-                                    }
-                                    // if the power up applied was not in the list apply penalty
-                                    if ( ! $power_up_achieved ) $tally -= (int)$pick['power_up']['penalty_points'];
-                                }
-                            }
-
-                            if ( (int)$pick['finish_id'] === (int)$result['finish_id'] ) $tally += 5;
-                            if ( (int)$pick['round'] === (int)$result['round'] ) $tally += 2;
-                            if ( (int)$pick['minute'] === (int)$result['minute'] ) $tally += 1;
-                        } else {
-                            $tally += 0;
+                            $this->fightScoring->determineFighterPoints((int)$result['winning_fighter_id'], (int)$pick['winning_fighter_id'], $pick['fight']['fighters']);
+                            $this->fightScoring->determinePowerupPoints($pick['power_up_id'], $result['power_ups']);
+                            $this->fightScoring->determineRoundPoints((int)$pick['round'], (int)$result['round']);
+                            $this->fightScoring->determineMinutePoints((int)$pick['minute'], (int)$result['minute']);
+                            $this->fightScoring->determineFinishPoints((int)$pick['finish_id'], (int)$result['finish_id']);
+                            $tally += $this->fightScoring->getTotalPoints();
                         }
+                        $standings[$index]['fightsReported'] += 1;
                     };
                 }
+
+                $standings[$index]['totalPoints'] = $tally;
             }
-            // make sure to capture the last players total
-            $standings[] = [
-                'player_id' => $current_user_id,
-                'total' => $tally,
-            ];
         }
 
         $standings = array_reverse(array_values(array_sort($standings, function ($value) {
-            return $value['total'];
+            return $value['totalPoints'];
         })));
+
+        if ( $withUsersInfo ) {
+            foreach( $standings as $key => $value )
+            {
+                $user_info = $this->user->find($value['playerId']);
+                $standings[$key]['player_name'] = $user_info->player_name;
+            }
+        }
 
         $data = [
             'standings' => $standings,
             'player' => $user->id
-        ];
-
-        return $this->respond(['data' => [$data]]);
-    }
-
-    public function getPlayerStandingsList($contest_id)
-    {
-        $user = \JWTAuth::parseToken()->authenticate();
-
-        $standings = [];
-        $picks = $this->pick->where('contest_id', $contest_id)
-                    ->with('fight.fighters', 'powerUp')
-                    ->orderBy('user_id')
-                    ->get();
-
-        $contestResults = $this->fightResult->where('contest_id', $contest_id)
-                            ->with('powerUps')
-                            ->get();
-
-        $contestData = $this->contest->with([
-                        'contestType',
-                        'event.fights.fighters',
-                        'event',
-                        'users'
-                    ])
-                    ->where('id', $contest_id)
-                    ->get();
-
-        $contest = $this->contestTransformer->transformCollection($contestData->toArray());
-
-        if ( ! $picks->isEmpty() ) {
-            $current_user_id = 0;
-            $tally = 0;
-            $winning_fights = 0;
-            $picks = $picks->toArray();
-            $contestResults = $contestResults->toArray();
-
-            foreach ( $picks as $key => $pick ) {
-                if ( $current_user_id !== (int)$pick['user_id'] ) {
-                    if ( $current_user_id !== 0 ) {
-                        $standings[] = [
-                            'player_id' => $current_user_id,
-                            'total' => $tally,
-                            'fights_won' => $winning_fights,
-                        ];
-                    }
-                    $current_user_id = (int)$pick['user_id'];
-                    $tally = 0;
-                    $winning_fights = 0;
-                }
-
-                foreach ( $contestResults as $result )
-                {
-                    if ( (int)$result['fight_id'] === (int)$pick['fight_id'] )
-                    {
-                        // did player pick the winning fighter
-                        if ( (int)$result['winning_fighter_id'] === (int)$pick['winning_fighter_id'] )
-                        {
-                            $winning_fights += 1;
-                            // was the winning fighter the favorite or the underdog
-                            foreach ($pick['fight']['fighters'] as $fighter)
-                            {
-                                if ( (int)$fighter['id'] === (int)$pick['winning_fighter_id'] )
-                                {
-                                    if ( (int)$fighter['pivot']['odds'] < 0 )
-                                    {
-                                        $tally += 3;
-                                    } else
-                                    {
-                                        $tally += 5;
-                                    }
-                                }
-                            }
-
-                            // did the player have a power-up applied to this fight
-                            if ( ! is_null($pick['power_up_id']) )
-                            {
-                                // if there were no power ups achieved during the fight apply penalty
-                                if ( empty($result['power_ups']) )
-                                {
-                                    $tally -= (int)$pick['power_up']['penalty_points'];
-                                } else
-                                {
-                                    // if the power up chosen was achieved add bonus points
-                                    $power_up_achieved = false;
-                                    foreach ( $result['power_ups'] as $power_up )
-                                    {
-                                        if ( (int)$power_up['id'] === (int)$pick['power_up_id'] )
-                                        {
-                                            $tally += (int)$pick['power_up']['bonus_points'];
-                                            $power_up_achieved = true;
-                                        }
-                                    }
-                                    // if the power up applied was not in the list apply penalty
-                                    if ( ! $power_up_achieved ) $tally -= (int)$pick['power_up']['penalty_points'];
-                                }
-                            }
-
-                            if ( (int)$pick['finish_id'] === (int)$result['finish_id'] ) $tally += 5;
-                            if ( (int)$pick['round'] === (int)$result['round'] ) $tally += 2;
-                            if ( (int)$pick['minute'] === (int)$result['minute'] ) $tally += 1;
-                        } else {
-                            $tally += 0;
-                        }
-                    };
-                }
-            }
-            // make sure to capture the last players total
-            $standings[] = [
-                'player_id' => $current_user_id,
-                'total' => $tally,
-                'fights_won' => $winning_fights,
-            ];
-
-        }
-
-        $standings = array_reverse(array_values(array_sort($standings, function ($value)
-        {
-            return $value['total'];
-        })));
-
-        foreach( $standings as $key => $value )
-        {
-            $user_info = $this->user->find($value['player_id']);
-            $standings[$key]['player_name'] = $user_info->player_name;
-        }
-
-        $data = [
-            'standings' => $standings,
-            'player' => $user->id,
-            'contest' => $contest,
         ];
 
         return $this->respond(['data' => [$data]]);

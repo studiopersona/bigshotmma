@@ -38,8 +38,7 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('power-ups', 'PowerUpsController@index');
 	    Route::get('finishes', 'FinishesController@index');
 	    Route::get('contest/{id}/results', 'FightResultsController@index');
-	    Route::get('contest/{id}/standings', 'PicksController@getPlayerStandings');
-	    Route::get('contest/{id}/standings-list', 'PicksController@getPlayerStandingsList');
+	    Route::get('contest/{id}/standings/{withplayers?}', 'PicksController@getStandings');
 	    Route::get('player-name', 'UsersController@getPlayerName');
 	});
 
