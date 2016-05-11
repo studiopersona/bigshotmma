@@ -3,7 +3,7 @@
         <header class="pageHeader">
             <h1 class="pageHeader__header">Enter a Contest</h1>
             <h4 class="pageHeader__subheader">
-               Total Prize Pool ${{ poolTotal }}
+                Total Prize Pool ${{ poolTotal }}
             </h4>
         </header>
         <div class="contestList">
@@ -11,12 +11,12 @@
                 <li class="contestList__item" v-for="contest in contestsList.contests">
                     <a v-link="{ path: '/contest/' + contest.contest_id + '/players' }">
                         <div class="container-fluid">
-                            <div class="col-xs-20">
+                            <div class="col-xs-23">
                                 <img class="contestList__img" :src="URL.base + '/public/image/events/' + contest.event_image_file" alt="{{ contest.event_name }} Image">
                             </div>
-                            <div class="col-xs-45 contestList__infoWarp">
-                                <div class="contestList__date">{{ contest.event_date }}</div>
-                                <div class="contestList__name">{{ contest.event_short_name }}</div>
+                            <div class="col-xs-42 contestList__infoWarp">
+                                <div class="contestList__date">{{ contest.event_date }} {{ contest.event_time }}</div>
+                                <div class="contestList__name">{{ contest.event_name }}</div>
                                 <div class="contestList__type">{{ contest.contest_type_name }}</div>
                             </div>
                             <div class="col-xs-20">

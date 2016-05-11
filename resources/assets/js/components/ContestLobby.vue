@@ -204,9 +204,9 @@
                     this.working = false;
                     // console.log(this.participantsList[0].contest);
                     deadline = new Date(this.participantsList[0].contest.entry_deadline);
-                    // console.log(now);
-                    // console.log(this.participantsList[0].contest.entry_deadline);
-                    // console.log(deadline);
+                    console.log(now);
+                    console.log(this.participantsList[0].contest.entry_deadline);
+                    console.log(deadline);
                     this.deadlinePast = ( now.getTime() > deadline.getTime() );
                 }, function(err) {
                     console.log(err);
@@ -319,12 +319,5 @@
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
             },
         },
-
-        route: {
-            // Check the users auth status before
-            // allowing navigation to the route
-            canActivate() {
-            }
-        }
     };
 </script>

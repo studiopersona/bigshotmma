@@ -392,21 +392,17 @@
                 var newPowerUp;
                 e.preventDefault();
 
-                // if the content is already loaded don't load it again
-                if ( this.powerUpId !== e.target.dataset.powerUp )
-                {
-                    this.powerUpId = e.target.dataset.powerUp;
-                    newPowerUp = this.powerUps.find(this.findPowerUp);
+                this.powerUpId = e.target.dataset.powerUp;
+                newPowerUp = this.powerUps.find(this.findPowerUp);
 
-                    this.selectedPowerUp.id = newPowerUp.power_up_id;
-                    this.selectedPowerUp.fightId = e.target.dataset.fightId;
-                    this.selectedPowerUp.title = newPowerUp.name;
-                    this.selectedPowerUp.description = newPowerUp.description,
-                    this.selectedPowerUp.image_name = newPowerUp.image_name;
-                    this.selectedPowerUp.color = newPowerUp.color;
-                    this.selectedPowerUp.bonus_points = newPowerUp.bonus_points;
-                    this.selectedPowerUp.penalty_points = newPowerUp.penalty_points;
-                }
+                this.selectedPowerUp.id = newPowerUp.power_up_id;
+                this.selectedPowerUp.fightId = e.target.dataset.fightId;
+                this.selectedPowerUp.title = newPowerUp.name;
+                this.selectedPowerUp.description = newPowerUp.description,
+                this.selectedPowerUp.image_name = newPowerUp.image_name;
+                this.selectedPowerUp.color = newPowerUp.color;
+                this.selectedPowerUp.bonus_points = newPowerUp.bonus_points;
+                this.selectedPowerUp.penalty_points = newPowerUp.penalty_points;
 
                 this.powerUpModalClasses.push('show');
             },
@@ -434,8 +430,7 @@
                     this.powerupPoints = powerupData.bonus_points;
                     // find fighter choosen for the fight and add show class to powerup image indicator
                     fightPick = this.playerPicks.find(findFight);
-                    puIndicatorImage = document.querySelector('img.fightsList__powerup[data-fight-id="' + fightId +'"][data-fighter-id="' + fightPick.fighterId + '"]');
-                    puIndicatorImage.classList.add('show');
+                    document.querySelector('img.fightsList__powerup[data-fight-id="' + fightId +'"][data-fighter-id="' + fightPick.fighterId + '"]').classList.add('show');
                 } else {
                     this.alert({
                         header: 'Heads Up!',

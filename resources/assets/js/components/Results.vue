@@ -97,7 +97,7 @@
                             wins via
                             {{ result.fightResults.finish.abbr }}
                             in Round {{ result.fightResults.round }}
-                            at {{ result.totalTime }}
+                            at {{ result.roundTime }}
                         </div>
                         <div class="fightsList__pick" id="{{ result.fightResults.id }}" data-fight-id="{{ result.fightResults.fight_id }}">
                             <div class="container-fluid">
@@ -228,6 +228,7 @@
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
                     this.resultsList = response.data.results;
+                    console.log(response.data.results);
                     this.event = response.data.results[0].fightResults.fight.event;
                     this.contestId = response.data.results[0].fightResults.contest_id;
                     this.working = false;

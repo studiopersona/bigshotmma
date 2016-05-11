@@ -27,8 +27,8 @@ class FightResultsController extends ApiController
 
     public function index($contest_id)
     {
-    	$fightResults = $this->fightResult->with(['powerUps'])
-                        ->with(['finish', 'fight', 'fight.fighters', 'fight.event'])
+    	$fightResults = $this->fightResult
+                        ->with(['finish', 'fight', 'fight.fighters', 'fight.event', 'powerUps'])
     					->where('contest_id', $contest_id)
     					->get();
 
