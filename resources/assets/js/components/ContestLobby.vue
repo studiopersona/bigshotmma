@@ -2,9 +2,22 @@
     <div :working="working">
         <header class="pageHeader" :working.sync="working">
             <h1 class="pageHeader__header">Contest Lobby</h1>
-            <h4 class="pageHeader__subheader">
-                {{ participantsList[0].contest.event_short_name }} / <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/results' }">Results</a>
-            </h4>
+            <div v-if="contestsEntered.indexOf(parseInt(participantsList[0].contest.contest_id, 10)) === -1">
+                <h4 v-if="! deadlinePast" class="pageHeader__subheader">
+                    {{ participantsList[0].contest.event_short_name }} / <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }">Enter</a>
+                </h4>
+                <h4 v-else class="pageHeader__subheader">
+                    {{ participantsList[0].contest.event_short_name }} / Contest Closed
+                </h4>
+            </div>
+            <div v-else>
+                <h4 v-if="! deadlinePast" class="pageHeader__subheader">
+                    {{ participantsList[0].contest.event_short_name }} / <a @click.prevent="confirmQuit">Quit Contest</a>
+                </h4>
+                <h4 v-else class="pageHeader__subheader">
+                    {{ participantsList[0].contest.event_short_name }} / <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/results' }">Results</a>
+                </h4>
+            </div>
         </header>
         <div class="contestDetails">
             <div class="container-fluid">
@@ -56,9 +69,17 @@
                     </div>
                 </li>
             </ul>
-            <div class="container-fluid">
-                <div class="col-xs-100 button-wrap">
+            <div v-if="contestsEntered.indexOf(parseInt(participantsList[0].contest.contest_id, 10)) === -1" class="container-fluid">
+                <div v-if="! deadlinePast" class="col-xs-100 button-wrap">
                     <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }" class="button button--primary">Enter</a>
+                </div>
+                <div v-else class="col-xs-100 button-wrap">
+                    Contest is Closed
+                </div>
+            </div>
+            <div v-else class="container-fluid">
+                <div class="col-xs-100 button-wrap">
+                    <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/picks' }" class="button button--primary">My Picks</a>
                 </div>
             </div>
             <div :class="loaderClasses">
@@ -79,6 +100,18 @@
                 <button @click="infoModalClose" type="button" class="button button--green">Got It</button>
             </div>
             <button @click="infoModalClose" type="button" class="infoModal__close">x</button>
+        </section>
+        <section :class="confirmModalClasses">
+            <h3 class="confirmModal__title">{{ confirmModalContent.title }}</h3>
+            <img class="confirmModal__image" :src="URL.base + '/public/image/events/' + confirmModalContent.image" alt="{{ confirmModalContent.title }} Image">
+            <div class="confirmModal__body">
+                {{{ confirmModalContent.body }}}
+            </div>
+            <div class="confirmModal__confirm">
+                <button @click="confirmModalClose" class="confirmModal__confirm--no">No</button>
+                <button @click="quitContest(participantsList[0].contest.contest_id, $event)" class="confirmModal__confirm--yes">Yes</button>
+            </div>
+            <button @click="confirmModalClose" type="button" class="confirmModal__close">x</button>
         </section>
     </div>
 </template>
@@ -112,9 +145,18 @@
                     rules: '',
                     image: ''
                 },
+                confirmModalContent: {
+                    title: '',
+                    image: '',
+                    body: '',
+                },
+                confirmModalClasList: [],
                 contest: {},
+                contestsEntered: [],
+                deadlinePast: false,
                 working: false,
                 infoModalClasses: ['infoModal'],
+                confirmModalClasses: ['confirmModal'],
                 URL: {
                     base: window.URL.base,
                     current: window.URL.current,
@@ -133,6 +175,8 @@
             } else {
                 this.fetch();
             }
+
+            this.confirmModalClassList = document.querySelector('.confirmModal').classList;
         },
 
         methods: {
@@ -154,8 +198,25 @@
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
+                    var now = new Date(),
+                        deadline;
                     this.participantsList = response.data.participants;
                     this.working = false;
+                    // console.log(this.participantsList[0].contest);
+                    deadline = new Date(this.participantsList[0].contest.entry_deadline);
+                    // console.log(now);
+                    // console.log(this.participantsList[0].contest.entry_deadline);
+                    // console.log(deadline);
+                    this.deadlinePast = ( now.getTime() > deadline.getTime() );
+                }, function(err) {
+                    console.log(err);
+                });
+
+                this.$http.get(URL.base + '/api/v1/player/contests-entered', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    this.contestsEntered = response.data.contests;
                 }, function(err) {
                     console.log(err);
                 });
@@ -171,7 +232,7 @@
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
-                    console.log(response.data);
+                    // console.log(response.data);
                     this.playerRecords = response.data.data;
                     this.parsePlayerRecords();
                 });
@@ -211,8 +272,8 @@
 
                 this.playerRecords.forEach(function(player, index) {
                     var findPlayer = function(player) {
-                        console.log('player_id: ', player.id);
-                        console.log('currentPlayerId: ', currentPlayerId);
+                        // console.log('player_id: ', player.id);
+                        // console.log('currentPlayerId: ', currentPlayerId);
                         return parseInt(player.id, 10) === parseInt(currentPlayerId, 10);
                     },
                     match,
@@ -227,7 +288,29 @@
                     };
                 });
 
-                console.log(this.participantsList[0].participants);
+                // console.log(this.participantsList[0].participants);
+            },
+
+            confirmQuit(e) {
+                this.confirmModalContent.title = 'Quit Contest';
+                this.confirmModalContent.image = this.participantsList[0].contest.event_image;
+                this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + ' / ' + this.participantsList[0].contest.total_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to quit this contest?</p>';
+
+                this.confirmModalClassList.add('show');
+            },
+
+            confirmModalClose(e) {
+                this.confirmModalClassList.remove('show');
+            },
+
+            quitContest(contestId, e) {
+                this.$http.get(URL.base + '/api/v1/contest/' + contestId +'/quit', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(function(response) {
+                    // console.log(response);
+                    router.go('/event/' + response.data.data.eventId + '/contests');
+                });
             },
         },
 

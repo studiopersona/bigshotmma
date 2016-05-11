@@ -208,15 +208,6 @@
                     >Lobby</button>
                 </div>
             </div>
-            <div v-else class="container-fluid">
-                <div class="col-xs-100 button-wrap">
-                    <button
-                        type="button"
-                        class="button button--primary"
-                        @click.prevent="quitContest(picksList[0].contest.id, $event)"
-                    >Quit</button>
-                </div>
-            </div>
             <div :class="loaderClasses">
                 <div class="js-global-loader loader">
                     <svg viewBox="0 0 32 32" width="32" height="32">
@@ -422,16 +413,6 @@
                     };
 
                 this.playerRanking = ( standings.findIndex(findPlayer) + 1 );
-            },
-
-            quitContest(contestId, e) {
-                this.$http.get(URL.base + '/api/v1/contest/' + contestId +'/quit', {}, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                }).then(function(response) {
-                    console.log(response);
-                    router.go('/event/' + response.data.data.eventId + '/contests');
-                });
             },
         },
 

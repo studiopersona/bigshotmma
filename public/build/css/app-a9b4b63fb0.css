@@ -4894,22 +4894,9 @@ a {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
-@media screen and (max-height: 540px) {
-  .confirmModal {
-    overflow-y: scroll; } }
-
 .confirmModal__body p {
   margin-bottom: 2rem;
   font-size: 2rem; }
-
-.confirmModal__body .highlight {
-  font-size: 2.4rem;
-  color: #2dbe0c;
-  text-transform: uppercase; }
-
-.confirmModal__body .larger {
-  font-size: 5.3rem;
-  margin-top: -1.5rem; }
 
 .confirmModal__title {
   font-size: 3rem;
@@ -4917,8 +4904,7 @@ a {
   margin-bottom: 2rem; }
 
 .confirmModal__image {
-  margin-bottom: 3rem;
-  width: 50%; }
+  margin-bottom: 3rem; }
 
 .confirmModal__close {
   position: absolute;

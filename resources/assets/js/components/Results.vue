@@ -154,7 +154,7 @@
                         </div>
                     </li>
                 </ul>
-                 <div class="container-fluid">
+                <div class="container-fluid">
                     <div class="col-xs-100 button-wrap">
                         <a v-link="{ path: '/contest/' + contestId + '/picks' }" class="button button--primary">My Picks</a>
                     </div>
