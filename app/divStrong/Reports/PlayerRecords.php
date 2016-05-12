@@ -34,6 +34,9 @@ class PlayerRecords
 		$picks = $this->pick->where('user_id', $playerId)
 					->with('fightResult')
 					->whereIn('contest_id', $contestsList)
+					->whereHas('fightResult', function($query) use ($contestsList) {
+						$query->whereIn('contest_id', $contestsList);
+					})
 					->orderBy('contest_id')
 					->get();
 
@@ -42,10 +45,9 @@ class PlayerRecords
 
 		if ( ! $picks->isEmpty() ) {
 			$picks->each(function($pick, $index) use ($record, &$correctPicks) {
-				if ( $pick->fightResult !== NULL ) {
-					if ( (int)$pick->winning_fighter_id === (int)$pick->fightResult->winning_fighter_id ) $correctPicks += 1;
-				}
+				if ( (int)$pick->winning_fighter_id === (int)$pick->fightResult->winning_fighter_id ) $correctPicks += 1;
 			});
+
 			$record['correctPicks'] = $correctPicks;
 			$record['incorrectPicks'] = $record['totalPicks'] - $correctPicks;
 		} else {
