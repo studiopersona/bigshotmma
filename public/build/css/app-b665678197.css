@@ -4543,13 +4543,15 @@ a {
     background: #fff; }
 
 .fightPicksList__details {
-  max-height: 200rem;
+  height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease; }
+  transition: height 0.3s ease; }
 
 .fightPicksList__item {
   padding: 0.9rem 0 0.5rem;
   cursor: pointer; }
+  .fightPicksList__item .fightPicksList__details {
+    max-height: 200rem; }
 
 .fightPicksList__item.closed .fightPicksList__details {
   max-height: 0;

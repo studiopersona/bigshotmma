@@ -204,9 +204,9 @@
                     this.working = false;
                     // console.log(this.participantsList[0].contest);
                     deadline = new Date(this.participantsList[0].contest.entry_deadline);
-                    console.log(now);
-                    console.log(this.participantsList[0].contest.entry_deadline);
-                    console.log(deadline);
+                    // console.log(now);
+                    // console.log(this.participantsList[0].contest.entry_deadline);
+                    // console.log(deadline);
                     this.deadlinePast = ( now.getTime() > deadline.getTime() );
                 }, function(err) {
                     console.log(err);
@@ -284,7 +284,7 @@
                     match.record = {
                         correctPicks: player.record.correctPicks,
                         incorrectPicks: player.record.incorrectPicks,
-                        percent: Math.round(( parseInt(player.record.correctPicks, 10)/parseInt(player.record.totalPicks, 10) ) * 100),
+                        percent: (parseInt(player.record.totalPicks, 10) === 0) ? 0 : Math.round(( parseInt(player.record.correctPicks, 10)/parseInt(player.record.totalPicks, 10) ) * 100),
                     };
                 });
 

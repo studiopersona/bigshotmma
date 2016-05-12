@@ -288,6 +288,7 @@
                 }).then(function(response) {
                     this.picksList = response.data.picks;
                     this.working = false;
+                    this.setAccordianHeights();
 
                     this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', {}, {
                         // Attach the JWT header
@@ -324,7 +325,7 @@
             },
 
             toggleDetails(pickId) {
-               document.querySelector('li.fightPicksList__item[data-pick-id="' + pickId + '"]').classList.toggle('show');
+               document.querySelector('li.fightPicksList__item[data-pick-id="' + pickId + '"]').classList.toggle('closed');
             },
 
             parseResults(results) {
@@ -386,15 +387,15 @@
                             vm.outcome[obj.fightResults.fight_id] = {
                                 fighter: 0,
                                 fighterPoints: 0,
+                                finish_points: 0,
                                 finish_id: 0,
-                                finish: parseInt(obj.fightResults.finish_id, 10),
                                 finish_abbr: obj.fightResults.finish.abbr,
-                                round: 0,
-                                minute: 0,
+                                round_points: 0,
+                                minute_points: 0,
                                 roundResult: obj.fightResults.round,
                                 minuteResult: obj.fightResults.minute,
                                 totalTime: obj.totalTime,
-                                power_up: 0,
+                                power_up_points: 0,
                                 total_points: 0,
                             };
                         }
@@ -413,6 +414,20 @@
                     };
 
                 this.playerRanking = ( standings.findIndex(findPlayer) + 1 );
+            },
+
+            setAccordianHeights() {
+                var elements,
+                    doc;
+
+                setTimeout(function(){
+                    elements = document.querySelectorAll('.fightPicksList__item');
+
+                    for (var i=0; i < elements.length; ++i) {
+                        elements[i].dataset.height = elements[i].offsetHeight;
+                        elements[i].classList.add('closed');
+                    }
+                }, 100);
             },
         },
 

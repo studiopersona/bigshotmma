@@ -4391,7 +4391,7 @@ a {
     background-color: #fff;
     border-bottom: 4px solid #eee;
     overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s ease;
+    transition: height 0.3s ease, padding 0.3s ease;
     padding-bottom: 3rem;
     max-height: 200rem; }
     .fightsList__item .fightsList__pick.closed {
@@ -4543,17 +4543,17 @@ a {
     background: #fff; }
 
 .fightPicksList__details {
-  max-height: 200rem;
+  height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease; }
+  transition: height 0.3s ease; }
 
 .fightPicksList__item {
   padding: 0.9rem 0 0.5rem;
   cursor: pointer; }
 
-.fightPicksList__item.closed .fightPicksList__details {
-  max-height: 0;
-  padding: 0; }
+.fightPicksList__item.show .fightPicksList__details {
+  min-height: 60rem;
+  min-height: calc(1vw * 116); }
 
 .fightPicksList__image,
 .fightPicksList__icon > img {

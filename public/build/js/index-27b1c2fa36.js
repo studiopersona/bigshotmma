@@ -14930,9 +14930,9 @@ exports.default = {
                 this.working = false;
                 // console.log(this.participantsList[0].contest);
                 deadline = new Date(this.participantsList[0].contest.entry_deadline);
-                console.log(now);
-                console.log(this.participantsList[0].contest.entry_deadline);
-                console.log(deadline);
+                // console.log(now);
+                // console.log(this.participantsList[0].contest.entry_deadline);
+                // console.log(deadline);
                 this.deadlinePast = now.getTime() > deadline.getTime();
             }, function (err) {
                 console.log(err);
@@ -15003,7 +15003,7 @@ exports.default = {
                 match.record = {
                     correctPicks: player.record.correctPicks,
                     incorrectPicks: player.record.incorrectPicks,
-                    percent: Math.round(parseInt(player.record.correctPicks, 10) / parseInt(player.record.totalPicks, 10) * 100)
+                    percent: parseInt(player.record.totalPicks, 10) === 0 ? 0 : Math.round(parseInt(player.record.correctPicks, 10) / parseInt(player.record.totalPicks, 10) * 100)
                 };
             });
 
@@ -15344,6 +15344,7 @@ exports.default = {
                 this.fightsList = response.data.fights;
                 this.initializeFightData(response.data.fights[0].fights);
                 this.working = false;
+                this.setAccordianHeights();
             }, function (err) {
                 console.log(err);
             });
@@ -15617,10 +15618,10 @@ exports.default = {
             var fightToClose, fightToOpen;
 
             fightToClose = document.querySelector('div.fightsList__pick[data-fight-id="' + this.currentFightId + '"]');
-            if (fightToClose) fightToClose.classList.toggle('show');
+            if (fightToClose) fightToClose.classList.toggle('closed');
 
             fightToOpen = document.querySelector('div.fightsList__pick[data-fight-id="' + e.target.dataset.fightId + '"]');
-            fightToOpen.classList.toggle('show');
+            fightToOpen.classList.toggle('closed');
             // update currentFightId
             this.currentFightId = e.target.dataset.fightId;
         },
@@ -15628,11 +15629,10 @@ exports.default = {
             var fightPickEl;
 
             fightPickEl = document.querySelector('div.fightsList__pick[data-fight-id="' + fightId + '"]');
-            fightPickEl.classList.toggle('show');
+            fightPickEl.classList.toggle('closed');
 
-            var position = this.getPosition(fightPickEl);
-            // console.log(position);
-            (0, _animatedScrollTo2.default)(document.body, position.y, 300, function () {
+            var position = fightPickEl.getBoundingClientRect().top + window.scrollY - 200;
+            (0, _animatedScrollTo2.default)(document.body, position, 300, function () {
                 // console.log('animate end');
             });
 
@@ -15875,6 +15875,17 @@ exports.default = {
                 x: xPos,
                 y: yPos
             };
+        },
+        setAccordianHeights: function setAccordianHeights() {
+            var elements, doc;
+
+            setTimeout(function () {
+                elements = document.querySelectorAll('.fightsList__pick');
+
+                for (var i = 0; i < elements.length; ++i) {
+                    elements[i].classList.add('closed');
+                }
+            }, 100);
         }
     },
 
@@ -16177,6 +16188,7 @@ exports.default = {
             }).then(function (response) {
                 this.picksList = response.data.picks;
                 this.working = false;
+                this.setAccordianHeights();
 
                 this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', {}, {
                     // Attach the JWT header
@@ -16211,7 +16223,7 @@ exports.default = {
             });
         },
         toggleDetails: function toggleDetails(pickId) {
-            document.querySelector('li.fightPicksList__item[data-pick-id="' + pickId + '"]').classList.toggle('show');
+            document.querySelector('li.fightPicksList__item[data-pick-id="' + pickId + '"]').classList.toggle('closed');
         },
         parseResults: function parseResults(results) {
             var fightPicks,
@@ -16272,15 +16284,15 @@ exports.default = {
                         vm.outcome[obj.fightResults.fight_id] = {
                             fighter: 0,
                             fighterPoints: 0,
+                            finish_points: 0,
                             finish_id: 0,
-                            finish: parseInt(obj.fightResults.finish_id, 10),
                             finish_abbr: obj.fightResults.finish.abbr,
-                            round: 0,
-                            minute: 0,
+                            round_points: 0,
+                            minute_points: 0,
                             roundResult: obj.fightResults.round,
                             minuteResult: obj.fightResults.minute,
                             totalTime: obj.totalTime,
-                            power_up: 0,
+                            power_up_points: 0,
                             total_points: 0
                         };
                     }
@@ -16298,6 +16310,18 @@ exports.default = {
             };
 
             this.playerRanking = standings.findIndex(findPlayer) + 1;
+        },
+        setAccordianHeights: function setAccordianHeights() {
+            var elements, doc;
+
+            setTimeout(function () {
+                elements = document.querySelectorAll('.fightPicksList__item');
+
+                for (var i = 0; i < elements.length; ++i) {
+                    elements[i].dataset.height = elements[i].offsetHeight;
+                    elements[i].classList.add('closed');
+                }
+            }, 100);
         }
     },
 
@@ -16468,10 +16492,11 @@ exports.default = {
                 headers: _auth2.default.getAuthHeader()
             }).then(function (response) {
                 this.resultsList = response.data.results;
-                console.log(response.data.results);
+                // console.log(response.data.results);
                 this.event = response.data.results[0].fightResults.fight.event;
                 this.contestId = response.data.results[0].fightResults.contest_id;
                 this.working = false;
+                this.setAccordianHeights();
             }, function (err) {
                 this.working = false;
                 console.log(err);
@@ -16495,7 +16520,19 @@ exports.default = {
             return powerUp.power_up_id === parseInt(this.powerUpId, 10);
         },
         toggleFight: function toggleFight(fightId) {
-            document.querySelector('div.fightsList__pick[data-fight-id="' + fightId + '"]').classList.toggle('show');
+            document.querySelector('div.fightsList__pick[data-fight-id="' + fightId + '"]').classList.toggle('closed');
+        },
+        setAccordianHeights: function setAccordianHeights() {
+            var elements, doc;
+
+            setTimeout(function () {
+                elements = document.querySelectorAll('.fightsList__pick');
+
+                for (var i = 0; i < elements.length; ++i) {
+                    elements[i].dataset.height = elements[i].offsetHeight;
+                    elements[i].classList.add('closed');
+                }
+            }, 100);
         }
     },
 

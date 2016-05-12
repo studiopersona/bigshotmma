@@ -4391,12 +4391,10 @@ a {
     background-color: #fff;
     border-bottom: 4px solid #eee;
     overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s ease;
-    padding-bottom: 3rem;
-    max-height: 200rem; }
-    .fightsList__item .fightsList__pick.closed {
-      max-height: 0;
-      padding-bottom: 0; }
+    transition: height 0.3s ease; }
+    .fightsList__item .fightsList__pick.show {
+      min-height: 77rem;
+      min-height: calc(1vw * 194); }
   .fightsList__item .fightsList__fightersWrap {
     padding: 0.9rem 0.5rem 0.5rem;
     position: relative; }
@@ -4543,17 +4541,17 @@ a {
     background: #fff; }
 
 .fightPicksList__details {
-  max-height: 200rem;
+  height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease; }
+  transition: height 0.3s ease; }
 
 .fightPicksList__item {
   padding: 0.9rem 0 0.5rem;
   cursor: pointer; }
 
-.fightPicksList__item.closed .fightPicksList__details {
-  max-height: 0;
-  padding: 0; }
+.fightPicksList__item.show .fightPicksList__details {
+  min-height: 60rem;
+  min-height: calc(1vw * 116); }
 
 .fightPicksList__image,
 .fightPicksList__icon > img {
@@ -4662,6 +4660,10 @@ a {
 
 .resultsList__item.fightsList__item .fightPicksList__selectionTitle {
   line-height: 2; }
+
+.resultsList__item.fightsList__item .fightsList__pick.show {
+  min-height: 30rem;
+  min-height: calc(1vw * 60); }
 
 .resultsList__powerUpsTitle {
   margin-bottom: 1rem; }

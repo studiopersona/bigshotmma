@@ -17,12 +17,6 @@
 	.fightPicksList__selectionTitle {
 		line-height: 2;
 	}
-	.fightsList__pick {
-		&.show {
-			min-height: 30rem;
-			min-height: calc(1vw * 60);
-		}
-	}
 }
 
 .resultsList__powerUpsTitle {

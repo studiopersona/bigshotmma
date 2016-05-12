@@ -28,10 +28,13 @@ class PlayerPickTransformer extends Transformer {
                 break;
             }
         }
-        // determine the points acheived here
+
         $this->fightScoring->determineFighterPoints($pick['winning_fighter_id'], $result['winning_fighter_id'], $this_fight['fighters']);
         $this->fightScoring->determineFinishPoints($pick['finish_id'], $result['finish_id']);
-        $this->fightScoring->determinePowerupPoints($pick['power_up_id'], $result['powerUps']->toArray());
+        // if no poweups used, no need to dtermine points
+        if ( $result['powerUps'] !== NULL ) {
+            $this->fightScoring->determinePowerupPoints($pick['power_up_id'], $result['powerUps']->toArray());
+        }
         $this->fightScoring->determineRoundPoints($pick['round'], $result['round']);
         $this->fightScoring->determineMinutePoints($pick['minute'], $result['minute']);
 

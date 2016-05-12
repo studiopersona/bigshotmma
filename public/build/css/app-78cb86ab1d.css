@@ -4545,7 +4545,7 @@ a {
 .fightPicksList__details {
   max-height: 200rem;
   overflow: hidden;
-  transition: max-height 0.3s ease; }
+  transition: height 0.3s ease; }
 
 .fightPicksList__item {
   padding: 0.9rem 0 0.5rem;

@@ -13,9 +13,9 @@
 }
 
 .fightPicksList__details {
-	height: 0;
+	max-height: 200rem;
 	overflow: hidden;
-	transition: height 0.3s ease;
+	transition: max-height 0.3s ease;
 }
 
 .fightPicksList__item {
@@ -23,9 +23,9 @@
 	cursor: pointer;
 }
 
-.fightPicksList__item.show .fightPicksList__details  {
-	min-height: 60rem;
-	min-height: calc(1vw * 116);
+.fightPicksList__item.closed .fightPicksList__details  {
+	max-height: 0;
+	padding: 0;
 }
 
 .fightPicksList__image,

@@ -354,6 +354,7 @@
                     this.fightsList = response.data.fights;
                     this.initializeFightData(response.data.fights[0].fights);
                     this.working = false;
+                    this.setAccordianHeights();
                 }, function(err) {
                     console.log(err);
                 });
@@ -646,10 +647,10 @@
                     fightToOpen;
 
                 fightToClose = document.querySelector('div.fightsList__pick[data-fight-id="' + this.currentFightId + '"]');
-                if ( fightToClose ) fightToClose.classList.toggle('show');
+                if ( fightToClose ) fightToClose.classList.toggle('closed');
 
                 fightToOpen = document.querySelector('div.fightsList__pick[data-fight-id="' + e.target.dataset.fightId + '"]');
-                fightToOpen.classList.toggle('show');
+                fightToOpen.classList.toggle('closed');
                 // update currentFightId
                 this.currentFightId = e.target.dataset.fightId;
             },
@@ -658,11 +659,10 @@
                 var fightPickEl;
 
                 fightPickEl = document.querySelector('div.fightsList__pick[data-fight-id="' + fightId + '"]');
-                fightPickEl.classList.toggle('show');
+                fightPickEl.classList.toggle('closed');
 
-                var position = this.getPosition(fightPickEl);
-                // console.log(position);
-                animatedScrollTo(document.body, position.y, 300, function() {
+                var position = fightPickEl.getBoundingClientRect().top + window.scrollY - 200;
+                animatedScrollTo(document.body, position, 300, function() {
                     // console.log('animate end');
                 });
 
@@ -919,6 +919,19 @@
                     x: xPos,
                     y: yPos
                 };
+            },
+
+            setAccordianHeights() {
+                var elements,
+                    doc;
+
+                setTimeout(function(){
+                    elements = document.querySelectorAll('.fightsList__pick');
+
+                    for (var i=0; i < elements.length; ++i) {
+                        elements[i].classList.add('closed');
+                    }
+                }, 100);
             },
         },
 
