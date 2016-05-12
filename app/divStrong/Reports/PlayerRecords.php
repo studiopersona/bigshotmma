@@ -42,9 +42,9 @@ class PlayerRecords
 
 		if ( ! $picks->isEmpty() ) {
 			$picks->each(function($pick, $index) use ($record, &$correctPicks) {
-				dump($pick->fight_id);
-				dump($pick->winning_fighter_id);
-				if ( (int)$pick->winning_fighter_id === (int)$pick->fightResult->winning_fighter_id ) $correctPicks += 1;
+				if ( $pick->has('fightResult') ) {
+					if ( (int)$pick->winning_fighter_id === (int)$pick->fightResult->winning_fighter_id ) $correctPicks += 1;
+				}
 			});
 			$record['correctPicks'] = $correctPicks;
 			$record['incorrectPicks'] = $record['totalPicks'] - $correctPicks;
