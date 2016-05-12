@@ -117,7 +117,7 @@
                             </div><!-- .fightsList__fighterWrap -->
                         </div><!-- .fightsList__fighterStatsWarp -->
                     </div><!-- .fightsList__fightersWrap -->
-                    <div class="fightsList__pick" id="{{ fight.id }}" data-fight-id="{{ fight.id }}">
+                    <div class="fightsList__pick closed" id="{{ fight.id }}" data-fight-id="{{ fight.id }}">
                         <div class="container-fluid">
                             <div class="col-xs-100">
                                 <div class="fightsList__pickHeader">How will {{ currentFighterName }} win? <span class="fightsList__finishPointsIndicator">+{{ finishPoints }} Points</span></div>
@@ -354,7 +354,6 @@
                     this.fightsList = response.data.fights;
                     this.initializeFightData(response.data.fights[0].fights);
                     this.working = false;
-                    this.setAccordianHeights();
                 }, function(err) {
                     console.log(err);
                 });
@@ -919,19 +918,6 @@
                     x: xPos,
                     y: yPos
                 };
-            },
-
-            setAccordianHeights() {
-                var elements,
-                    doc;
-
-                setTimeout(function(){
-                    elements = document.querySelectorAll('.fightsList__pick');
-
-                    for (var i=0; i < elements.length; ++i) {
-                        elements[i].classList.add('closed');
-                    }
-                }, 100);
             },
         },
 

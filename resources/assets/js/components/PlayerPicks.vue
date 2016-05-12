@@ -28,7 +28,7 @@
         <div class="fightPicksList">
             <ul class="stripped-list">
                 <li
-                    class="fightPicksList__item"
+                    class="fightPicksList__item closed"
                     @click.prevent="toggleDetails(pick.pick_id)"
                     v-for="pick in picksList"
                     data-pick-id="{{ pick.pick_id }}"
@@ -201,6 +201,14 @@
             </ul>
             <div v-if="results.length" class="container-fluid">
                 <div class="col-xs-100 button-wrap">
+                    <div class="playerSummary col-xs-100">
+                        <div class="col-xs-50">
+                            <span class="playerSummary__title">Record:</span> <span class="playerSummary__item playerSummary__item--green">Won {{ playerRecord.wins }}</span> / <span class="playerSummary__item playerSummary__item--red">Lost {{ playerRecord.loses }}</span>
+                        </div>
+                        <div class="col-xs-50">
+                            <span class="playerSummary__title playerSummary__totalTitle">Total Points</span> <span class="playerSummary__total">{{ playerRecord.totalPoints }}</span>
+                        </div>
+                    </div>
                     <button
                         type="button"
                         class="button button--primary"
@@ -240,6 +248,11 @@
                 }],
                 results: [],
                 outcome: [],
+                playerRecord: {
+                    wins: 0,
+                    loses: 0,
+                    totalPoints: 0,
+                },
                 standings: [],
                 finishes: [],
                 totalPoints: 0,
@@ -288,7 +301,6 @@
                 }).then(function(response) {
                     this.picksList = response.data.picks;
                     this.working = false;
-                    this.setAccordianHeights();
 
                     this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', {}, {
                         // Attach the JWT header
@@ -332,6 +344,9 @@
                 var fightPicks,
                     powerUpResult,
                     finishResult,
+                    totalFightPicks = 0,
+                    totalWinningFights = 0,
+                    totalPoints = 0,
                     vm = this;
 
                 results.forEach(function(obj, i) {
@@ -345,7 +360,9 @@
                     // console.log('fight id from fight results: ', parseInt(obj.fightResults.fight_id, 10));
                     // console.log('pick list: ', vm.picksList);
                     if ( fightPicks ) {
+                        ++totalFightPicks;
                         if ( parseInt(obj.fightResults.winning_fighter_id, 10) === parseInt(fightPicks.fighter.winning_fighter_id, 10) ) {
+                            ++totalWinningFights;
                             // console.log('got the winning fighter');
                             // figher results
                             vm.outcome[obj.fightResults.fight_id].fighter = 1;
@@ -367,6 +384,7 @@
 
                             vm.outcome[obj.fightResults.fight_id].totalTime = obj.totalTime;
                             vm.outcome[obj.fightResults.fight_id].total_points = fightPicks.totalPoints;
+                            totalPoints = totalPoints + parseInt(fightPicks.totalPoints, 10);
                             // power up points
                             if ( fightPicks.power_up.power_up_id ) {
                                 powerUpResult = obj.fightResults.power_ups.findIndex(function(pu) {
@@ -401,6 +419,9 @@
                         }
                     }
                 });
+                this.playerRecord.wins = totalWinningFights;
+                this.playerRecord.loses = totalFightPicks - totalWinningFights;
+                this.playerRecord.totalPoints = totalPoints;
                 // console.log('outcome: ', this.outcome);
                 // this.tallyPoints(this.outcome);
             },
@@ -414,20 +435,6 @@
                     };
 
                 this.playerRanking = ( standings.findIndex(findPlayer) + 1 );
-            },
-
-            setAccordianHeights() {
-                var elements,
-                    doc;
-
-                setTimeout(function(){
-                    elements = document.querySelectorAll('.fightPicksList__item');
-
-                    for (var i=0; i < elements.length; ++i) {
-                        elements[i].dataset.height = elements[i].offsetHeight;
-                        elements[i].classList.add('closed');
-                    }
-                }, 100);
             },
         },
 

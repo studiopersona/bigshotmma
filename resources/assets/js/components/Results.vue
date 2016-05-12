@@ -99,7 +99,7 @@
                             in Round {{ result.fightResults.round }}
                             at {{ result.roundTime }}
                         </div>
-                        <div class="fightsList__pick" id="{{ result.fightResults.id }}" data-fight-id="{{ result.fightResults.fight_id }}">
+                        <div class="fightsList__pick closed" id="{{ result.fightResults.id }}" data-fight-id="{{ result.fightResults.fight_id }}">
                             <div class="container-fluid">
                                 <!--<div class="col-xs-100 fightPicksList__row">
                                     <div class="col-xs-10 fightPicksList__icon">
@@ -232,7 +232,6 @@
                     this.event = response.data.results[0].fightResults.fight.event;
                     this.contestId = response.data.results[0].fightResults.contest_id;
                     this.working = false;
-                    this.setAccordianHeights();
                 }, function(err) {
                     this.working = false;
                     console.log(err);
@@ -259,20 +258,6 @@
 
             toggleFight(fightId) {
                 document.querySelector('div.fightsList__pick[data-fight-id="' + fightId + '"]').classList.toggle('closed');
-            },
-
-            setAccordianHeights() {
-                var elements,
-                    doc;
-
-                setTimeout(function(){
-                    elements = document.querySelectorAll('.fightsList__pick');
-
-                    for (var i=0; i < elements.length; ++i) {
-                        elements[i].dataset.height = elements[i].offsetHeight;
-                        elements[i].classList.add('closed');
-                    }
-                }, 100);
             },
         },
 

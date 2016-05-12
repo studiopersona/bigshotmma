@@ -4533,7 +4533,7 @@ a {
 
 .fightPicksList {
   position: relative;
-  margin-bottom: 8.5rem; }
+  margin-bottom: 6rem; }
   .fightPicksList > div .button-wrap {
     position: fixed;
     bottom: 0;
@@ -4644,31 +4644,18 @@ a {
   text-align: right;
   padding-right: 0.5rem; }
 
-.playerSummary {
-  font-size: 1.2rem;
-  margin-bottom: 1rem; }
-
 .playerSummary__title {
   text-transform: uppercase;
-  font-weight: 600; }
+  font-size: 1.1rem; }
 
-.playerSummary__totalTitle {
-  display: block;
-  margin: 0 1rem 0 0; }
+.playerSummary__item {
+  font-size: 1.1rem; }
 
 .playerSummary__item--green {
   color: #2dbe0c; }
 
 .playerSummary__item--red {
   color: #e51937; }
-
-.playerSummary__total {
-  font-size: 2.5rem;
-  text-align: right;
-  display: block;
-  float: right;
-  margin-top: -2.4rem;
-  margin-right: 1rem; }
 
 .standingsList__rank,
 .standingsList__points,

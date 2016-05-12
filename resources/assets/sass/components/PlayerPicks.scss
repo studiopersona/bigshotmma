@@ -1,6 +1,6 @@
 .fightPicksList {
 	position: relative;
-	margin-bottom: 6rem;
+	margin-bottom: 8.5rem;
 
 	> div .button-wrap {
 		position: fixed;
@@ -144,4 +144,37 @@
 	font-weight: 700;
 	text-align: right;
 	padding-right: 0.5rem;
+}
+
+// Players Summary
+.playerSummary {
+	font-size: 1.2rem;
+	margin-bottom: 1rem;
+}
+
+.playerSummary__title {
+	text-transform: uppercase;
+	font-weight: 600;
+}
+
+.playerSummary__totalTitle {
+	display: block;
+	margin: 0 1rem 0 0;
+}
+
+.playerSummary__item--green {
+	color: $color-green;
+}
+
+.playerSummary__item--red {
+	color: $color-red;
+}
+
+.playerSummary__total {
+	font-size: 2.5rem;
+    text-align: right;
+    display: block;
+    float: right;
+    margin-top: -2.4rem;
+    margin-right: 1rem
 }

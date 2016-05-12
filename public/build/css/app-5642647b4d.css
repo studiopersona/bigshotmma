@@ -4533,7 +4533,7 @@ a {
 
 .fightPicksList {
   position: relative;
-  margin-bottom: 8.5rem; }
+  margin-bottom: 6rem; }
   .fightPicksList > div .button-wrap {
     position: fixed;
     bottom: 0;
@@ -4645,8 +4645,7 @@ a {
   padding-right: 0.5rem; }
 
 .playerSummary {
-  font-size: 1.2rem;
-  margin-bottom: 1rem; }
+  font-size: 1.2rem; }
 
 .playerSummary__title {
   text-transform: uppercase;
@@ -4667,7 +4666,7 @@ a {
   text-align: right;
   display: block;
   float: right;
-  margin-top: -2.4rem;
+  margin-top: -2.6rem;
   margin-right: 1rem; }
 
 .standingsList__rank,
