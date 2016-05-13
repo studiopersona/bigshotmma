@@ -4120,9 +4120,7 @@ a {
   padding: 0 2rem; }
   .loginForm p,
   .registerForm p {
-    font-size: 1.1rem;
-    text-align: center;
-    margin-bottom: 1.5rem; }
+    font-size: 1.1rem; }
   .loginForm a,
   .registerForm a {
     text-decoration: none; }

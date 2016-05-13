@@ -25,6 +25,9 @@
 						</label>
 					</div>
 				</div>
+				<div class="row form_row">
+					<p>iPhone users please turn off <a target="_blank" href="https://support.apple.com/en-us/HT203036">Private Mode</a> to login</p>
+				</div>
 				<div class="row form__row" v-if="error">
 					<div :class="alertClasses" :type="alertType">
 						<p>{{ error }}</p>
