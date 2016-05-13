@@ -24,7 +24,7 @@
                                 <div class="contestList__entries">{{ contest.total_participants }}/{{ contest.max_participants }}</div>
                             </div>
                             <div class="col-xs-15">
-                                <div class="contestList__buyinTitle">Buy-In</div>
+                                <div class="contestList__buyinTitle">Entry Fee</div>
                                 <div class="contestList__buyin">${{ contest.buy_in }}</div>
                             </div>
                         </div>

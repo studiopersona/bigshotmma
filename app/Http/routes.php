@@ -35,6 +35,7 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::resource('contests', 'ContestsController');
 	    Route::resource('picks', 'PicksController');
 	    Route::get('contest/{id}/picks', 'PicksController@showCard');
+	    Route::get('contest/{id}/check-for-picks', 'PicksController@checkForPicks');
 	    Route::resource('powerups', 'PowerUpsController');
 	    Route::get('contest-types', 'ContestTypesController@index');
 	    Route::get('power-ups', 'PowerUpsController@index');

@@ -124,7 +124,7 @@
                                     <img src="public/image/icons/bell.png">
                                 </div>
                                 <div class="col-xs-75">
-                                    <h4 class="fightPicksList__selectionTitle">Round {{ numberNames[parseInt(pick.round, 10) - 1] }}</h4>
+                                    <h4 class="fightPicksList__selectionTitle">Round {{ numberNames[parseInt(pick.round.selected, 10) - 1] }}</h4>
                                     <p class="fightPicksList__selectionResults" v-if="results.length">
                                         <span v-if="outcome[pick.fight_id].round">You chose the winning round</span>
                                         <span v-else>You didn't choose the winning round</span>
@@ -146,7 +146,7 @@
                                     <img src="public/image/icons/stopwatch.png">
                                 </div>
                                 <div class="col-xs-75">
-                                    <h4 class="fightPicksList__selectionTitle">Minute {{ numberNames[parseInt(pick.minute, 10) - 1] }}</h4>
+                                    <h4 class="fightPicksList__selectionTitle">Minute {{ numberNames[parseInt(pick.minute.selected, 10) - 1] }}</h4>
                                     <p class="fightPicksList__selectionResults" v-if="results.length">
                                         <span v-if="outcome[pick.fight_id].minute">You chose the winning minute</span>
                                         <span v-else>You didn't chose the winning minute</span>
@@ -199,16 +199,20 @@
                     </div>
                 </li>
             </ul>
+            <div v-if="results.length" class="playerSummary">
+                <div class="playerSummary__itemsWrap">
+                    <div class="playerSummary__recordTitle">Record:</div>
+                    <div class="playerSummary__recordWrap">
+                        <span class="playerSummary__record--win">Won {{ playerRecord.wins }}</span> / <span class="playerSummary__record--lose">Lost {{ playerRecord.loses }}</span>
+                    </div>
+                </div>
+                <div class="playerSummary__totalWrap">
+                    <div class="playerSummary__totalPointsTitle">Total Points</div>
+                    <div class="playerSummary__total">{{ playerRecord.totalPoints }}</div>
+                </div>
+            </div>
             <div v-if="results.length" class="container-fluid">
                 <div class="col-xs-100 button-wrap">
-                    <div class="playerSummary col-xs-100">
-                        <div class="col-xs-50">
-                            <span class="playerSummary__title">Record:</span> <span class="playerSummary__item playerSummary__item--green">Won {{ playerRecord.wins }}</span> / <span class="playerSummary__item playerSummary__item--red">Lost {{ playerRecord.loses }}</span>
-                        </div>
-                        <div class="col-xs-50">
-                            <span class="playerSummary__title playerSummary__totalTitle">Total Points</span> <span class="playerSummary__total">{{ playerRecord.totalPoints }}</span>
-                        </div>
-                    </div>
                     <button
                         type="button"
                         class="button button--primary"

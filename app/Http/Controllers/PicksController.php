@@ -247,6 +247,17 @@ class PicksController extends ApiController
         return $this->respond(['data' => $playerRecords]);
     }
 
+    public function checkForPicks($contestId)
+    {
+        $user = \JWTAuth::parseToken()->authenticate();
+
+        $count = $this->pick->where('user_id', $user->id)
+                    ->where('contest_id', $contestId)
+                    ->count();
+
+        return ( $count ) ? $this->respond(['data' => ['count' => $count]]) : $this->respondNotFound('No picks were found for this user for this contest');
+    }
+
     public function quitContest($contestId)
     {
         $user = \JWTAuth::parseToken()->authenticate();

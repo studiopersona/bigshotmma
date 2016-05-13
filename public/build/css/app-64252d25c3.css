@@ -4533,7 +4533,7 @@ a {
 
 .fightPicksList {
   position: relative;
-  margin-bottom: 6rem; }
+  margin-bottom: 8.5rem; }
   .fightPicksList > div .button-wrap {
     position: fixed;
     bottom: 0;
@@ -4659,7 +4659,7 @@ a {
   height: 2.5rem;
   float: left;
   width: 50%;
-  padding-top: 0.8rem;
+  padding-top: 0.6rem;
   padding-left: 0.5rem; }
 
 .playerSummary__recordTitle {

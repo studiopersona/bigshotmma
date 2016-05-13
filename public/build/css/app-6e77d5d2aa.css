@@ -4533,7 +4533,7 @@ a {
 
 .fightPicksList {
   position: relative;
-  margin-bottom: 6rem; }
+  margin-bottom: 8.5rem; }
   .fightPicksList > div .button-wrap {
     position: fixed;
     bottom: 0;
@@ -4658,9 +4658,7 @@ a {
 .playerSummary__itemsWrap {
   height: 2.5rem;
   float: left;
-  width: 50%;
-  padding-top: 0.8rem;
-  padding-left: 0.5rem; }
+  width: 50%; }
 
 .playerSummary__recordTitle {
   width: 35%;
@@ -4668,7 +4666,7 @@ a {
 
 .playerSummary__recordWrap {
   width: 65%;
-  float: left; }
+  float: right; }
 
 .playerSummary__record--win {
   color: #2dbe0c; }
@@ -4683,16 +4681,13 @@ a {
 .playerSummary__totalPointsTitle {
   font-size: 1.5rem;
   float: left;
-  width: 70%;
-  text-align: right;
-  padding-top: 0.6rem; }
+  width: 70%; }
 
 .playerSummary__total {
   font-size: 2.5rem;
   height: 3.5rem;
   width: 30%;
-  float: left;
-  text-align: center; }
+  float: left; }
 
 .standingsList__rank,
 .standingsList__points,

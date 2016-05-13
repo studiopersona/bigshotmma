@@ -346,31 +346,38 @@
             },
 
             fetch() {
-                this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', {}, {
+                this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/check-for-picks', {}, {
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
-                    // console.log(response.data.fights);
-                    this.fightsList = response.data.fights;
-                    this.initializeFightData(response.data.fights[0].fights);
-                    this.working = false;
+                    router.go('/contest/' + this.$route.params.contest_id + '/picks');
                 }, function(err) {
-                    console.log(err);
-                });
+                    this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', {}, {
+                        // Attach the JWT header
+                        headers: auth.getAuthHeader()
+                    }).then(function(response) {
+                        // console.log(response.data.fights);
+                        this.fightsList = response.data.fights;
+                        this.initializeFightData(response.data.fights[0].fights);
+                        this.working = false;
+                    }, function(err) {
+                        console.log(err);
+                    });
 
-                this.$http.get(URL.base + '/api/v1/power-ups', {}, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                }).then(function(response) {
-                    this.powerUps = response.data;
-                    // console.log(this.powerUps);
-                });
+                    this.$http.get(URL.base + '/api/v1/power-ups', {}, {
+                        // Attach the JWT header
+                        headers: auth.getAuthHeader()
+                    }).then(function(response) {
+                        this.powerUps = response.data;
+                        // console.log(this.powerUps);
+                    });
 
-                this.$http.get(URL.base + '/api/v1/finishes', {}, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                }).then(function(response) {
-                    this.finishes = response.data;
+                    this.$http.get(URL.base + '/api/v1/finishes', {}, {
+                        // Attach the JWT header
+                        headers: auth.getAuthHeader()
+                    }).then(function(response) {
+                        this.finishes = response.data;
+                    });
                 });
             },
 

@@ -4,7 +4,7 @@
             <h1 class="pageHeader__header">Contest Lobby</h1>
             <div v-if="contestsEntered.indexOf(parseInt(participantsList[0].contest.contest_id, 10)) === -1">
                 <h4 v-if="! deadlinePast" class="pageHeader__subheader">
-                    {{ participantsList[0].contest.event_short_name }} / <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }">Enter</a>
+                    {{ participantsList[0].contest.event_short_name }} / <a @click.prevent="confirmEnter">Enter</a>
                 </h4>
                 <h4 v-else class="pageHeader__subheader">
                     {{ participantsList[0].contest.event_short_name }} / Contest Closed
@@ -71,7 +71,7 @@
             </ul>
             <div v-if="contestsEntered.indexOf(parseInt(participantsList[0].contest.contest_id, 10)) === -1" class="container-fluid">
                 <div v-if="! deadlinePast" class="col-xs-100 button-wrap">
-                    <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/fights' }" class="button button--primary">Enter</a>
+                    <a @click.prevent="confirmEnter" class="button button--primary">Enter</a>
                 </div>
                 <div v-else class="col-xs-100 button-wrap">
                     Contest is Closed
@@ -109,7 +109,7 @@
             </div>
             <div class="confirmModal__confirm">
                 <button @click="confirmModalClose" class="confirmModal__confirm--no">No</button>
-                <button @click="quitContest(participantsList[0].contest.contest_id, $event)" class="confirmModal__confirm--yes">Yes</button>
+                <button @click="actionConfirmed({ action: confirmModalContent.action, contestId: participantsList[0].contest.contest_id, path:  '/contest/' + participantsList[0].contest.contest_id + '/fights' }, $event)" class="confirmModal__confirm--yes">Yes</button>
             </div>
             <button @click="confirmModalClose" type="button" class="confirmModal__close">x</button>
         </section>
@@ -146,6 +146,7 @@
                     image: ''
                 },
                 confirmModalContent: {
+                    action: '',
                     title: '',
                     image: '',
                     body: '',
@@ -292,9 +293,19 @@
             },
 
             confirmQuit(e) {
+                this.confirmModalContent.action = 'quit';
                 this.confirmModalContent.title = 'Quit Contest';
                 this.confirmModalContent.image = this.participantsList[0].contest.event_image;
                 this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + ' / ' + this.participantsList[0].contest.total_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to quit this contest?</p>';
+
+                this.confirmModalClassList.add('show');
+            },
+
+            confirmEnter(e) {
+                this.confirmModalContent.action = 'enter';
+                this.confirmModalContent.title = 'Enter Contest';
+                this.confirmModalContent.image = this.participantsList[0].contest.event_image;
+                this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + ' / ' + this.participantsList[0].contest.total_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
 
                 this.confirmModalClassList.add('show');
             },
@@ -303,14 +314,18 @@
                 this.confirmModalClassList.remove('show');
             },
 
-            quitContest(contestId, e) {
-                this.$http.get(URL.base + '/api/v1/contest/' + contestId +'/quit', {}, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                }).then(function(response) {
-                    // console.log(response);
-                    router.go('/event/' + response.data.data.eventId + '/contests');
-                });
+            actionConfirmed(actionData, e) {
+                if ( actionData.action === 'quit' ) {
+                    this.$http.get(URL.base + '/api/v1/contest/' + actionData.contestId +'/quit', {}, {
+                        // Attach the JWT header
+                        headers: auth.getAuthHeader()
+                    }).then(function(response) {
+                        // console.log(response);
+                        router.go('/event/' + response.data.data.eventId + '/contests');
+                    });
+                } else if ( actionData.action === 'enter' ) {
+                    router.go(actionData.path);
+                }
             },
         },
 

@@ -1,6 +1,6 @@
 .fightPicksList {
 	position: relative;
-	margin-bottom: 8.5rem;
+	margin-bottom: 6rem;
 
 	> div .button-wrap {
 		position: fixed;
@@ -23,7 +23,7 @@
 	cursor: pointer;
 }
 
-.fightPicksList__item.closed .fightPicksList__details  {
+.fightPicksList__item.closed .fightPicksList__details {
 	max-height: 0;
 	padding: 0;
 }
@@ -75,7 +75,7 @@
 .fightPicksList__resultString {
 	margin: 1rem auto 2rem;
 	text-align: center;
-
+	font-size: 1.2rem;
 }
 
 .fightPicksList__row {
@@ -149,32 +149,59 @@
 // Players Summary
 .playerSummary {
 	font-size: 1.2rem;
-	margin-bottom: 1rem;
+	margin-top: 1rem;
 }
 
-.playerSummary__title {
+.playerSummary__recordTitle,
+.playerSummary__totalPointsTitle {
 	text-transform: uppercase;
 	font-weight: 600;
+	height: 3.5rem;
 }
 
-.playerSummary__totalTitle {
-	display: block;
-	margin: 0 1rem 0 0;
+.playerSummary__itemsWrap {
+	height: 2.5rem;
+	float: left;
+	width: 50%;
+	padding-top: 0.8rem;
+	padding-left: 0.5rem;
 }
 
-.playerSummary__item--green {
+.playerSummary__recordTitle {
+	width: 35%;
+	float: left;
+}
+
+.playerSummary__recordWrap {
+	width: 65%;
+	float: left;
+}
+
+.playerSummary__record--win {
 	color: $color-green;
 }
 
-.playerSummary__item--red {
+.playerSummary__record--lose {
 	color: $color-red;
+}
+
+.playerSummary__totalWrap {
+	float: left;
+	width: 50%;
+}
+
+.playerSummary__totalPointsTitle {
+	font-size: 1.5rem;
+	float: left;
+	width: 70%;
+	text-align: right;
+	padding-top: 0.6rem;
 }
 
 .playerSummary__total {
 	font-size: 2.5rem;
-    text-align: right;
-    display: block;
-    float: right;
-    margin-top: -2.4rem;
-    margin-right: 1rem
+	height: 3.5rem;
+	width: 30%;
+	float: left;
+	text-align: center;
 }
