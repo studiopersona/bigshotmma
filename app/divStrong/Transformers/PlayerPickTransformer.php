@@ -29,10 +29,17 @@ class PlayerPickTransformer extends Transformer {
             }
         }
 
-        $this->fightScoring->determineFighterPoints($pick['winning_fighter_id'], $result['winning_fighter_id'], $this_fight['fighters']);
-        $this->fightScoring->determineFinishPoints($pick['finish_id'], $result['finish_id']);
-        $this->fightScoring->determineRoundPoints($pick['round'], $result['round']);
-        $this->fightScoring->determineMinutePoints($pick['minute'], $result['minute']);
+        if ( (int)$result['finish_id'] !== 4 ) {
+            $this->fightScoring->determineFighterPoints($pick['winning_fighter_id'], $result['winning_fighter_id'], $this_fight['fighters']);
+            $this->fightScoring->determineFinishPoints($pick['finish_id'], $result['finish_id']);
+            $this->fightScoring->determineRoundPoints($pick['round'], $result['round']);
+            $this->fightScoring->determineMinutePoints($pick['minute'], $result['minute']);
+        } else {
+            $this->fightScoring->determineFighterPoints(0, $result['winning_fighter_id'], $this_fight['fighters']);
+            $this->fightScoring->determineFinishPoints(0, $result['finish_id']);
+            $this->fightScoring->determineRoundPoints(0, $result['round']);
+            $this->fightScoring->determineMinutePoints(0, $result['minute']);
+        }
         // if no poweups used, no need to dtermine points
         if ( $result['powerUps'] !== NULL ) {
             $this->fightScoring->determinePowerupPoints($pick['power_up_id'], $result['powerUps']->toArray(), $fighter_id);

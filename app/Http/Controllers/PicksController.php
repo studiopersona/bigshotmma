@@ -190,15 +190,20 @@ class PicksController extends ApiController
                 foreach ( $contestResults as $result ) {
                     // did the player pick the winning fighter
                     if ( (int)$result['fight_id'] === (int)$pick['fight_id']  ) {
-                        if ( (int)$result['winning_fighter_id'] === (int)$pick['winning_fighter_id'] && (int)$result['finish_id'] !== 4  ) {
-                            $this->fightScoring->determineFighterPoints((int)$result['winning_fighter_id'], (int)$pick['winning_fighter_id'], $pick['fight']['fighters']);
-                            $this->fightScoring->determinePowerupPoints($pick['power_up_id'], $result['power_ups'], (int)$pick['winning_fighter_id']);
+                        if ( (int)$result['finish_id'] !== 4  ) {
+                            $this->fightScoring->determineFighterPoints((int)$pick['winning_fighter_id'], (int)$result['winning_fighter_id'], $pick['fight']['fighters']);
                             $this->fightScoring->determineRoundPoints((int)$pick['round'], (int)$result['round']);
                             $this->fightScoring->determineMinutePoints((int)$pick['minute'], (int)$result['minute']);
                             $this->fightScoring->determineFinishPoints((int)$pick['finish_id'], (int)$result['finish_id']);
+                            $this->fightScoring->determinePowerupPoints($pick['power_up_id'], $result['power_ups'], (int)$pick['winning_fighter_id']);
                             $tally += $this->fightScoring->getTotalPoints();
                         } else {
+                            $this->fightScoring->determineFighterPoints(0, (int)$result['winning_fighter_id'], $pick['fight']['fighters']);
+                            $this->fightScoring->determineRoundPoints(0, (int)$result['round']);
+                            $this->fightScoring->determineMinutePoints(0, (int)$result['minute']);
+                            $this->fightScoring->determineFinishPoints(0, (int)$result['finish_id']);
                             $this->fightScoring->determinePowerupPoints($pick['power_up_id'], $result['power_ups'], (int)$pick['winning_fighter_id']);
+                            $tally += $this->fightScoring->getTotalPoints();
                         }
                         $standings[$index]['fightsReported'] += 1;
                     };
