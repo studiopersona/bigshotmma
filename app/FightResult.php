@@ -28,7 +28,7 @@ class FightResult extends Model
 
     public function powerUps()
     {
-        return $this->belongsToMany('Bsmma\PowerUp');
+        return $this->belongsToMany('Bsmma\PowerUp')->withPivot('fighter_id');
     }
 
     public function contests()

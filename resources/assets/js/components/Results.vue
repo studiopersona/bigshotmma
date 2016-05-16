@@ -22,7 +22,24 @@
                     <li class="fightsList__item resultsList__item" @click.prevent="toggleFight(result.fightResults.fight_id)" v-for="result in resultsList">
                         <div class="container-fluid fightsList__fightersWrap" data-fight-id="{{ result.fightResults.fight_id }}">
                             <div class="col-xs-50 fightsList__fighterStatsWarp">
-                                <div class="col-xs-40 fightsList__fighterWrap">
+                                <div v-if="parseInt(result.fightResults.finish_id, 10) === 4" class="col-xs-40 fightsList__fighterWrap">
+                                    <div class="fightsList__fighterImgWrap" data-fight-id="{{ result.fightResults.fight_id }}">
+                                        <img
+                                            :class="['fightsList__fighter']"
+                                            :src="'public/image/fighters/' + result.fightResults.fight.fighters[0].fighter_image_name"
+                                            alt="{{ result.fightResults.fight.fighters[0].firstname }} {{ result.fightResults.fight.fighters[0].lastname }} Image"
+                                            data-fighter-id="{{ result.fightResults.fight.fighters[0].id }}"
+                                        >
+                                        <div class="fightsList__selectedIndicatorWrap">
+                                            <div :class="['fightsList__selectedIndicator']" data-fighter-id="{{ result.fightResults.fight.fighters[0].id }}">
+                                                <span>
+
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else class="col-xs-40 fightsList__fighterWrap">
                                     <div class="fightsList__fighterImgWrap" data-fight-id="{{ result.fightResults.fight_id }}">
                                         <img
                                             :class="['fightsList__fighter', (result.fightResults.fight.fighters[0].pivot.odds < result.fightResults.fight.fighters[1].pivot.odds) ? 'favorite' : '', (parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10)) ? 'selected' : '']"
@@ -71,7 +88,26 @@
                                         {{ result.fightResults.fight.fighters[1].pivot.odds > 0 ? '+' : '' }}{{ result.fightResults.fight.fighters[1].pivot.odds }}
                                     </div>
                                 </div>
-                                <div class="col-xs-40  fightsList__fighterWrap">
+                                <div v-if="parseInt(result.fightResults.finish_id, 10) === 4" class="col-xs-40  fightsList__fighterWrap">
+                                    <div class="fightsList__fighterImgWrap" data-fight-id="{{ result.fightResults.id }}">
+                                        <img
+                                            :class="['fightsList__fighter']"
+                                            :src="'public/image/fighters/' + result.fightResults.fight.fighters[1].fighter_image_name"
+                                            alt="{{ result.fightResults.fight.fighters[1].firstname }} {{ result.fightResults.fight.fighters[1].lastname }} Image"
+                                            data-fighter-id="{{ result.fightResults.fight.fighters[1].id }}"
+                                        >
+                                         <div class="fightsList__selectedIndicatorWrap">
+                                            <div
+                                                :class="['fightsList__selectedIndicator']"
+                                                data-fighter-id="{{ result.fightResults.fight.fighters[1].id }}">
+                                                <span>
+                                                    Winner
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div><!-- .fightsList__fighterImgWrap -->
+                                </div><!-- .fightsList__fighterWrap -->
+                                <div v-else class="col-xs-40  fightsList__fighterWrap">
                                     <div class="fightsList__fighterImgWrap" data-fight-id="{{ result.fightResults.id }}">
                                         <img
                                             :class="['fightsList__fighter', (parseInt(result.fightResults.fight.fighters[1].pivot.odds, 10) < parseInt(result.fightResults.fight.fighters[0].pivot.odds, 10)) ? 'favorite' : '', (parseInt(result.fightResults.fight.fighters[1].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10)) ? 'selected' : '']"
@@ -92,7 +128,10 @@
                                 </div><!-- .fightsList__fighterWrap -->
                             </div><!-- .fightsList__fighterStatsWarp -->
                         </div><!-- .fightsList__fightersWrap -->
-                        <div :class="['resultsList__outcomeString', (parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10)) ? 'right' : 'left']">
+                        <div v-if="parseInt(result.fightResults.finish_id, 10) === 4" class="resultsList__outcomeString left">
+                            {{ result.fightResults.fight.fighters[0].lastname }} vs. {{ result.fightResults.fight.fighters[1].lastname }} declared a draw
+                        </div>
+                        <div v-else :class="['resultsList__outcomeString', (parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10)) ? 'right' : 'left']">
                             {{ parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10) ? result.fightResults.fight.fighters[0].lastname : result.fightResults.fight.fighters[1].lastname }}
                             wins via
                             {{ result.fightResults.finish.abbr }}
@@ -138,14 +177,14 @@
                                     </div>
                                 </div>
                                 <!-- power up row -->
-                                <div class="col-xs-100 fightPicksList__row">
+                                <div v-for="fighter in result.fightResults.fight.fighters" class="col-xs-100 fightPicksList__row">
                                     <div class="col-xs-100 resultsList__powerUpsTitle">
-                                        Power Ups Achieved by {{ parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10) ? result.fightResults.fight.fighters[0].lastname : result.fightResults.fight.fighters[1].lastname }}
+                                        Power Ups Achieved by {{ fighter.lastname }}
                                     </div>
-                                    <div v-if="! result.fightResults.power_ups.length" class="col-xs-100 resultsList__noPowerUps">
-                                        {{ parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10) ? result.fightResults.fight.fighters[0].lastname : result.fightResults.fight.fighters[1].lastname }} did not achieve any power ups during this match.
+                                    <div v-if="! fighter.powerupsAchieved.length" class="col-xs-100 resultsList__noPowerUps">
+                                        {{ fighter.lastname }} did not achieve any power ups during this match.
                                     </div>
-                                    <div v-else v-for="powerup in result.fightResults.power_ups" :class="['col-xs-20', 'resultsList__powerUps']">
+                                    <div v-else v-for="powerup in fighter.powerupsAchieved" :class="['col-xs-20', 'resultsList__powerUps']">
                                         <img :src="URL.base + '/public/image/powerups/' + powerup.power_up_image_name">
                                         <div :style="{color: powerup.power_up_color}">{{ powerup.power_up_name }}</div>
                                     </div>
@@ -232,6 +271,7 @@
                     this.event = response.data.results[0].fightResults.fight.event;
                     this.contestId = response.data.results[0].fightResults.contest_id;
                     this.working = false;
+                    console.log(response.data.results[0].fightResults.fight.fighters);
                 }, function(err) {
                     this.working = false;
                     console.log(err);

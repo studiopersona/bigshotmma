@@ -387,24 +387,7 @@
                             vm.outcome[obj.fightResults.fight_id].minuteResult = obj.fightResults.minute;
 
                             vm.outcome[obj.fightResults.fight_id].totalTime = obj.totalTime;
-                            vm.outcome[obj.fightResults.fight_id].total_points = fightPicks.totalPoints;
-                            totalPoints = totalPoints + parseInt(fightPicks.totalPoints, 10);
-                            // power up points
-                            if ( fightPicks.power_up.power_up_id ) {
-                                powerUpResult = obj.fightResults.power_ups.findIndex(function(pu) {
-                                    return ( parseInt(fightPicks.power_up.power_up_id, 10)  === parseInt(pu.power_up_id, 10) );
-                                });
 
-                                if ( powerUpResult !== -1 ) {
-                                    vm.outcome[obj.fightResults.fight_id].power_up = 1;
-                                    vm.outcome[obj.fightResults.fight_id].power_up_points = parseInt(fightPicks.power_up.bonus_points, 10);
-                                } else {
-                                    vm.outcome[obj.fightResults.fight_id].power_up = 1;
-                                    vm.outcome[obj.fightResults.fight_id].power_up_points = -parseInt(fightPicks.power_up.penalty_points, 10);
-                                }
-                            } else {
-                                vm.outcome[obj.fightResults.fight_id].power_up = 0;
-                            }
                         } else {
                             vm.outcome[obj.fightResults.fight_id] = {
                                 fighter: 0,
@@ -417,10 +400,27 @@
                                 roundResult: obj.fightResults.round,
                                 minuteResult: obj.fightResults.minute,
                                 totalTime: obj.totalTime,
-                                power_up_points: 0,
-                                total_points: 0,
                             };
                         }
+                        // power up points
+                        if ( fightPicks.power_up.power_up_id ) {
+                            powerUpResult = obj.fightResults.power_ups.findIndex(function(pu) {
+                                return ( parseInt(fightPicks.power_up.power_up_id, 10)  === parseInt(pu.power_up_id, 10) );
+                            });
+
+                            if ( powerUpResult !== -1 ) {
+                                vm.outcome[obj.fightResults.fight_id].power_up = 1;
+                                vm.outcome[obj.fightResults.fight_id].power_up_points = parseInt(fightPicks.power_up.bonus_points, 10);
+                            } else {
+                                vm.outcome[obj.fightResults.fight_id].power_up = 1;
+                                vm.outcome[obj.fightResults.fight_id].power_up_points = -parseInt(fightPicks.power_up.penalty_points, 10);
+                            }
+                        } else {
+                            vm.outcome[obj.fightResults.fight_id].power_up = 0;
+                        }
+
+                        vm.outcome[obj.fightResults.fight_id].total_points = fightPicks.totalPoints;
+                        totalPoints = totalPoints + parseInt(fightPicks.totalPoints, 10);
                     }
                 });
                 this.playerRecord.wins = totalWinningFights;
@@ -435,7 +435,7 @@
                     findPlayer = function(standing) {
                         // console.log('standing player id: ', parseInt(standing.player_id, 10));
                         // console.log('playerId: ', vm.playerId)
-                        return parseInt(standing.player_id, 10) === parseInt(vm.playerId, 10);
+                        return parseInt(standing.playerId, 10) === parseInt(vm.playerId, 10);
                     };
 
                 this.playerRanking = ( standings.findIndex(findPlayer) + 1 );

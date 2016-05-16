@@ -212,10 +212,12 @@
             determineRank(standings) {
                 var vm = this,
                     findPlayer = function(standing) {
-                        // console.log('standing player id: ', parseInt(standing.player_id, 10));
+                        // console.log('standing player id: ', parseInt(standing.playerId, 10));
                         // console.log('playerId: ', vm.playerId)
-                        return parseInt(standing.player_id, 10) === parseInt(vm.playerId, 10);
+                        return parseInt(standing.playerId, 10) === parseInt(vm.playerId, 10);
                     };
+
+                console.log(standings);
 
                 this.playerRanking = ( standings.findIndex(findPlayer) + 1 );
             },
