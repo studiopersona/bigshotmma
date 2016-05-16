@@ -12,7 +12,7 @@ class CreateUserBalancesTable extends Migration
      */
     public function up()
     {
-        Schema::table('user_balances', function (Blueprint $table) {
+        Schema::create('user_balances', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->index()->unsigned();
             $table->integer('transaction_type_id')->unsigned();
