@@ -68,7 +68,7 @@
                             </div>
                             <div v-else class="col-xs-70 col-xs-push-15 fightPicksList__resultString">
                                 {{ pick.fighter.name }} <span v-if="outcome[pick.fight_id].fighter">wins</span><span v-else>loses</span> via {{ outcome[pick.fight_id].finish_abbr }}
-                                in Round {{ outcome[pick.fight_id].roundResult }} at {{ outcome[pick.fight_id].totalTime }}
+                                in Round {{ outcome[pick.fight_id].roundResult }} at {{ outcome[pick.fight_id].roundTime }}
                             </div>
                             <div class="col-xs-100 fightPicksList__choicesTitle">
                                 Your Choices
@@ -387,6 +387,7 @@
                             vm.outcome[obj.fightResults.fight_id].minuteResult = obj.fightResults.minute;
 
                             vm.outcome[obj.fightResults.fight_id].totalTime = obj.totalTime;
+                            vm.outcome[obj.fightResults.fight_id].roundTime = obj.roundTime;
 
                         } else {
                             vm.outcome[obj.fightResults.fight_id] = {
@@ -400,6 +401,7 @@
                                 roundResult: obj.fightResults.round,
                                 minuteResult: obj.fightResults.minute,
                                 totalTime: obj.totalTime,
+                                roundTime: obj.roundTime,
                             };
                         }
                         // power up points
