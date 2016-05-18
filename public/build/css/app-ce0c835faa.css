@@ -5005,7 +5005,7 @@ a {
   left: 0;
   right: 0;
   z-index: 500;
-  width: 224px;
+  width: 200px;
   -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   transition: -webkit-transform 0.3s ease;
@@ -5024,7 +5024,7 @@ a {
   float: left;
   margin: 0 3% 4% 0;
   text-align: center;
-  border: 1px solid #000;
+  border: 1px solid #6c6c6c;
   box-sizing: border-box; }
   .appDashboard__linkWrap:nth-child(2n) {
     margin-right: 0; }

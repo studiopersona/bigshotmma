@@ -6,11 +6,21 @@
         </div>
         <router-view></router-view>
         <nav class="appDashboard">
-        	<header class="pageHeader">
-	            <h1 class="pageHeader__header">Dashboard</h1>
-	            <h4 class="pageHeader__subheader">Logged in as {{ playersName }}. <a @click.prevent="logout" v-link="{path: '/logout'}">Logout</a> </h4>
-	        </header>
-        	 <ul class="appDashboard__list">
+        	<header class="dashboardHeader">
+                <div class="dashboardHeader__playerWrap clearfix">
+                    <img src="public/image/avatar/male.jpg" class="dashboardHeader__avatar">
+                    <div class="dashboardHeader__playerName">
+                        {{ playersName }}
+                        <div class="dashboardHeader__balance">
+                            Balance: <span>${{ playersBalance }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboardHeader__logoutWrap">
+                    <a class="dashboardHeader__logout" @click.prevent="logout" v-link="{path: '/logout'}">Logout</a>
+                </div>
+            </header>
+        	 <ul class="appDashboard__list clearfix">
         	 	<li class="appDashboard__linkWrap">
         	 		<a class="appDashboard__link appDashboard__link--contests" v-link="{ path: '/player/contests' }" @click="toggleMenu">
         	 			<img src="public/image/dashboard/contests.png">
@@ -23,10 +33,10 @@
                         How to Play
                     </a>
                 </li>
-        	 	 <!--<li class="appDashboard__linkWrap">
+        	 	 <li class="appDashboard__linkWrap">
         	 		<a class="appDashboard__link appDashboard__link--rules" @click="showContestTypes">
         	 			<img src="public/image/dashboard/rules.png">
-        	 			Contest Types
+        	 			Deposit
         	 		</a>
         	 	</li>
         	 	<li class="appDashboard__linkWrap">
@@ -34,7 +44,7 @@
         	 			<img src="public/image/dashboard/profile.png">
         	 			Profile
         	 		</a>
-        	 	</li>-->
+        	 	</li>
         	 </ul>
         </nav>
         <section id="rulesSlider" class="rulesSlider">
@@ -199,6 +209,7 @@
                 currentHowToPlaySlide: 0,
 				loggedIn: false,
 				playersName: '',
+                playersBalance: 0,
                 appDashboardClassList: [],
                 rulesSliderClassList: [],
                 howToPlayClassList: [],

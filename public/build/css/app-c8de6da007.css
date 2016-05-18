@@ -5005,7 +5005,7 @@ a {
   left: 0;
   right: 0;
   z-index: 500;
-  width: 224px;
+  width: 200px;
   -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   transition: -webkit-transform 0.3s ease;

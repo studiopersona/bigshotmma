@@ -5005,27 +5005,25 @@ a {
   left: 0;
   right: 0;
   z-index: 500;
-  width: 224px;
+  width: 200px;
   -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   transition: -webkit-transform 0.3s ease;
   transition: transform 0.3s ease;
-  background: #eee;
+  background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6); }
   .appDashboard.show {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
 .appDashboard__list {
-  margin: 1rem 0.5rem; }
+  margin-top: 74px; }
 
 .appDashboard__linkWrap {
   width: 48%;
   float: left;
-  margin: 0 3% 4% 0;
-  text-align: center;
-  border: 1px solid #000;
-  box-sizing: border-box; }
+  margin-right: 2%;
+  text-align: center; }
   .appDashboard__linkWrap:nth-child(2n) {
     margin-right: 0; }
   .appDashboard__linkWrap:nth-child(2n + 1) {
@@ -5033,7 +5031,7 @@ a {
 
 .appDashboard__link {
   padding: 1rem;
-  margin: 0;
+  margin: 0 0 4%;
   background: #A70300;
   color: #fff;
   display: block;
@@ -5052,46 +5050,26 @@ a {
 .dashboardHeader {
   background: #eee;
   font-size: 1.1rem;
-  padding-top: 1rem;
-  position: relative; }
+  padding: 1rem; }
 
-.dashboardHeader__playerWrap {
-  width: 100%;
-  margin-bottom: 0.6rem; }
+.dashboadHeader__playerWrap {
+  width: 100%; }
 
 .dashboardHeader__avatar {
   float: left;
-  width: calc(28% - 1rem);
-  margin-left: 0.5rem;
-  border: 1px solid #6c6c6c;
-  border-radius: 50%; }
+  width: 20%; }
 
 .dashboardHeader__playerName {
   float: left;
-  margin: 0.45rem 0 0 0.5rem;
-  width: calc(62% - 1rem);
+  margin-left: 1rem;
+  width: calc(80% - 1rem);
   font-size: 1.4rem;
-  line-height: 1.4;
-  padding-bottom: 1rem; }
+  line-height: 1.4; }
 
 .dashboardHeader__balance {
   font-size: 0.8em; }
   .dashboardHeader__balance span {
     color: #2dbe0c; }
-
-.dashboardHeader__logoutWrap {
-  text-align: center; }
-
-.dashboardHeader__logout {
-  text-transform: uppercase;
-  font-weight: 600;
-  text-decoration: none;
-  display: block;
-  padding: 0.75rem 0;
-  background: #A70300;
-  color: #fff;
-  border: 3px solid #000;
-  border-width: 1px 0; }
 
 .rulesSlider {
   position: fixed;
