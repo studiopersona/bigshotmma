@@ -40,7 +40,7 @@
         	 		</a>
         	 	</li>
         	 	<li class="appDashboard__linkWrap">
-        	 		<a class="appDashboard__link appDashboard__link--profile" v-link="{ path: '/profile' }">
+        	 		<a class="appDashboard__link appDashboard__link--profile" v-link="{ path: '/profile' }" @click="toggleMenu">
         	 			<img src="public/image/dashboard/profile.png">
         	 			Profile
         	 		</a>

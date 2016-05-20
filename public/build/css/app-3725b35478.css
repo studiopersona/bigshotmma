@@ -5187,10 +5187,10 @@ a {
   left: 0;
   right: 0;
   z-index: 300;
-  transform: translate3d(0, -120%, 0);
+  transform: translate3d(0, -100%, 0);
   transition: transform 0.3s ease; }
   .syncAlert.show {
-    transform: translate3d(0, 0, 0); }
+    tansform: translate3d(0, 0, 0); }
 
 .syncAlert__body {
   padding: 1.5rem 1rem;
@@ -5200,7 +5200,7 @@ a {
 .syncAlert--success {
   background: rgba(0, 147, 39, 0.8); }
 
-.syncAlert--failed {
+.syncAlert--falied {
   background: rgba(147, 0, 0, 0.8); }
 
 .form input,

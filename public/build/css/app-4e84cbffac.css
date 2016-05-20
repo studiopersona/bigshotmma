@@ -4696,21 +4696,12 @@ a {
 
 .profile {
   text-align: center; }
-  .profile > div .button-wrap {
-    position: fixed;
-    bottom: 0;
-    z-index: 30;
-    margin-top: 2.5rem;
-    padding: 1.5rem 0;
-    background: #fff; }
 
 .profile__image {
   margin-bottom: 2rem; }
 
 .profile__inputWrap {
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto; }
+  width: 60%; }
 
 .infoModal {
   position: fixed;
@@ -5180,28 +5171,6 @@ a {
     background-color: #2dbe0c; }
   .rulesSlider__indicator:last-child {
     margin-right: 0; }
-
-.syncAlert {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 300;
-  transform: translate3d(0, -120%, 0);
-  transition: transform 0.3s ease; }
-  .syncAlert.show {
-    transform: translate3d(0, 0, 0); }
-
-.syncAlert__body {
-  padding: 1.5rem 1rem;
-  font-size: 1.4rem;
-  color: #fff; }
-
-.syncAlert--success {
-  background: rgba(0, 147, 39, 0.8); }
-
-.syncAlert--failed {
-  background: rgba(147, 0, 0, 0.8); }
 
 .form input,
 .form select,

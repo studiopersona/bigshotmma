@@ -5200,7 +5200,7 @@ a {
 .syncAlert--success {
   background: rgba(0, 147, 39, 0.8); }
 
-.syncAlert--failed {
+.syncAlert--falied {
   background: rgba(147, 0, 0, 0.8); }
 
 .form input,

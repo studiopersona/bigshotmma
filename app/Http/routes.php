@@ -43,6 +43,9 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('contest/{id}/results', 'FightResultsController@index');
 	    Route::get('contest/{id}/standings/{withplayers?}', 'PicksController@getStandings');
 	    Route::get('player-name', 'UsersController@getPlayerName');
+	    // Profile Routes ----------------------------------------------------
+	    Route::get('profile', 'UsersController@profile');
+	    Route::post('profile', 'UsersController@update');
 	});
 
 });

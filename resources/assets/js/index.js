@@ -56,6 +56,7 @@ import PlayerPicks from './components/PlayerPicks.vue';
 import Standings from './components/Standings.vue';
 import Results from './components/Results.vue';
 import PlayerContests from './components/PlayerContests.vue';
+import Profile from './components/Profile.vue';
 
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
@@ -107,6 +108,10 @@ router.map({
 
   '/contest/:contest_id/results': {
     component: Results
+  },
+
+  '/profile': {
+    component: Profile
   },
 
 });
