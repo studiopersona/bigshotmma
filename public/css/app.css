@@ -3976,52 +3976,24 @@ strong {
   left: 50%;
   top: 33%;
   position: absolute;
-  -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   z-index: 50; }
   .loader #spinner {
     box-sizing: border-box;
     stroke: #a80300;
     stroke-width: 3px;
-    -webkit-transform-origin: 50%;
     transform-origin: 50%;
-    -webkit-animation: line 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite, rotate 1.6s linear infinite;
     animation: line 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite, rotate 1.6s linear infinite; }
-
-@-webkit-keyframes rotate {
-  from {
-    -webkit-transform: rotate(0);
-    transform: rotate(0); }
-  to {
-    -webkit-transform: rotate(450deg);
-    transform: rotate(450deg); } }
 
 @keyframes rotate {
   from {
-    -webkit-transform: rotate(0);
     transform: rotate(0); }
   to {
-    -webkit-transform: rotate(450deg);
     transform: rotate(450deg); } }
-
-@-webkit-keyframes line {
-  0% {
-    stroke-dasharray: 2, 85.964;
-    -webkit-transform: rotate(0);
-    transform: rotate(0); }
-  50% {
-    stroke-dasharray: 65.973, 21.9911;
-    stroke-dashoffset: 0; }
-  100% {
-    stroke-dasharray: 2, 85.964;
-    stroke-dashoffset: -65.973;
-    -webkit-transform: rotate(90deg);
-    transform: rotate(90deg); } }
 
 @keyframes line {
   0% {
     stroke-dasharray: 2, 85.964;
-    -webkit-transform: rotate(0);
     transform: rotate(0); }
   50% {
     stroke-dasharray: 65.973, 21.9911;
@@ -4029,7 +4001,6 @@ strong {
   100% {
     stroke-dasharray: 2, 85.964;
     stroke-dashoffset: -65.973;
-    -webkit-transform: rotate(90deg);
     transform: rotate(90deg); } }
 
 html {
@@ -4284,12 +4255,9 @@ a {
     margin-top: 2.5rem;
     padding: 1.5rem 0;
     background: #fff;
-    -webkit-transform: translate3d(0, 100%, 0);
     transform: translate3d(0, 100%, 0);
-    transition: -webkit-transform 0.3s ease;
     transition: transform 0.3s ease; }
     .fightsList > div .button-wrap.show {
-      -webkit-transform: translate3d(0, 0, 0);
       transform: translate3d(0, 0, 0); }
   .fightsList p {
     text-align: center; }
@@ -4743,15 +4711,12 @@ a {
   z-index: 200;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
-  -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
   color: #fff;
   text-align: center; }
   .infoModal.show {
-    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
 .infoModal__rules p {
@@ -4788,15 +4753,12 @@ a {
   z-index: 200;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
-  -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
   color: #fff;
   text-align: center; }
   .powerUpModal.show {
-    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
 @media screen and (max-height: 540px) {
@@ -4874,9 +4836,7 @@ a {
   height: auto;
   padding: 5.5rem 2rem;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.3s ease;
   transition: transform 0.3s ease;
-  -webkit-transform: translate3d(0, -110%, 0);
   transform: translate3d(0, -110%, 0);
   overflow: hidden;
   font-size: 1.6rem;
@@ -4885,7 +4845,6 @@ a {
   text-align: center;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8); }
   .alertNotice.show {
-    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
   .alertNotice p {
     margin: 0 0 2rem; }
@@ -4938,15 +4897,12 @@ a {
   z-index: 200;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
-  -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
   color: #fff;
   text-align: center; }
   .confirmModal.show {
-    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
 @media screen and (max-height: 540px) {
@@ -5015,15 +4971,12 @@ a {
   z-index: 500;
   width: 100%;
   max-width: 600px;
-  -webkit-transform: translate3d(-100%, 0, 0);
   transform: translate3d(-100%, 0, 0);
-  transition: -webkit-transform 0.3s ease;
   transition: transform 0.3s ease;
   background: #fff;
   padding: 1rem;
   text-align: center; }
   .appDashboard.show {
-    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
   .appDashboard .pageHeader {
     top: 0;
@@ -5069,9 +5022,7 @@ a {
   width: 100%;
   max-width: 600px;
   background: rgba(0, 0, 0, 0.9);
-  transition: -webkit-transform 0.3s ease;
   transition: transform 0.3s ease;
-  -webkit-transform: translate3d(200%, 0, 0);
   transform: translate3d(200%, 0, 0);
   overflow: hidden;
   font-size: 1.6rem;
@@ -5079,7 +5030,6 @@ a {
   color: #fff;
   text-align: center; }
   .rulesSlider.show {
-    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
 @media screen and (max-height: 540px) {
@@ -5091,9 +5041,7 @@ a {
   position: absolute;
   left: 0;
   top: 0;
-  -webkit-transform: translate3d(150%, 0, 0);
   transform: translate3d(150%, 0, 0);
-  transition: -webkit-transform 0.3s ease;
   transition: transform 0.3s ease;
   height: auto;
   padding: 5.5rem 2rem;
@@ -5101,7 +5049,6 @@ a {
   max-width: 600px; }
   .rulesSlider__slide.current,
   .playSlider__slide.current {
-    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
 .rulesSlider__close {
@@ -5322,7 +5269,6 @@ a {
     width: 100%; }
 
 .flip-container {
-  -webkit-perspective: 2000;
   -ms-perspective: 2000;
   perspective: 2000;
   -ms-transform: perspective(2000px);
@@ -5332,11 +5278,9 @@ a {
   background: #fff; }
 
 .flip-container.fliped .back {
-  -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg); }
 
 .flip-container.fliped .front {
-  -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg); }
   .flip-container.fliped .front .view-more {
     display: none; }
@@ -5350,14 +5294,12 @@ a {
   -moz-transform-style: preserve-3d;
   -ms-transform-style: preserve-3d;
   transition: 0.3s;
-  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   position: relative;
   height: inherit; }
 
 .front,
 .back {
-  -webkit-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-transition: 0.3s;
@@ -5373,9 +5315,7 @@ a {
   -ms-transform-style: preserve-3d;
   -ms-transform: rotateY(0deg);
   transition: 0.3s;
-  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
   position: absolute;
   top: 0;
@@ -5389,7 +5329,6 @@ a {
   z-index: 2; }
 
 .back {
-  -webkit-transform: rotateY(-180deg);
   transform: rotateY(-180deg); }
 
 .stripped-list > li {
