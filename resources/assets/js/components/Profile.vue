@@ -14,11 +14,17 @@
             <div class="profile__inputWrap form__row">
                 <input v-model="player.name" type="text">
             </div>
-            <div class="profile__inputWrap form__row">
-                <input v-model="player.email" type="text">
-            </div>
+            <fieldset>
+                <legend>Change Your Password</legend>
+                <div class="profile__inputWrap form__row">
+                    <input v-model="player.oldPassword" type="password" placeholder="Old Password">
+                </div>
+                <div class="profile__inputWrap form__row">
+                    <input v-model="player.newPassword" type="password" placeholder="New Password">
+                </div>
+            </fieldset>
             <div class="profile__depositLink">
-                Update your <a :v-link="{ path: '/deposit-profile' }">Deposit Method</a>
+                Update your <a v-link="{ path: '/deposit-profile' }">Deposit Method</a>
             </div>
             <div class="container-fluid">
                 <div class="col-xs-100 button-wrap">
@@ -55,6 +61,9 @@
                 player: {
                     name: '',
                     email: '',
+                    avatar: '',
+                    oldPassword: '',
+                    newPassword: '',
                 },
                 alert: {
                     body: '',
@@ -115,8 +124,9 @@
 
                 this.$http.post(URL.base + '/api/v1/profile', {
                     player_name: this.player.name,
-                    email: this.player.email,
                     avatar: this.player.avatar,
+                    old_password: this.player.oldPassword,
+                    new_password: this.player.newPassword,
                 }, {
                     // Attach the JWT header
                     headers: auth.getAuthHeader()

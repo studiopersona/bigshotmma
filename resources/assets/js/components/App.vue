@@ -33,12 +33,18 @@
                         How to Play
                     </a>
                 </li>
-        	 	 <li class="appDashboard__linkWrap">
+        	 	<li class="appDashboard__linkWrap">
         	 		<a class="appDashboard__link appDashboard__link--rules" @click="showContestTypes">
         	 			<img src="public/image/dashboard/rules.png">
-        	 			Deposit
+        	 			Contest Types
         	 		</a>
         	 	</li>
+                <li class="appDashboard__linkWrap">
+                    <a class="appDashboard__link appDashboard__link--rules" v-link="{ path: '/deposit' }" @click="toggleMenu">
+                        <img src="public/image/dashboard/rules.png">
+                        Make Deposit
+                    </a>
+                </li>
         	 	<li class="appDashboard__linkWrap">
         	 		<a class="appDashboard__link appDashboard__link--profile" v-link="{ path: '/profile' }" @click="toggleMenu">
         	 			<img src="public/image/dashboard/profile.png">
@@ -239,6 +245,17 @@
             }).then(
                 function(response) {
                     this.playersName = response.data.player_name;
+                },
+                function(err) {
+                    console.log(err);
+            });
+
+            this.$http.get( URL.base + '/api/v1/player-balance', {}, {
+                // Attach the JWT header
+                headers: auth.getAuthHeader()
+            }).then(
+                function(response) {
+                    this.playersBalance = response.data.playerBalance;
                 },
                 function(err) {
                     console.log(err);

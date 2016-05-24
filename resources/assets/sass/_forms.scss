@@ -8,6 +8,28 @@
 		border: 1px solid $form-field-border-color;
 		width: 100%;
 	}
+
+	select {
+		padding-bottom: 1.3rem;
+	}
+
+	legend {
+		text-transform: uppercase;
+		color: $color-gray-dark;
+		margin-bottom: 0.75rem;
+		text-align: left;
+		padding-left: 4%;
+		width: 100%;
+	}
+
+	input[type="checkbox"] {
+		width: auto;
+		vertical-align: middle;
+	}
+
+	.checkboxText {
+		font-size: 1rem;
+	}
 }
 
 .form__row {

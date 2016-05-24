@@ -3,29 +3,120 @@
         <header class="pageHeader">
             <h1 class="pageHeader__header">{{ player.name }}</h1>
             <h4 class="pageHeader__subheader">
-                Modify your profile information
+                Modify your deposit profile information
             </h4>
         </header>
         <div class="profile form">
-            <div class="profile__image">
-                <img :src="URL.base + '/public/image/avatar/male.jpg'">
-                <!--<button type="button">Upload New Image</button>-->
-            </div>
-            <div class="profile__inputWrap form__row">
-                <input v-model="player.name" type="text">
-            </div>
-            <div class="profile__inputWrap form__row">
-                <input v-model="player.email" type="text">
-            </div>
-            <div class="profile__depositLink">
-                Update your <a :v-link="{ path: '/deposit-profile' }">Deposit Method</a>
-            </div>
+            <fieldset>
+                <legend>Billing &amp; Payout Details</legend>
+                <div class="profile__inputWrap form__row container-fluid">
+                    <label for="firstname" class="col-xs-100">
+                        <span class="visuallyhidden">First Name</span>
+                        <input v-model="player.firstname" type="text" placeholder="First Name" id="firstname">
+                    </label>
+                </div>
+                <div class="profile__inputWrap form__row container-fluid">
+                    <label for="lastname" class="col-xs-100">
+                        <span class="visuallyhidden">Last Name</span>
+                        <input v-model="player.lastname" type="text" placeholder="Last Name" id="lastname">
+                    </label>
+                </div>
+                <div class="profile__inputWrap form__row container-fluid">
+                    <label for="address" class="col-xs-100">
+                        <span class="visuallyhidden">Address</span>
+                        <input v-model="player.address" type="text" placeholder="Address" id="address">
+                    </label>
+                </div>
+                <div class="profile__inputWrap form__row container-fluid">
+                    <label for="address2" class="col-xs-100">
+                        <span class="visuallyhidden">Address Line 2</span>
+                        <input v-model="player.address2" type="text" placeholder="Address Line 2" id="address2">
+                    </label>
+                </div>
+                <div class="profile__inputWrap form__row container-fluid">
+                    <label for="city" class="col-xs-66">
+                        <span class="visuallyhidden">City</span>
+                        <input v-model="player.city" type="text" placeholder="City" id="city">
+                    </label>
+                    <div  class="col-xs-offset-2 col-xs-32">
+                        <select v-model="player.state">
+                            <option value="">State</option>
+                            <option value="AL">AL</option>
+                            <option value="AK">AK</option>
+                            <option value="AZ">AZ</option>
+                            <option value="AR">AR</option>
+                            <option value="CA">CA</option>
+                            <option value="CO">CO</option>
+                            <option value="CT">CT</option>
+                            <option value="DE">DE</option>
+                            <option value="DC">DC</option>
+                            <option value="FL">FL</option>
+                            <option value="GA">GA</option>
+                            <option value="HI">HI</option>
+                            <option value="ID">ID</option>
+                            <option value="IL">IL</option>
+                            <option value="IN">IN</option>
+                            <option value="IA">IA</option>
+                            <option value="KS">KS</option>
+                            <option value="KY">KY</option>
+                            <option value="LA">LA</option>
+                            <option value="ME">ME</option>
+                            <option value="MD">MD</option>
+                            <option value="MA">MA</option>
+                            <option value="MI">MI</option>
+                            <option value="MN">MN</option>
+                            <option value="MS">MS</option>
+                            <option value="MO">MO</option>
+                            <option value="MT">MT</option>
+                            <option value="NE">NE</option>
+                            <option value="NV">NV</option>
+                            <option value="NH">NH</option>
+                            <option value="NJ">NJ</option>
+                            <option value="NM">NM</option>
+                            <option value="NY">NY</option>
+                            <option value="NC">NC</option>
+                            <option value="ND">ND</option>
+                            <option value="OH">OH</option>
+                            <option value="OK">OK</option>
+                            <option value="OR">OR</option>
+                            <option value="PA">PA</option>
+                            <option value="RI">RI</option>
+                            <option value="SC">SC</option>
+                            <option value="SD">SD</option>
+                            <option value="TN">TN</option>
+                            <option value="TX">TX</option>
+                            <option value="UT">UT</option>
+                            <option value="VT">VT</option>
+                            <option value="VA">VA</option>
+                            <option value="WA">WA</option>
+                            <option value="WV">WV</option>
+                            <option value="WI">WI</option>
+                            <option value="WY">WY</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="profile__inputWrap form__row container-fluid">
+                    <div class="col-xs-50">
+                        <input v-model="player.zipcode" type="text" placeholder="Zip Code">
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Preferred Payment Method</legend>
+                <div class="profile__inputWrap form__row">
+                    <select v-model="player.merchant">
+                        <option value="0">Select Payment Method</option>
+                        <option value="1">Credit Card</option>
+                        <option value="2">PayPal</option>
+                    </select>
+                </div>
+            </fieldset>
             <div class="container-fluid">
                 <div class="col-xs-100 button-wrap">
                     <button
                         type="button"
                         class="button button--primary"
-                        @click="profileUpdate"
+                        @click="depositUpdate"
                     >Update</button>
                 </div>
             </div>
@@ -55,7 +146,23 @@
                 player: {
                     name: '',
                     email: '',
+                    firstname: '',
+                    lastname: '',
+                    address: '',
+                    address2: '',
+                    city: '',
+                    state: '',
+                    zipcode: '',
+                    merchant: 0,
                 },
+                cardInfo: {
+                    number: '',
+                    expMonth: 0,
+                    expYear: 0,
+                    cvv: '',
+                },
+                paypalEmail: '',
+                expYears: [],
                 alert: {
                     body: '',
                     class: 'syncAlert--success',
@@ -97,7 +204,7 @@
             },
 
             fetch() {
-                this.$http.get(URL.base + '/api/v1/profile', {}, {
+                this.$http.get(URL.base + '/api/v1/deposit-profile', {}, {
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
@@ -108,15 +215,36 @@
                     console.log(err);
                     this.working = false;
                 });
+                this.expirationYears();
             },
 
-            profileUpdate() {
+            expirationYears() {
+                var thisYear,
+                    years = [],
+                    now = new Date();
+
+                years[0] = thisYear = now.getFullYear();
+
+                for ( var i=1; i < 10; ++i ) {
+                    now.setFullYear(thisYear + i)
+                    years[i] = now.getFullYear();
+                }
+
+                this.expYears = years;
+            },
+
+            depositUpdate() {
                 this.working = true;
 
-                this.$http.post(URL.base + '/api/v1/profile', {
-                    player_name: this.player.name,
-                    email: this.player.email,
-                    avatar: this.player.avatar,
+                this.$http.post(URL.base + '/api/v1/deposit-profile', {
+                    firstname: this.player.firstname,
+                    lastname: this.player.lastname,
+                    address: this.player.address,
+                    address2: this.player.address2,
+                    city: this.player.city,
+                    state: this.player.state,
+                    zipcode: this.player.zipcode,
+                    merchant_id: this.player.merchant,
                 }, {
                     // Attach the JWT header
                     headers: auth.getAuthHeader()

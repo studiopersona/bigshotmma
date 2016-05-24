@@ -74,7 +74,7 @@
 
 .dashboardHeader__avatar {
 	float: left;
-	width: calc(28% - 1rem);
+	width: calc(23% - 1rem);
 	margin-left: 0.5rem;
 	border: 1px solid $color-gray-dark;
 	border-radius: 50%;
@@ -82,11 +82,11 @@
 
 .dashboardHeader__playerName {
 	float: left;
-	margin: 0.45rem 0 0 0.5rem;
+	margin: 0.25rem 0 0 0.5rem;
 	width: calc(62% - 1rem);
 	font-size: 1.4rem;
 	line-height: 1.4;
-	padding-bottom: 1rem;
+	padding-bottom: 0.7rem;
 }
 
 .dashboardHeader__balance {

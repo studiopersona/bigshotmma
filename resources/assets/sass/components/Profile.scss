@@ -1,5 +1,6 @@
 .profile {
 	text-align: center;
+	margin-bottom: 6rem;
 
 	> div .button-wrap {
 		position: fixed;
@@ -16,7 +17,25 @@
 }
 
 .profile__inputWrap {
-	width: 80%;
+	width: 93%;
 	margin-left: auto;
 	margin-right: auto;
+
+	option:first-child {
+		color: #ccc;
+	}
+
+	select option:selected {
+		color: #ccc;
+	}
+}
+
+.profile__dynamicContent {
+	overflow: hidden;
+	max-height: 0;
+	transition: max-height 0.3s ease;
+
+	&.show {
+		max-height: 600px;
+	}
 }
