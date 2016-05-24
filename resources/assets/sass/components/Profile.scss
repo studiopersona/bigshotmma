@@ -1,0 +1,41 @@
+.profile {
+	text-align: center;
+	margin-bottom: 6rem;
+
+	> div .button-wrap {
+		position: fixed;
+		bottom: 0;
+		z-index: 30;
+		margin-top: 2.5rem;
+		padding: 1.5rem 0;
+		background: $color-white;
+	}
+}
+
+.profile__image {
+	margin-bottom: 2rem;
+}
+
+.profile__inputWrap {
+	width: 93%;
+	margin-left: auto;
+	margin-right: auto;
+
+	option:first-child {
+		color: #ccc;
+	}
+
+	select option:selected {
+		color: #ccc;
+	}
+}
+
+.profile__dynamicContent {
+	overflow: hidden;
+	max-height: 0;
+	transition: max-height 0.3s ease;
+
+	&.show {
+		max-height: 600px;
+	}
+}
