@@ -55,6 +55,8 @@ class AuthenticateController extends ApiController
             if ( $e->errorInfo[1] == 1062 ) return $this->respondAlreadyExists('The Email Address Provided is Already in Use');
         }
 
+        event(new \Bsmma\Events\UserRegistered($user));
+
         return response()->json(compact('token'));
     }
 

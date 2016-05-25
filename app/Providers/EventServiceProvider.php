@@ -13,8 +13,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Bsmma\Events\SomeEvent' => [
-            'Bsmma\Listeners\EventListener',
+        'Bsmma\Events\UserRegistered' => [
+            'Bsmma\Listeners\AddFundsToUserAccount',
         ],
     ];
 
