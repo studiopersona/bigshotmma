@@ -5,7 +5,14 @@
 		<title>@yield('title', 'Login') | Blood Sport Fantasy MMA</title>
 
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width">
+		<meta http-equiv="cleartype" content="on">
+
+		<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+  		<meta http-equiv="PRAGMA" content="NO-CACHE">
+
+  		<meta name="viewport" content="width=device-width">
+  		<meta name="apple-mobile-web-app-capable" content="yes">
+  		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		@yield('meta')
 
 		<!-- stylesheets -->

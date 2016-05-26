@@ -112,12 +112,5 @@
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
             },
         },
-
-        route: {
-            // Check the users auth status before
-            // allowing navigation to the route
-            canActivate() {
-            }
-        }
     };
 </script>

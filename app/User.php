@@ -45,4 +45,19 @@ class User extends Authenticatable
         return $this->belongsToMany('Bsmma\Pick');
     }
 
+    public function stripeDetail()
+    {
+        return $this->hasOne('Bsmma\StripeDetail');
+    }
+
+    public function paypalEmail()
+    {
+        return $this->hasOne('Bsmma\PaypalEmail');
+    }
+
+    public function userBalances()
+    {
+        return $this->hasMany('Bsmma\UserBalance');
+    }
+
 }

@@ -4702,6 +4702,67 @@ a {
     width: 90%;
     margin: 0 auto; }
 
+.profile {
+  text-align: center;
+  margin-bottom: 6rem; }
+  .profile > div .button-wrap {
+    position: fixed;
+    bottom: 0;
+    z-index: 30;
+    margin-top: 2.5rem;
+    padding: 1.5rem 0;
+    background: #fff; }
+
+.profile__image {
+  margin-bottom: 2rem; }
+
+.profile__inputWrap {
+  width: 93%;
+  margin-left: auto;
+  margin-right: auto; }
+  .profile__inputWrap option:first-child {
+    color: #ccc; }
+  .profile__inputWrap select option:selected {
+    color: #ccc; }
+
+.profile__dynamicContent {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease; }
+  .profile__dynamicContent.show {
+    max-height: 600px; }
+
+.amountSelectionWrap {
+  text-align: center;
+  margin-bottom: 2rem; }
+
+.deposit__amountWrap {
+  font-size: 1.1rem;
+  text-align: center; }
+
+.deposit__amount {
+  font-size: 3.6em;
+  font-weight: 400;
+  color: #2dbe0c;
+  margin: 1rem 0; }
+  .deposit__amount sup {
+    vertical-align: super;
+    font-size: 0.5em; }
+
+.deposit__billedTo {
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  margin-bottom: 2rem; }
+  .deposit__billedTo .larger-text {
+    font-size: 1.25em; }
+
+.deposit__explanation {
+  font-size: 1.1rem;
+  color: #6c6c6c;
+  text-align: center;
+  line-height: 3; }
+
 .infoModal {
   position: fixed;
   left: 0;
@@ -4964,32 +5025,29 @@ a {
 
 .appDashboard {
   position: fixed;
-  top: 33px;
+  top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 500;
-  width: 100%;
-  max-width: 600px;
+  width: 224px;
   transform: translate3d(-100%, 0, 0);
   transition: transform 0.3s ease;
-  background: #fff;
-  padding: 1rem;
-  text-align: center; }
+  background: #eee;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6); }
   .appDashboard.show {
     transform: translate3d(0, 0, 0); }
-  .appDashboard .pageHeader {
-    top: 0;
-    width: 97%; }
 
 .appDashboard__list {
-  margin-top: 74px; }
+  margin: 1rem 0.5rem; }
 
 .appDashboard__linkWrap {
   width: 48%;
   float: left;
-  margin-right: 2%;
-  text-align: center; }
+  margin: 0 3% 4% 0;
+  text-align: center;
+  border: 1px solid #000;
+  box-sizing: border-box; }
   .appDashboard__linkWrap:nth-child(2n) {
     margin-right: 0; }
   .appDashboard__linkWrap:nth-child(2n + 1) {
@@ -4997,10 +5055,11 @@ a {
 
 .appDashboard__link {
   padding: 1rem;
-  margin: 0 0 4%;
+  margin: 0;
   background: #A70300;
   color: #fff;
   display: block;
+  font-size: 0.9rem;
   text-align: center;
   text-transform: uppercase;
   text-decoration: none; }
@@ -5011,6 +5070,50 @@ a {
     display: block;
     width: 65%;
     margin: 0 auto 1rem; }
+
+.dashboardHeader {
+  background: #eee;
+  font-size: 1.1rem;
+  padding-top: 1rem;
+  position: relative; }
+
+.dashboardHeader__playerWrap {
+  width: 100%;
+  margin-bottom: 0.6rem; }
+
+.dashboardHeader__avatar {
+  float: left;
+  width: calc(23% - 1rem);
+  margin-left: 0.5rem;
+  border: 1px solid #6c6c6c;
+  border-radius: 50%; }
+
+.dashboardHeader__playerName {
+  float: left;
+  margin: 0.25rem 0 0 0.5rem;
+  width: calc(62% - 1rem);
+  font-size: 1.4rem;
+  line-height: 1.4;
+  padding-bottom: 0.7rem; }
+
+.dashboardHeader__balance {
+  font-size: 0.8em; }
+  .dashboardHeader__balance span {
+    color: #2dbe0c; }
+
+.dashboardHeader__logoutWrap {
+  text-align: center; }
+
+.dashboardHeader__logout {
+  text-transform: uppercase;
+  font-weight: 600;
+  text-decoration: none;
+  display: block;
+  padding: 0.75rem 0;
+  background: #A70300;
+  color: #fff;
+  border: 3px solid #000;
+  border-width: 1px 0; }
 
 .rulesSlider {
   position: fixed;
@@ -5129,6 +5232,29 @@ a {
   .rulesSlider__indicator:last-child {
     margin-right: 0; }
 
+.syncAlert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 300;
+  transform: translate3d(0, -136%, 0);
+  transition: transform 0.3s ease;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); }
+  .syncAlert.show {
+    transform: translate3d(0, 0, 0); }
+
+.syncAlert__body {
+  padding: 1.5rem 1rem;
+  font-size: 1.3rem;
+  color: #fff; }
+
+.syncAlert--success {
+  background: rgba(0, 147, 39, 0.8); }
+
+.syncAlert--failed {
+  background: rgba(147, 0, 0, 0.8); }
+
 .form input,
 .form select,
 .form textarea {
@@ -5137,6 +5263,24 @@ a {
   font-size: 1.5rem;
   border: 1px solid #c0acac;
   width: 100%; }
+
+.form select {
+  padding-bottom: 1.3rem; }
+
+.form legend {
+  text-transform: uppercase;
+  color: #6c6c6c;
+  margin-bottom: 0.75rem;
+  text-align: left;
+  padding-left: 4%;
+  width: 100%; }
+
+.form input[type="checkbox"] {
+  width: auto;
+  vertical-align: middle; }
+
+.form .checkboxText {
+  font-size: 1rem; }
 
 .form__row {
   margin-bottom: 1.5rem; }

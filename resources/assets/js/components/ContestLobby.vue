@@ -137,6 +137,7 @@
                         contest_id: '',
                     },
                 }],
+                playersBalance: 0,
                 playerRecords: [],
                 contestTypes: {},
                 contestTypeId: '',
@@ -237,6 +238,17 @@
                     this.playerRecords = response.data.data;
                     this.parsePlayerRecords();
                 });
+
+                this.$http.get( URL.base + '/api/v1/player-balance', {}, {
+                    // Attach the JWT header
+                    headers: auth.getAuthHeader()
+                }).then(
+                    function(response) {
+                        this.playersBalance = response.data.playerBalance;
+                    },
+                    function(err) {
+                        console.log(err);
+                });
             },
 
             showContestRules(e) {
@@ -302,12 +314,16 @@
             },
 
             confirmEnter(e) {
-                this.confirmModalContent.action = 'enter';
-                this.confirmModalContent.title = 'Enter Contest';
-                this.confirmModalContent.image = this.participantsList[0].contest.event_image;
-                this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + ' / ' + this.participantsList[0].contest.total_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
+                if ( this.playersBalance >= parseInt(this.participantsList[0].contest.buy_in, 10) ) {
+                    this.confirmModalContent.action = 'enter';
+                    this.confirmModalContent.title = 'Enter Contest';
+                    this.confirmModalContent.image = this.participantsList[0].contest.event_image;
+                    this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + ' / ' + this.participantsList[0].contest.total_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
 
-                this.confirmModalClassList.add('show');
+                    this.confirmModalClassList.add('show');
+                } else {
+                    // show insufficent funds notice here
+                }
             },
 
             confirmModalClose(e) {
