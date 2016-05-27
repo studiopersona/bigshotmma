@@ -33,18 +33,18 @@
                         How to Play
                     </a>
                 </li>
-        	 	<li class="appDashboard__linkWrap">
+        	 	<!--<li class="appDashboard__linkWrap">
         	 		<a class="appDashboard__link appDashboard__link--rules" @click="showContestTypes">
-        	 			<img src="public/image/dashboard/rules.png">
+        	 			<img src="public/image/dashboard/contest-types.png">
         	 			Contest Types
         	 		</a>
         	 	</li>
                 <li class="appDashboard__linkWrap">
                     <a class="appDashboard__link appDashboard__link--rules" v-link="{ path: '/deposit' }" @click="toggleMenu">
-                        <img src="public/image/dashboard/rules.png">
+                        <img src="public/image/dashboard/deposit.png">
                         Make Deposit
                     </a>
-                </li>
+                </li>-->
         	 	<li class="appDashboard__linkWrap">
         	 		<a class="appDashboard__link appDashboard__link--profile" v-link="{ path: '/profile' }" @click="toggleMenu">
         	 			<img src="public/image/dashboard/profile.png">

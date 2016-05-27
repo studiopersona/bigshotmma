@@ -5101,23 +5101,20 @@ a {
   margin-bottom: 2rem; }
 
 .prizeModal__entryFeeWrap {
-  padding: 0 1.75rem;
+  padding: 1rem 0.75rem;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid #646464;
   width: auto;
-  display: inline-block;
-  line-height: 2; }
+  display: inline-block; }
 
 .prizeModal__entryFee {
   color: #2dbe0c;
-  font-size: 2.4rem; }
+  font-size: 1.5rem; }
 
 .prizeModal__entryFeeTitle {
   font-weight: 100;
-  vertical-align: middle;
-  margin-right: 3rem;
-  transform: translateY(-11%);
-  display: inline-block; }
+  line-heigh: 1.5;
+  vertical-align: middle; }
 
 .prizeModal__payoutTable {
   width: 70%;

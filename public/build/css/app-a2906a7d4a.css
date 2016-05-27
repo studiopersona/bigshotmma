@@ -5106,7 +5106,7 @@ a {
   border: 1px solid #646464;
   width: auto;
   display: inline-block;
-  line-height: 2; }
+  line-height: 2.4; }
 
 .prizeModal__entryFee {
   color: #2dbe0c;
@@ -5116,7 +5116,7 @@ a {
   font-weight: 100;
   vertical-align: middle;
   margin-right: 3rem;
-  transform: translateY(-11%);
+  transform: translateY(-10%);
   display: inline-block; }
 
 .prizeModal__payoutTable {

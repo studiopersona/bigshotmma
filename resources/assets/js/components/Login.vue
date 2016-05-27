@@ -51,7 +51,7 @@
 		<div class="container-fluid">
 			<div class="col-xs-100">
 				<div class="logo">
-					<img :src="URL.base + '/public/image/logo.jpg'" alt="Blood Sport Fantasy MMA Logo">
+					<img :src="URL.base + '/public/image/logo.png'" alt="Blood Sport Fantasy MMA Logo">
 				</div>
 			</div>
 		</div>

@@ -5100,25 +5100,6 @@ a {
   text-transform: uppercase;
   margin-bottom: 2rem; }
 
-.prizeModal__entryFeeWrap {
-  padding: 0 1.75rem;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid #646464;
-  width: auto;
-  display: inline-block;
-  line-height: 2; }
-
-.prizeModal__entryFee {
-  color: #2dbe0c;
-  font-size: 2.4rem; }
-
-.prizeModal__entryFeeTitle {
-  font-weight: 100;
-  vertical-align: middle;
-  margin-right: 3rem;
-  transform: translateY(-11%);
-  display: inline-block; }
-
 .prizeModal__payoutTable {
   width: 70%;
   max-width: 400px;
@@ -5128,8 +5109,8 @@ a {
   font-size: 1rem; }
   .prizeModal__payoutTable tbody tr {
     background: #535456;
-    border-bottom: 10px solid rgba(0, 0, 0, 0.5);
-    border-top: 10px solid rgba(0, 0, 0, 0.5);
+    border-bottom: 10px solid rgba(0, 0, 0, 0.6);
+    border-top: 10px solid rgba(0, 0, 0, 0.6);
     padding: 1em 0; }
   .prizeModal__payoutTable th {
     text-transform: uppercase;
@@ -5140,13 +5121,10 @@ a {
       text-align: right; }
   .prizeModal__payoutTable tbody td {
     padding: 6px;
-    font-weight: 300;
-    padding-left: 1rem; }
+    font-weight: 300; }
     .prizeModal__payoutTable tbody td:nth-child(2n) {
       text-align: right;
-      font-size: 1.2rem;
-      font-weight: 600;
-      padding-right: 1rem; }
+      font-weight: 600; }
 
 .prizeModal__close {
   position: absolute;

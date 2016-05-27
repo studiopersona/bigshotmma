@@ -31,7 +31,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-50">
-                    <span class="contestDetails__title">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}
+                        <span class="contestDetails__title"><a @click="showPrizeModal">Prize Pool</a>:</span> ${{ participantsList[0].contest.prize_pool }}
                     </div>
                     <div class="col-xs-50 contestDetails__type">
                         <a href="#" @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">
@@ -89,7 +89,39 @@
                     </svg>
                 </div>
             </div>
-        </div><section :class="infoModalClasses">
+        </div>
+        <section :class="prizeModalClasses">
+            <h3 class="prizeModal__title">Prize Pool</h3>
+            <div class="prizeModal__body">
+            <p>In an <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">Old School</a> contest with 10 players:</p>
+                <div class="prizeModal__entryFeeWrap">
+                    <span class="prizeModal__entryFeeTitle">Entry Fee:</span> <span class="prizeModal__entryFee">$1</span>
+                </div>
+                <table class="prizeModal__payoutTable">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Prize</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1st</td>
+                            <td class="prizeModal__payout">$6.70</td>
+                        </tr>
+                        <tr>
+                            <td>2nd</td>
+                            <td class="prizeModal__payout">$2.30</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="button-wrap">
+                <button @click="prizeModalClose" type="button" class="button button--green">Got It</button>
+            </div>
+            <button @click="prizeModalClose" type="button" class="infoModal__close">x</button>
+        </section>
+        <section :class="infoModalClasses">
             <h3 class="infoModal__title">{{ infoModalContent.title }}</h3>
             <img class="infoModal__image" :src="infoModalContent.image" alt="{{ infoModalContent.title }} Image">
             <div class="infoModal__rules">
@@ -175,6 +207,7 @@
                 infoModalClasses: ['infoModal'],
                 fundsModalClasses: ['fundsModal'],
                 confirmModalClasses: ['confirmModal'],
+                prizeModalClasses: ['prizeModal'],
                 URL: {
                     base: window.URL.base,
                     current: window.URL.current,
@@ -290,6 +323,10 @@
                 return contestType.id === parseInt(this.contestTypeId, 10);
             },
 
+            showPrizeModal() {
+                this.prizeModalClasses.push('show');
+            },
+
             infoModalClose(e) {
                 e.preventDefault();
 
@@ -300,6 +337,12 @@
                 e.preventDefault();
 
                 this.fundsModalClasses = ['fundsModal'];
+            },
+
+            prizeModalClose(e) {
+                e.preventDefault();
+
+                this.prizeModalClasses = ['prizeModal'];
             },
 
             parsePlayerRecords() {
