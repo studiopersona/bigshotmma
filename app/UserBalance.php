@@ -8,6 +8,8 @@ class UserBalance extends Model
 {
 	protected $gaurded = [];
 
+    protected $fillable = ['user_id', 'amount', 'transaction_type_id'];
+
     public function user()
     {
     	return $this->belongsTo('Bsmma\User');
@@ -16,5 +18,10 @@ class UserBalance extends Model
     public function transactionType()
     {
     	return $this->belongsTo('Bsmma\TransactionType');
+    }
+
+    public function contests()
+    {
+    	return $this->belongsToMany('Bsmma\Contest');
     }
 }

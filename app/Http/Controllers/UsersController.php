@@ -34,7 +34,7 @@ class UsersController extends ApiController
         $user = \JWTAuth::parseToken()->authenticate();
 
         $credits = $this->userBalance->where('user_id', $user->id)
-                    ->whereIn('transaction_type_id', [2, 4])
+                    ->whereIn('transaction_type_id', [2, 4, 5])
                     ->sum('amount');
 
         $debits = $this->userBalance->where('user_id', $user->id)

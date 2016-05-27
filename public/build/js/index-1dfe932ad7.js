@@ -15325,7 +15325,7 @@ exports.default = {
             this.confirmModalContent.action = 'quit';
             this.confirmModalContent.title = 'Quit Contest';
             this.confirmModalContent.image = URL.base + '/public/image/events/' + this.participantsList[0].contest.event_image;
-            this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + '<br>' + this.participantsList[0].contest.total_participants + ' / ' + this.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to quit this contest?</p>';
+            this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + '<br>' + this.participantsList[0].contest.participants + ' / ' + this.participantsList[0].contest.total_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to quit this contest?</p>';
 
             this.confirmModalClassList.add('show');
         },
@@ -15334,7 +15334,7 @@ exports.default = {
                 this.confirmModalContent.action = 'enter';
                 this.confirmModalContent.title = 'Enter Contest';
                 this.confirmModalContent.image = URL.base + '/public/image/events/' + this.participantsList[0].contest.event_image;
-                this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + '<br>' + this.participantsList[0].contest.total_participants + ' / ' + this.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
+                this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + '<br>' + this.participantsList[0].contest.participants + ' / ' + this.participantsList[0].contest.total_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
 
                 this.confirmModalClassList.add('show');
             } else {

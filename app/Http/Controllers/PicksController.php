@@ -11,6 +11,8 @@ use Bsmma\Contest;
 use Bsmma\Event;
 use Bsmma\FightResult;
 use Bsmma\ContestParticipant;
+use Bsmma\UserBalance;
+use Bsmma\ContestUserBalance;
 use Bsmma\divStrong\Transformers\PickTransformer;
 use Bsmma\divStrong\Transformers\PlayerPickTransformer;
 use Bsmma\divStrong\Transformers\ContestTransformer;
@@ -24,6 +26,8 @@ class PicksController extends ApiController
         User $user,
         Contest $contest,
         Event $event,
+        UserBalance $userBalance,
+        ContestUserBalance $contestUserBalance,
         ContestParticipant $contestParticipant,
         FightResult $fightResult,
         PickTransformer $pickTransformer,
@@ -37,6 +41,8 @@ class PicksController extends ApiController
         $this->user = $user;
         $this->contest = $contest;
         $this->event = $event;
+        $this->userBalance = $userBalance;
+        $this->contestUserBalance = $contestUserBalance;
         $this->contestParticipant = $contestParticipant;
         $this->pickTransformer = $pickTransformer;
         $this->playerPickTransformer = $playerPickTransformer;
@@ -107,7 +113,13 @@ class PicksController extends ApiController
             $this->pick->insert($data);
         }
 
+        $contest = $this->contest->select('entry_fee')
+                        ->where('id', $requestData['picks'][0]['contest_id'])
+                        ->first();
+
         $this->contestParticipant->create(['contest_id'=> $requestData['picks'][0]['contest_id'], 'user_id' => $user->id]);
+        $userBalance = $this->userBalance->create(['user_id' => $user->id, 'transaction_type_id' => 1, 'amount' => $contest->entry_fee * 100]);
+        $this->contestUserBalance->create(['contest_id' => $requestData['picks'][0]['contest_id'], 'user_balance_id' => $userBalance->id, 'is_entry' => 1]);
 
         return $this->respond([
             'success' => true,
@@ -278,9 +290,12 @@ class PicksController extends ApiController
             ->where('contest_id', $contestId)
             ->delete();
 
-        $contest = $this->contest->select('event_id')
+        $contest = $this->contest->select('event_id', 'entry_fee')
                     ->where('id', $contestId)
                     ->first();
+
+        $userBalance = $this->userBalance->create(['user_id' => $user->id, 'transaction_type_id' => 5, 'amount' => $contest->entry_fee * 100]);
+        $this->contestUserBalance->create(['contest_id' => $contestId, 'user_balance_id' => $userBalance->id]);
 
         return $this->respond(['data' => ['eventId' => $contest->event_id]]);
     }

@@ -41,4 +41,9 @@ class Contest extends Model
     {
         return $this->belongsTo('Bsmma\FightResult');
     }
+
+    public function userBalances()
+    {
+        return $this->belongsToMany('Bsmma\UserBalance');
+    }
 }

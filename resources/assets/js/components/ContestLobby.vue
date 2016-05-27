@@ -89,10 +89,9 @@
                     </svg>
                 </div>
             </div>
-        </div>
-        <section :class="infoModalClasses">
+        </div><section :class="infoModalClasses">
             <h3 class="infoModal__title">{{ infoModalContent.title }}</h3>
-            <img class="infoModal__image" :src="URL.base + '/public/image/info/' + infoModalContent.image" alt="{{ infoModalContent.title }} Image">
+            <img class="infoModal__image" :src="infoModalContent.image" alt="{{ infoModalContent.title }} Image">
             <div class="infoModal__rules">
                 {{{ infoModalContent.rules }}}
             </div>
@@ -101,9 +100,20 @@
             </div>
             <button @click="infoModalClose" type="button" class="infoModal__close">x</button>
         </section>
+        <section :class="fundsModalClasses">
+            <h3 class="fundsModal__title">{{ fundsModalContent.title }}</h3>
+            <img class="fundsModal__image" :src="fundsModalContent.image" alt="{{ fundsModalContent.title }} Image">
+            <div class="fundsModal__body">
+                {{{ fundsModalContent.body }}}
+            </div>
+            <div class="button-wrap">
+                <button @click="fundsModalClose" type="button" class="button button--green">Got It</button>
+            </div>
+            <button @click="fundsModalClose" type="button" class="infoModal__close">x</button>
+        </section>
         <section :class="confirmModalClasses">
             <h3 class="confirmModal__title">{{ confirmModalContent.title }}</h3>
-            <img class="confirmModal__image" :src="URL.base + '/public/image/events/' + confirmModalContent.image" alt="{{ confirmModalContent.title }} Image">
+            <img class="confirmModal__image" :src="confirmModalContent.image" alt="{{ confirmModalContent.title }} Image">
             <div class="confirmModal__body">
                 {{{ confirmModalContent.body }}}
             </div>
@@ -146,6 +156,11 @@
                     rules: '',
                     image: ''
                 },
+                fundsModalContent: {
+                    title: '',
+                    body: '',
+                    image: ''
+                },
                 confirmModalContent: {
                     action: '',
                     title: '',
@@ -158,6 +173,7 @@
                 deadlinePast: false,
                 working: false,
                 infoModalClasses: ['infoModal'],
+                fundsModalClasses: ['fundsModal'],
                 confirmModalClasses: ['confirmModal'],
                 URL: {
                     base: window.URL.base,
@@ -264,7 +280,7 @@
 
                     this.infoModalContent.title = newType.contest_type_name;
                     this.infoModalContent.rules = newType.contest_type_rules,
-                    this.infoModalContent.image = newType.image_name;
+                    this.infoModalContent.image = URL.base + '/public/image/info/' + newType.image_name;
                 }
 
                 this.infoModalClasses.push('show');
@@ -278,6 +294,12 @@
                 e.preventDefault();
 
                 this.infoModalClasses = ['infoModal'];
+            },
+
+            fundsModalClose(e) {
+                e.preventDefault();
+
+                this.fundsModalClasses = ['fundsModal'];
             },
 
             parsePlayerRecords() {
@@ -307,8 +329,8 @@
             confirmQuit(e) {
                 this.confirmModalContent.action = 'quit';
                 this.confirmModalContent.title = 'Quit Contest';
-                this.confirmModalContent.image = this.participantsList[0].contest.event_image;
-                this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + ' / ' + this.participantsList[0].contest.total_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to quit this contest?</p>';
+                this.confirmModalContent.image = URL.base + '/public/image/events/' + this.participantsList[0].contest.event_image;
+                this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + '<br>' + this.participantsList[0].contest.total_participants + ' / ' + this.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to quit this contest?</p>';
 
                 this.confirmModalClassList.add('show');
             },
@@ -317,12 +339,16 @@
                 if ( this.playersBalance >= parseInt(this.participantsList[0].contest.buy_in, 10) ) {
                     this.confirmModalContent.action = 'enter';
                     this.confirmModalContent.title = 'Enter Contest';
-                    this.confirmModalContent.image = this.participantsList[0].contest.event_image;
-                    this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + ' / ' + this.participantsList[0].contest.total_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
+                    this.confirmModalContent.image = URL.base + '/public/image/events/' + this.participantsList[0].contest.event_image;
+                    this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + '<br>' + this.participantsList[0].contest.total_participants + ' / ' + this.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
 
                     this.confirmModalClassList.add('show');
                 } else {
-                    // show insufficent funds notice here
+                    this.fundsModalContent.title = 'Insufficent Funds';
+                    this.fundsModalContent.image = URL.base + '/public/image/events/' + this.participantsList[0].contest.event_image;
+                    this.fundsModalContent.body = '<p>Your current balance is <span class="highlight">$' + this.playersBalance + '</span> you need a minimum balance of <span class="highlight">$' + this.participantsList[0].contest.buy_in + '</span> in order to enter this contest.';
+
+                    this.fundsModalClasses.push('show');
                 }
             },
 
