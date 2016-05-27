@@ -30,8 +30,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-50">
+                    <div v-if="parseInt(participantsList[0].contest.buy_in, 10) === 1"class="col-xs-50">
                         <span class="contestDetails__title"><a @click="showPrizeModal">Prize Pool</a>:</span> ${{ participantsList[0].contest.prize_pool }}
+                    </div>
+                    <div v-else class="col-xs-50">
+                        <span class="contestDetails__title">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}
                     </div>
                     <div class="col-xs-50 contestDetails__type">
                         <a href="#" @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">
@@ -90,7 +93,7 @@
                 </div>
             </div>
         </div>
-        <section :class="prizeModalClasses">
+        <section v-if="parseInt(participantsList[0].contest.buy_in, 10) === 1" :class="prizeModalClasses">
             <h3 class="prizeModal__title">Prize Pool</h3>
             <div class="prizeModal__body">
             <p>In an <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">Old School</a> contest with 10 players:</p>
