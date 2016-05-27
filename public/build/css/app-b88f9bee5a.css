@@ -5192,12 +5192,8 @@ a {
   margin-bottom: 2rem; }
 
 .howToPlayModal__image {
-  width: 66%;
-  display: block;
-  margin: 0 auto 3rem;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 0.5rem;
-  border-radius: 12px; }
+  margin-bottom: 3rem;
+  width: 60%; }
 
 .howToPlayModal__close {
   position: absolute;

@@ -246,6 +246,19 @@
             </div>
             <button @click="powerUpModalClose" type="button" class="powerUpModal__close">x</button>
         </section>
+        <section :class="howToPlayModalClasses">
+            <h3 class="howToPlayModal__title">How to Play</h3>
+            <img class="howToPlayModal__image" :src="'public/image/logo.png'" alt="Blood Sport MMA">
+            <div class="howToPlayModal__body">
+                <p>Tap a fighters avatar to choose that fighter as the winner of that fight. Then, in the revealed selection area, choose how &amp; when you think the fight will end.</p>
+                <p>Apply a power up to your chosen fighter by tapping its icon. A detail of the power up will appear and ask you to confirm your choice.</p>
+                <p>For more information on scoring and game play please checkout the HOW TO PLAY section of your <a @click="showDashboard">Dashboard</a>.</p>
+            </div>
+            <div class="button-wrap">
+                <button @click="howToPlayModalClose" type="button" class="button button--green">Got It</button>
+            </div>
+            <button @click="howToPlayModalClose" type="button" class="infoModal__close">x</button>
+        </section>
         <section :class="alertNoticeClasses">
             <div>
                 <h2 class="alertNotice__header">{{ alertNotice.header }}</h2>
@@ -285,6 +298,7 @@
                 working: false,
                 powerUpModalClasses: ['powerUpModal'],
                 alertNoticeClasses: ['alertNotice'],
+                howToPlayModalClasses: ['howToPlayModal'],
                 selectedPowerUp: {
                     id: 0,
                     title: '',
@@ -380,6 +394,24 @@
                         this.finishes = response.data;
                     });
                 });
+
+                if ( localStorage.getItem('newplayer') ) this.showHowToPlay();
+
+            },
+
+            showDashboard() {
+                this.$root.toggleMenu();
+            },
+
+            showHowToPlay() {
+                this.howToPlayModalClasses.push('show');
+                localStorage.removeItem('newplayer');
+            },
+
+            howToPlayModalClose(e) {
+                e.preventDefault();
+
+                this.howToPlayModalClasses = ['howToPlayModal'];
             },
 
             initializeFightData(fights) {

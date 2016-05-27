@@ -87,7 +87,10 @@
 					email: this.credentials.email,
 					password: this.credentials.password,
 					player_name: this.credentials.player_name,
-				}
+				};
+
+				localStorage.setItem('newplayer', 1);
+
 				// We need to pass the component's this context
 				// to properly make use of http in the auth service
 				auth.signup(this, credentials, 'events')
