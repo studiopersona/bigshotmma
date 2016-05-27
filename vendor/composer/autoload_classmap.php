@@ -57,6 +57,7 @@ return array(
     'CreateStripeDetailsTable' => $baseDir . '/database/migrations/2016_05_23_210313_create_stripe_details_table.php',
     'CreateTransactionTypes' => $baseDir . '/database/migrations/2016_05_13_203514_create_transaction_types.php',
     'CreateUserBalancesTable' => $baseDir . '/database/migrations/2016_05_13_200738_create_user_balances_table.php',
+    'CreateUserBillingInformationTable' => $baseDir . '/database/migrations/2016_05_27_202330_create_user_billing_information_table.php',
     'CreateUserRolesTable' => $baseDir . '/database/migrations/2016_03_25_00_create_user_roles_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2016_03_25_02_create_users_table.php',
     'CreateWeightClassesTable' => $baseDir . '/database/migrations/2016_03_29_205333_create_weight_classes_table.php',

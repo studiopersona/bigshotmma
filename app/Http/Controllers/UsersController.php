@@ -9,16 +9,23 @@ use Bsmma\Http\Requests;
 
 use Bsmma\User;
 use Bsmma\UserBalance;
+use Bsmma\PaypalEmail;
 use Bsmma\divStrong\Transformers\ProfileTransformer as ProfileTransformer;
 use Bsmma\Http\Requests\ProfileRequest;
 use Bsmma\Http\Requests\DepositProfileRequest;
 
 class UsersController extends ApiController
 {
-    public function __construct(User $user, ProfileTransformer $profileTransformer, UserBalance $userBalance)
+    public function __construct(
+        User $user,
+        ProfileTransformer $profileTransformer,
+        UserBalance $userBalance,
+        PaypalEmail $paypalEmail
+    )
     {
     	$this->user = $user;
         $this->userBalance = $userBalance;
+        $this->paypalEmail = $paypalEmail;
     	$this->profileTransformer = $profileTransformer;
     }
 
@@ -151,6 +158,8 @@ class UsersController extends ApiController
         $userBalance->transaction_type_id = 4;
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+        if ( $request->persist ) $this->saveBillingInfo($request, $user->id);
+
         return ($userBalance->save()) ? $this->respond([
             'success' => true,
             'msg' => 'Your deposit was successfully processed',
@@ -158,6 +167,11 @@ class UsersController extends ApiController
             'success' => false,
             'msg' => 'There was a problem processing your deposit'
         ]);
+    }
+
+    private function saveBillingInfo($request, $userId)
+    {
+        if ($request->paypal) $this->paypalEmail->create(['user_id' => $userId, 'email' => $request->paypal ]);
     }
 
 }

@@ -328,11 +328,19 @@
             },
 
             makeDeposit() {
-                this.working = true;
-                console.log(this.depositTotal);
-                this.$http.post(URL.base + '/api/v1/deposit', {
+                var data = {
                     amount: this.depositTotal,
-                }, {
+                };
+
+                this.working = true;
+
+                // if player would like to save payment info
+                if ( this.persist.paypal ) {
+                    data.persist = true;
+                    data.paypal = this.player.paypalEmail
+                };
+
+                this.$http.post(URL.base + '/api/v1/deposit', data, {
                     // Attach the JWT header
                     headers: auth.getAuthHeader()
                 }).then(function(response) {
