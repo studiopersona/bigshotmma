@@ -879,7 +879,10 @@
                     errors = this.validatePicks(compiledPicks);
                     if ( ! errors.length ) {
                         this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, (data) => {
-                            if ( data.success ) this.$router.go({ path: '/contest/' + this.contestId + '/picks' });
+                            if ( data.success ) {
+                                this.$root.playersBalance = data.balance;
+                                this.$router.go({ path: '/contest/' + this.contestId + '/picks' });
+                            }
                         }, {
                             // Attach the JWT header
                             headers: auth.getAuthHeader()

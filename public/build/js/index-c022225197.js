@@ -16517,7 +16517,10 @@ exports.default = {
                     errors = this.validatePicks(compiledPicks);
                     if (!errors.length) {
                         this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, function (data) {
-                            if (data.success) _this.$router.go({ path: '/contest/' + _this.contestId + '/picks' });
+                            if (data.success) {
+                                _this.$root.playersBalance = data.balance;
+                                _this.$router.go({ path: '/contest/' + _this.contestId + '/picks' });
+                            }
                         }, {
                             // Attach the JWT header
                             headers: _auth2.default.getAuthHeader()

@@ -123,6 +123,7 @@ class PicksController extends ApiController
 
         return $this->respond([
             'success' => true,
+            'balance' => $this->getUserBalance($user->id),
         ]);
     }
 
@@ -332,5 +333,18 @@ class PicksController extends ApiController
     public function destroy($id)
     {
         //
+    }
+
+    private function getUserBalance($userId)
+    {
+        $credits = $this->userBalance->where('user_id', $userId)
+                    ->whereIn('transaction_type_id', [2, 4, 5])
+                    ->sum('amount');
+
+        $debits = $this->userBalance->where('user_id', $userId)
+                    ->whereIn('transaction_type_id', [1, 3])
+                    ->sum('amount');
+
+        return ($credits - $debits)/100;
     }
 }
