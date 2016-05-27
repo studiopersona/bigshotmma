@@ -126,6 +126,7 @@
                             <div class="col-xs-100">
                                 <label
                                     v-for="finish in finishes"
+                                    v-if="parseInt(finish.id, 10) !== 4"
                                     @click.prevent="selectDecision(fight.id, finish.id, $event)"
                                     for="finish{{finish.id}}"
                                     class="fightsList__pickButton"
