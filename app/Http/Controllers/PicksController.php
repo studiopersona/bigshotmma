@@ -176,11 +176,24 @@ class PicksController extends ApiController
                     ->orderBy('user_id')
                     ->get();
 
-        $contestResults = $this->fightResult->where('contest_id', $contest_id)
-                            ->with('powerUps')
-                            ->get();
+        $contest = $this->contest->with([
+                        'event',
+                        'event.fightResults',
+                        'event.fightResults.fight',
+                        'event.fightResults.fight.fighters',
+                        'event.fightResults.powerUps',
+                        'event.fightResults.finish'
+                    ])
+                    ->where('id', $contest_id)
+                    ->first();
 
-        if ( ! $playerPicks->isEmpty() ) {
+        if ( is_null($contest) ) {
+            return $this->respondNotFound('No contest was found');
+        }
+
+        $contestResults = ($contest->event->fightResults) ? $contest->event->fightResults : collect([]);
+
+        if ( ! $playerPicks->isEmpty() && ! $contestResults->isEmpty() ) {
             $current_user_id = 0;
             $index = 0;
             $tally = 0;

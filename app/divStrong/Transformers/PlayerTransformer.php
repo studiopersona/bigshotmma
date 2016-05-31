@@ -7,6 +7,7 @@ class PlayerTransformer extends Transformer {
         return [
             //'data' => $player,
             'contest' => [
+                'event_id' => $player['event']['id'],
                 'event_short_name' => $player['event']['event_short_name'],
                 'event_date' => date('F j, Y', strtotime($player['event']['date_time'])),
                 'event_image' => $player['event']['event_image_name'],

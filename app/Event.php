@@ -30,4 +30,9 @@ class Event extends Model
     {
         return $this->hasMany('Bsmma\Promotion');
     }
+
+    public function fightResults()
+    {
+        return $this->hasManyThrough('Bsmma\FightResult', 'Bsmma\Fight');
+    }
 }

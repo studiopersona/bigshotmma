@@ -22,7 +22,6 @@ class FightResultTransformer extends Transformer {
         return [
         	'fightResults' => [
 	        	'id' => $fightResult['id'],
-	        	'contest_id' => $fightResult['contest_id'],
 	        	'fight_id' => $fightResult['fight_id'],
 	        	'winning_fighter_id' => $fightResult['winning_fighter_id'],
   				'finish_id' => $fightResult['finish_id'],
@@ -79,13 +78,8 @@ class FightResultTransformer extends Transformer {
 	        				'powerupsAchieved' => $fightResult['fight']['fighters'][1]['powerupsAchieved']
 	        			]
 	        		],
-	        		'event' => [
-	        			'id' => $fightResult['fight']['event']['id'],
-	        			'event_short_name' => $fightResult['fight']['event']['event_short_name'],
-	        		],
 	        	],
 	        	'power_ups' => $fightResult['power_ups'],
-
 	        ],
 	        'totalTime' => date('i:s', strtotime($fightResult['total_time'])),
 	        'roundTime' => date('i:s', strtotime($fightResult['total_time'].' -'.$timeAdjustment.'minute')),

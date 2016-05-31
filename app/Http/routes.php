@@ -28,20 +28,21 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('player/{id}/contests', 'ContestsController@index');
 	    Route::get('player/contests-entered', 'ContestParticipantsController@getByPlayer');
 	    Route::get('event/{id}/contests', 'ContestsController@eventLimited');
+	    Route::get('event/{id}/results', 'FightResultsController@getByEvent');
 	    Route::get('contest/{id}/players', 'ContestsController@getParticipants');
 	    Route::get('contest/{id}/fights', 'ContestsController@getFights');
 	    Route::get('contest/{id}/players-records', 'PicksController@playersRecords');
 	    Route::get('contest/{id}/quit', 'PicksController@quitContest');
-	    Route::resource('contests', 'ContestsController');
-	    Route::resource('picks', 'PicksController');
 	    Route::get('contest/{id}/picks', 'PicksController@showCard');
 	    Route::get('contest/{id}/check-for-picks', 'PicksController@checkForPicks');
+	    Route::get('contest/{id}/standings/{withplayers?}', 'PicksController@getStandings');
+	    Route::get('contest/{id}/results', 'FightResultsController@getByContestId');
+	    Route::resource('contests', 'ContestsController');
+	    Route::resource('picks', 'PicksController');
 	    Route::resource('powerups', 'PowerUpsController');
 	    Route::get('contest-types', 'ContestTypesController@index');
 	    Route::get('power-ups', 'PowerUpsController@index');
 	    Route::get('finishes', 'FinishesController@index');
-	    Route::get('contest/{id}/results', 'FightResultsController@index');
-	    Route::get('contest/{id}/standings/{withplayers?}', 'PicksController@getStandings');
 	    Route::get('player-name', 'UsersController@getPlayerName');
 	    Route::get('player-balance', 'UsersController@getPlayerBalance');
 	    // Profile Routes ----------------------------------------------------

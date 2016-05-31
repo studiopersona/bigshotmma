@@ -268,10 +268,10 @@
                 }).then(function(response) {
                     this.resultsList = response.data.results;
                     // console.log(response.data.results);
-                    this.event = response.data.results[0].fightResults.fight.event;
-                    this.contestId = response.data.results[0].fightResults.contest_id;
+                    this.event = response.data.event;
+                    this.contestId = response.data.contest.contest_id;
                     this.working = false;
-                    console.log(response.data.results[0].fightResults.fight.fighters);
+                    // console.log(response.data.results[0].fightResults.fight.fighters);
                 }, function(err) {
                     this.working = false;
                     console.log(err);

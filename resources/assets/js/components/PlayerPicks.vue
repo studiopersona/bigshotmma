@@ -25,7 +25,11 @@
                 </div>
             </div>
         </div>
-        <div class="fightPicksList">
+
+        <div v-if="picksList.length === 0" class="fightPicksList">
+            <p>You did not make any picks for this contest.</p>
+        </div>
+        <div v-else class="fightPicksList">
             <ul class="stripped-list">
                 <li
                     class="fightPicksList__item closed"
@@ -337,6 +341,8 @@
 
                 }, function(err) {
                     console.log(err);
+                    this.picksList = [];
+                    this.working = false;
                 });
             },
 
