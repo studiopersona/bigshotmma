@@ -164,6 +164,8 @@
 <script>
     import auth from '../auth';
     import {router} from '../index';
+    import localforage from 'localforage';
+
     export default {
 
         props: ['working'],
@@ -224,21 +226,25 @@
         },
 
         ready() {
-            if ( ! auth.validate() ) {
-                this.tokenRefresh();
-            } else {
-                this.fetch();
-            }
+            var vm = this;
+
+            localforage.getItem('id_token').then(function(token) {
+                if ( ! auth.validate() ) {
+                    vm.tokenRefresh(token);
+                } else {
+                    vm.fetch(token);
+                }
+            });
 
             this.confirmModalClassList = document.querySelector('.confirmModal').classList;
         },
 
         methods: {
-            tokenRefresh() {
+            tokenRefresh(token) {
                 var vm = this;
 
                 this.$http.post(URL.base + '/api/v1/refresh', {}, {
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     localStorage.setItem('id_token', response.data.token);
                     vm.fetch();
@@ -247,10 +253,10 @@
                 });
             },
 
-            fetch() {
+            fetch(token) {
                 this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', {}, {
                     // Attach the JWT header
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     var now = new Date(),
                         deadline;
@@ -268,7 +274,7 @@
 
                 this.$http.get(URL.base + '/api/v1/player/contests-entered', {}, {
                     // Attach the JWT header
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     this.contestsEntered = response.data.contests;
                 }, function(err) {
@@ -277,14 +283,14 @@
 
                 this.$http.get( URL.base + '/api/v1/contest-types', {}, {
                     // Attach the JWT header
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     this.contestTypes = response.data;
                 });
 
                 this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players-records', {}, {
                     // Attach the JWT header
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     // console.log(response.data);
                     this.playerRecords = response.data.data;
@@ -293,7 +299,7 @@
 
                 this.$http.get( URL.base + '/api/v1/player-balance', {}, {
                     // Attach the JWT header
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(
                     function(response) {
                         this.playersBalance = response.data.playerBalance;
@@ -403,17 +409,19 @@
             },
 
             actionConfirmed(actionData, e) {
-                if ( actionData.action === 'quit' ) {
-                    this.$http.get(URL.base + '/api/v1/contest/' + actionData.contestId +'/quit', {}, {
-                        // Attach the JWT header
-                        headers: auth.getAuthHeader()
-                    }).then(function(response) {
-                        // console.log(response);
-                        router.go('/event/' + response.data.data.eventId + '/contests');
-                    });
-                } else if ( actionData.action === 'enter' ) {
-                    router.go(actionData.path);
-                }
+                localforage.getItem('id_token').then(function(token) {
+                    if ( actionData.action === 'quit' ) {
+                        this.$http.get(URL.base + '/api/v1/contest/' + actionData.contestId +'/quit', {}, {
+                            // Attach the JWT header
+                            headers: { 'Authorization' : 'Bearer ' + token }
+                        }).then(function(response) {
+                            // console.log(response);
+                            router.go('/event/' + response.data.data.eventId + '/contests');
+                        });
+                    } else if ( actionData.action === 'enter' ) {
+                        router.go(actionData.path);
+                    }
+                });
             },
         },
 

@@ -1,3 +1,4 @@
+// ECMASCRIPT 2015 Array Polfils ----------
 if (!Array.prototype.find) {
   Array.prototype.find = function(predicate) {
     if (this === null) {
@@ -43,7 +44,7 @@ if (!Array.prototype.findIndex) {
     return -1;
   };
 }
-
+// ---------------------------------------
 import Vue from 'vue';
 import App from './components/App.vue';
 import Register from './components/Register.vue';

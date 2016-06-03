@@ -34,6 +34,7 @@
 <script>
     import auth from '../auth';
     import {router} from '../index';
+    import localforage from 'localforage';
 
     export default {
 
@@ -57,20 +58,25 @@
         },
 
         ready() {
-            if ( ! auth.validate() ) {
-                this.tokenRefresh();
-            } else {
-                this.fetch();
-                this.$root.loggedIn = true;
-            }
+            var vm = this;
+
+            localforage.getItem('id_token').then(function(token) {
+                if ( ! auth.validate() ) {
+                    vm.tokenRefresh(token);
+                } else {
+                    vm.fetch(token);
+                    vm.$root.loggedIn = true;
+                }
+            });
+
         },
 
         methods: {
-            tokenRefresh() {
+            tokenRefresh(token) {
                 var vm = this;
 
                 this.$http.post(URL.base + '/api/v1/refresh', {}, {
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     localStorage.setItem('id_token', response.data.token);
                     vm.fetch();
@@ -80,10 +86,10 @@
                 });
             },
 
-            fetch() {
+            fetch(token) {
                 this.$http.get( URL.base + '/api/v1/events', {}, {
                     // Attach the JWT header
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(
                     function(response) {
                         this.eventsList = response.data;

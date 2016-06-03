@@ -206,6 +206,7 @@
 	//import auth from '../auth';
 	import {router} from '../index';
 	import auth from '../auth';
+    import localforage from 'localforage';
 
 	export default {
 		data: function() {
@@ -228,9 +229,15 @@
 		},
 
 		created() {
+            var vm = this;
+
+            localforage.getItem('id_token').then(vm.fetch);
+        },
+
+        fetch(token) {
 			this.$http.get( URL.base + '/api/v1/contest-types', {}, {
                 // Attach the JWT header
-                headers: auth.getAuthHeader()
+                headers: { 'Authorization' : 'Bearer ' + token }
             }).then(
                 function(response) {
                     this.contestTypes = response.data;
@@ -241,7 +248,7 @@
 
             this.$http.get( URL.base + '/api/v1/player-name', {}, {
                 // Attach the JWT header
-                headers: auth.getAuthHeader()
+                headers: { 'Authorization' : 'Bearer ' + token }
             }).then(
                 function(response) {
                     this.playersName = response.data.player_name;
@@ -252,7 +259,7 @@
 
             this.$http.get( URL.base + '/api/v1/player-balance', {}, {
                 // Attach the JWT header
-                headers: auth.getAuthHeader()
+                headers: { 'Authorization' : 'Bearer ' + token }
             }).then(
                 function(response) {
                     this.playersBalance = response.data.playerBalance;

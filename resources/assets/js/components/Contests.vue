@@ -48,6 +48,7 @@
 <script>
     import auth from '../auth';
     import {router} from '../index';
+    import localforage from 'localforage';
 
     export default {
 
@@ -72,31 +73,36 @@
         },
 
         ready() {
-            if ( ! auth.validate() ) {
-                this.tokenRefresh();
-            } else {
-                this.fetch();
-            }
+            var vm = this;
+
+            localforage.getItem('id_token').then(function(token) {
+                if ( ! auth.validate() ) {
+                    vm.tokenRefresh(token);
+                } else {
+                    vm.fetch(token);
+                }
+            });
         },
 
         methods: {
-            tokenRefresh() {
+            tokenRefresh(token) {
                 var vm = this;
 
                 this.$http.post(URL.base + '/api/v1/refresh', {}, {
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    localStorage.setItem('id_token', response.data.token);
-                    vm.fetch();
+                    localforage.setItem('id_token', response.data.token).then(function() {
+                        vm.fetch(token);
+                    });
                 }, function(err) {
                     router.go('login');
                 });
             },
 
-            fetch() {
+            fetch(token) {
                 this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', {}, {
                     // Attach the JWT header
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     this.contestsList = response.data;
                     this.working = false;

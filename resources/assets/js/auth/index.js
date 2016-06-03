@@ -2,6 +2,7 @@
 
 import {router} from '../index';
 import D from '../libs/d';
+import localforage from 'localforage';
 
 // URL and endpoint constants
 const API_URL = URL.base + '/api/v1/';
@@ -12,16 +13,21 @@ const REFRESH_URL = API_URL + 'refresh';
 export default {
 
     login(context, creds, redirect) {
-        var storage = new this.Storage();
+        this.initLocalforage();
         context.working = true;
         context.$http.post(LOGIN_URL, creds)
             .then(function(response) {
-                storage.setItem('id_token', response.data.token);
-
-                // Redirect to a specified route
-                if(redirect) {
-                    router.go(redirect);
-                }
+                //storage.setItem('id_token', response.data.token);
+                localforage.setItem('id_token', response.data.token)
+                .then(function(value) {
+                    // Redirect to a specified route
+                    if(redirect) {
+                        router.go(redirect);
+                    }
+                })
+                .catch(function(err) {
+                    console.log(err);
+                });
             })
             .catch(function(err) {
                 if (err.data ) {
@@ -34,15 +40,19 @@ export default {
     },
 
     signup(context, creds, redirect) {
-        var storage = new this.Storage();
+        this.initLocalforage();
 
         context.$http.post(SIGNUP_URL, creds)
             .then(function(response) {
-                storage.setItem('id_token', response.data.token);
-
-                if(redirect) {
-                    router.go(redirect);
-                }
+                localforage.setItem('id_token', respone.data.token)
+                .then(function(value) {
+                    if(redirect) {
+                        router.go(redirect);
+                    }
+                })
+                .catch(function(err) {
+                    consloe.log(err);
+                });
             })
             .catch(function(err) {
                 if ( err.data ) {
@@ -54,31 +64,48 @@ export default {
     },
 
     logout() {
-        var storage = new this.Storage();
+        this.initLocalforage();
 
-        storage.removeItem('id_token');
+        localforage.removeItem('id_token');
     },
 
     validate() {
-        var storage = new this.Storage(),
-            token = storage.getItem('id_token'),
-            params;
+        var params,
+            vm = this;
 
-        if ( token ) {
-            params = this.parseToken(token)
-            return Math.round(new Date().getTime() / 1000) <= params.exp;
-        } else {
-            return false;
-        }
+        this.initLocalforage();
+
+        localforage.getItem('id_token')
+        .then(function(token) {
+             if ( token ) {
+                params = vm.parseToken(token)
+                return Math.round(new Date().getTime() / 1000) <= params.exp;
+            } else {
+                return false;
+            }
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
     },
 
     // The object to be passed as a header for authenticated requests
     getAuthHeader() {
-        var storage = new this.Storage();
+        var header,
+            sendBackToken = function(token) {
+                console.log('wtf2:', token);
+                return {
+                    'Authorization': 'Bearer ' + token,
+                };
+            },
+            vm = this;
 
-        return {
-            'Authorization': 'Bearer ' + storage.getItem('id_token')
-        };
+        this.initLocalforage();
+        header = localforage.getItem('id_token').then(function(token) {
+            return sendBackToken(token);
+        });
+
+        return;
     },
 
     parseToken(token) {
@@ -115,5 +142,11 @@ export default {
             }
         };
         return storage;
+    },
+
+    initLocalforage() {
+        localforage.config({
+            name: 'Blood Sport MMA',
+        });
     },
 };
