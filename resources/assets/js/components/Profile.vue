@@ -135,22 +135,26 @@
             },
 
             profileUpdate() {
+                var vm = this;
+
                 this.working = true;
 
-                this.$http.post(URL.base + '/api/v1/profile', {
-                    player_name: this.player.name,
-                    avatar: this.player.avatar,
-                    old_password: this.player.oldPassword,
-                    new_password: this.player.newPassword,
-                }, {
-                    // Attach the JWT header
-                    headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    this.flash(response.data);
-                    this.working = false;
-                }, function(err) {
-                    console.log(err);
-                    this.working = false;
+                localforage.getItem('id_token').then(function(token) {
+                    vm.$http.post(URL.base + '/api/v1/profile', {
+                        player_name: vm.player.name,
+                        avatar: vm.player.avatar,
+                        old_password: vm.player.oldPassword,
+                        new_password: vm.player.newPassword,
+                    }, {
+                        // Attach the JWT header
+                        headers: { 'Authorization' : 'Bearer ' + token }
+                    }).then(function(response) {
+                        vm.flash(response.data);
+                        vm.working = false;
+                    }, function(err) {
+                        console.log(err);
+                        vm.working = false;
+                    });
                 });
             },
 
