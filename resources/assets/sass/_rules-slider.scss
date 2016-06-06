@@ -8,11 +8,8 @@
 	width: 100%;
 	max-width: 600px;
 	background: rgba(0,0,0, 0.9);
-	transition: -webkit-transform 0.3s ease;
 	transition: transform 0.3s ease;
-	transition: transform 0.3s ease, -webkit-transform 0.3s ease;
-	-webkit-transform: translate3d(200%, 0, 0);
-	        transform: translate3d(200%, 0, 0);
+	transform: translate3d(200%, 0, 0);
 	overflow: hidden;
 	font-size: 1.6rem;
 	font-weight: 700;
@@ -20,8 +17,7 @@
 	text-align: center;
 
 	&.show {
-		-webkit-transform: translate3d(0,0,0);
-		        transform: translate3d(0,0,0);
+		transform: translate3d(0,0,0);
 	}
 }
 
@@ -36,19 +32,15 @@
 	position: absolute;
 	left: 0;
 	top: 0;
-	-webkit-transform: translate3d(150%, 0, 0);
-	        transform: translate3d(150%, 0, 0);
-	transition: -webkit-transform 0.3s ease;
+	transform: translate3d(150%, 0, 0);
 	transition: transform 0.3s ease;
-	transition: transform 0.3s ease, -webkit-transform 0.3s ease;
 	height: auto;
 	padding: 5.5rem 2rem;
 	width: 100%;
 	max-width: 600px;
 
 	&.current {
-		-webkit-transform: translate3d(0,0,0);
-		        transform: translate3d(0,0,0);
+		transform: translate3d(0,0,0);
 	}
 }
 
