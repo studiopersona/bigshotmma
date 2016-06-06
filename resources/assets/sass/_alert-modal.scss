@@ -8,8 +8,11 @@
 	height: auto;
 	padding: 5.5rem 2rem;
 	background: rgba(0,0,0, 0.9);
+	transition: -webkit-transform 0.3s ease;
 	transition: transform 0.3s ease;
-	transform: translate3d(0, -110%, 0);
+	transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+	-webkit-transform: translate3d(0, -110%, 0);
+	        transform: translate3d(0, -110%, 0);
 	overflow: hidden;
 	font-size: 1.6rem;
 	font-weight: 700;
@@ -18,7 +21,8 @@
 	box-shadow: 2px 2px 3px rgba(0,0,0, 0.8);
 
 	&.show {
-		transform: translate3d(0,0,0);
+		-webkit-transform: translate3d(0,0,0);
+		        transform: translate3d(0,0,0);
 	}
 
 	p {

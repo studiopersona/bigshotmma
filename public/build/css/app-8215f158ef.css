@@ -4900,7 +4900,6 @@ a {
   padding: 5.5rem 2rem;
   background: rgba(0, 0, 0, 0.9);
   transition: transform 0.3s ease;
-  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
   transform: translate3d(0, -110%, 0);
   overflow: hidden;
   font-size: 1.6rem;
@@ -4962,7 +4961,6 @@ a {
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
   transition: transform 0.2s ease;
-  transition: transform 0.2s ease, -webkit-transform 0.2s ease;
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
   color: #fff;
@@ -5037,7 +5035,6 @@ a {
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
   transition: transform 0.2s ease;
-  transition: transform 0.2s ease, -webkit-transform 0.2s ease;
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
   color: #fff;
@@ -5177,7 +5174,6 @@ a {
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
   transition: transform 0.2s ease;
-  transition: transform 0.2s ease, -webkit-transform 0.2s ease;
   transform: translate3d(-100%, 0, 0);
   overflow: hidden;
   color: #fff;
@@ -5229,7 +5225,6 @@ a {
   width: 224px;
   transform: translate3d(-100%, 0, 0);
   transition: transform 0.3s ease;
-  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
   background: #eee;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6); }
   .appDashboard.show {
