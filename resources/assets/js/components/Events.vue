@@ -58,17 +58,25 @@
         },
 
         ready() {
-            var vm = this;
+            var vm = this,
+                params;
 
             localforage.getItem('id_token').then(function(token) {
-                if ( ! auth.validate() ) {
-                    vm.tokenRefresh(token);
+                if ( token ) {
+                    params = auth.parseToken(token);
+                    if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
+                        vm.fetch(token);
+                        vm.$root.loggedIn = true;
+                    } else {
+                        vm.tokenRefresh(token);
+                    }
                 } else {
-                    vm.fetch(token);
-                    vm.$root.loggedIn = true;
+                    router.go('login');
                 }
+            })
+            .catch(function(err) {
+                console.log(err);
             });
-
         },
 
         methods: {
@@ -78,15 +86,39 @@
                 this.$http.post(URL.base + '/api/v1/refresh', {}, {
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    localStorage.setItem('id_token', response.data.token);
-                    vm.fetch();
-                    vm.$root.loggedIn = true;
+                    localforage.setItem('id_token', response.data.token).then(function() {
+                        vm.fetch(token);
+                        vm.$root.loggedIn = true;
+                    });
                 }, function(err) {
                     router.go('login');
                 });
             },
 
             fetch(token) {
+                // get the player name and balance after login since this lookup will have failed in the app vue
+                this.$http.get( URL.base + '/api/v1/player-name', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                }).then(
+                    function(response) {
+                        this.$root.playersName = response.data.player_name;
+                    },
+                    function(err) {
+                        console.log(err);
+                });
+
+                this.$http.get( URL.base + '/api/v1/player-balance', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                }).then(
+                    function(response) {
+                        this.$root.playersBalance = response.data.playerBalance;
+                    },
+                    function(err) {
+                        console.log(err);
+                });
+
                 this.$http.get( URL.base + '/api/v1/events', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }

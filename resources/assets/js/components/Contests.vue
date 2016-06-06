@@ -73,14 +73,23 @@
         },
 
         ready() {
-            var vm = this;
+            var vm = this,
+                params;
 
             localforage.getItem('id_token').then(function(token) {
-                if ( ! auth.validate() ) {
-                    vm.tokenRefresh(token);
+                if ( token ) {
+                    params = auth.parseToken(token);
+                    if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
+                        vm.fetch(token);
+                    } else {
+                        vm.tokenRefresh(token);
+                    }
                 } else {
-                    vm.fetch(token);
+                    router.go('login');
                 }
+            })
+            .catch(function(err) {
+                console.log(err);
             });
         },
 

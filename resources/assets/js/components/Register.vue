@@ -58,7 +58,9 @@
   </template>
 
   <script>
-	import auth from '../auth'
+	import auth from '../auth';
+    import localforage from 'localforage';
+
 	export default {
 
 		props: ['working'],
@@ -84,16 +86,17 @@
 		methods: {
 			submit() {
 				var credentials = {
-					email: this.credentials.email,
-					password: this.credentials.password,
-					player_name: this.credentials.player_name,
-				};
+						email: this.credentials.email,
+						password: this.credentials.password,
+						player_name: this.credentials.player_name,
+					},
+					vm = this;
 
-				localStorage.setItem('newplayer', 1);
-
-				// We need to pass the component's this context
-				// to properly make use of http in the auth service
-				auth.signup(this, credentials, 'events')
+				localforage.setItem('newplayer', 1).then(function() {
+					// We need to pass the component's this context
+					// to properly make use of http in the auth service
+					auth.signup(vm, credentials, 'events')
+				});
 			}
 		},
 

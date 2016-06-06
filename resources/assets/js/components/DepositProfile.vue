@@ -138,6 +138,7 @@
 <script>
     import auth from '../auth';
     import {router} from '../index';
+    import localforage from 'localforage';
 
     export default {
 
@@ -182,31 +183,45 @@
         },
 
         ready() {
-            if ( ! auth.validate() ) {
-                this.tokenRefresh();
-            } else {
-                this.fetch();
-            }
+            var vm = this,
+                params;
+
+            localforage.getItem('id_token').then(function(token) {
+                if ( token ) {
+                    params = auth.parseToken(token);
+                    if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
+                        vm.fetch(token);
+                    } else {
+                        vm.tokenRefresh(token);
+                    }
+                } else {
+                    router.go('login');
+                }
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
         },
 
         methods: {
-            tokenRefresh() {
+            tokenRefresh(token) {
                 var vm = this;
 
                 this.$http.post(URL.base + '/api/v1/refresh', {}, {
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    localStorage.setItem('id_token', response.data.token);
-                    vm.fetch();
+                    localforage.setItem('id_token', response.data.token).then(function() {
+                        vm.fetch(token);
+                    });
                 }, function(err) {
                     router.go('login');
                 });
             },
 
-            fetch() {
+            fetch(token) {
                 this.$http.get(URL.base + '/api/v1/deposit-profile', {}, {
                     // Attach the JWT header
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     console.log(response);
                     this.player = response.data.profile;
@@ -234,26 +249,30 @@
             },
 
             depositUpdate() {
+                var vm = this;
+
                 this.working = true;
 
-                this.$http.post(URL.base + '/api/v1/deposit-profile', {
-                    firstname: this.player.firstname,
-                    lastname: this.player.lastname,
-                    address: this.player.address,
-                    address2: this.player.address2,
-                    city: this.player.city,
-                    state: this.player.state,
-                    zipcode: this.player.zipcode,
-                    merchant_id: this.player.merchant,
-                }, {
-                    // Attach the JWT header
-                    headers: auth.getAuthHeader()
-                }).then(function(response) {
-                    this.flash(response.data);
-                    this.working = false;
-                }, function(err) {
-                    console.log(err);
-                    this.working = false;
+                localforage.getItem('id_token').then(function(token) {
+                    vm.$http.post(URL.base + '/api/v1/deposit-profile', {
+                        firstname: vm.player.firstname,
+                        lastname: vm.player.lastname,
+                        address: vm.player.address,
+                        address2: vm.player.address2,
+                        city: vm.player.city,
+                        state: vm.player.state,
+                        zipcode: vm.player.zipcode,
+                        merchant_id: vm.player.merchant,
+                    }, {
+                        // Attach the JWT header
+                        headers: { 'Authorization' : 'Bearer ' + token }
+                    }).then(function(response) {
+                        vm.flash(response.data);
+                        vm.working = false;
+                    }, function(err) {
+                        console.log(err);
+                        vm.working = false;
+                    });
                 });
             },
 

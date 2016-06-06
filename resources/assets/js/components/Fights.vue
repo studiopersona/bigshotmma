@@ -280,6 +280,7 @@
     import {router} from '../index';
     import D from '../libs/d.js';
     import animatedScrollTo from '../libs/animatedScrollTo.js';
+    import localforage from 'localforage';
 
     export default {
 
@@ -339,37 +340,53 @@
         },
 
         ready() {
-            if ( ! auth.validate() ) {
-                this.tokenRefresh();
-            } else {
-                this.fetch();
-            }
+            var vm = this,
+                params;
+
+            localforage.getItem('id_token').then(function(token) {
+                if ( token ) {
+                    params = auth.parseToken(token);
+                    if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
+                        vm.fetch(token);
+                    } else {
+                        vm.tokenRefresh(token);
+                    }
+                } else {
+                    router.go('login');
+                }
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
         },
 
         methods: {
-            tokenRefresh() {
+            tokenRefresh(token) {
                 var vm = this;
 
                 this.$http.post(URL.base + '/api/v1/refresh', {}, {
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    localStorage.setItem('id_token', response.data.token);
-                    vm.fetch();
+                    localforage.setItem('id_token', response.data.token).then(function() {
+                        vm.fetch(token);
+                    });
                 }, function(err) {
                     router.go('login');
                 });
             },
 
-            fetch() {
+            fetch(token) {
+                var vm = this;
+
                 this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/check-for-picks', {}, {
                     // Attach the JWT header
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     router.go('/contest/' + this.$route.params.contest_id + '/picks');
                 }, function(err) {
                     this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', {}, {
                         // Attach the JWT header
-                        headers: auth.getAuthHeader()
+                        headers: { 'Authorization' : 'Bearer ' + token }
                     }).then(function(response) {
                         // console.log(response.data.fights);
                         this.fightsList = response.data.fights;
@@ -381,7 +398,7 @@
 
                     this.$http.get(URL.base + '/api/v1/power-ups', {}, {
                         // Attach the JWT header
-                        headers: auth.getAuthHeader()
+                        headers: { 'Authorization' : 'Bearer ' + token }
                     }).then(function(response) {
                         this.powerUps = response.data;
                         // console.log(this.powerUps);
@@ -389,13 +406,17 @@
 
                     this.$http.get(URL.base + '/api/v1/finishes', {}, {
                         // Attach the JWT header
-                        headers: auth.getAuthHeader()
+                        headers: { 'Authorization' : 'Bearer ' + token }
                     }).then(function(response) {
                         this.finishes = response.data;
                     });
                 });
 
-                if ( localStorage.getItem('newplayer') ) this.showHowToPlay();
+                //if ( localStorage.getItem('newplayer') ) this.showHowToPlay();
+                localforage.getItem('newplayer')
+                .then(function(newplayer) {
+                    if ( parseInt(newplayer, 10) === 1 ) vm.showHowToPlay();
+                });
 
             },
 
@@ -405,7 +426,8 @@
 
             showHowToPlay() {
                 this.howToPlayModalClasses.push('show');
-                localStorage.removeItem('newplayer');
+                //localStorage.removeItem('newplayer');
+                localforage.removeItem('newplayer');
             },
 
             howToPlayModalClose(e) {
@@ -840,7 +862,8 @@
                 var localfightData = this.fightData,
                     localContestId = this.contestId,
                     compiledPicks,
-                    errors;
+                    errors,
+                    vm = this;
                 // compile data with playerPicks and fightData
                 // sync the pick with the server
                 // take to player picks page
@@ -878,14 +901,16 @@
                     // validate selections
                     errors = this.validatePicks(compiledPicks);
                     if ( ! errors.length ) {
-                        this.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, (data) => {
-                            if ( data.success ) {
-                                this.$root.playersBalance = data.balance;
-                                this.$router.go({ path: '/contest/' + this.contestId + '/picks' });
-                            }
-                        }, {
-                            // Attach the JWT header
-                            headers: auth.getAuthHeader()
+                        localforage.getItem('id_token').then(function(token) {
+                            vm.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, (data) => {
+                                if ( data.success ) {
+                                    vm.$root.playersBalance = data.balance;
+                                    vm.$router.go({ path: '/contest/' + vm.contestId + '/picks' });
+                                }
+                            }, {
+                                // Attach the JWT header
+                                headers: { 'Authorization' : 'Bearer ' + token }
+                            });
                         });
                     } else {
                         // display errors here

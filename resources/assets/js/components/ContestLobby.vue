@@ -226,14 +226,23 @@
         },
 
         ready() {
-            var vm = this;
+            var vm = this,
+                params;
 
             localforage.getItem('id_token').then(function(token) {
-                if ( ! auth.validate() ) {
-                    vm.tokenRefresh(token);
+                if ( token ) {
+                    params = auth.parseToken(token);
+                    if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
+                        vm.fetch(token);
+                    } else {
+                        vm.tokenRefresh(token);
+                    }
                 } else {
-                    vm.fetch(token);
+                    router.go('login');
                 }
+            })
+            .catch(function(err) {
+                console.log(err);
             });
 
             this.confirmModalClassList = document.querySelector('.confirmModal').classList;
@@ -246,8 +255,9 @@
                 this.$http.post(URL.base + '/api/v1/refresh', {}, {
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    localStorage.setItem('id_token', response.data.token);
-                    vm.fetch();
+                    localforage.setItem('id_token', response.data.token).then(function() {
+                        vm.fetch(token);
+                    });
                 }, function(err) {
                     router.go('login');
                 });
@@ -409,13 +419,16 @@
             },
 
             actionConfirmed(actionData, e) {
+                var vm = this;
+
                 localforage.getItem('id_token').then(function(token) {
                     if ( actionData.action === 'quit' ) {
-                        this.$http.get(URL.base + '/api/v1/contest/' + actionData.contestId +'/quit', {}, {
+                        vm.$http.get(URL.base + '/api/v1/contest/' + actionData.contestId +'/quit', {}, {
                             // Attach the JWT header
                             headers: { 'Authorization' : 'Bearer ' + token }
                         }).then(function(response) {
                             // console.log(response);
+                            vm.$root.playersBalance = vm.$root.playersBalance + parseInt(vm.participantsList[0].contest.buy_in, 10);
                             router.go('/event/' + response.data.data.eventId + '/contests');
                         });
                     } else if ( actionData.action === 'enter' ) {

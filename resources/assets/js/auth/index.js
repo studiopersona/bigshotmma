@@ -44,7 +44,7 @@ export default {
 
         context.$http.post(SIGNUP_URL, creds)
             .then(function(response) {
-                localforage.setItem('id_token', respone.data.token)
+                localforage.setItem('id_token', response.data.token)
                 .then(function(value) {
                     if(redirect) {
                         router.go(redirect);

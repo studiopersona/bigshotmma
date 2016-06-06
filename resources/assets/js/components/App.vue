@@ -234,49 +234,64 @@
             localforage.getItem('id_token').then(vm.fetch);
         },
 
-        fetch(token) {
-			this.$http.get( URL.base + '/api/v1/contest-types', {}, {
-                // Attach the JWT header
-                headers: { 'Authorization' : 'Bearer ' + token }
-            }).then(
-                function(response) {
-                    this.contestTypes = response.data;
-                },
-                function(err) {
-                    console.log(err);
-            });
-
-            this.$http.get( URL.base + '/api/v1/player-name', {}, {
-                // Attach the JWT header
-                headers: { 'Authorization' : 'Bearer ' + token }
-            }).then(
-                function(response) {
-                    this.playersName = response.data.player_name;
-                },
-                function(err) {
-                    console.log(err);
-            });
-
-            this.$http.get( URL.base + '/api/v1/player-balance', {}, {
-                // Attach the JWT header
-                headers: { 'Authorization' : 'Bearer ' + token }
-            }).then(
-                function(response) {
-                    this.playersBalance = response.data.playerBalance;
-                },
-                function(err) {
-                    console.log(err);
-            });
-		},
-
 		ready() {
-			if ( auth.validate() ) this.loggedIn = true;
+            var vm = this;
+			//if ( auth.validate() ) this.loggedIn = true;
+            auth.initLocalforage();
+            localforage.getItem('id_token')
+            .then(function(token) {
+                var params;
+
+                if ( token ) {
+                    params = auth.parseToken(token)
+                    if ( Math.round(new Date().getTime() / 1000) <= params.exp ) vm.loggedIn = true;
+                }
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
             this.appDashboardClassList = document.querySelector('.appDashboard').classList;
             this.rulesSliderClassList = document.querySelector('#rulesSlider').classList;
             this.howToPlayClassList = document.querySelector('#howToPlaySlider').classList;
 		},
 
 		methods: {
+
+            fetch(token) {
+                this.$http.get( URL.base + '/api/v1/contest-types', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                }).then(
+                    function(response) {
+                        this.contestTypes = response.data;
+                    },
+                    function(err) {
+                        console.log(err);
+                });
+
+                this.$http.get( URL.base + '/api/v1/player-name', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                }).then(
+                    function(response) {
+                        this.playersName = response.data.player_name;
+                    },
+                    function(err) {
+                        console.log(err);
+                });
+
+                this.$http.get( URL.base + '/api/v1/player-balance', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                }).then(
+                    function(response) {
+                        this.playersBalance = response.data.playerBalance;
+                    },
+                    function(err) {
+                        console.log(err);
+                });
+            },
+
 			toggleMenu() {
 				this.appDashboardClassList.toggle('show');
 			},

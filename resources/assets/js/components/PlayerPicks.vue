@@ -238,6 +238,8 @@
 <script>
     import auth from '../auth';
     import {router} from '../index';
+    import localforage from 'localforage';
+
     export default {
 
         props: ['working'],
@@ -281,38 +283,52 @@
         },
 
         ready() {
-            if ( ! auth.validate() ) {
-                this.tokenRefresh();
-            } else {
-                this.fetch();
-            }
+            var vm = this,
+                params;
+
+            localforage.getItem('id_token').then(function(token) {
+                if ( token ) {
+                    params = auth.parseToken(token);
+                    if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
+                        vm.fetch(token);
+                    } else {
+                        vm.tokenRefresh(token);
+                    }
+                } else {
+                    router.go('login');
+                }
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
         },
 
         methods: {
-            tokenRefresh() {
+            tokenRefresh(token) {
                 var vm = this;
 
                 this.$http.post(URL.base + '/api/v1/refresh', {}, {
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    localStorage.setItem('id_token', response.data.token);
-                    vm.fetch();
+                    localforage.setItem('id_token', response.data.token).then(function() {
+                        vm.fetch(token);
+                    });
                 }, function(err) {
                     router.go('login');
                 });
             },
 
-            fetch() {
+            fetch(token) {
                 this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/picks', {}, {
                     // Attach the JWT header
-                    headers: auth.getAuthHeader()
+                    headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     this.picksList = response.data.picks;
                     this.working = false;
 
                     this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', {}, {
                         // Attach the JWT header
-                        headers: auth.getAuthHeader()
+                        headers: { 'Authorization' : 'Bearer ' + token }
                     }).then(function(response) {
                         this.results = response.data.results;
                         this.parseResults(response.data.results);
@@ -322,7 +338,7 @@
 
                     this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings', {}, {
                         // Attach the JWT header
-                        headers: auth.getAuthHeader()
+                        headers: { 'Authorization' : 'Bearer ' + token }
                     }).then(function(response) {
                         this.standings = response.data.data[0].standings;
                         this.playerId = response.data.data[0].player;
@@ -333,7 +349,7 @@
 
                     this.$http.get(URL.base + '/api/v1/finishes', {}, {
                         // Attach the JWT header
-                        headers: auth.getAuthHeader()
+                        headers: { 'Authorization' : 'Bearer ' + token }
                     }).then(function(response) {
                         this.finishes = response.data;
                         // console.log(this.finishes);
