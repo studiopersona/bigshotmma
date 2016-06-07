@@ -14,8 +14,9 @@ require('laravel-elixir-livereload');
  */
 
 elixir.config.js.browserify.watchify.options.poll = true;
+elixir.config.assetsDir = 'resources/assets/admin/';
 
 elixir(function(mix) {
-    mix.sass('app.scss');
-    mix.browserify('index.js').version(['public/js/index.js','public/css/app.css']).livereload();
+    mix.sass('./resources/assets/admin/sass/app.scss', 'public/css/admin/app.css').version('public/css/admin/app.css').livereload();
+    mix.browserify('index.js', 'public/js/admin/index.js').version('public/js/admin/index.js').livereload();
 });
