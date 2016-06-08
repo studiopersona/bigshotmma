@@ -19,12 +19,8 @@
 		@yield('styles')
 		@if ( App::environment() === 'local' )
 			<link href="/bsmma/public{{ elixir('css/app.css') }}" rel=stylesheet >
-		@elseif ( App::environment() === 'admin-local' )
-			<link href="/bsmma/public{{ elixir('css/admin/app.css') }}" rel=stylesheet >
 		@elseif ( App::environment() === 'staging' )
 			<link href="/staging/public{{ elixir('css/app.css') }}" rel=stylesheet >
-		@elseif ( App::environment() === 'admin-staging' )
-			<link href="/staging/public{{ elixir('css/admin/app.css') }}" rel=stylesheet >
 		@else
 			<link href="/public{{ elixir('css/app.css') }}" rel=stylesheet >
 		@endif
@@ -44,12 +40,8 @@
 		@yield('scripts')
 		@if ( App::environment() === 'local' )
 			<script src="/bsmma/public{{ elixir('js/index.js') }}"></script>
-		@elseif ( App::environment() === 'admin-local' )
-			<script src="/bsmma/public{{ elixir('js/admin/index.js') }}"></script>
 		@elseif ( App::environment() === 'staging' )
 			<script src="/staging/public{{ elixir('js/index.js') }}"></script>
-		@elseif ( App::environment() === 'admin-staging' )
-			<script src="/staging/public{{ elixir('js/admin/index.js') }}"></script>
 		@else
 			<script src="/public{{ elixir('js/index.js') }}"></script>
 		@endif
