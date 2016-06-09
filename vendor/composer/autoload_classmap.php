@@ -23,6 +23,7 @@ return array(
     'AddImageNameColumnToContestTypes' => $baseDir . '/database/migrations/2016_03_29_194626_add_image_name_column_to_contest_types.php',
     'AddMerchantIdToUsers' => $baseDir . '/database/migrations/2016_05_13_224736_add_merchant_id_to_users.php',
     'AddOddsColumnToFightFighter' => $baseDir . '/database/migrations/2016_04_08_205128_add_odds_column_to_fight_fighter.php',
+    'AddPinColumnToUsers' => $baseDir . '/database/migrations/2016_06_08_190832_add_pin_column_to_users.php',
     'AddPlayerNameColumnToUsers' => $baseDir . '/database/migrations/2016_04_05_163440_add_player_name_column_to_users.php',
     'AddPointColumnToFinishes' => $baseDir . '/database/migrations/2016_03_29_211905_add_point_column_to_finishes.php',
     'AddPowerUpIdColumnToFightResults' => $baseDir . '/database/migrations/2016_04_01_172222_add_power_up_id_column_to_fight_results.php',
