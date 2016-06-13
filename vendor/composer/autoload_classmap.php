@@ -11,6 +11,7 @@ return array(
     'AddColumnsToFighters' => $baseDir . '/database/migrations/2016_03_29_204951_add_columns_to_fighters.php',
     'AddColumnsToPowerUps' => $baseDir . '/database/migrations/2016_03_29_200849_add_columns_to_power_ups.php',
     'AddContestIdToFightResults' => $baseDir . '/database/migrations/2016_04_09_204512_add_contest_id_to_fight_results.php',
+    'AddEnabledColumnToContests' => $baseDir . '/database/migrations/2016_06_13_194951_add_enabled_column_to_contests.php',
     'AddEntryFeeColumnToContests' => $baseDir . '/database/migrations/2016_03_29_204523_add_entry_fee_column_to_contests.php',
     'AddEventIdColumnToFightResults' => $baseDir . '/database/migrations/2016_05_31_175927_add_event_id_column_to_fight_results.php',
     'AddFightIdColumnToPicks' => $baseDir . '/database/migrations/2016_04_01_025027_add_fight_id_column_to_picks.php',
