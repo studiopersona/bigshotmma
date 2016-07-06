@@ -1,0 +1,56 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+
+//Sass responsive modular scale
+/*
+ * Modular scale
+ * http://www.modularscale.com/?1.25&em&1.33&web&text
+*/
+
+$type-scale-large: (
+  h1: 4.381rem,
+  h2: 3.294rem,
+  h3: 2.476rem,
+  h4: 1.862rem,
+  p: 1.6rem
+);
+
+/*
+ * Modular scale
+ * http://www.modularscale.com/?1.25&em&1.25&web&text
+*/
+
+$type-scale-medium: (
+  h1: 3.418rem,
+  h2: 2.734rem,
+  h3: 2.188em,
+  h4: 1.75rem,
+  p: 1.6rem,
+);
+
+
+/*
+ * Modular scale
+ * http://www.modularscale.com/?1.1&em&1.25&web&text
+*/
+
+$type-scale-small: (
+  h1: 3.052rem,
+  h2: 2.441rem,
+  h3: 1.953rem,
+  h4: 1.563rem,
+  p: 1.4rem
+);
+
+
+$breakpoint-medium: 75em;
+$breakpoint-small: 45em;
+
+@mixin size($level) {
+  font-size: map-get($type-scale-large, $level);
+  @media (max-width: $breakpoint-medium) {
+     font-size: map-get($type-scale-medium, $level);
+  }
+  @media (max-width: $breakpoint-small) {
+     font-size: map-get($type-scale-small, $level);
+  }
+}

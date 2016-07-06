@@ -53,4 +53,11 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::post('deposit', 'UsersController@makeDeposit');
 	});
 
+	Route::group(['prefix' => 'lander'], function()
+	{
+		Route::get('/', 'LanderController@index');
+	});
+
 });
+
+

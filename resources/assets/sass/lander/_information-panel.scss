@@ -1,0 +1,83 @@
+.information {
+	background: url('../../image/lander/information-panel-bkgd.jpg') left top/cover no-repeat;
+}
+
+.information__itemsWrap {
+	width: 100%;
+	min-height: 220px;
+	overflow: hidden;
+	position: relative;
+	margin-bottom: 3.2rem;
+}
+
+.information__item {
+	color: $color-white;
+	width: inherit;
+	position: absolute;
+	transform: translate3d(-100%, 0, 0);
+	z-index: 1;
+	transition: transform 0.3s cubic-bezier(0.000, 0.685, 0.540, 1.005);
+
+	&.show {
+		z-index: 5;
+		transform: translate3d(0,0,0);
+	}
+}
+
+.information__header {
+	color: $color-white;
+	text-transform: uppercase;
+	text-shadow: 4px 4px 0 rgba(0,0,0,1);
+	font-weight: 700;
+}
+
+h3.information__header {
+	margin-bottom: 0;
+}
+
+.informaion__itemLinksList {
+	width: 100%;
+	list-style-image: url('../../image/lander/list-icon.png');
+	list-style-position: inside;
+	list-style-type: disc;
+
+	> li {
+		float: left;
+		margin: 1.4rem 4rem 0 0;
+		width: 40%;
+
+		&:nth-child(2n) {
+			margin-right: 0;
+		}
+
+		&:nth-child(2n+1) {
+			clear: left;
+		}
+	}
+}
+
+.information__itemLink {
+	background: transparent;
+	color: $color-green;
+	text-decoration: underline;
+	border: none;
+	text-shadow: 1px 1px 2px rgba(0,0,0,0);
+	margin-left: -0.5rem;
+	cursor: pointer;
+}
+
+a.information__itemLink {
+	padding-left: 5px;
+}
+
+.information__thirdPartyLogo {
+	width: 23%;
+    margin: 5.96rem 9% 5.96rem 0;
+}
+
+.information__phoneTemplateWrap {
+	width: 312px;
+	height: 600px;
+	background: url('../../image/lander/phone-template.png') left top/cover no-repeat;
+	margin: 0 auto;
+}
