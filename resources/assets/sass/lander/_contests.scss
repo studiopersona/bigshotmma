@@ -1,0 +1,16 @@
+.contests__header {
+	text-transform: uppercase;
+	font-size: 5.96rem;
+	font-weight: 700;
+}
+
+.contests__noEvents {
+	text-align: center;
+	width: 80%;
+	margin: 0 auto;
+
+	p {
+		font-size: 2.4rem;
+		color: $color-green;
+	}
+}

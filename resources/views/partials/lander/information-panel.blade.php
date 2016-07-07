@@ -48,17 +48,19 @@
 					</ul>
 				</div>
 				<div class="information__thirdPartyLogosWrap">
-					<img src="{{ asset('public/image/lander/paypal-logo.png') }}" class="information__thirdPartyLogo">
-					<img src="{{ asset('public/image/lander/credit-card-logos.png') }}" class="information__thirdPartyLogo">
-					<img src="{{ asset('public/image/lander/ssl-logo.png') }}" class="information__thirdPartyLogo">
+					<img src="{{ asset('public/image/lander/paypal-logo.png') }}" class="information__thirdPartyLogo information__thirdPartyLogo--paypal">
+					<img src="{{ asset('public/image/lander/credit-card-logos.png') }}" class="information__thirdPartyLogo information__thirdPartyLogo--creditCards">
+					<img src="{{ asset('public/image/lander/ssl-logo.png') }}" class="information__thirdPartyLogo information__thirdPartyLogo--ssl">
 				</div>
 			</div>
 			<div class="col-xs-50 col-xs-offset-5">
 				<div class="information__phoneTemplateWrap">
-					<div class="information__phoneScreen information__phoneScreen--howToPlay"></div>
-					<div class="information__phoneScreen information__phoneScreen--powerUps"></div>
-					<div class="information__phoneScreen information__phoneScreen--contestFormats"></div>
-					<div class="information__phoneScreen information__phoneScreen--legal"></div>
+					<div class="information__phoneScreenWrap">
+						<div class="information__phoneScreen information__phoneScreen--howToPlay visible"></div>
+						<div class="information__phoneScreen information__phoneScreen--powerUps"></div>
+						<div class="information__phoneScreen information__phoneScreen--contestFormats"></div>
+						<div class="information__phoneScreen information__phoneScreen--legal"></div>
+					</div>
 				</div>
 			</div>
 		</div><!-- .row -->

@@ -64,6 +64,11 @@ h3.information__header {
 	text-shadow: 1px 1px 2px rgba(0,0,0,0);
 	margin-left: -0.5rem;
 	cursor: pointer;
+	transition: color 0.3s ease;
+
+	&:hover {
+		color: $color-white;
+	}
 }
 
 a.information__itemLink {
@@ -71,13 +76,71 @@ a.information__itemLink {
 }
 
 .information__thirdPartyLogo {
-	width: 23%;
+	width: 17%;
     margin: 5.96rem 9% 5.96rem 0;
+    float: left;
+}
+
+.information__thirdPartyLogo--paypal {
+	width: 14%;
+	margin-right: 2%;
+}
+
+.information__thirdPartyLogo--creditCards {
+	width: 21%;
+}
+
+.information__thirdPartyLogo--ssl {
+	width: 30%;
+	margin-top: 5.06rem;
 }
 
 .information__phoneTemplateWrap {
+	position: relative;
 	width: 312px;
 	height: 600px;
 	background: url('../../image/lander/phone-template.png') left top/cover no-repeat;
 	margin: 0 auto;
+}
+
+.information__phoneScreenWrap {
+	position: absolute;
+    width: 268px;
+    height: 475px;
+    top: 63px;
+    left: 23px;
+	z-index: 1;
+	overflow: hidden;
+	background: left top/cover no-repeat $color-black;
+}
+
+.information__phoneScreen {
+	position: absolute;
+	width: inherit;
+	height: inherit;
+	background: left top/cover no-repeat $color-black;
+	transform: translate3d(-100%,0,0);
+	transition: transform 0.3s cubic-bezier(0.000, 0.685, 0.540, 1.005);
+	z-index: 1;
+
+	&.visible {
+		z-index: 5;
+		transform: translate3d(0,0,0);
+	}
+}
+
+.information__phoneScreen--howToPlay {
+	background-image: url('../../image/lander/how-to-play-screen.jpg');
+}
+
+.information__phoneScreen--powerUps {
+	background-image: url('../../image/lander/powerup-screen.jpg');
+}
+
+.information__phoneScreen--contestFormats {
+	background-image: url('../../image/lander/powerup-screen.jpg');
+}
+
+.information__phoneScreen--legal {
+	background-image: url('../../image/lander/availability-screen.jpg');
 }
