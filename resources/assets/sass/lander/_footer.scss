@@ -1,0 +1,22 @@
+.footer {
+	background: $color-primary;
+	color: $color-white;
+
+	> .content-container {
+		padding: 2rem;
+	}
+
+	p {
+		margin-bottom: 0;
+		font-size: 1.2rem;
+	}
+}
+
+.footer__links {
+	text-align: right;
+
+	> a {
+		color: $color-white;
+		margin: 0 0.5rem;
+	}
+}

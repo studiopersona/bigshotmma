@@ -1,0 +1,78 @@
+
+
+.carousel-nav {
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	height: 90px;
+	left: 93.5%;
+	position: absolute;
+	top: 48%;
+	width: 72px;
+	z-index: 200;
+	opacity: 1;
+	color: $color-black;
+	outline: 0; /* older webkit */
+	transition: opacity 300ms cubic-bezier(0.380, 0.090, 0.280, 1.265);
+	z-index: 20;
+
+	&[data-direction="backward"] {
+		left: 0.7%;
+	}
+
+	&:before {
+		content: "\ea1c";
+		font-family: 'icomoon';
+		color: $color-primary;
+		opacity: 0.8;
+		position: absolute;
+		top: -5px;
+		left: 11px;
+		font-size: 4rem;
+		font-weight: 600;
+	}
+
+	&[data-direction="backward"]:before {
+		transform: rotate(180deg);
+		left: 8px;
+	}
+
+	&:hover:before {
+		opacity: 1;
+	}
+
+	&.disabled {
+		cursor: default;
+		opacity: 0.2;
+	}
+
+	&.navBtn--hide {
+		display: none;
+	}
+}
+
+.carousel__holder {
+	overflow: hidden;
+	position: relative;
+	margin: 3.052rem auto;
+	width: 85%;
+
+	.carousel__wrap {
+		width: 500%;
+		position: relative;
+		left: 0; /* older webkit */
+		transition: left 400ms cubic-bezier(0.380, 0.090, 0.280, 1.265);
+
+		.carousel__item {
+			float: left;
+			width: 218px;
+			height: 218px;
+			overflow: hidden;
+			margin-right: 1.4rem;
+
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+	}
+}

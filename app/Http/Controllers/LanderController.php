@@ -28,6 +28,8 @@ class LanderController extends Controller
     				->orderBy('date_time', 'asc')
     				->first();
 
-    	return response()->view('templates.lander', compact('event'));
+        $powerUps = $this->powerUp->get();
+
+    	return response()->view('templates.lander', compact('event', 'powerUps'));
     }
 }

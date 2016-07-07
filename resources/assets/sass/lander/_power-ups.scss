@@ -1,0 +1,75 @@
+.powerUps {
+	background: url('../../image/lander/power-up-bkgd.jpg') left top/cover no-repeat;
+	overflow: hidden;
+	position: relative;
+	text-align: center;
+}
+
+.powerUps__header {
+	color: $color-white;
+	font-weight: 700;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+.powerupsCarousel__itemButton {
+	cursor: pointer;
+	background: transparent;
+	border: none;
+}
+
+.powerupsCarousel__itemTitle {
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
+.powerupsInfo {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	z-index: 10;
+	transform: translate3d(0,-100%,0);
+	transition: transform 0.3s cubic-bezier(0.000, 0.685, 0.540, 1.005);
+
+	background: rgba(0,0,0, 0.9);
+	color: $color-white;
+	text-align: center;
+
+	&.show {
+		transform: translate3d(0,0,0);
+	}
+}
+
+.powerupsInfo__item {
+	position: absolute;
+	z-index: 1;
+	width: 100%;
+	top: 0;
+	bottom: 0;
+	opacity: 0;
+	transition: opacity 0.3s cubic-bezier(0.000, 0.685, 0.540, 1.005);
+	padding: ($vertical-rhythm * 2) 2rem;
+
+	&.show {
+		z-index: 5;
+		opacity: 1;
+
+	}
+}
+
+.powerupsInfo__itemTitle {
+	text-transform: uppercase;
+	color: $color-white;
+	font-weight: 700;
+	font-size: 3.052em;
+	text-align: center;
+	margin-bottom: 0.25em;
+}
+
+.powerupsInfo__description {
+	font-size: 2.441rem;
+	margin-top: 0.5em;
+}
