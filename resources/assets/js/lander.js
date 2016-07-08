@@ -10,13 +10,19 @@ window.onload = function() {
 	menuControl.init();
 
 	if (document.getElementById('powerupsCarousel')) {
+		var ipf = 6;
+
+		if (window.innerWidth < 900) ipf = 4;
+		if (window.innerWidth < 768 ) ipf = 3;
+		if (window.innerWidth < 600 ) ipf = 2;
+
 		var pc = new Carousel.getInstance({
 			$carouselHolder: $('.carousel__holder'),
             $itemsWrap: $('.carousel__wrap'),
             $items: $('.carousel__item'),
             $navBtnsWrap: $('.carousel-nav'),
             marginSize: 15, // in pixels
-            itemsPerFrame: 6,
+            itemsPerFrame: ipf,
 		});
 
 		$('.carousel-nav').on('click', pc.move);

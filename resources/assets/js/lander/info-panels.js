@@ -11,6 +11,8 @@ var panelControl = (function($, w, undefined) {
 		$phoneScreens = $('.information__phoneScreen')
 
 		$triggers.on('click', switchInfo);
+
+		$('.information__itemsWrap').outerHeight($infoWindows.filter('[data-item="scoring"]').innerHeight() + 'px');
 	}
 
 	var switchInfo = function(e) {
@@ -21,6 +23,7 @@ var panelControl = (function($, w, undefined) {
 
 		$phoneScreens.filter('.visible').removeClass('visible');
 		$phoneScreens.filter('[data-item="' + target + '"]').addClass('visible');
+		$('.information__itemsWrap').outerHeight($infoWindows.filter('[data-item="' + target + '"]').innerHeight() + 'px');
 	}
 
 	return {

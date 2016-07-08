@@ -4401,7 +4401,7 @@ h3 {
   margin-bottom: 1.96rem; }
   @media (max-width: 75em) {
     h3 {
-      font-size: 2.188em; } }
+      font-size: 2.188rem; } }
   @media (max-width: 45em) {
     h3 {
       font-size: 1.953rem; } }
@@ -4511,6 +4511,14 @@ h4 {
 .navigation__btnWrap {
   text-align: right; }
 
+@media screen and (max-width: 70rem) {
+  .navigation__btnWrap .btn, .navigation__btnWrap .btn--block, .navigation__btnWrap .btn--primary, .navigation__btnWrap .btn--green, .navigation__btnWrap .btn--black, .navigation__btnWrap .btn--outline {
+    width: 30%;
+    font-size: 1em;
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0; } }
+
 .information {
   background: url("../../image/lander/information-panel-bkgd.jpg") left top/cover no-repeat; }
 
@@ -4519,7 +4527,8 @@ h4 {
   min-height: 220px;
   overflow: hidden;
   position: relative;
-  margin-bottom: 3.2rem; }
+  margin-bottom: 1.2rem;
+  transition: height 0.3s ease; }
 
 .information__item {
   color: #fff;
@@ -4531,6 +4540,11 @@ h4 {
   .information__item.show {
     z-index: 5;
     transform: translate3d(0, 0, 0); }
+  .information__item .highlight--pos {
+    color: #2dbe0c; }
+  .information__item .highlight--neg {
+    color: #F9546A;
+    text-shadow: 1px 1px 1px #000; }
 
 .information__header {
   color: #fff;
@@ -4631,6 +4645,18 @@ a.information__itemLink {
 .information__phoneScreen--legal {
   background-image: url("../../image/lander/availability-screen.jpg"); }
 
+@media screen and (max-width: 62rem) {
+  .informaion__itemLinksList > li {
+    width: 48%;
+    margin-right: 1rem; } }
+
+@media screen and (max-width: 52rem) {
+  .informaion__itemLinksList > li {
+    float: none;
+    width: 100%; }
+  .information__phoneTemplateWrap {
+    margin-top: 2rem; } }
+
 .contests__header {
   text-transform: uppercase;
   font-size: 5.96rem;
@@ -4684,16 +4710,46 @@ a.information__itemLink {
   line-height: 2.4;
   margin-right: 0.5rem; }
 
-.contests__playerCount {
+.contests__playerCount,
+.contest__tableFee {
   font-size: 2.8rem;
   font-weight: 700;
   vertical-align: middle; }
 
 .contests__tableFee {
-  color: #2dbe0c;
-  font-size: 2.8rem;
-  font-weight: 700;
-  vertical-align: middle; }
+  color: #2dbe0c; }
+
+@media screen and (max-width: 60rem) {
+  .contests__table td {
+    font-size: 1.1em; }
+  .contests__playerCount,
+  .contest__tableFee {
+    font-size: 2.2rem; }
+  .contests__eventWrap .btn, .contests__eventWrap .btn--block, .contests__eventWrap .btn--primary, .contests__eventWrap .btn--green, .contests__eventWrap .btn--black, .contests__eventWrap .btn--outline {
+    font-size: 1.2em; } }
+
+@media screen and (max-width: 50rem) {
+  .contests__table {
+    width: 100%; }
+    .contests__table tr {
+      display: block;
+      margin-bottom: 2rem;
+      width: 48%;
+      margin-right: 2%;
+      float: left;
+      border: 1px solid; }
+      .contests__table tr:nth-child(2n) {
+        background: #eee;
+        margin-right: 0; }
+      .contests__table tr:nth-child(2n+1) {
+        clear: left; }
+      .contests__table tr:nth-child(5) {
+        display: none; }
+    .contests__table td {
+      display: block;
+      border-bottom: 1px dotted; }
+      .contests__table td:last-child {
+        border-bottom: none; } }
 
 .powerUps {
   background: url("../../image/lander/power-up-bkgd.jpg") left top/cover no-repeat;
@@ -4759,8 +4815,7 @@ a.information__itemLink {
 
 .carousel-nav {
   position: absolute;
-  left: 86%;
-  top: 44.5%;
+  top: 42%;
   z-index: 20;
   width: 25px;
   height: 35px;
@@ -4772,7 +4827,9 @@ a.information__itemLink {
   outline: 0;
   transition: opacity 300ms cubic-bezier(0.38, 0.09, 0.28, 1.265); }
   .carousel-nav[data-direction="backward"] {
-    left: 12%; }
+    left: 6%; }
+  .carousel-nav[data-direction="forward"] {
+    right: 6%; }
   .carousel-nav:before {
     content: url("../../image/lander/carousel-arrow.png");
     opacity: 0.8;
@@ -4810,6 +4867,14 @@ a.information__itemLink {
       margin-right: 1.4rem; }
       .carousel__holder .carousel__wrap .carousel__item:last-child {
         margin-right: 0; }
+
+@media screen and (max-width: 70rem) {
+  .powerupsCarousel__itemImage {
+    width: 100%; }
+  .powerupsCarousel__itemTitle {
+    font-size: 1.2rem; }
+  .carousel-nav {
+    top: 38%; } }
 
 .footer {
   background: #a80300;

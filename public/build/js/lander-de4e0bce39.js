@@ -10108,13 +10108,19 @@ window.onload = function () {
 	_menuControl2.default.init();
 
 	if (document.getElementById('powerupsCarousel')) {
+		var ipf = 6;
+
+		if (window.innerWidth < 900) ipf = 4;
+		if (window.innerWidth < 768) ipf = 3;
+		if (window.innerWidth < 600) ipf = 2;
+
 		var pc = new _carousel2.default.getInstance({
 			$carouselHolder: (0, _jquery2.default)('.carousel__holder'),
 			$itemsWrap: (0, _jquery2.default)('.carousel__wrap'),
 			$items: (0, _jquery2.default)('.carousel__item'),
 			$navBtnsWrap: (0, _jquery2.default)('.carousel-nav'),
 			marginSize: 15, // in pixels
-			itemsPerFrame: 6
+			itemsPerFrame: ipf
 		});
 
 		(0, _jquery2.default)('.carousel-nav').on('click', pc.move);
@@ -10320,6 +10326,8 @@ var panelControl = function ($, w, undefined) {
 		$phoneScreens = $('.information__phoneScreen');
 
 		$triggers.on('click', switchInfo);
+
+		$('.information__itemsWrap').outerHeight($infoWindows.filter('[data-item="scoring"]').innerHeight() + 'px');
 	};
 
 	var switchInfo = function switchInfo(e) {
@@ -10330,6 +10338,7 @@ var panelControl = function ($, w, undefined) {
 
 		$phoneScreens.filter('.visible').removeClass('visible');
 		$phoneScreens.filter('[data-item="' + target + '"]').addClass('visible');
+		$('.information__itemsWrap').outerHeight($infoWindows.filter('[data-item="' + target + '"]').innerHeight() + 'px');
 	};
 
 	return {

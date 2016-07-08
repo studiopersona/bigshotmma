@@ -21,15 +21,17 @@
 					<div class="information__item" data-item="contest-formats">
 						<h1 class="information__header">Contest Fomats</h1>
 						<ul>
-							<li>OLD SCHOOL - top 20% of players win a prize</li>
-							<li>50/50 -  top 50% of players win a prize</li>
-							<li>GREED - winner take all, one player wins a prize</li>
+							<li><span class="highlight--pos">OLD SCHOOL</span> - top 20% of players win a prize</li>
+							<li>&nbsp;</li>
+							<li><span class="highlight--pos">50/50</span> -  top 50% of players win a prize</li>
+							<li>&nbsp;</li>
+							<li><span class="highlight--pos">GREED</span> - winner take all, one player wins a prize</li>
 						</ul>
 					</div>
 					<div class="information__item" data-item="legal">
 						<h1 class="information__header">Is this Legal?</h1>
-						<p>Yes! Daily fantasy sports (DFS) are completely legal for residents of 41 US states, and anyone is allowed to participate in our free entry contests.</p>
-						<p>Residents of the following states are not eligible to participate in paid entry contests:<br>Alabama, Arizona, Hawaii, Idaho, Iowa, Louisiana, Montana, Nevada, and Washington.</p>
+						<p><span class="highlight--pos">Yes!</span> Daily fantasy sports (DFS) are completely legal for residents of 41 US states, and anyone is allowed to participate in our free entry contests.</p>
+						<p>Residents of the following states are not eligible to participate in paid entry contests:<br><span class="highlight--neg">Alabama, Arizona, Hawaii, Idaho, Iowa, Louisiana, Montana, Nevada, and Washington</span>.</p>
 					</div>
 				</div>
 				<div class="information__itemLinksWrap">

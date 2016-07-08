@@ -71,7 +71,8 @@
 	margin-right: 0.5rem;
 }
 
-.contests__playerCount {
+.contests__playerCount,
+.contest__tableFee {
 	font-size: 2.8rem;
 	font-weight: 700;
 	vertical-align: middle;
@@ -79,7 +80,61 @@
 
 .contests__tableFee {
 	color: $color-green;
-	font-size: 2.8rem;
-	font-weight: 700;
-	vertical-align: middle;
+}
+
+@media screen and (max-width: 60rem) {
+	.contests__table {
+
+		td {
+			font-size: 1.1em;
+		}
+	}
+
+	.contests__playerCount,
+	.contest__tableFee {
+		font-size: 2.2rem;
+	}
+
+	.contests__eventWrap {
+		.btn {
+			font-size: 1.2em;
+		}
+	}
+}
+
+@media screen and (max-width: 50rem) {
+	.contests__table {
+		width: 100%;
+
+		tr {
+			display: block;
+			margin-bottom: 2rem;
+			width: 48%;
+			margin-right: 2%;
+			float: left;
+			border: 1px solid;
+
+			&:nth-child(2n) {
+				background: $color-gray-light;
+				margin-right: 0;
+			}
+
+			&:nth-child(2n+1) {
+				clear: left;
+			}
+
+			&:nth-child(5) {
+				display: none;
+			}
+		}
+
+		td {
+			display: block;
+			border-bottom: 1px dotted;
+
+			&:last-child {
+				border-bottom: none;
+			}
+		}
+	}
 }
