@@ -1,0 +1,49 @@
+$base-line-height: 1.4;
+$base-font-size: 1.4rem;
+$vertical-rhythm: $base-line-height * $base-font-size;
+
+html {
+  font-size: 62.5%; /* Sets up Base 10 stuff */
+}
+
+body {
+	font-family: 'Montserrat', sans-serif;
+  	@include size(p);
+  	line-height: $base-line-height;
+}
+
+p {
+	@include size(p);
+  	margin-bottom: $vertical-rhythm;
+}
+
+a {
+	color: $color-primary;
+	transition: all 0.3s ease;
+
+	&:hover, :focus {
+		color: lighten($color-primary, 20%);
+	}
+}
+
+h1 {
+	@include size(h1);
+  	margin-bottom: $vertical-rhythm;
+}
+
+h2 {
+	@include size(h2);
+  	margin-bottom: $vertical-rhythm;
+
+
+}
+
+h3 {
+	@include size(h3);
+  	margin-bottom: $vertical-rhythm;
+}
+
+h4 {
+	@include size(h4);
+	margin-bottom: $vertical-rhythm;
+}

@@ -3,7 +3,12 @@
 		<div class="row">
 			<div class="col-xs-45">
 				<div class="information__itemsWrap">
-					<div class="information__item show" data-item="how-to-play">
+					<div class="information__item show" data-item="scoring">
+						<h1 class="information__header">Scoring</h1>
+						<p>Points are scored by making correct choices, and the player(s) with the most points win.</p>
+						<p>Players can apply power ups to try and boost their total score, but there is a risk of penalty in the event the fighter fails to achieve the power up.</p>
+					</div>
+					<div class="information__item" data-item="how-to-play">
 						<h1 class="information__header">How to Play</h1>
 						<p>Each player picks a total of five (5) fighters from the event lineup and decides how &amp; when each fight will end.</p>
 						<p>Points are awarded based on performance, and winning players receive cash prizes!</p>
@@ -31,7 +36,7 @@
 					<h3 class="information__header">Learn</h3>
 					<ul class="informaion__itemLinksList clearfix">
 						<li>
-							<button type="button" class="information__itemLink" data-target="how-to-play">Scoring Explained</button>
+							<button type="button" class="information__itemLink" data-target="scoring">Scoring Explained</button>
 						</li>
 						<li>
 							<button type="button" class="information__itemLink" data-target="legal">Is this legal?</button>
@@ -40,10 +45,13 @@
 							<button type="button" class="information__itemLink" data-target="power-ups">Power Ups</button>
 						</li>
 						<li>
-							<a href="{{ url('/') }}" class="information__itemLink">Start Playing</a>
+							<button type="button" class="information__itemLink" data-target="how-to-play">How to Play</button>
 						</li>
 						<li>
 							<button type="button" class="information__itemLink" data-target="contest-formats">Contest Formats</button>
+						</li>
+						<li>
+							<a href="{{ url('/') }}" class="information__itemLink">Start Playing</a>
 						</li>
 					</ul>
 				</div>
@@ -56,8 +64,9 @@
 			<div class="col-xs-50 col-xs-offset-5">
 				<div class="information__phoneTemplateWrap">
 					<div class="information__phoneScreenWrap">
-						<div class="information__phoneScreen information__phoneScreen--howToPlay visible" data-item="how-to-play"></div>
+						<div class="information__phoneScreen information__phoneScreen--scoring visible" data-item="scoring"></div>
 						<div class="information__phoneScreen information__phoneScreen--powerUps" data-item="power-ups"></div>
+						<div class="information__phoneScreen information__phoneScreen--howToPlay" data-item="how-to-play"></div>
 						<div class="information__phoneScreen information__phoneScreen--contestFormats" data-item="contest-formats"></div>
 						<div class="information__phoneScreen information__phoneScreen--legal" data-item="legal"></div>
 					</div>

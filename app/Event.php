@@ -23,7 +23,7 @@ class Event extends Model
 
     public function contests()
     {
-        return $this->hasMany('Bsmma\Contests');
+        return $this->hasMany('Bsmma\Contest');
     }
 
     public function promotions()

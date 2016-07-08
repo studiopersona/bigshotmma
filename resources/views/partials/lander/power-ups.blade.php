@@ -1,8 +1,8 @@
 <section class="powerUps">
 	<div class="content-container">
 		<h1 class="powerUps__header">Apply Power Ups with Caution</h1>
-		<button class="carousel-nav" data-direction="forward"><span class="sr-only">Forward</span></button>
-	    <button class="carousel-nav disabled" data-direction="backward"><span class="sr-only">Backward</span></button>
+		<button class="carousel-nav" data-direction="forward"><span class="visuallyhidden">Forward</span></button>
+	    <button class="carousel-nav disabled" data-direction="backward"><span class="visuallyhidden">Backward</span></button>
 	    <div id="powerupsCarousel" class="carousel__holder">
 	        <div class="carousel__wrap">
 	            @foreach ($powerUps as $powerUp)

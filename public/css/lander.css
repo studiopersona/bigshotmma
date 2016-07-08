@@ -4616,6 +4616,9 @@ a.information__itemLink {
     z-index: 5;
     transform: translate3d(0, 0, 0); }
 
+.information__phoneScreen--scoring {
+  background-image: url("../../image/lander/scoring-screen.jpg"); }
+
 .information__phoneScreen--howToPlay {
   background-image: url("../../image/lander/how-to-play-screen.jpg"); }
 
@@ -4631,7 +4634,15 @@ a.information__itemLink {
 .contests__header {
   text-transform: uppercase;
   font-size: 5.96rem;
-  font-weight: 700; }
+  font-weight: 700;
+  margin-bottom: 0; }
+
+.contests__subheader {
+  font-size: 2.4rem;
+  font-weight: 100; }
+
+.contests__list {
+  margin-top: 8rem; }
 
 .contests__noEvents {
   text-align: center;
@@ -4640,6 +4651,49 @@ a.information__itemLink {
   .contests__noEvents p {
     font-size: 2.4rem;
     color: #2dbe0c; }
+
+.contests__eventImage {
+  width: 90%;
+  margin-bottom: 2.4rem; }
+
+.contests__eventWrap {
+  text-align: center; }
+
+.contests__noContests {
+  text-align: center; }
+
+.contests__table {
+  width: 100%; }
+  .contests__table tr {
+    background: #eee; }
+    .contests__table tr:nth-child(2n) {
+      background: #fff; }
+  .contests__table td {
+    padding: 1.5rem;
+    font-size: 1.3em; }
+    .contests__table td .btn, .contests__table td .btn--block, .contests__table td .btn--primary, .contests__table td .btn--green, .contests__table td .btn--black, .contests__table td .btn--outline {
+      font-size: 0.75em; }
+
+.contests__tableHeader {
+  text-align: center;
+  font-size: 1.8em; }
+
+.contests__tableTitle {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  line-height: 2.4;
+  margin-right: 0.5rem; }
+
+.contests__playerCount {
+  font-size: 2.8rem;
+  font-weight: 700;
+  vertical-align: middle; }
+
+.contests__tableFee {
+  color: #2dbe0c;
+  font-size: 2.8rem;
+  font-weight: 700;
+  vertical-align: middle; }
 
 .powerUps {
   background: url("../../image/lander/power-up-bkgd.jpg") left top/cover no-repeat;
@@ -4669,7 +4723,7 @@ a.information__itemLink {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 10;
+  z-index: 30;
   transform: translate3d(0, -100%, 0);
   transition: transform 0.3s cubic-bezier(0, 0.685, 0.54, 1.005);
   background: rgba(0, 0, 0, 0.9);
@@ -4688,7 +4742,7 @@ a.information__itemLink {
   transition: opacity 0.3s cubic-bezier(0, 0.685, 0.54, 1.005);
   padding: 3.92rem 2rem; }
   .powerupsInfo__item.show {
-    z-index: 5;
+    z-index: 2;
     opacity: 1; }
 
 .powerupsInfo__itemTitle {
@@ -4704,36 +4758,31 @@ a.information__itemLink {
   margin-top: 0.5em; }
 
 .carousel-nav {
+  position: absolute;
+  left: 86%;
+  top: 44.5%;
+  z-index: 20;
+  width: 25px;
+  height: 35px;
+  opacity: 1;
+  color: #000;
   background: transparent;
   border: none;
   cursor: pointer;
-  height: 90px;
-  left: 93.5%;
-  position: absolute;
-  top: 48%;
-  width: 72px;
-  z-index: 200;
-  opacity: 1;
-  color: #000;
   outline: 0;
-  /* older webkit */
-  transition: opacity 300ms cubic-bezier(0.38, 0.09, 0.28, 1.265);
-  z-index: 20; }
+  transition: opacity 300ms cubic-bezier(0.38, 0.09, 0.28, 1.265); }
   .carousel-nav[data-direction="backward"] {
-    left: 0.7%; }
+    left: 12%; }
   .carousel-nav:before {
-    content: "\ea1c";
-    font-family: 'icomoon';
-    color: #a80300;
+    content: url("../../image/lander/carousel-arrow.png");
     opacity: 0.8;
     position: absolute;
-    top: -5px;
-    left: 11px;
-    font-size: 4rem;
-    font-weight: 600; }
+    width: 25px;
+    height: 35px;
+    top: 0;
+    left: 0; }
   .carousel-nav[data-direction="backward"]:before {
-    transform: rotate(180deg);
-    left: 8px; }
+    transform: rotate(180deg); }
   .carousel-nav:hover:before {
     opacity: 1; }
   .carousel-nav.disabled {
@@ -4778,5 +4827,15 @@ a.information__itemLink {
     margin: 0 0.5rem; }
     .footer__links > a:hover {
       color: #000; }
+
+.visuallyhidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0; }
 
 /*# sourceMappingURL=lander.css.map */

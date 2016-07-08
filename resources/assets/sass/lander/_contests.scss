@@ -2,6 +2,16 @@
 	text-transform: uppercase;
 	font-size: 5.96rem;
 	font-weight: 700;
+	margin-bottom: 0;
+}
+
+.contests__subheader {
+	font-size: 2.4rem;
+	font-weight: 100;
+}
+
+.contests__list {
+	margin-top: 8rem;
 }
 
 .contests__noEvents {
@@ -13,4 +23,63 @@
 		font-size: 2.4rem;
 		color: $color-green;
 	}
+}
+
+.contests__eventImage {
+	width: 90%;
+	margin-bottom: 2.4rem;
+}
+
+.contests__eventWrap {
+	text-align: center;
+}
+
+.contests__noContests {
+	text-align: center;
+}
+
+.contests__table {
+	width: 100%;
+
+	tr {
+		background: $color-gray-light;
+
+		&:nth-child(2n) {
+			background: $color-white;
+		}
+	}
+
+	td {
+		padding: 1.5rem;
+		font-size: 1.3em;
+
+		.btn {
+			font-size: 0.75em;
+		}
+	}
+}
+
+.contests__tableHeader {
+	text-align: center;
+	font-size: 1.8em;
+}
+
+.contests__tableTitle {
+	font-size: 1.2rem;
+	text-transform: uppercase;
+	line-height: 2.4;
+	margin-right: 0.5rem;
+}
+
+.contests__playerCount {
+	font-size: 2.8rem;
+	font-weight: 700;
+	vertical-align: middle;
+}
+
+.contests__tableFee {
+	color: $color-green;
+	font-size: 2.8rem;
+	font-weight: 700;
+	vertical-align: middle;
 }

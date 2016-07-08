@@ -22,7 +22,7 @@ class LanderController extends Controller
     	$event = $this->event->with([
     					'contests',
     					'contests.contestType',
-    					'contests.contestParticipant'
+    					'contests.contestParticipants'
     				])
     				->where('date_time', '>=', date('Y-m-d'))
     				->orderBy('date_time', 'asc')
