@@ -18,5 +18,9 @@
 	> a {
 		color: $color-white;
 		margin: 0 0.5rem;
+
+		&:hover {
+			color: $color-black;
+		}
 	}
 }

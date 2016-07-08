@@ -4563,7 +4563,8 @@ h3.information__header {
   text-shadow: 1px 1px 2px transparent;
   margin-left: -0.5rem;
   cursor: pointer;
-  transition: color 0.3s ease; }
+  transition: color 0.3s ease;
+  outline: none; }
   .information__itemLink:hover {
     color: #fff; }
 
@@ -4655,7 +4656,8 @@ a.information__itemLink {
 .powerupsCarousel__itemButton {
   cursor: pointer;
   background: transparent;
-  border: none; }
+  border: none;
+  outline: none; }
 
 .powerupsCarousel__itemTitle {
   text-transform: uppercase;
@@ -4774,5 +4776,7 @@ a.information__itemLink {
   .footer__links > a {
     color: #fff;
     margin: 0 0.5rem; }
+    .footer__links > a:hover {
+      color: #000; }
 
 /*# sourceMappingURL=lander.css.map */

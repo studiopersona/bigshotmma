@@ -10048,13 +10048,51 @@ var _carousel = require('./lander/carousel');
 
 var _carousel2 = _interopRequireDefault(_carousel);
 
+var _powerupInfo = require('./lander/powerup-info');
+
+var _powerupInfo2 = _interopRequireDefault(_powerupInfo);
+
+var _infoPanels = require('./lander/info-panels');
+
+var _infoPanels2 = _interopRequireDefault(_infoPanels);
+
+var _menuControl = require('./lander/menu-control');
+
+var _menuControl2 = _interopRequireDefault(_menuControl);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.onload = function () {
 	(0, _heroSizer2.default)();
+	_menuControl2.default.init();
+
+	if (document.getElementById('powerupsCarousel')) {
+		var pc = new _carousel2.default.getInstance({
+			$carouselHolder: (0, _jquery2.default)('.carousel__holder'),
+			$itemsWrap: (0, _jquery2.default)('.carousel__wrap'),
+			$items: (0, _jquery2.default)('.carousel__item'),
+			$navBtnsWrap: (0, _jquery2.default)('.carousel-nav'),
+			marginSize: 15, // in pixels
+			itemsPerFrame: 6
+		});
+
+		(0, _jquery2.default)('.carousel-nav').on('click', pc.move);
+	}
+
+	if (document.querySelector('.powerupsInfo')) {
+		_powerupInfo2.default.init();
+	}
+
+	if (document.querySelector('#information')) {
+		_infoPanels2.default.init();
+	}
 };
 
-},{"./lander/carousel":3,"./lander/hero-sizer":4}],3:[function(require,module,exports){
+},{"./lander/carousel":3,"./lander/hero-sizer":4,"./lander/info-panels":5,"./lander/menu-control":6,"./lander/powerup-info":7,"jquery":1}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10095,7 +10133,7 @@ var Carousel = function ($, w, undefined) {
         if (numberOfItems < o.itemsPerFrame) o.itemsPerFrame = numberOfItems;
         itemWidth = o.$carouselHolder.outerWidth() / o.itemsPerFrame - o.marginSize + o.marginSize / (o.itemsPerFrame + 1);
         itemsWrapWidth = Math.ceil(itemWidth * numberOfItems + (numberOfItems - 1) * o.marginSize);
-        console.log(o.$itemsWrap);
+        // console.log(o.$itemsWrap);
         o.$itemsWrap.width(itemsWrapWidth + 'px');
         o.$items.each(function (i, el) {
             $(this).outerWidth(itemWidth + 'px');
@@ -10108,7 +10146,8 @@ var Carousel = function ($, w, undefined) {
 
         $leftBtn = o.$navBtnsWrap.filter('[data-direction="forward"]');
         $rightBtn = o.$navBtnsWrap.filter('[data-direction="backward"]');
-
+        // console.log($leftBtn);
+        // console.log($rightBtn);
         // if all the items fit in one frame hide the navigation buttons
         if (numberOfItems <= o.itemsPerFrame) {
             o.$navBtnsWrap.addClass('navBtn--hide');
@@ -10118,7 +10157,7 @@ var Carousel = function ($, w, undefined) {
             var direction = $(e.currentTarget).data('direction'),
                 currentPos = o.$itemsWrap.offset().left;
 
-            // console.log(direction);
+            console.log(direction);
 
             e.preventDefault();
 
@@ -10222,6 +10261,140 @@ var heroSizer = function heroSizer() {
 
 exports.default = heroSizer;
 
-},{}]},{},[2]);
+},{}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var panelControl = function ($, w, undefined) {
+	var $triggers, $infoWindows, $phoneScreens;
+
+	var init = function init() {
+		$triggers = $('button.information__itemLink');
+		$infoWindows = $('.information__item');
+		$phoneScreens = $('.information__phoneScreen');
+
+		$triggers.on('click', switchInfo);
+	};
+
+	var switchInfo = function switchInfo(e) {
+		var target = $(e.currentTarget).data('target');
+
+		$infoWindows.filter('.show').removeClass('show');
+		$infoWindows.filter('[data-item="' + target + '"]').addClass('show');
+
+		$phoneScreens.filter('.visible').removeClass('visible');
+		$phoneScreens.filter('[data-item="' + target + '"]').addClass('visible');
+	};
+
+	return {
+		init: init
+	};
+}(_jquery2.default, window);
+
+exports.default = panelControl;
+
+},{"jquery":1}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var menuControl = function ($, w, undefined) {
+
+	var init = function init() {
+		$('.navigation__btnWrap').on('click', 'button', scrollPage);
+	};
+
+	var scrollPage = function scrollPage(e) {
+		var target = $(e.currentTarget).data('target');
+
+		e.preventDefault();
+		$('html,body').animate({
+			scrollTop: $(target).offset().top
+		}, 600);
+	};
+
+	return {
+		init: init
+	};
+}(_jquery2.default, window);
+
+exports.default = menuControl;
+
+},{"jquery":1}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var infoSlides = function ($, w, undefined) {
+	var $triggers;
+	var $infoWindows;
+	var $windowsHolder;
+	var $infoCloseBtns;
+
+	var init = function init() {
+		$triggers = $('.powerupsCarousel__itemButton');
+		$infoWindows = $('.powerupsInfo__item');
+		$windowsHolder = $('.powerupsInfo');
+		$infoCloseBtns = $('.powerupsInfo__closeBtn');
+
+		$triggers.on('click', showInfo);
+		$infoCloseBtns.on('click', closeInfo);
+	};
+
+	var showInfo = function showInfo(e) {
+		var powerupID;
+
+		e.preventDefault();
+
+		powerupID = $(e.currentTarget).data('id');
+
+		$windowsHolder.addClass('show');
+		$infoWindows.filter('[data-id="' + powerupID + '"]').addClass('show');
+	};
+
+	var closeInfo = function closeInfo(e) {
+		var powerupID;
+
+		e.preventDefault();
+
+		powerupID = $(e.currentTarget).data('id');
+
+		$windowsHolder.removeClass('show');
+		$infoWindows.filter('[data-id="' + powerupID + '"]').removeClass('show');
+	};
+
+	return {
+		init: init
+	};
+}(_jquery2.default, window);
+
+exports.default = infoSlides;
+
+},{"jquery":1}]},{},[2]);
 
 //# sourceMappingURL=lander.js.map

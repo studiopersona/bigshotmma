@@ -65,6 +65,7 @@ h3.information__header {
 	margin-left: -0.5rem;
 	cursor: pointer;
 	transition: color 0.3s ease;
+	outline: none;
 
 	&:hover {
 		color: $color-white;

@@ -56,10 +56,10 @@
 			<div class="col-xs-50 col-xs-offset-5">
 				<div class="information__phoneTemplateWrap">
 					<div class="information__phoneScreenWrap">
-						<div class="information__phoneScreen information__phoneScreen--howToPlay visible"></div>
-						<div class="information__phoneScreen information__phoneScreen--powerUps"></div>
-						<div class="information__phoneScreen information__phoneScreen--contestFormats"></div>
-						<div class="information__phoneScreen information__phoneScreen--legal"></div>
+						<div class="information__phoneScreen information__phoneScreen--howToPlay visible" data-item="how-to-play"></div>
+						<div class="information__phoneScreen information__phoneScreen--powerUps" data-item="power-ups"></div>
+						<div class="information__phoneScreen information__phoneScreen--contestFormats" data-item="contest-formats"></div>
+						<div class="information__phoneScreen information__phoneScreen--legal" data-item="legal"></div>
 					</div>
 				</div>
 			</div>

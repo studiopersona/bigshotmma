@@ -28,7 +28,7 @@ var Carousel = (function($, w, undefined) {
         if ( numberOfItems < o.itemsPerFrame ) o.itemsPerFrame = numberOfItems;
         itemWidth = ( (o.$carouselHolder.outerWidth() / o.itemsPerFrame) - o.marginSize ) + ( o.marginSize /(o.itemsPerFrame + 1 ) );
         itemsWrapWidth = Math.ceil((itemWidth * numberOfItems) + (( numberOfItems -1 ) * o.marginSize));
-        console.log(o.$itemsWrap);
+        // console.log(o.$itemsWrap);
         o.$itemsWrap.width(  itemsWrapWidth + 'px');
         o.$items.each(function(i, el) {
             $(this).outerWidth( itemWidth + 'px');
@@ -41,7 +41,8 @@ var Carousel = (function($, w, undefined) {
 
         $leftBtn = o.$navBtnsWrap.filter('[data-direction="forward"]');
         $rightBtn = o.$navBtnsWrap.filter('[data-direction="backward"]');
-
+        // console.log($leftBtn);
+        // console.log($rightBtn);
         // if all the items fit in one frame hide the navigation buttons
         if ( numberOfItems <= o.itemsPerFrame ) {
             o.$navBtnsWrap.addClass('navBtn--hide');
@@ -51,7 +52,7 @@ var Carousel = (function($, w, undefined) {
             var direction = $(e.currentTarget).data('direction'),
                 currentPos = o.$itemsWrap.offset().left;
 
-           	// console.log(direction);
+           	console.log(direction);
 
             e.preventDefault();
 

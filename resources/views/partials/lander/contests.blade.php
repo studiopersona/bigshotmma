@@ -1,4 +1,4 @@
-<section class="contests">
+<section id="contests" class="contests">
 	<div class="content-container">
 		<h2 class="contests__header">Contests</h2>
 		<p>Compete for real cash in our fantasy MMA contests which offer a variety of formats and entry fees for players of all skill levels:</p>

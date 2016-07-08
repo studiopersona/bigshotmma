@@ -2,7 +2,7 @@
 	<div class="content-container">
 		<h1 class="powerUps__header">Apply Power Ups with Caution</h1>
 		<button class="carousel-nav" data-direction="forward"><span class="sr-only">Forward</span></button>
-	    <button class="carousel-nav disabled" disabled data-direction="backward"><span class="sr-only">Backward</span></button>
+	    <button class="carousel-nav disabled" data-direction="backward"><span class="sr-only">Backward</span></button>
 	    <div id="powerupsCarousel" class="carousel__holder">
 	        <div class="carousel__wrap">
 	            @foreach ($powerUps as $powerUp)
@@ -18,7 +18,7 @@
 		<a href="{{ url('/') }}" class="btn btn--black btn--semiround">Start Playing</a>
 	    <div class="powerupsInfo">
 	    	@foreach ($powerUps as $powerUp)
-	    		<div class="powerupsInfo__item">
+	    		<div class="powerupsInfo__item" data-id="{{ $powerUp['id'] }}">
 	            	<h5 class="powerupsInfo__itemTitle" style="color:{{ $powerUp['power_up_color'] }}">{{ $powerUp['power_up_name'] }}</h5>
 	    			<img class="powerupsInfo__itemImage" src="{{ asset('public/image/powerups/'.$powerUp['power_up_image_name']) }}">
 	    			<p class="powerupsInfo__description">{{ $powerUp['power_up_description'] }}</p>
