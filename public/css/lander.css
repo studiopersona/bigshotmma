@@ -4810,8 +4810,12 @@ a.information__itemLink {
   margin-bottom: 0.25em; }
 
 .powerupsInfo__description {
-  font-size: 2.441rem;
+  font-size: 1.953rem;
   margin-top: 0.5em; }
+
+.powerUpInfo__points {
+  font-size: 3.052rem;
+  margin-bottom: 2.4rem; }
 
 .carousel-nav {
   position: absolute;
