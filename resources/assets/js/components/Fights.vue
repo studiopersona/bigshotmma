@@ -28,7 +28,7 @@
                                         :src="'public/image/powerups/' + fightData[fight.id].powerupImage"
                                         data-fighter-id="{{ fight.fighters[0].id }}"
                                         data-fight-id="{{ fight.id }}"
-                                        @click="removePowerUp(fight.id, $event)"
+                                        @click="confirmRemovePowerUp(fight.id, $event)"
                                     >
                                     <button @click="clearFight(fight.id, fight.fighters[0].id, $event)"
                                             type="button"
@@ -96,7 +96,7 @@
                                         :src="'public/image/powerups/' + fightData[fight.id].powerupImage"
                                         data-fighter-id="{{ fight.fighters[1].id }}"
                                         data-fight-id="{{ fight.id }}"
-                                        @click="removePowerUp(fight.id, $event)"
+                                        @click="confirmRemovePowerUp(fight.id, $event)"
                                     >
                                     <button @click="clearFight(fight.id, fight.fighters[1].id, $event)"
                                             type="button"
@@ -246,6 +246,24 @@
             </div>
             <button @click="powerUpModalClose" type="button" class="powerUpModal__close">x</button>
         </section>
+        <section :class="powerUpRemoveModalClasses">
+            <h3 class="powerUpModal__title" :style="{color: selectedPowerUp.color}">{{ selectedPowerUp.title }}</h3>
+            <img class="powerUpModal__image" :src="'public/image/powerups/' + selectedPowerUp.image_name" alt="{{ selectedPowerUp.title }}">
+            <div class="powerUpModal__description">
+                {{{ selectedPowerUp.description }}}
+            </div>
+            <div class="powerUpModal__points" :style="{color: selectedPowerUp.color}">
+                +{{ selectedPowerUp.bonus_points }} points
+            </div>
+            <div class="powerUpModal__apply">
+                <p class="powerUpModal__apply--big">Remove this power up?</p>
+            </div>
+            <div class="powerUpModal__confirm">
+                <button @click="powerUpModalClose" class="powerUpModal__confirm--no">No</button>
+                <button @click="removePowerUp" class="powerUpModal__confirm--yes">Yes</button>
+            </div>
+            <button @click="powerUpModalClose" type="button" class="powerUpModal__close">x</button>
+        </section>
         <section :class="howToPlayModalClasses">
             <h3 class="howToPlayModal__title">How to Play</h3>
             <img class="howToPlayModal__image" :src="'public/image/logo.png'" alt="Blood Sport MMA">
@@ -298,6 +316,7 @@
                 finishes: {},
                 working: false,
                 powerUpModalClasses: ['powerUpModal'],
+                powerUpRemoveModalClasses: ['powerUpModal'],
                 alertNoticeClasses: ['alertNotice'],
                 howToPlayModalClasses: ['howToPlayModal'],
                 selectedPowerUp: {
@@ -503,6 +522,46 @@
                 }
             },
 
+            confirmRemovePowerUp(fightId, e) {
+                var newPowerUp;
+                e.preventDefault();
+
+                console.log('power up id:', this.fightData[fightId].powerupId);
+
+                this.powerUpId = this.fightData[fightId].powerupId;
+                newPowerUp = this.powerUps.find(this.findPowerUp);
+
+                this.selectedPowerUp.id = newPowerUp.power_up_id;
+                this.selectedPowerUp.fightId = e.target.dataset.fightId;
+                this.selectedPowerUp.title = newPowerUp.name;
+                this.selectedPowerUp.description = newPowerUp.description,
+                this.selectedPowerUp.image_name = newPowerUp.image_name;
+                this.selectedPowerUp.color = newPowerUp.color;
+                this.selectedPowerUp.bonus_points = newPowerUp.bonus_points;
+                this.selectedPowerUp.penalty_points = newPowerUp.penalty_points;
+
+                this.powerUpRemoveModalClasses.push('show');
+            },
+
+            removePowerUp(e) {
+                var powerupImageIndicator;
+
+                this.fightData[this.selectedPowerUp.fightId].powerupId = 0;
+                this.powerupImage = '';
+
+                // remove points indicator
+                document.querySelector('.fightsList__pick[data-fight-id="' + this.selectedPowerUp.fightId + '"] .fightsList__powerupPointsIndicator').classList.remove('show');
+
+                // remove the show class form powerup images
+                powerupImageIndicator = document.querySelectorAll('img.fightsList__powerup[data-fight-id="' + this.selectedPowerUp.fightId + '"]');
+                for (var i = 0; i < powerupImageIndicator.length; ++i) {
+                    powerupImageIndicator[i].classList.remove('show');
+                };
+
+                this.totalPowerUps--;
+                this.powerUpModalClose(e);
+            },
+
             findPowerUp(powerUp) {
                 return powerUp.power_up_id === parseInt(this.powerUpId, 10);
             },
@@ -511,24 +570,7 @@
                 e.preventDefault();
 
                 this.powerUpModalClasses = ['powerUpModal'];
-            },
-
-            removePowerUp(fightId, e) {
-                var powerupImageIndicator;
-
-                this.fightData[fightId].powerupId = 0;
-                this.powerupImage = '';
-
-                // remove points indicator
-                document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__powerupPointsIndicator').classList.remove('show');
-
-                // remove the show class form powerup images
-                powerupImageIndicator = document.querySelectorAll('img.fightsList__powerup[data-fight-id="' + fightId + '"]');
-                for (var i = 0; i < powerupImageIndicator.length; ++i) {
-                    powerupImageIndicator[i].classList.remove('show');
-                };
-
-                this.totalPowerUps--;
+                this.powerUpRemoveModalClasses = ['powerUpModal'];
             },
 
             removeShowOnButtons(buttons) {

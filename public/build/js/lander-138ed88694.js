@@ -10130,7 +10130,7 @@ window.onload = function () {
 		_powerupInfo2.default.init();
 	}
 
-	if (document.querySelector('#information')) {
+	if (document.getElementById('information')) {
 		_infoPanels2.default.init();
 	}
 };

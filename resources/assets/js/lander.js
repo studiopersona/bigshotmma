@@ -32,7 +32,7 @@ window.onload = function() {
 		powerupSlides.init()
 	}
 
-	if (document.querySelector('#information')) {
+	if (document.getElementById('information')) {
 		infoPanels.init()
 	}
 };
