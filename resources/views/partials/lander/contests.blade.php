@@ -45,6 +45,9 @@
 											<span class="contests__tableTitle">Fee: </span>
 											<span class="contests__tableFee">${{ $contest['entry_fee'] }}</span>
 										</td>
+										<td>
+											<a href="{{ url('/') }}" class="btn btn--green btn--round">Enter</a>
+										</td>
 									</tr>
 								@endforeach
 							@endif
