@@ -311,7 +311,7 @@
 
                 years[0] = thisYear = now.getFullYear()
 
-                for ( var i=1 i < 10 ++i ) {
+                for ( var i=1; i < 10; ++i ) {
                     now.setFullYear(thisYear + i)
                     years[i] = now.getFullYear()
                 }
@@ -322,7 +322,7 @@
             removeAmountIndicators() {
                 var deferred = D()
 
-                for (var i=0 i < this.amountIndicators.length ++i) {
+                for (var i=0; i < this.amountIndicators.length; ++i) {
                     this.amountIndicators.$set(i, 0)
                 }
 
