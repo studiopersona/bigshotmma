@@ -870,6 +870,7 @@
                         for ( var i = 0; i < powerupIndicators.length; ++i) {
                             powerupIndicators[i].classList.remove('show')
                         }
+                        this.powerupIndicatorsClasses.$set(this.totalPowerUps, ['powerupIndicators'])
                     }
                     // delete the pick
                     this.playerPicks.splice(parseInt(pickDataIndex, 10), 1)
@@ -901,8 +902,8 @@
                     document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] span.fightsList__minutePointsIndicator').classList.remove('show')
                     document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] span.fightsList__powerupPointsIndicator').classList.remove('show')
 
-                    this.currentFightId = ''
-                    this.currentFighterId = ''
+                    // this.currentFightId = ''
+                    // this.currentFighterId = ''
 
                     // remove fighter indicators image
                     // cycle through the current set of elements and save the style attributes
@@ -930,6 +931,9 @@
                             fighterIndicator.removeAttribute('data-fight-id')
                         }
                     }
+
+                    // remove power up indicators if any associated
+
                 }
 
             },
