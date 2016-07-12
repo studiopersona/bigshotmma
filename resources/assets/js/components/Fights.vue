@@ -11,11 +11,11 @@
                     </h4>
                 </div>
                 <div class="col-xs-60">
-                    <span @click="scrollToFight" id="fi0" class="fighterIndicators"></span>
-                    <span @click="scrollToFight" id="fi1" class="fighterIndicators"></span>
-                    <span @click="scrollToFight" id="fi2" class="fighterIndicators"></span>
-                    <span @click="scrollToFight" id="fi3" class="fighterIndicators"></span>
-                    <span @click="scrollToFight" id="fi4" class="fighterIndicators"></span>
+                    <span @click="switchFight" id="fi0" class="fighterIndicators"></span>
+                    <span @click="switchFight" id="fi1" class="fighterIndicators"></span>
+                    <span @click="switchFight" id="fi2" class="fighterIndicators"></span>
+                    <span @click="switchFight" id="fi3" class="fighterIndicators"></span>
+                    <span @click="switchFight" id="fi4" class="fighterIndicators"></span>
                 </div>
             </div>
         </header>
@@ -798,15 +798,27 @@
 
             switchFight(e) {
                 var fightToClose,
-                    fightToOpen
+                    fightToOpen,
+                    target,
+                    position
 
-                fightToClose = document.querySelector('div.fightsList__pick[data-fight-id="' + this.currentFightId + '"]')
-                if ( fightToClose ) fightToClose.classList.toggle('closed')
+                if ( e.target.hasAttribute('data-fight-id') ) {
 
-                fightToOpen = document.querySelector('div.fightsList__pick[data-fight-id="' + e.target.dataset.fightId + '"]')
-                fightToOpen.classList.toggle('closed')
-                // update currentFightId
-                this.currentFightId = e.target.dataset.fightId
+                    fightToClose = document.querySelector('div.fightsList__pick[data-fight-id="' + this.currentFightId + '"]')
+                    if ( fightToClose ) fightToClose.classList.toggle('closed')
+
+                    fightToOpen = document.querySelector('div.fightsList__pick[data-fight-id="' + e.target.dataset.fightId + '"]')
+                    fightToOpen.classList.toggle('closed')
+                    // update currentFightId
+                    this.currentFightId = e.target.dataset.fightId
+
+                    setTimeout(function() {
+                        target = document.querySelector('.fightsList__fightersWrap[data-fight-id="' + e.target.dataset.fightId + '"]')
+                        position = target.getBoundingClientRect().top + window.scrollY - 110
+                        animatedScrollTo(document.body, position, 300)
+                    }, 300)
+
+                }
             },
 
             closeFight(fightId) {
@@ -1083,15 +1095,6 @@
                 e.preventDefault()
 
                 this.alertNoticeClasses = ['alertNotice']
-            },
-
-            scrollToFight(e) {
-                var target,
-                    position
-
-                target = document.querySelector('.fightsList__fightersWrap[data-fight-id="' + e.target.dataset.fightId + '"]')
-                position = target.getBoundingClientRect().top + window.scrollY - 110
-                animatedScrollTo(document.body, position, 300)
             },
 
             getPosition(el) {
