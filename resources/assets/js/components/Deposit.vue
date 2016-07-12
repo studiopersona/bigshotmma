@@ -246,7 +246,6 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
-                depositToken:
             }
         },
 
