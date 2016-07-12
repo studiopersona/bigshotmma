@@ -24,6 +24,16 @@
 	margin-bottom: 2rem;
 }
 
+.pageHeader__subheader-toLeft {
+	text-align: left;
+	padding-left: 0.5rem;
+}
+
+.pageHeader__subheader-uppercase {
+	text-transform: uppercase;
+	font-size: 1.05rem;
+}
+
 .pageHeader__icon {
 	height: 1.45rem;
 	vertical-align: middle;
@@ -64,4 +74,25 @@
 .appHeader__backBtn {
 	float: left;
 	margin-left: 0.5rem
+}
+
+// Header Indicators ---------------------
+.fighterIndicators {
+	width: 28px;
+	height: 28px;
+	background: url('../../image/fighter-blank.png') left top/cover no-repeat;
+	display: inline-block;
+}
+
+.powerupIndicators {
+	width: 11px;
+	height: 10px;
+	background: url('../../image/powerup-star.png') left top/cover no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: -2px;
+
+	&.active {
+		background-position: left bottom;
+	}
 }
