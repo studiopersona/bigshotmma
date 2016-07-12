@@ -182,10 +182,11 @@
 </template>
 
 <script>
-    import auth from '../auth';
-    import {router} from '../index';
-    import D from '../libs/d.js';
-    import localforage from 'localforage';
+    import auth from '../auth'
+    import {router} from '../index'
+    import D from '../libs/d.js'
+    import localforage from 'localforage'
+    import ccProcess from '../cc-process'
 
     export default {
 
@@ -245,47 +246,48 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
+                depositToken:
             }
         },
 
         created() {
-            this.working = true;
+            this.working = true
         },
 
         ready() {
             var vm = this,
-                params;
+                params
 
             localforage.getItem('id_token').then(function(token) {
                 if ( token ) {
-                    params = auth.parseToken(token);
+                    params = auth.parseToken(token)
                     if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
-                        vm.fetch(token);
+                        vm.fetch(token)
                     } else {
-                        vm.tokenRefresh(token);
+                        vm.tokenRefresh(token)
                     }
                 } else {
-                    router.go('login');
+                    router.go('login')
                 }
             })
             .catch(function(err) {
-                console.log(err);
-            });
+                console.log(err)
+            })
         },
 
         methods: {
             tokenRefresh(token) {
-                var vm = this;
+                var vm = this
 
                 this.$http.post(URL.base + '/api/v1/refresh', {}, {
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     localforage.setItem('id_token', response.data.token).then(function() {
-                        vm.fetch(token);
-                    });
+                        vm.fetch(token)
+                    })
                 }, function(err) {
-                    router.go('login');
-                });
+                    router.go('login')
+                })
             },
 
             fetch(token) {
@@ -293,102 +295,110 @@
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    console.log(response);
-                    this.player = response.data.profile;
-                    this.working = false;
+                    console.log(response)
+                    this.player = response.data.profile
+                    this.working = false
                 }, function(err) {
-                    console.log(err);
-                    this.working = false;
-                });
-                this.expirationYears();
+                    console.log(err)
+                    this.working = false
+                })
+                this.expirationYears()
             },
 
             expirationYears() {
                 var thisYear,
                     years = [],
-                    now = new Date();
+                    now = new Date()
 
-                years[0] = thisYear = now.getFullYear();
+                years[0] = thisYear = now.getFullYear()
 
-                for ( var i=1; i < 10; ++i ) {
+                for ( var i=1 i < 10 ++i ) {
                     now.setFullYear(thisYear + i)
-                    years[i] = now.getFullYear();
+                    years[i] = now.getFullYear()
                 }
 
-                this.expYears = years;
+                this.expYears = years
             },
 
             removeAmountIndicators() {
-                var deferred = D();
+                var deferred = D()
 
-                for (var i=0; i < this.amountIndicators.length; ++i) {
-                    this.amountIndicators.$set(i, 0);
+                for (var i=0 i < this.amountIndicators.length ++i) {
+                    this.amountIndicators.$set(i, 0)
                 }
 
-                deferred.resolve();
+                deferred.resolve()
 
-                return deferred.promise;
+                return deferred.promise
             },
 
             selectAmount(index, amount, e) {
-                this.amountIndicators.$set(0, 0);
-                this.amountIndicators.$set(1, 0);
-                this.amountIndicators.$set(2, 0);
-                this.amountIndicators.$set(3, 0);
-                this.amountIndicators.$set(4, 0);
+                this.amountIndicators.$set(0, 0)
+                this.amountIndicators.$set(1, 0)
+                this.amountIndicators.$set(2, 0)
+                this.amountIndicators.$set(3, 0)
+                this.amountIndicators.$set(4, 0)
 
-                this.amountIndicators.$set(index, 1);
+                this.amountIndicators.$set(index, 1)
 
-                this.deposit.amount.dollars = amount;
+                this.deposit.amount.dollars = amount
             },
 
             makeDeposit() {
                 var data = {
                         amount: this.depositTotal,
                     },
-                    vm = this;
+                    vm = this
 
-                this.working = true;
+                this.working = true
 
                 // if player would like to save payment info
                 if ( this.persist.paypal ) {
-                    data.persist = true;
+                    data.persist = true
                     data.paypal = this.player.paypalEmail
-                };
+                }
+
+                // initialize the ccProcess module ccProcess.init()
+
+                // do input validation here send it "data" ccProcess.validate()
+                // if passes then get token from stripe ccProcess.getToken()
+                //      add stripe token to data
+                //      send request to server to make actual charge
+                // if fails display the errors and allow user to re-submit
 
                 localforage.getItem('id_token').then(function(token) {
                     vm.$http.post(URL.base + '/api/v1/deposit', data, {
                         // Attach the JWT header
                         headers: { 'Authorization' : 'Bearer ' + token }
                     }).then(function(response) {
-                        vm.flash(response.data);
-                        vm.working = false;
+                        vm.flash(response.data)
+                        vm.working = false
                     }, function(err) {
-                        console.log(err);
-                        vm.working = false;
-                    });
-                });
+                        console.log(err)
+                        vm.working = false
+                    })
+                })
             },
 
             flash(response) {
-                this.alert.body = response.msg;
-                this.alert.show = true;
+                this.alert.body = response.msg
+                this.alert.show = true
 
-                this.alert.class = ( response.success ) ? 'syncAlert--success' : 'syncAlert--failed';
+                this.alert.class = ( response.success ) ? 'syncAlert--success' : 'syncAlert--failed'
             },
 
             alertClose(e) {
-                this.alert.show = false;
+                this.alert.show = false
             },
         },
 
         computed: {
             loaderClasses() {
-                return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
+                return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden'
             },
             depositTotal() {
-                return (this.deposit.amount.dollars * 100) + this.deposit.amount.cents;
+                return (this.deposit.amount.dollars * 100) + this.deposit.amount.cents
             },
         },
-    };
+    }
 </script>

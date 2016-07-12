@@ -14,19 +14,23 @@ use Bsmma\divStrong\Transformers\ProfileTransformer as ProfileTransformer;
 use Bsmma\Http\Requests\ProfileRequest;
 use Bsmma\Http\Requests\DepositProfileRequest;
 
+use Bsmma\divStrong\Merchants\StripeMerchant;
+
 class UsersController extends ApiController
 {
     public function __construct(
         User $user,
         ProfileTransformer $profileTransformer,
         UserBalance $userBalance,
-        PaypalEmail $paypalEmail
+        PaypalEmail $paypalEmail,
+        StripeMerchant $stripe,
     )
     {
     	$this->user = $user;
         $this->userBalance = $userBalance;
         $this->paypalEmail = $paypalEmail;
     	$this->profileTransformer = $profileTransformer;
+        $this->stripe = $stripe;
     }
 
     public function getPlayerName()
@@ -158,15 +162,27 @@ class UsersController extends ApiController
         $userBalance->transaction_type_id = 4;
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        if ( $request->persist ) $this->saveBillingInfo($request, $user->id);
+        $this->stripe->setData($request->input(), $userInfo);
 
-        return ($userBalance->save()) ? $this->respond([
-            'success' => true,
-            'msg' => 'Your deposit was successfully processed',
-        ]) : $this->respond([
-            'success' => false,
-            'msg' => 'There was a problem processing your deposit'
-        ]);
+        $chargeReponse = $this->stripe->charge();
+
+        if ( ! $chargeResponse['failed'] ) {
+            $userBalance = new $this->userBalance;
+            $userBalance->user_id = $user->id;
+            $userBalance->amount = $request->amount - 35;
+            $userBalance->is_credit = 1;
+            $userBalance->transaction_type_id = 4;
+
+            if ( $request->persist ) $this->saveBillingInfo($request, $user->id);
+
+            return ($userBalance->save()) ? $this->respond([
+                'success' => true,
+                'msg' => 'Your deposit was successfully processed',
+            ]) : $this->respond([
+                'success' => false,
+                'msg' => 'There was a problem recording your deposit'
+            ]);
+        }
     }
 
     private function saveBillingInfo($request, $userId)

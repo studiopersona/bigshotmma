@@ -73,15 +73,11 @@ class StripeMerchant implements MerchantContract {
 
 	public function setData(array $input, $invoice, array $settings)
 	{
-		$this->api_key = $settings['access_token'];
+		$this->api_key = env('STRIPE_SECRET');
 
 		$this->data = [
 			'stripeToken'    => $input['stripeToken'],
-			'amount'         => $invoice->total,
-			'currency_code'  => $currency->code,
-			'invoice_number' => $invoice->number,
-			'client_company' => $invoice->client->company,
-			'stripe_account' =>	$settings['stripe_user_id']
+			'amount'         => $invoice->amount,
 		];
 	}
 }
