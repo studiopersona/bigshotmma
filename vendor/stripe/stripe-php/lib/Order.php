@@ -27,6 +27,18 @@ class Order extends ApiResource
     }
 
     /**
+     * @param string $id The ID of the order to update.
+     * @param array|null $params
+     * @param array|string|null $options
+     *
+     * @return Order The updated order.
+     */
+    public static function update($id, $params = null, $options = null)
+    {
+        return self::_update($id, $params, $options);
+    }
+
+    /**
      * @param array|string|null $opts
      *
      * @return Order The saved Order.
@@ -56,5 +68,15 @@ class Order extends ApiResource
         list($response, $opts) = $this->_request('post', $url, $params, $opts);
         $this->refreshFrom($response, $opts);
         return $this;
+    }
+
+    /**
+     * @return OrderReturn The newly created return.
+     */
+    public function returnOrder($params = null, $opts = null)
+    {
+        $url = $this->instanceUrl() . '/returns';
+        list($response, $opts) = $this->_request('post', $url, $params, $opts);
+        return Util\Util::convertToStripeObject($response, $opts);
     }
 }

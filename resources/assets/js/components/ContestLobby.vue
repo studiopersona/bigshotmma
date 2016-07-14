@@ -398,20 +398,61 @@
             },
 
             confirmEnter(e) {
-                if ( this.playersBalance >= parseInt(this.participantsList[0].contest.buy_in, 10) ) {
-                    this.confirmModalContent.action = 'enter';
-                    this.confirmModalContent.title = 'Enter Contest';
-                    this.confirmModalContent.image = URL.base + '/public/image/events/' + this.participantsList[0].contest.event_image;
-                    this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + '<br>' + this.participantsList[0].contest.total_participants + ' / ' + this.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
+                var vm = this,
+                    params,
+                    playersBalance
+                // get the players balance from the server
+                var fetch = function(token) {
+                    vm.$http.get( URL.base + '/api/v1/player-balance', {}, {
+                        // Attach the JWT header
+                        headers: { 'Authorization' : 'Bearer ' + token }
+                    }).then(
+                        function(response) {
+                            playersBalance = response.data.playerBalance;
+                            vm.$root.playersBalance = response.data.playerBalance;
+                            if ( playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10) ) {
+                                vm.confirmModalContent.action = 'enter';
+                                vm.confirmModalContent.title = 'Enter Contest';
+                                vm.confirmModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
+                                vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
 
-                    this.confirmModalClassList.add('show');
-                } else {
-                    this.fundsModalContent.title = 'Insufficent Funds';
-                    this.fundsModalContent.image = URL.base + '/public/image/events/' + this.participantsList[0].contest.event_image;
-                    this.fundsModalContent.body = '<p>Your current balance is <span class="highlight">$' + this.playersBalance + '</span> you need a minimum balance of <span class="highlight">$' + this.participantsList[0].contest.buy_in + '</span> in order to enter this contest.';
+                                vm.confirmModalClassList.add('show');
+                            } else {
+                                vm.fundsModalContent.title = 'Insufficent Funds';
+                                vm.fundsModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
+                                vm.fundsModalContent.body = '<p>Your current balance is <span class="highlight">$' + vm.playersBalance + '</span> you need a minimum balance of <span class="highlight">$' + vm.participantsList[0].contest.buy_in + '</span> in order to enter this contest.';
 
-                    this.fundsModalClasses.push('show');
+                                vm.fundsModalClasses.push('show');
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                    });
                 }
+                // get token and re-query server to get players true balance (protect against client side changes to balance total)
+                localforage.getItem('id_token').then(function(token) {
+                    if ( token ) {
+                        params = auth.parseToken(token);
+                        if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
+                            fetch(token);
+                        } else {
+                            vm.$http.post(URL.base + '/api/v1/refresh', {}, {
+                                headers: { 'Authorization' : 'Bearer ' + token }
+                            }).then(function(response) {
+                                localforage.setItem('id_token', response.data.token).then(function() {
+                                    fetch(token);
+                                });
+                            }, function(err) {
+                                router.go('login');
+                            });
+                        }
+                    } else {
+                        router.go('login');
+                    }
+                })
+                .catch(function(err) {
+                    console.log(err);
+                });
             },
 
             confirmModalClose(e) {

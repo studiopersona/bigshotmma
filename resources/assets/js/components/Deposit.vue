@@ -137,7 +137,7 @@
                     </div>
                     <div class="profile__inputWrap form__row container-fluid">
                         <label for="storeCC">
-                            <input v-model="persist.cc" type="checkbox" value="1" id="storeCC"> <span class="checkboxText">Please store this information for future use.</span>
+                            <input v-model="customerState.addCustomer" type="checkbox" value="1" id="storeCC"> <span class="checkboxText">Please store this information for future use.</span>
                         </label>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
                 </div>
                 <div class="profile__inputWrap form__row container-fluid">
                     <label for="storePP">
-                        <input v-model="persist.paypal" type="checkbox" value="1" id="storePP"> <span class="checkboxText">Please store this information for future use.</span>
+                        <input v-model="persistPaypal" type="checkbox" value="1" id="storePP"> <span class="checkboxText">Please store this information for future use.</span>
                     </label>
                 </div>
             </div>
@@ -160,25 +160,26 @@
                 <div class="col-xs-100 button-wrap">
                 <div class="deposit__explanation">(Includes a $0.35 Transaction Fee)</div>
                     <button
+                        id="depositBtn"
                         type="button"
                         class="button button--primary"
                         @click="makeDeposit"
                     >Deposit</button>
                 </div>
             </div>
-            <div :class="loaderClasses">
-                <div class="js-global-loader loader">
-                    <svg viewBox="0 0 32 32" width="32" height="32">
-                        <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
-                    </svg>
-                </div>
+        </div>
+        <div :class="loaderClasses">
+            <div class="js-global-loader loader">
+                <svg viewBox="0 0 32 32" width="32" height="32">
+                    <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
+                </svg>
             </div>
         </div>
+            <section :class="['syncAlert', alert.show ? 'show' : '']">
+            <p :class="['syncAlert__body', alert.class]">{{ alert.body }}</p>
+            <button @click="alertClose" type="button" class="alertModal__close">x</button>
+        </section>
     </div>
-    <section :class="['syncAlert', alert.show ? 'show' : '']">
-        <p :class="['syncAlert__body', alert.class]">{{ alert.body }}</p>
-        <button @click="alertClose" type="button" class="alertModal__close">x</button>
-    </section>
 </template>
 
 <script>
@@ -186,7 +187,6 @@
     import {router} from '../index'
     import D from '../libs/d.js'
     import localforage from 'localforage'
-    import ccProcess from '../cc-process'
 
     export default {
 
@@ -215,17 +215,31 @@
                         cents: 35,
                         total: this.depositTotal,
                     },
+                    fee: 35,
                 },
                 cardInfo: {
+                    name: '',
                     number: '',
                     expMonth: 0,
                     expYear: 0,
                     cvv: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    zipcode: '',
+                    firstname: '',
+                    lastname: ''
                 },
                 paypalEmail: '',
-                persist: {
-                    cc: false,
-                    paypal: false,
+                persistPaypal: false,
+                customerState: {
+                    isCustomer: this.isCurrentCustomer,
+                    addCustomer: false,
+                    removeCustomer: false,
+                    currentCustomer: {
+                        newCard: false,
+                        saveNewCard: false,
+                    },
                 },
                 expYears: [],
                 amountIndicators: [
@@ -255,7 +269,9 @@
 
         ready() {
             var vm = this,
-                params
+                params,
+                head,
+                script
 
             localforage.getItem('id_token').then(function(token) {
                 if ( token ) {
@@ -294,8 +310,14 @@
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    console.log(response)
+                    console.log(response.data.profile)
                     this.player = response.data.profile
+                    this.cardInfo.address = response.data.profile.address
+                    this.cardInfo.city = response.data.profile.city
+                    this.cardInfo.state = response.data.profile.state
+                    this.cardInfo.zipcode = response.data.profile.zipcode
+                    this.cardInfo.firstname = response.data.profile.firstname
+                    this.cardInfo.lastname = response.data.profile.lastname
                     this.working = false
                 }, function(err) {
                     console.log(err)
@@ -346,24 +368,35 @@
             makeDeposit() {
                 var data = {
                         amount: this.depositTotal,
+                        fee: this.deposit.fee,
+                        deposit: this.depositTotal - this.deposit.fee,
+                        card: this.cardInfo,
+                        merchantId: parseInt(this.player.merchant, 10),
+                        customerState: this.customerState,
+                        paypalEmail: this.paypalEmail,
+                        persistPaypal: this.persistPaypal,
                     },
                     vm = this
+                    depositBtn = document.getElementById('depositBtn')
 
                 this.working = true
 
+                // disable the deposit button
+                depositBtn.setAttribute('disabled', true)
+
+                // if there is a player stripeId
+                if ( this.player.stripeId !== 0 ) data.currentCustomer = true
+
                 // if player would like to save payment info
+                if ( this.persist.cc ) {
+                    data.persist = true
+                    data.ccPersist = true
+                }
+
                 if ( this.persist.paypal ) {
                     data.persist = true
                     data.paypal = this.player.paypalEmail
                 }
-
-                // initialize the ccProcess module ccProcess.init()
-
-                // do input validation here send it "data" ccProcess.validate()
-                // if passes then get token from stripe ccProcess.getToken()
-                //      add stripe token to data
-                //      send request to server to make actual charge
-                // if fails display the errors and allow user to re-submit
 
                 localforage.getItem('id_token').then(function(token) {
                     vm.$http.post(URL.base + '/api/v1/deposit', data, {
@@ -371,6 +404,10 @@
                         headers: { 'Authorization' : 'Bearer ' + token }
                     }).then(function(response) {
                         vm.flash(response.data)
+                        // re-enable the deposit button
+                        depositBtn.removeAttribute('disabled')
+                        // Update players balance display
+                        if (response.data.success) vm.$root.playersBalance = vm.$root.playersBalance + this.deposit.amount.dollars
                         vm.working = false
                     }, function(err) {
                         console.log(err)
@@ -380,8 +417,11 @@
             },
 
             flash(response) {
-                this.alert.body = response.msg
+                this.alert.body = response.msg || response.error.message
                 this.alert.show = true
+
+                console.log('reponse', response)
+                console.log('alert body', this.alert.body)
 
                 this.alert.class = ( response.success ) ? 'syncAlert--success' : 'syncAlert--failed'
             },
@@ -397,6 +437,9 @@
             },
             depositTotal() {
                 return (this.deposit.amount.dollars * 100) + this.deposit.amount.cents
+            },
+            isCurrentCustomer() {
+                return (this.player.stripeId !== 0)
             },
         },
     }

@@ -6,31 +6,36 @@ use Illuminate\Http\Request;
 use Auth;
 
 use Bsmma\Http\Requests;
+use Illuminate\Support\Facades\DB;
 
 use Bsmma\User;
 use Bsmma\UserBalance;
 use Bsmma\PaypalEmail;
+use Bsmma\MerchantTransaction;
+use Bsmma\CreditCardType;
 use Bsmma\divStrong\Transformers\ProfileTransformer as ProfileTransformer;
 use Bsmma\Http\Requests\ProfileRequest;
 use Bsmma\Http\Requests\DepositProfileRequest;
 
-use Bsmma\divStrong\Merchants\StripeMerchant;
-
 class UsersController extends ApiController
 {
+    private $stripe;
+
     public function __construct(
         User $user,
         ProfileTransformer $profileTransformer,
         UserBalance $userBalance,
         PaypalEmail $paypalEmail,
-        StripeMerchant $stripe,
+        MerchantTransaction $merchantTransaction,
+        CreditCardType $creditCardType
     )
     {
     	$this->user = $user;
         $this->userBalance = $userBalance;
         $this->paypalEmail = $paypalEmail;
     	$this->profileTransformer = $profileTransformer;
-        $this->stripe = $stripe;
+        $this->merchantTransaction = $merchantTransaction;
+        $this->creditCardType = $creditCardType;
     }
 
     public function getPlayerName()
@@ -147,47 +152,180 @@ class UsersController extends ApiController
         ]);
     }
 
+    public function getDepositToken(Request $request)
+    {
+
+    }
+
     public function makeDeposit(Request $request)
     {
         $user = \JWTAuth::parseToken()->authenticate();
 
-        $userInfo = $this->user->where('id', $user->id)
-                        ->first();
+        if ( $request->merchantId === 1 ) $outcome = $this->makeDepositWithStripe($user, $request);
 
-        // Beta code version !!!!!!!!!!!!!!
-        $userBalance = new $this->userBalance;
-        $userBalance->user_id = $user->id;
-        $userBalance->amount = $request->amount - 35;
-        $userBalance->is_credit = 1;
-        $userBalance->transaction_type_id = 4;
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if ( $request->merchantId === 2 ) $outcome = $this->makeDepositWithPayPal($user, $request);
 
-        $this->stripe->setData($request->input(), $userInfo);
-
-        $chargeReponse = $this->stripe->charge();
-
-        if ( ! $chargeResponse['failed'] ) {
-            $userBalance = new $this->userBalance;
-            $userBalance->user_id = $user->id;
-            $userBalance->amount = $request->amount - 35;
-            $userBalance->is_credit = 1;
-            $userBalance->transaction_type_id = 4;
-
-            if ( $request->persist ) $this->saveBillingInfo($request, $user->id);
-
-            return ($userBalance->save()) ? $this->respond([
-                'success' => true,
-                'msg' => 'Your deposit was successfully processed',
-            ]) : $this->respond([
-                'success' => false,
-                'msg' => 'There was a problem recording your deposit'
-            ]);
-        }
+        return ( $outcome['success'] ) ? $this->respond([
+            'success' => true,
+            'msg'     => 'Your deposit was successfully processed. Your transaction number is '.$outcome['transactionId'],
+        ]) : $this->respondWithError($outcome['msg']);
     }
 
-    private function saveBillingInfo($request, $userId)
+    private function makeDepositWithStripe($user, $request)
+    {
+        $userInfo = $this->user->with('stripeDetail')
+                        ->where('id', $user->id)
+                        ->first();
+
+        $this->stripe = new \Bsmma\divStrong\Merchants\StripeMerchant;
+
+        $cardInfo = [
+            'cardNumber' => $request->card['number'],
+            'expMonth'   => $request->card['expMonth'],
+            'expYear'    => $request->card['expYear'],
+            'cvc'        => $request->card['cvv'],
+            'address'    => $request->card['address'],
+            'city'       => $request->card['city'],
+            'state'      => $request->card['state'],
+            'zipcode'    => $request->card['zipcode'],
+        ];
+
+        // not a current customer and not creating customer OR current customer using new card not saving new card
+        if ( (! $request->customerState['isCustomer'] && ! $request->customerState['addCustomer']) || ($request->customerState['isCustomer'] && $request->customerState['currentCustomer']['newCard'] && ! $request->customerState['currentCustomer']['saveNewCard']) ) $chargeOutcome = $this->chargeCard($cardInfo, $request);
+
+        // not a current customer create new customer
+        if ( ! $request->customerState['isCustomer'] && $request->customerState['addCustomer'] ) $chargeOutcome = $this->createCustomerAndCharge($cardInfo, $userInfo, $request);
+
+        // current customer using stored card
+        if ( $request->customerState['isCustomer'] && ! $request->customerState['currentCustomer']['newCard'] ) $chargeOutcome = $this->chargeCustomer($userInfo, $request);
+
+        // current customer using new card saving new card
+        if ( $request->customerState['isCustomer'] && $request->customerState['currentCustomer']['newCard'] && $request->customerState['currentCustomer']['saveNewCard'] ) $chargeOutcome = $this->updateCustomerAndCharge($cardInfo, $userInfo, $request);
+
+        // current customer wants to use new card and stop storing
+        // if ( $request->customerState['isCustomer'] && $request->customerState['removeCustomer'] ) $chargeOutcome = $this->removeCustomerAndCharge($cardInfo, $userInfo);
+
+        if ( ! $chargeOutcome['success'] ) return $this->respondWithError($chargeOutcome['msg']);
+
+        DB::transaction(function() use ($chargeResponse, $userInfo, $user, $request) {
+            $balance = $this->userBalance->create([
+                'user_id'             => $user->id,
+                'transaction_type_id' => 4,
+                'amount'              => $request->deposit,
+            ]);
+
+            $this->merchantTransaction->create([
+                'merchant_id'      => $request->merchantId,
+                'user_balances_id' => $balance->id,
+            ]);
+
+            if ( $request->customerState['addCustomer'] ) $this->addStripeCustomer($chargeOutcome, $user);
+        });
+
+        return ['success' => true, 'transactionId' => $chargeOutcome['transactionId']];
+    }
+
+    private function makeDepositWithPayPal($user, $request)
+    {
+
+    }
+
+    private function addPayPalCustomer($request, $userId)
     {
         if ($request->paypal) $this->paypalEmail->create(['user_id' => $userId, 'email' => $request->paypal ]);
+    }
+
+    private function chargeCard($cardInfo, $request)
+    {
+        $this->stripe->setCardData($cardInfo);
+        $tokenResponse = $this->stripe->getToken();
+
+        if ( isset($tokenResponse['failed']) ) return ['success' => false, 'msg' => $tokenResponse['msg']];
+
+        $chargeInfo = [
+            'stripeToken' => $tokenResponse['id'],
+            'amount'      => $request->amount,
+            'description' => 'BSMMA Funds deposit for '.$request->card['firstname'].' '.$request->card['lastname'],
+        ];
+
+        return $this->performCharge($chargeInfo);
+    }
+
+    private function chargeCustomer($userInfo, $request)
+    {
+        $chargeInfo = [
+            'customer' => $userInfo['stripeDetail']['stripe_id'],
+            'amount'      => $request->amount,
+            'description' => 'BSMMA Funds deposit for '.$userInfo['firstname'].' '.$userInfo['lastname'],
+        ];
+
+        return $this->performCharge($chargeInfo);
+    }
+
+    private function createCustomerAndCharge($cardInfo, $userInfo, $request)
+    {
+        $this->stripe->setCardData($cardInfo);
+        $tokenResponse = $this->stripe->getToken();
+
+        if ( isset($tokenResponse['failed']) ) return ['success' => false, 'msg' => $tokenResponse['msg']];
+
+        $customerInfo = [
+            'source' => $tokenReponse['id'],
+            'description' => 'BSMMA Customer Account',
+            'metadata' => [
+                'name' => $userInfo['firstname'].' '.$userInfo['lastname'],
+                'id' => $userInfo['id'],
+            ],
+            'email' => $userInfo['email'],
+        ];
+
+        $customerAccountId = $this->stripe->createCustomer();
+
+        $chargeInfo = [
+            'customer' => $customerAccountId,
+            'amount'   => $request->amount,
+            'description' => 'BSMMA Funds deposit for '.$userInfo['firstname'].' '.$userInfo['lastname']
+        ];
+
+        return $this->performCharge($chargeInfo);
+    }
+
+    private function updateCustomerAndCharge($cardInfo, $userInfo, $request)
+    {
+        $this->stripe->setCardData($cardInfo);
+        $tokenResponse = $this->stripe->getToken();
+
+        if ( isset($tokenResponse['failed']) ) return ['success' => false, 'msg' => $tokenResponse['msg']];
+
+        $this->stripe->updateCustomer([
+            'customerId' => $userInfo['stripeDetail']['stripe_id'],
+            'source' => $tokenResponse['id']
+        ]);
+
+        return $this->chargeCustomer($userInfo, $request);
+    }
+
+    private function addStripeCustomer($responseData, $user)
+    {
+        $cardType = $this->creditCardType->where('name', $responseData['cardType'])->first();
+
+        $this->stripeDetail->insert([
+            'user_id'      => $user->id,
+            'stripe_id'    => $responseData['customerId'],
+            'cc_digits'    => $responseData['ccDigits'],
+            'card_type_id' => $cardType->id,
+        ]);
+    }
+
+    private function performCharge($chargeInfo)
+    {
+        $this->stripe->setChargeData($chargeInfo);
+
+        $chargeResponse = $this->stripe->charge();
+
+        if ( isset($chargeResponse['failed']) ) return ['success' => false, 'msg' => $chargeResponse['msg']];
+
+        return ['success' => true, 'transactionId' => $chargeResponse['transactionId'] ];
     }
 
 }

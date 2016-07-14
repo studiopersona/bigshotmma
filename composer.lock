@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4274be43e12602b4f6bd1fbaa0ad783a",
-    "content-hash": "5be645b1d9186cb371f66cf7e80bb0d8",
+    "hash": "33cac46b51a70ad9effd9f946638c1e6",
+    "content-hash": "b7e701e5074224167ba1b7658ed94012",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -1100,16 +1100,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v3.13.0",
+            "version": "v3.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "7ba7ff9765e3ba530bf4801a8ffc841a1cc1f77d"
+                "reference": "f7b9249fd6a085183ffeea68df0e62e32cb37ae9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/7ba7ff9765e3ba530bf4801a8ffc841a1cc1f77d",
-                "reference": "7ba7ff9765e3ba530bf4801a8ffc841a1cc1f77d",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/f7b9249fd6a085183ffeea68df0e62e32cb37ae9",
+                "reference": "f7b9249fd6a085183ffeea68df0e62e32cb37ae9",
                 "shasum": ""
             },
             "require": {
@@ -1151,7 +1151,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2016-05-04 22:02:14"
+            "time": "2016-07-12 17:04:44"
         },
         {
             "name": "swiftmailer/swiftmailer",

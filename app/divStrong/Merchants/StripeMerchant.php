@@ -1,83 +1,223 @@
-<?php namespace Invoisa\Merchants;
+<?php
+namespace Bsmma\divStrong\Merchants;
 
-use Invoisa\Contracts\MerchantContract;
-use Invoisa\Contracts\CurrencyContract as Currency;
-use Invoisa\Contracts\UserSettingContract as Settings;
+use Bsmma\Contracts\MerchantContract;
 use Validator;
-use Config;
 
-use Stripe;
-use Stripe_Charge;
-use Stripe_CardError;
-use Stripe_InvalidRequestError;
-use Stripe_AuthenticationError;
-use Stripe_Error;
+use \Stripe\Stripe as Stripe;
+use \Stripe\Customer as Stripe_Customer;
+use \Stripe\Charge as Stripe_Charge;
+use \Stripe\Error\Card as Stripe_CardError;
+use \Stripe\Error\InvalidRequest as Stripe_InvalidRequestError;
+use \Stripe\Error\Authentication as Stripe_AuthenticationError;
+use \Stripe\Error\ApiConnection as Stripe_ApiConnectionError;
+use \Stripe\Error as Stripe_Error;
+use \Stripe\Token as Stripe_Token;
 
 class StripeMerchant implements MerchantContract {
 
 	// the data required to process a charge
-	public $data;
+	public $chargeData;
+	public $cardData;
 
-	private $api_key;
+	private $apiKey;
+	private $newCustomer;
 
 	public function __construct()
 	{
+		$this->newCustomer      = false;
+		$this->chargeData       = [];
+		$this->cardData         = [];
+		$this->apiKey           = env('STRIPE_SECRET');
+	}
 
+	public function setCardData(array $input)
+	{
+		$this->cardData = [
+			'card' => [
+				'number'        => $input['cardNumber'],
+				'exp_month'     => $input['expMonth'],
+				'exp_year'      => $input['expYear'],
+				'cvc'           => $input['cvc'],
+				'address_line1' => $input['address'],
+				'address_city'  => $input['city'],
+				'address_state' => $input['state'],
+				'address_zip'   => $input['zipcode'],
+			],
+		];
+	}
+
+	public function setChargeData(array $input)
+	{
+		$this->chargeData = [
+			'amount'      => $input['amount'],
+			'currency'    => 'usd',
+			'description' => $input['description'],
+		];
+
+		if ( isset($input['stripeToken']) ) $this->chargeData['source'] = $input['stripeToken'];
+
+		if ( isset($input['cutomer']) ) $this->chargeData['customer'] = $input['customer'];
+
+		$this->newCustomer = ( isset($input['setupNewCustomer']) );
+	}
+
+	public function getToken()
+	{
+		Stripe::setApiKey($this->apiKey);
+
+		if ( ! empty($this->cardData) ) {
+			try {
+				$tokenResponse = Stripe_Token::create($this->cardData);
+			}
+			catch (Stripe_CardError $e) {
+				return [
+					'failed' => true,
+					'msg' => $e->jsonBody['error']['message'],
+					'error' => $e,
+				];
+			}
+			catch (Stripe_InvalidRequestError $e) {
+			 	return [
+						'failed' => true,
+						'msg'    => 'Invalid parameters were supplied to Stripe\'s API',
+						'error'  => $e,
+			 	];
+
+			}
+			catch (Stripe_AuthenticationError $e) {
+			  	return [
+						'failed' => true,
+						'msg'    => 'Authentication with Stripe\'s API failed (maybe you changed API keys recently)',
+						'error'  => $e,
+			  	];
+
+			}
+			catch (Stripe_ApiConnectionError $e) {
+			  	return [
+						'failed' => true,
+						'msg'    => 'Network communication with Stripe failed',
+						'error'  => $e,
+			  	];
+
+			}
+			catch (Stripe_Error $e) {
+			  	return [
+						'failed' =>true,
+						'msg'    =>'There was an error processing your request',
+						'error'  => $e,
+			  	];
+
+			  	// fire an event to send email to administrator
+			}
+			catch (Exception $e) {
+				return [
+					'failed' => true,
+					'msg' => 'There was an error while attempting to get the card token',
+					'error' => $e,
+				];
+			}
+
+			return $tokenResponse;
+		}
+		else {
+			return [
+				'failed' => true,
+				'msg'    => 'Card data was not set',
+				'error'  => 'Card data was not set',
+			];
+		}
 	}
 
 	public function charge()
 	{
-		// We use our platforms secret key here to, this along with the tenants stripe_user_id
-		// is all we need to make a charge directly to the tenants account.
-		//
-		// Set your secret key: remember to change this to your live secret key in production
-		// See your keys here https://manage.stripe.com/account
-		Stripe::setApiKey($this->api_key); // test api key goes here
-		// Get the credit card details submitted by the form
-		$token = $this->data['stripeToken'];
-		// Create the charge on Stripe's servers - this will charge the user's card
+		Stripe::setApiKey($this->apiKey);
+
 		try {
-			$charge = Stripe_Charge::create(array(
-			  'amount' => $this->data['amount'] * 100, // amount in cents, again
-			  'currency' => $this->data['currency_code'], // this should come from the users currency setting
-			  'source' => $token,
-			  'description' => 'Payment for invoice number '.$this->data['invoice_number'].' form '.$this->data['client_company']
-			), array('stripe_account' => $this->data['stripe_account']));
-		} catch(Stripe_CardError $e) {
-		  	// The card has been declined
-		  	$body = $e->getJsonBody();
-	  		$err  = $body['error'];
-	  		return array('failed'=>true, 'msg'=>$err);
 
-		} catch (Stripe_InvalidRequestError $e) {
-		 	return array('failed'=>true, 'msg'=>'Invalid parameters were supplied to Stripe\'s API', 'error'=>$e);
+			if ( ! empty($this->chargeData) ) {
+				Stripe_Charge::create($this->chargeData);
+			}
+			else {
+				return [
+					'failed' => true,
+					'msg' => 'Charge data was not set'
+				];
+			}
 
-		} catch (Stripe_AuthenticationError $e) {
-		  	return array('failed'=>true, 'msg'=>'Authentication with Stripe\'s API failed (maybe you changed API keys recently)');
+		}
+		catch(Stripe_CardError $e) {
+	  		return [
+					'failed' => true,
+					'msg'    => $e->jsonBody['error']['message'],
+					'error'  => $e
+	  		];
 
-		} catch (Stripe_ApiConnectionError $e) {
-		  	return array('failed'=>true, 'msg'=>'Network communication with Stripe failed');
+		}
+		catch (Stripe_InvalidRequestError $e) {
+		 	return [
+					'failed' => true,
+					'msg'    => 'Invalid parameters were supplied to Stripe\'s API',
+					'error'  => $e,
+		 	];
 
-		} catch (Stripe_Error $e) {
-		  	return array('failed'=>true, 'msg'=>'Display a very generic error to the user, and maybe send yourself an email');
+		}
+		catch (Stripe_AuthenticationError $e) {
+		  	return [
+					'failed' => true,
+					'msg'    => 'Authentication with Stripe\'s API failed (maybe you changed API keys recently)',
+					'error'  => $e,
+		  	];
 
-		} catch (Exception $e) {
-		  	return array('failed'=>true, 'msg'=>'Something else happened, completely unrelated to Stripe');
+		}
+		catch (Stripe_ApiConnectionError $e) {
+		  	return [
+					'failed' => true,
+					'msg'    => 'Network communication with Stripe failed',
+					'error'  => $e,
+		  	];
+
+		}
+		catch (Stripe_Error $e) {
+		  	return [
+					'failed' =>true,
+					'msg'    =>'Display a very generic error to the user, and maybe send yourself an email',
+					'error'  => $e,
+		  	];
+
+		}
+		catch (Exception $e) {
+		  	return [
+					'failed' => true,
+					'msg'    => 'Something else happened, completely unrelated to Stripe',
+					'error'  => $e,
+		  	];
 
 		}
 
-		if (isset($charge)) {
-			return ['transactionId' => $charge->id];
+		if ( isset($charge) ) {
+			return [
+				'transactionId' => $charge->id,
+				'ccDigits' => $charge->source->last4,
+			];
 		}
 	}
 
-	public function setData(array $input, $invoice, array $settings)
+	public function createCustomer(array $input)
 	{
-		$this->api_key = env('STRIPE_SECRET');
+		Stripe::setApiKey($this->apiKey);
 
-		$this->data = [
-			'stripeToken'    => $input['stripeToken'],
-			'amount'         => $invoice->amount,
-		];
+		$customer = Stripe_Customer::create($input);
+
+		return $customer->id;
+	}
+
+	public function updateCustomer(array $input)
+	{
+		Stripe::setApiKey($this->apiKey);
+
+		$customer = Stripe_Customer::retrieve($input['cutomerId']);
+		$cutomer->source = $input['source'];
+		$customer->save();
 	}
 }

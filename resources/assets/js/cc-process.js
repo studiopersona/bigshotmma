@@ -1,5 +1,4 @@
 import jQuery from 'jquery'
-import Stripe from './libs/stripe'
 
 var ccProcess = (function ($, stripe, w, undefined) {
 
