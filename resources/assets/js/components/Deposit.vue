@@ -200,6 +200,11 @@
             <p :class="['syncAlert__body', alert.class]">{{ alert.body }}</p>
             <button @click="alertClose" type="button" class="syncAlert__close">x</button>
         </section>
+        <form id="paypal-form" action="https://www.paypal.com/cgi-bin/webscr">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="{{ player.paypalEmail }}">
+            <input type="hidden" name="return" value="{{  }}">
+        </form>
     </div>
 </template>
 

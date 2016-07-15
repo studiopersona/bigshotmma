@@ -311,6 +311,26 @@ class UsersController extends ApiController
         return $this->chargeCustomer($userInfo, $request);
     }
 
+    private function performCharge($chargeInfo)
+    {
+        $this->stripe->setChargeData($chargeInfo);
+
+        $chargeResponse = $this->stripe->charge();
+
+        if ( isset($chargeResponse['failed']) ) return ['success' => false, 'msg' => $chargeResponse['msg']];
+
+        $return = [
+            'success' => true,
+            'transactionId' => $chargeResponse['transactionId'],
+            'ccDigits' => $chargeResponse['ccDigits'],
+        ];
+
+        if ( isset($chargeInfo['customer']) ) $return['customerId'] = $chargeInfo['customer'];
+        if ( isset($chargeInfo['cardBrand']) ) $return['cardBrand'] = $chargeInfo['cardBrand'];
+
+        return $return;
+    }
+
     private function addStripeCustomer($responseData, $user)
     {
         $cardType = $this->creditCardType->where('name', $responseData['cardBrand'])->first();
@@ -332,26 +352,6 @@ class UsersController extends ApiController
             'cc_digits'    => $responseData['ccDigits'],
             'credit_card_type_id' => $cardType->id,
         ]);
-    }
-
-    private function performCharge($chargeInfo)
-    {
-        $this->stripe->setChargeData($chargeInfo);
-
-        $chargeResponse = $this->stripe->charge();
-
-        if ( isset($chargeResponse['failed']) ) return ['success' => false, 'msg' => $chargeResponse['msg']];
-
-        $return = [
-            'success' => true,
-            'transactionId' => $chargeResponse['transactionId'],
-            'ccDigits' => $chargeResponse['ccDigits'],
-        ];
-
-        if ( isset($chargeInfo['customer']) ) $return['customerId'] = $chargeInfo['customer'];
-        if ( isset($chargeInfo['cardBrand']) ) $return['cardBrand'] = $chargeInfo['cardBrand'];
-
-        return $return;
     }
 
     /**
