@@ -4023,6 +4023,24 @@ a {
   margin: 0 auto;
   padding-top: 90px; }
 
+#overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  background: transparent; }
+  #overlay.show {
+    display: block; }
+
+#templateWrap {
+  transition: -webkit-filter 0.3s ease, filter 0.3s ease; }
+  #templateWrap.blur {
+    -webkit-filter: blur(2px);
+    filter: blur(2px); }
+
 .pageHeader {
   position: fixed;
   top: 26px;
@@ -4080,7 +4098,9 @@ a {
   color: #e51937;
   position: relative;
   z-index: 600;
-  float: right; }
+  float: right;
+  outline: none;
+  cursor: pointer; }
   .appHeader__menuBtn img,
   .appHeader__backBtn img {
     vertical-align: middle;
@@ -4787,6 +4807,9 @@ a {
   text-align: center;
   line-height: 3; }
 
+.deposit__cardTypeImage {
+  text-align: center; }
+
 .infoModal {
   position: fixed;
   left: 0;
@@ -5447,26 +5470,40 @@ a {
 
 .syncAlert {
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
   z-index: 300;
-  transform: translate3d(0, -136%, 0);
+  transform: translate3d(0, 136%, 0);
   transition: transform 0.3s ease;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); }
   .syncAlert.show {
     transform: translate3d(0, 0, 0); }
 
 .syncAlert__body {
-  padding: 1.5rem 1rem;
-  font-size: 1.3rem;
+  padding: 1.5rem 5.5rem 1.5rem 1rem;
+  font-size: 1.5rem;
   color: #fff; }
 
 .syncAlert--success {
-  background: rgba(0, 147, 39, 0.8); }
+  background: rgba(0, 147, 39, 0.9); }
 
 .syncAlert--failed {
-  background: rgba(147, 0, 0, 0.8); }
+  background: rgba(147, 0, 0, 0.9); }
+
+.syncAlert__close {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  color: #fff;
+  border: 4px solid;
+  border-radius: 50%;
+  padding: 0 0.9rem 0.2rem; }
 
 .form input,
 .form select,

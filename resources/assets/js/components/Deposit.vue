@@ -1,5 +1,5 @@
  <template>
-    <div :working="working">
+    <div id="templateWrap" :working="working">
         <header class="pageHeader">
             <h1 class="pageHeader__header">{{ player.name }}</h1>
             <h4 class="pageHeader__subheader">
@@ -83,7 +83,9 @@
                 The following amount:
                 <div class="deposit__amount">${{ deposit.amount.dollars }}<sup>.{{ deposit.amount.cents }}</sup></div>
             </div>
+
             <div v-if="player.merchant == 1">
+
                 <div v-if="player.stripeId !== 0 ">
                     <div class="deposit__billedTo">
                         will be billed to your<br>
@@ -93,11 +95,22 @@
                         <img :src="URL.base + '/public/image/creditcards/' + player.ccImageName" alt="{{ player.ccType }}">
                     </div>
                 </div>
+
                 <div v-else >
                     <div class="deposit__billedTo">
                         will be billed to your<br>
                         <span class="larger-text"><span class="larger-text">Credit Card</span></span>
                     </div>
+                </div>
+
+                <div v-if="player.stripeId !== 0" class="profile__inputWrap form__row container-fluid">
+                    <label for="newCard">
+                        <input v-model="customerState.currentCustomer.newCard" type="checkbox" value="1" id="newCard">
+                        <span class="checkboxText">Use a different card for this deposit</span>
+                    </label>
+                </div>
+
+                <div v-if="player.stripeId === 0 || customerState.currentCustomer.newCard">
                     <div class="profile__inputWrap form__row">
                         <input v-model="cardInfo.name" type="text" placeholder="Name on Card">
                     </div>
@@ -135,13 +148,21 @@
                             </label>
                         </div>
                     </div>
-                    <div class="profile__inputWrap form__row container-fluid">
+
+                    <div v-if="player.StripeId !== 0" class="profile__inputWrap form__row container-fluid">
+                        <label for="storeCC">
+                            <input v-model="customerState.currentCustomer.saveNewCard" type="checkbox" value="1" id="storeCC"> <span class="checkboxText">Please replace my current card with this card.</span>
+                        </label>
+                    </div>
+
+                    <div v-else class="profile__inputWrap form__row container-fluid">
                         <label for="storeCC">
                             <input v-model="customerState.addCustomer" type="checkbox" value="1" id="storeCC"> <span class="checkboxText">Please store this information for future use.</span>
                         </label>
                     </div>
                 </div>
             </div>
+
             <div v-else>
                 <div class="deposit__billedTo">
                     will be billed to your<br>
@@ -177,7 +198,7 @@
         </div>
             <section :class="['syncAlert', alert.show ? 'show' : '']">
             <p :class="['syncAlert__body', alert.class]">{{ alert.body }}</p>
-            <button @click="alertClose" type="button" class="alertModal__close">x</button>
+            <button @click="alertClose" type="button" class="syncAlert__close">x</button>
         </section>
     </div>
 </template>
@@ -318,6 +339,7 @@
                     this.cardInfo.zipcode = response.data.profile.zipcode
                     this.cardInfo.firstname = response.data.profile.firstname
                     this.cardInfo.lastname = response.data.profile.lastname
+                    if ( this.player.stripeId !== 0 ) this.customerState.isCustomer = true
                     this.working = false
                 }, function(err) {
                     console.log(err)

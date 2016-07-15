@@ -1,5 +1,5 @@
 <template>
-    <div :working="working">
+    <div id="templateWrap" :working="working">
         <header class="pageHeader" :working.sync="working">
             <h1 class="pageHeader__header">Event Results</h1>
             <h4 class="pageHeader__subheader">{{ event.event_name }}</h4>

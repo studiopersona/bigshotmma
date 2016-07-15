@@ -57,7 +57,7 @@ class StripeMerchant implements MerchantContract {
 
 		if ( isset($input['stripeToken']) ) $this->chargeData['source'] = $input['stripeToken'];
 
-		if ( isset($input['cutomer']) ) $this->chargeData['customer'] = $input['customer'];
+		if ( isset($input['customer']) ) $this->chargeData['customer'] = $input['customer'];
 
 		$this->newCustomer = ( isset($input['setupNewCustomer']) );
 	}
@@ -136,7 +136,7 @@ class StripeMerchant implements MerchantContract {
 		try {
 
 			if ( ! empty($this->chargeData) ) {
-				Stripe_Charge::create($this->chargeData);
+				$charge = Stripe_Charge::create($this->chargeData);
 			}
 			else {
 				return [
@@ -216,8 +216,8 @@ class StripeMerchant implements MerchantContract {
 	{
 		Stripe::setApiKey($this->apiKey);
 
-		$customer = Stripe_Customer::retrieve($input['cutomerId']);
-		$cutomer->source = $input['source'];
+		$customer = Stripe_Customer::retrieve($input['customer']);
+		$customer->source = $input['source'];
 		$customer->save();
 	}
 }

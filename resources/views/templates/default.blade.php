@@ -35,7 +35,6 @@
 	</head>
 	<body>
 		<div id="app"></div>
-
 		<!-- scripts -->
 		@yield('scripts')
 		@if ( App::environment() === 'local' )

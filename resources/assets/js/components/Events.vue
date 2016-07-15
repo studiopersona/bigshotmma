@@ -1,5 +1,5 @@
 <template>
-    <div :working="working">
+    <div id="templateWrap" :working="working">
         <header class="pageHeader">
             <h1 class="pageHeader__header">Choose an Event</h1>
             <h4 class="pageHeader__subheader">

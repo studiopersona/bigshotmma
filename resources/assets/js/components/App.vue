@@ -199,6 +199,7 @@
                 <button @click="sliderClose('#howToPlaySlider')" type="button" class="alertModal__close">x</button>
             </div>
         </section>
+        <div id="overlay" @click="toggleMenu"></div>
     </div>
 </template>
 
@@ -220,6 +221,8 @@
                 appDashboardClassList: [],
                 rulesSliderClassList: [],
                 howToPlayClassList: [],
+                overlayClassList: [],
+                overlay: {},
 				URL: {
                     base: window.URL.base,
                     current: window.URL.current,
@@ -253,6 +256,10 @@
             this.appDashboardClassList = document.querySelector('.appDashboard').classList;
             this.rulesSliderClassList = document.querySelector('#rulesSlider').classList;
             this.howToPlayClassList = document.querySelector('#howToPlaySlider').classList;
+            this.overlay = document.getElementById('overlay')
+            this.overlayClassList = this.overlay.classList
+            this.overlay.addEventListener('click', this.toogleMenu, false)
+            console.log(this.overlay)
 		},
 
 		methods: {
@@ -293,7 +300,12 @@
             },
 
 			toggleMenu() {
-				this.appDashboardClassList.toggle('show');
+                var templateWrapClassList
+
+				this.appDashboardClassList.toggle('show')
+                this.overlayClassList.toggle('show')
+                templateWrapClassList = document.getElementById('templateWrap').classList
+                templateWrapClassList.toggle('blur')
 			},
 
 			showContestTypes() {

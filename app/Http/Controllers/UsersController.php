@@ -13,6 +13,7 @@ use Bsmma\UserBalance;
 use Bsmma\PaypalEmail;
 use Bsmma\MerchantTransaction;
 use Bsmma\CreditCardType;
+use Bsmma\StripeDetail;
 use Bsmma\divStrong\Transformers\ProfileTransformer as ProfileTransformer;
 use Bsmma\Http\Requests\ProfileRequest;
 use Bsmma\Http\Requests\DepositProfileRequest;
@@ -27,7 +28,8 @@ class UsersController extends ApiController
         UserBalance $userBalance,
         PaypalEmail $paypalEmail,
         MerchantTransaction $merchantTransaction,
-        CreditCardType $creditCardType
+        CreditCardType $creditCardType,
+        StripeDetail $stripeDetail
     )
     {
     	$this->user = $user;
@@ -36,6 +38,7 @@ class UsersController extends ApiController
     	$this->profileTransformer = $profileTransformer;
         $this->merchantTransaction = $merchantTransaction;
         $this->creditCardType = $creditCardType;
+        $this->stripeDetail = $stripeDetail;
     }
 
     public function getPlayerName()
@@ -202,7 +205,7 @@ class UsersController extends ApiController
 
         if ( ! $chargeOutcome['success'] ) return ['success' => false, 'msg' => $chargeOutcome['msg']];
 
-        DB::transaction(function() use ($chargeResponse, $userInfo, $user, $request) {
+        DB::transaction(function() use ($chargeOutcome, $userInfo, $user, $request) {
             $balance = $this->userBalance->create([
                 'user_id'             => $user->id,
                 'transaction_type_id' => 4,
@@ -215,6 +218,7 @@ class UsersController extends ApiController
             ]);
 
             if ( $request->customerState['addCustomer'] ) $this->addStripeCustomer($chargeOutcome, $user);
+            if ( $request->customerState['currentCustomer']['saveNewCard'] ) $this->updateStripeCustomer($chargeOutcome, $user);
         });
 
         return ['success' => true, 'transactionId' => $chargeOutcome['transactionId']];
@@ -254,6 +258,8 @@ class UsersController extends ApiController
             'description' => 'BSMMA Funds deposit for '.$userInfo['firstname'].' '.$userInfo['lastname'],
         ];
 
+        if ( isset($userInfo['cardBrand']) ) $chargeInfo['cardBrand'] = $userInfo['cardBrand'];
+
         return $this->performCharge($chargeInfo);
     }
 
@@ -265,7 +271,7 @@ class UsersController extends ApiController
         if ( isset($tokenResponse['failed']) ) return ['success' => false, 'msg' => $tokenResponse['msg']];
 
         $customerInfo = [
-            'source' => $tokenReponse['id'],
+            'source' => $tokenResponse['id'],
             'description' => 'BSMMA Customer Account',
             'metadata' => [
                 'name' => $userInfo['firstname'].' '.$userInfo['lastname'],
@@ -274,12 +280,15 @@ class UsersController extends ApiController
             'email' => $userInfo['email'],
         ];
 
-        $customerAccountId = $this->stripe->createCustomer();
+        $customerAccountId = $this->stripe->createCustomer($customerInfo);
+
+        $ccBrand = $this->cardBrand($cardInfo['cardNumber']);
 
         $chargeInfo = [
             'customer' => $customerAccountId,
             'amount'   => $request->amount,
-            'description' => 'BSMMA Funds deposit for '.$userInfo['firstname'].' '.$userInfo['lastname']
+            'description' => 'BSMMA Funds deposit for '.$userInfo['firstname'].' '.$userInfo['lastname'],
+            'cardBrand' => $ccBrand,
         ];
 
         return $this->performCharge($chargeInfo);
@@ -292,9 +301,11 @@ class UsersController extends ApiController
 
         if ( isset($tokenResponse['failed']) ) return ['success' => false, 'msg' => $tokenResponse['msg']];
 
+        $userInfo['cardBrand'] = $this->cardBrand($cardInfo['cardNumber']);
+
         $this->stripe->updateCustomer([
-            'customerId' => $userInfo['stripeDetail']['stripe_id'],
-            'source' => $tokenResponse['id']
+            'customer' => $userInfo['stripeDetail']['stripe_id'],
+            'source' => $tokenResponse['id'],
         ]);
 
         return $this->chargeCustomer($userInfo, $request);
@@ -302,13 +313,24 @@ class UsersController extends ApiController
 
     private function addStripeCustomer($responseData, $user)
     {
-        $cardType = $this->creditCardType->where('name', $responseData['cardType'])->first();
+        $cardType = $this->creditCardType->where('name', $responseData['cardBrand'])->first();
 
         $this->stripeDetail->insert([
             'user_id'      => $user->id,
             'stripe_id'    => $responseData['customerId'],
             'cc_digits'    => $responseData['ccDigits'],
-            'card_type_id' => $cardType->id,
+            'credit_card_type_id' => $cardType->id,
+        ]);
+    }
+
+    private function updateStripeCustomer($responseData, $user)
+    {
+        $cardType = $this->creditCardType->where('name', $responseData['cardBrand'])->first();
+
+        $this->stripeDetail->where('user_id', $user->id)->update([
+            'stripe_id'    => $responseData['customerId'],
+            'cc_digits'    => $responseData['ccDigits'],
+            'credit_card_type_id' => $cardType->id,
         ]);
     }
 
@@ -320,7 +342,46 @@ class UsersController extends ApiController
 
         if ( isset($chargeResponse['failed']) ) return ['success' => false, 'msg' => $chargeResponse['msg']];
 
-        return ['success' => true, 'transactionId' => $chargeResponse['transactionId'] ];
+        $return = [
+            'success' => true,
+            'transactionId' => $chargeResponse['transactionId'],
+            'ccDigits' => $chargeResponse['ccDigits'],
+        ];
+
+        if ( isset($chargeInfo['customer']) ) $return['customerId'] = $chargeInfo['customer'];
+        if ( isset($chargeInfo['cardBrand']) ) $return['cardBrand'] = $chargeInfo['cardBrand'];
+
+        return $return;
     }
 
+    /**
+    * Return credit card type if number is valid
+    * @return string
+    * @param $number string
+    **/
+    private function cardBrand($number)
+    {
+        $number=preg_replace('/[^\d]/','',$number);
+        if (preg_match('/^3[47][0-9]{13}$/',$number)) {
+            return 'American Express';
+        }
+        elseif (preg_match('/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/',$number)) {
+            return 'Diners Club';
+        }
+        elseif (preg_match('/^6(?:011|5[0-9][0-9])[0-9]{12}$/',$number)) {
+            return 'Discover';
+        }
+        elseif (preg_match('/^(?:2131|1800|35\d{3})\d{11}$/',$number)) {
+            return 'JCB';
+        }
+        elseif (preg_match('/^5[1-5][0-9]{14}$/',$number)) {
+            return 'MasterCard';
+        }
+        elseif (preg_match('/^4[0-9]{12}(?:[0-9]{3})?$/',$number)) {
+            return 'Visa';
+        }
+        else {
+            return 'Unknown';
+        }
+    }
 }

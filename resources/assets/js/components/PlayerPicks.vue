@@ -1,5 +1,5 @@
 <template>
-    <div :working="working">
+    <div id="templateWrap" :working="working">
         <header class="pageHeader" :working.sync="working">
             <h1 class="pageHeader__header">{{ $root.playersName }}'s Picks</h1>
             <h4 class="pageHeader__subheader">{{ picksList[0].event.event_short_name }} / <a v-link="{ path: '/contest/' + picksList[0].contest.id + '/results' }">Results</a> </h4>

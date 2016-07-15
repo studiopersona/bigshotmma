@@ -22,3 +22,27 @@ a {
 	margin: 0 auto;
 	padding-top: 90px;
 }
+
+#overlay {
+	display: none;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 90;
+	background: transparent;
+
+	&.show {
+		display: block;
+	}
+}
+
+#templateWrap {
+	transition: filter 0.3s ease;
+
+	&.blur {
+		-webkit-filter: blur(2px);
+		        filter: blur(2px);
+	}
+}

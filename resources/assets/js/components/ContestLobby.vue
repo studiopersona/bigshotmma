@@ -1,5 +1,5 @@
 <template>
-    <div :working="working">
+    <div id="templateWrap" :working="working">
         <header class="pageHeader" :working.sync="working">
             <h1 class="pageHeader__header">Contest Lobby</h1>
             <div v-if="contestsEntered.indexOf(parseInt(participantsList[0].contest.contest_id, 10)) === -1">

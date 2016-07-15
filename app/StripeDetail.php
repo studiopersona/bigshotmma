@@ -8,6 +8,8 @@ class StripeDetail extends Model
 {
     protected $gaurded = [];
 
+    public $timestamps = false;
+
     public function user()
     {
     	return $this->belongsTo('Bsmma\User');

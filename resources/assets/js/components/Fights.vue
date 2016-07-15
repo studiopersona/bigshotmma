@@ -1,5 +1,5 @@
 <template>
-    <div :working="working">
+    <div id="templateWrap" :working="working">
         <header class="pageHeader" :working.sync="working">
             <div class="container-fluid">
                 <div class="col-xs-40">
