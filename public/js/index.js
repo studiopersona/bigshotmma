@@ -17974,7 +17974,7 @@ exports.default = {
             paypalEmail: '',
             persistPaypal: false,
             customerState: {
-                isCustomer: this.isCurrentCustomer,
+                isCustomer: false,
                 addCustomer: false,
                 removeCustomer: false,
                 currentCustomer: {
@@ -18104,8 +18104,8 @@ exports.default = {
                 paypalEmail: this.paypalEmail,
                 persistPaypal: this.persistPaypal
             },
-                vm = this;
-            depositBtn = document.getElementById('depositBtn');
+                vm = this,
+                depositBtn = document.getElementById('depositBtn');
 
             this.working = true;
 
@@ -18113,18 +18113,7 @@ exports.default = {
             depositBtn.setAttribute('disabled', true);
 
             // if there is a player stripeId
-            if (this.player.stripeId !== 0) data.currentCustomer = true;
-
-            // if player would like to save payment info
-            if (this.persist.cc) {
-                data.persist = true;
-                data.ccPersist = true;
-            }
-
-            if (this.persist.paypal) {
-                data.persist = true;
-                data.paypal = this.player.paypalEmail;
-            }
+            if (this.player.stripeId !== 0) data.customerState.isCustomer = true;
 
             _localforage2.default.getItem('id_token').then(function (token) {
                 vm.$http.post(URL.base + '/api/v1/deposit', data, {

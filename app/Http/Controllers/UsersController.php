@@ -152,11 +152,6 @@ class UsersController extends ApiController
         ]);
     }
 
-    public function getDepositToken(Request $request)
-    {
-
-    }
-
     public function makeDeposit(Request $request)
     {
         $user = \JWTAuth::parseToken()->authenticate();
@@ -205,7 +200,7 @@ class UsersController extends ApiController
         // current customer wants to use new card and stop storing
         // if ( $request->customerState['isCustomer'] && $request->customerState['removeCustomer'] ) $chargeOutcome = $this->removeCustomerAndCharge($cardInfo, $userInfo);
 
-        if ( ! $chargeOutcome['success'] ) return $this->respondWithError($chargeOutcome['msg']);
+        if ( ! $chargeOutcome['success'] ) return ['success' => false, 'msg' => $chargeOutcome['msg']];
 
         DB::transaction(function() use ($chargeResponse, $userInfo, $user, $request) {
             $balance = $this->userBalance->create([
