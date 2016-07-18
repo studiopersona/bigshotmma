@@ -9,7 +9,8 @@
         "laravel/framework": "5.2.*",
         "tymon/jwt-auth": "0.5.9",
         "laravelcollective/html": "5.2.*",
-        "stripe/stripe-php": "^3.16"
+        "stripe/stripe-php": "^3.16",
+        "paypal/rest-api-sdk-php": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

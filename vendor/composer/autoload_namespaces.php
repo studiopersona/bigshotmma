@@ -10,6 +10,7 @@ return array(
     'System' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
+    'PayPal' => array($vendorDir . '/paypal/rest-api-sdk-php/lib'),
     'Net' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
     'Namshi\\JOSE' => array($vendorDir . '/namshi/jose/src'),
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),

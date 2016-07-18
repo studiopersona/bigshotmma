@@ -83,9 +83,9 @@
                 The following amount:
                 <div class="deposit__amount">${{ deposit.amount.dollars }}<sup>.{{ deposit.amount.cents }}</sup></div>
             </div>
-
+            <!-- if credit card is preferred deppsit method -->
             <div v-if="player.merchant == 1">
-
+                <!-- if player has a card saved -->
                 <div v-if="player.stripeId !== 0 ">
                     <div class="deposit__billedTo">
                         will be billed to your<br>
@@ -95,21 +95,21 @@
                         <img :src="URL.base + '/public/image/creditcards/' + player.ccImageName" alt="{{ player.ccType }}">
                     </div>
                 </div>
-
+                <!-- no card saved -->
                 <div v-else >
                     <div class="deposit__billedTo">
                         will be billed to your<br>
                         <span class="larger-text"><span class="larger-text">Credit Card</span></span>
                     </div>
                 </div>
-
+                <!-- if player has card saved -->
                 <div v-if="player.stripeId !== 0" class="profile__inputWrap form__row container-fluid">
                     <label for="newCard">
                         <input v-model="customerState.currentCustomer.newCard" type="checkbox" value="1" id="newCard">
                         <span class="checkboxText">Use a different card for this deposit</span>
                     </label>
                 </div>
-
+                <!-- no card saved or player wants to use a new card -->
                 <div v-if="player.stripeId === 0 || customerState.currentCustomer.newCard">
                     <div class="profile__inputWrap form__row">
                         <input v-model="cardInfo.name" type="text" placeholder="Name on Card">
@@ -148,13 +148,13 @@
                             </label>
                         </div>
                     </div>
-
+                    <!-- if player has a card saved -->
                     <div v-if="player.StripeId !== 0" class="profile__inputWrap form__row container-fluid">
                         <label for="storeCC">
                             <input v-model="customerState.currentCustomer.saveNewCard" type="checkbox" value="1" id="storeCC"> <span class="checkboxText">Please replace my current card with this card.</span>
                         </label>
                     </div>
-
+                    <!-- no card saved -->
                     <div v-else class="profile__inputWrap form__row container-fluid">
                         <label for="storeCC">
                             <input v-model="customerState.addCustomer" type="checkbox" value="1" id="storeCC"> <span class="checkboxText">Please store this information for future use.</span>
@@ -162,7 +162,7 @@
                     </div>
                 </div>
             </div>
-
+            <!-- paypal is preferred deposit method -->
             <div v-else>
                 <div class="deposit__billedTo">
                     will be billed to your<br>
@@ -176,6 +176,12 @@
                         <input v-model="persistPaypal" type="checkbox" value="1" id="storePP"> <span class="checkboxText">Please store this information for future use.</span>
                     </label>
                 </div>
+                <form id="paypal-form" action="https://www.paypal.com/cgi-bin/webscr">
+                    <input type="hidden" name="cmd" value="_xclick">
+                    <input type="hidden" name="business" value="{{ player.paypalEmail }}">
+                    <input type="hidden" name="return" value="{{ URL.base + '/paypal-return' }}">
+                    <input type="hidden" name="amount" value="{{ deposit.amount.total }}">
+                </form>
             </div>
             <div class="container-fluid">
                 <div class="col-xs-100 button-wrap">
@@ -200,11 +206,6 @@
             <p :class="['syncAlert__body', alert.class]">{{ alert.body }}</p>
             <button @click="alertClose" type="button" class="syncAlert__close">x</button>
         </section>
-        <form id="paypal-form" action="https://www.paypal.com/cgi-bin/webscr">
-            <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="{{ player.paypalEmail }}">
-            <input type="hidden" name="return" value="{{  }}">
-        </form>
     </div>
 </template>
 
@@ -213,6 +214,7 @@
     import {router} from '../index'
     import D from '../libs/d.js'
     import localforage from 'localforage'
+    import paypalPay from 'paypal-rest-sdk'
 
     export default {
 
@@ -400,8 +402,9 @@
                         card: this.cardInfo,
                         merchantId: parseInt(this.player.merchant, 10),
                         customerState: this.customerState,
-                        paypalEmail: this.paypalEmail,
+                        paypalEmail: this.player.paypalEmail,
                         persistPaypal: this.persistPaypal,
+                        cmd: '_xclick',
                     },
                     vm = this,
                     depositBtn = document.getElementById('depositBtn')
@@ -414,22 +417,73 @@
                 // if there is a player stripeId
                 if ( this.player.stripeId !== 0 ) data.customerState.isCustomer = true
 
-                localforage.getItem('id_token').then(function(token) {
-                    vm.$http.post(URL.base + '/api/v1/deposit', data, {
-                        // Attach the JWT header
-                        headers: { 'Authorization' : 'Bearer ' + token }
-                    }).then(function(response) {
-                        vm.flash(response.data)
-                        // re-enable the deposit button
-                        depositBtn.removeAttribute('disabled')
-                        // Update players balance display
-                        if (response.data.success) vm.$root.playersBalance = vm.$root.playersBalance + this.deposit.amount.dollars
-                        vm.working = false
-                    }, function(err) {
-                        console.log(err)
-                        vm.working = false
+                if ( parseInt(this.player.merchant, 10) === 1 ) {
+                    localforage.getItem('id_token').then(function(token) {
+                        vm.$http.post(URL.base + '/api/v1/deposit', data, {
+                            // Attach the JWT header
+                            headers: { 'Authorization' : 'Bearer ' + token }
+                        }).then(function(response) {
+                            vm.flash(response.data)
+                            // re-enable the deposit button
+                            depositBtn.removeAttribute('disabled')
+                            // Update players balance display
+                            if (response.data.success) vm.$root.playersBalance = vm.$root.playersBalance + this.deposit.amount.dollars
+                            vm.working = false
+                        }, function(err) {
+                            console.log(err)
+                            vm.working = false
+                        })
                     })
-                })
+                } else {
+                    this.$http.post('https://api.sandbox.paypal.com/v1/oauth2/token', "grant_type=client_credentials", {
+                        headers: {
+                            'Authorization': 'Basic ' + 'QVZRakNIWmpFYTJoM1ZLVm5JcE9UZkk1OVFDbzl4NlJWaHRWeFV1MFpiM0d6NnJWaXFCWGNjcGdWRmMzdUw3cDZuVzJWcm5jX3RFbDJzUHU6RUV4ZUJqRzJRbllsX1F6ZklybFVTeTZ1Q3ZvUzFOVnRoWGQxM3hFR2xOd0hYVjNNc0RsWXR2Y19LS1N1b3N3a3N0blV1dVRoVndEVHQxakQ=',
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                    })
+                    .then(function(response) {
+                        var accessToken = response.data.access_token
+
+                        console.log(response)
+
+                        vm.$http.post('https://api.sandbox.paypal.com/v1/payments/payment', {
+                            "intent":"sale",
+                            "redirect_urls":{
+                                "return_url":"http://edward.dev/bsmma/paypal-accepted",
+                                "cancel_url":"http://edward.dev/bsmma/paypal-declined"
+                            },
+                            "payer":{
+                                "payment_method":"paypal"
+                            },
+                            "transactions":[
+                                {
+                                    "amount":{
+                                    "total": vm.depositTotal / 100,
+                                    "currency":"USD"
+                                }
+                            }
+]
+                        },
+                        {
+                            headers: {
+                                'Authorization': 'Bearer ' + accessToken,
+                            },
+                        })
+                        .then(function(response) {
+                            console.log(response)
+
+                            response.data.links.forEach(function(link) {
+                                if ( link.rel === 'approval_url' ) window.location = link.href
+                            })
+                        })
+                        .catch(function(err) {
+                            console.log(err)
+                        })
+                    })
+                    .catch(function(err) {
+                        console.log(err)
+                    })
+                }
             },
 
             flash(response) {
@@ -452,6 +506,7 @@
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden'
             },
             depositTotal() {
+                // return the total charge for the deposit in cents
                 return (this.deposit.amount.dollars * 100) + this.deposit.amount.cents
             },
             isCurrentCustomer() {

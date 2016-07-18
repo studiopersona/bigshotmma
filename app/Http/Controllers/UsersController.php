@@ -21,6 +21,7 @@ use Bsmma\Http\Requests\DepositProfileRequest;
 class UsersController extends ApiController
 {
     private $stripe;
+    private $paypal;
 
     public function __construct(
         User $user,
@@ -226,7 +227,13 @@ class UsersController extends ApiController
 
     private function makeDepositWithPayPal($user, $request)
     {
+        $this->paypal = new \Bsmma\divStrong\Merchants\PayPalMerchant;
 
+        $this->paypal->setChargeData($request->input());
+
+        $chargeOutcome = $this->paypal->charge();
+
+        dump($chargeOutcome);
     }
 
     private function addPayPalCustomer($request, $userId)
