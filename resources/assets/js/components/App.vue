@@ -259,7 +259,6 @@
             this.overlay = document.getElementById('overlay')
             this.overlayClassList = this.overlay.classList
             this.overlay.addEventListener('click', this.toogleMenu, false)
-            console.log(this.overlay)
 		},
 
 		methods: {

@@ -4,6 +4,7 @@ namespace Bsmma\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use Session;
 
 use Bsmma\Http\Requests;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +28,6 @@ class UsersController extends ApiController
         User $user,
         ProfileTransformer $profileTransformer,
         UserBalance $userBalance,
-        PaypalEmail $paypalEmail,
         MerchantTransaction $merchantTransaction,
         CreditCardType $creditCardType,
         StripeDetail $stripeDetail
@@ -35,7 +35,6 @@ class UsersController extends ApiController
     {
     	$this->user = $user;
         $this->userBalance = $userBalance;
-        $this->paypalEmail = $paypalEmail;
     	$this->profileTransformer = $profileTransformer;
         $this->merchantTransaction = $merchantTransaction;
         $this->creditCardType = $creditCardType;
@@ -54,7 +53,7 @@ class UsersController extends ApiController
         $user = \JWTAuth::parseToken()->authenticate();
 
         $credits = $this->userBalance->where('user_id', $user->id)
-                    ->whereIn('transaction_type_id', [2, 4, 5])
+                    ->whereIn('transaction_type_id', [2, 4, 5, 6])
                     ->sum('amount');
 
         $debits = $this->userBalance->where('user_id', $user->id)
@@ -164,6 +163,8 @@ class UsersController extends ApiController
 
         if ( $request->merchantId === 2 ) $outcome = $this->makeDepositWithPayPal($user, $request);
 
+        if ( isset($outcome['approvalLink']) ) return $this->respond(['success' => true, 'approvalLink' => $outcome['approvalLink']]);
+
         return ( $outcome['success'] ) ? $this->respond([
             'success' => true,
             'msg'     => 'Your deposit was successfully processed. Your transaction number is '.$outcome['transactionId'],
@@ -216,6 +217,7 @@ class UsersController extends ApiController
             $this->merchantTransaction->create([
                 'merchant_id'      => $request->merchantId,
                 'user_balances_id' => $balance->id,
+                'transaction_id'   => $chargeOutcome['transactionId'],
             ]);
 
             if ( $request->customerState['addCustomer'] ) $this->addStripeCustomer($chargeOutcome, $user);
@@ -230,15 +232,56 @@ class UsersController extends ApiController
         $this->paypal = new \Bsmma\divStrong\Merchants\PayPalMerchant;
 
         $this->paypal->setChargeData($request->input());
+        $this->paypal->setCredentials();
+        $paymentResult = $this->paypal->createPayment();
 
-        $chargeOutcome = $this->paypal->charge();
+        if ( isset($paymentResult['failed']) ) return ['success' => flase, 'msg' => $paymentResult['msg']];
 
-        dump($chargeOutcome);
+        Session::put('userId', $user->id);
+        Session::put('fee', $request['fee']);
+
+        return ['success' => true, 'approvalLink' => $paymentResult['approvalLink']];
     }
 
-    private function addPayPalCustomer($request, $userId)
+    public function completePaymentWithPayPal(Request $request)
     {
-        if ($request->paypal) $this->paypalEmail->create(['user_id' => $userId, 'email' => $request->paypal ]);
+        $this->paypal = new \Bsmma\divStrong\Merchants\PayPalMerchant;
+
+        $fee = (int)Session::get('fee');
+        $user = $this->user->where('id', (int)Session::get('userId'))->first();
+
+        $input = $request->input();
+
+        $this->paypal->setCredentials();
+        $this->paypal->setChargeData($request->input());
+        $chargeOutcome = $this->paypal->charge();
+
+        if ( isset($chargeOutcome['failed']) ) return ['success' => false, 'msg' => $chargeOutcome['msg']];
+
+        DB::transaction(function() use ($chargeOutcome, $user, $request, $fee) {
+            $balance = $this->userBalance->create([
+                'user_id'             => $user['id'],
+                'transaction_type_id' => 6,
+                'amount'              => $chargeOutcome['amount'],
+            ]);
+
+            $this->merchantTransaction->create([
+                'merchant_id'      => 2,
+                'user_balances_id' => $balance->id,
+                'transaction_id' => $chargeOutcome['transactionId'],
+                'payment_id' => $chargeOutcome['paymentId'],
+            ]);
+        });
+
+        Session::forget('userId');
+        Session::forget('fee');
+
+        return redirect()->away(url('/#!/deposit/paypal/'.$chargeOutcome['transactionId']));
+    }
+
+    public function paypalPaymentRejected()
+    {
+
     }
 
     private function chargeCard($cardInfo, $request)

@@ -4,65 +4,135 @@ namespace Bsmma\divStrong\Merchants;
 use Bsmma\Contracts\MerchantContract;
 use Validator;
 
+use \PayPal\Api\Amount;
+use \PayPal\Api\Details;
+use \PayPal\Api\Item;
+use \PayPal\Api\ItemList;
+use \PayPal\Api\Payer;
+use \PayPal\Api\Payment;
+use \PayPal\Api\PaymentExecution;
+use \PayPal\Api\PaymentDetails;
+use \PayPal\Api\RedirectUrls;
+use \PayPal\Api\Transaction;
+use \PayPal\Auth\OAuthTokenCredential;
+use \PayPal\Rest\ApiContext;
+
 class PayPalMerchant implements MerchantContract {
 
-	public $chargeData;
-	public $chargeUrl;
-
-	public $returnUrl;
-	public $businessEmail;
+	private $chargeUrl;
+	private $returnUrl;
+	private $cancelUrl;
+	private $paypalSecret;
+	private $paypalId;
+	private $mode;
+	private $credentials;
+	private $token;
+	private $chargeData;
 
 	public function __construct()
 	{
 		$this->chargeData = [];
 		$this->chargeUrl = env('PAYPAL_CHARGE_URL');
 		$this->returnUrl = env('PAYPAL_RETURN_URL');
-		$this->businessEmail = env('PAYPAL_BUSINESS_EMAIL');
+		$this->cancelUrl = env('PAYPAL_CANCEL_URL');
+		$this->paypalSecret = env('PAYPAL_SECRET');
+		$this->paypalId = env('PAYPAL_CLIENT_ID');
+		$this->mode = env('PAYPAL_MODE');
+	}
+
+	public function setCredentials()
+	{
+		$this->credentials = new OAuthTokenCredential($this->paypalId, $this->paypalSecret, ['mode' => $this->mode]);
+	}
+
+	public function createPayment()
+	{
+		$apiContext = new ApiContext($this->credentials, 'Request'.time());
+		$apiContext->setConfig(['mode' => $this->mode]);
+
+		$payer = new Payer();
+		$payer->setPaymentMethod('paypal');
+
+		$amount = new Amount();
+		$amount->setCurrency('USD');
+		$amount->setTotal($this->chargeData['amount']);
+
+		$transaction = new Transaction();
+		$transaction->setDescription('BSMMA Account Deposit');
+		$transaction->setAmount($amount);
+
+		$redirectUrls = new RedirectUrls();
+		$redirectUrls->setReturnUrl($this->returnUrl)->setCancelUrl($this->cancelUrl);
+
+		$payment = new Payment();
+		$payment->setIntent('sale')
+			->setPayer($payer)
+			->setRedirectUrls($redirectUrls)
+			->setTransactions([$transaction]);
+
+		$request = clone $payment;
+
+		try {
+			$payment->create($apiContext);
+		}
+		catch (Expection $e) {
+			return ['failed' => true, 'msg' => "There was an error processing the payment.", 'error' => $e];
+		}
+
+		return [
+			'success' => true,
+			'approvalLink' => $payment->getApprovalLink(),
+			'payment' => $payment
+		];
+	}
+
+	/**
+	 * Execute the payment
+	 * @return  [description]
+	 */
+	public function charge()
+	{
+		$apiContext = new ApiContext($this->credentials, 'Request'.time());
+		$apiContext->setConfig(['mode' => $this->mode]);
+
+		$payment = Payment::get($this->chargeData['paymentId'], $apiContext);
+
+		$execution = new PaymentExecution();
+		$execution->setPayerId($this->chargeData['payerId']);
+
+		try {
+			$result = $payment->execute($execution, $apiContext);
+
+			try {
+				$paymentDetails = Payment::get($this->chargeData['paymentId'], $apiContext);
+			}
+			catch (Exception $e) {
+				return ['failed' => true, 'msg' => 'There was a problem retrieving the payment details', 'error' => $e];
+			}
+			catch(\PayPal\Exception\PayPalConnectionException $e) {
+				return ['failed' => true, 'msg' => 'There was a problem connecting to retrieve the payment details ', 'error' => $e];
+			}
+		}
+		catch (Exception $e) {
+			return ['failed' => true, 'msg' => 'There was a error while executing the charge', 'error' => $e];
+		}
+		catch(\PayPal\Exception\PayPalConnectionException $e) {
+			return ['failed' => true, 'msg' => 'There was a problem connecting to execute the payment. This usually occurs when the payment has already been processed.', 'error' => $e];
+		}
+		// return the amount in cents
+		return [
+			'success' => true,
+			'amount' => (int)$paymentDetails->transactions[0]->amount->total * 100,
+			'transactionId' => $paymentDetails->transactions[0]->related_resources[0]->sale->id,
+			'paymentId' => $result->id,
+		];
 	}
 
 	public function setChargeData(array $input)
 	{
-		dump($input);
-		$this->chargeData = [
-			'cmd' => $input['cmd'],
-			'email' => $input['paypalEmail'],
-			'business' => $this->businessEmail,
-			'return' => $this->returnUrl,
-			'amount' => $input['amount']
-		];
-	}
-
-	public function charge()
-	{
-		if (empty($this->chargeData)) return [
-				'failed' => true,
-				'message' => 'Charge data was not set'
-			];
-
-		$charge = $this->executeCurl();
-
-		return [
-			'success' => true,
-			'message' => 'Your desposit has been applied to your account',
-		];
-	}
-
-	protected function executeCurl()
-	{
-		$ch = curl_init($this->chargeUrl);
-
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($this->chargeData));
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-		curl_setopt($ch, CURLOPT_CAINFO, storage_path('app/cacert.pem'));
-
-		$response = curl_exec($ch);
-
-		dump($response);
-
-		curl_close($ch);
-
-		return $response;
+		if (isset($input['amount']) ) $this->chargeData['amount'] = (float)$input['amount'] / 100;
+		if ( isset($input['paymentId']) ) $this->chargeData['paymentId'] = $input['paymentId'];
+		if ( isset($input['PayerID']) ) $this->chargeData['payerId'] = $input['PayerID'];
+		if ( isset($input['token']) ) $this->chargeData['token'] = $input['token'];
 	}
 }

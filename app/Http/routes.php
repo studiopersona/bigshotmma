@@ -58,6 +58,9 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/', 'LanderController@index');
 	});
 
+	Route::get('paypal-return', 'UsersController@completePaymentWithPayPal');
+	Route::get('paypal-cancel', 'UsersController@paypalPaymentRejected');
+
 });
 
 

@@ -168,20 +168,6 @@
                     will be billed to your<br>
                     <span class="larger-text"><span class="larger-text">PayPal Account</span></span>
                 </div>
-                <div class="profile__inputWrap form__row">
-                    <input v-model="player.paypalEmail" type="text" placeholder="PayPal Email">
-                </div>
-                <div class="profile__inputWrap form__row container-fluid">
-                    <label for="storePP">
-                        <input v-model="persistPaypal" type="checkbox" value="1" id="storePP"> <span class="checkboxText">Please store this information for future use.</span>
-                    </label>
-                </div>
-                <form id="paypal-form" action="https://www.paypal.com/cgi-bin/webscr">
-                    <input type="hidden" name="cmd" value="_xclick">
-                    <input type="hidden" name="business" value="{{ player.paypalEmail }}">
-                    <input type="hidden" name="return" value="{{ URL.base + '/paypal-return' }}">
-                    <input type="hidden" name="amount" value="{{ deposit.amount.total }}">
-                </form>
             </div>
             <div class="container-fluid">
                 <div class="col-xs-100 button-wrap">
@@ -338,7 +324,7 @@
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    console.log(response.data.profile)
+                    // console.log(response.data.profile)
                     this.player = response.data.profile
                     this.cardInfo.address = response.data.profile.address
                     this.cardInfo.city = response.data.profile.city
@@ -353,6 +339,10 @@
                     this.working = false
                 })
                 this.expirationYears()
+                if ( this.$route.params.transactionId ) this.flash({
+                    msg: 'Your PayPal deposit was successful. Your transaction id is ' + this.$route.params.transactionId,
+                    success: true,
+                })
             },
 
             expirationYears() {
@@ -404,7 +394,6 @@
                         customerState: this.customerState,
                         paypalEmail: this.player.paypalEmail,
                         persistPaypal: this.persistPaypal,
-                        cmd: '_xclick',
                     },
                     vm = this,
                     depositBtn = document.getElementById('depositBtn')
@@ -417,81 +406,31 @@
                 // if there is a player stripeId
                 if ( this.player.stripeId !== 0 ) data.customerState.isCustomer = true
 
-                if ( parseInt(this.player.merchant, 10) === 1 ) {
-                    localforage.getItem('id_token').then(function(token) {
-                        vm.$http.post(URL.base + '/api/v1/deposit', data, {
-                            // Attach the JWT header
-                            headers: { 'Authorization' : 'Bearer ' + token }
-                        }).then(function(response) {
-                            vm.flash(response.data)
-                            // re-enable the deposit button
-                            depositBtn.removeAttribute('disabled')
-                            // Update players balance display
-                            if (response.data.success) vm.$root.playersBalance = vm.$root.playersBalance + this.deposit.amount.dollars
-                            vm.working = false
-                        }, function(err) {
-                            console.log(err)
-                            vm.working = false
-                        })
-                    })
-                } else {
-                    this.$http.post('https://api.sandbox.paypal.com/v1/oauth2/token', "grant_type=client_credentials", {
-                        headers: {
-                            'Authorization': 'Basic ' + 'QVZRakNIWmpFYTJoM1ZLVm5JcE9UZkk1OVFDbzl4NlJWaHRWeFV1MFpiM0d6NnJWaXFCWGNjcGdWRmMzdUw3cDZuVzJWcm5jX3RFbDJzUHU6RUV4ZUJqRzJRbllsX1F6ZklybFVTeTZ1Q3ZvUzFOVnRoWGQxM3hFR2xOd0hYVjNNc0RsWXR2Y19LS1N1b3N3a3N0blV1dVRoVndEVHQxakQ=',
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                    })
-                    .then(function(response) {
-                        var accessToken = response.data.access_token
-
-                        console.log(response)
-
-                        vm.$http.post('https://api.sandbox.paypal.com/v1/payments/payment', {
-                            "intent":"sale",
-                            "redirect_urls":{
-                                "return_url":"http://edward.dev/bsmma/paypal-accepted",
-                                "cancel_url":"http://edward.dev/bsmma/paypal-declined"
-                            },
-                            "payer":{
-                                "payment_method":"paypal"
-                            },
-                            "transactions":[
-                                {
-                                    "amount":{
-                                    "total": vm.depositTotal / 100,
-                                    "currency":"USD"
-                                }
-                            }
-]
-                        },
-                        {
-                            headers: {
-                                'Authorization': 'Bearer ' + accessToken,
-                            },
-                        })
-                        .then(function(response) {
-                            console.log(response)
-
-                            response.data.links.forEach(function(link) {
-                                if ( link.rel === 'approval_url' ) window.location = link.href
-                            })
-                        })
-                        .catch(function(err) {
-                            console.log(err)
-                        })
-                    })
-                    .catch(function(err) {
+                localforage.getItem('id_token').then(function(token) {
+                    vm.$http.post(URL.base + '/api/v1/deposit', data, {
+                        // Attach the JWT header
+                        headers: { 'Authorization' : 'Bearer ' + token }
+                    }).then(function(response) {
+                        if (response.data.approvalLink) window.location = response.data.approvalLink;
+                        vm.flash(response.data)
+                        // re-enable the deposit button
+                        depositBtn.removeAttribute('disabled')
+                        // Update players balance display
+                        if (response.data.success) vm.$root.playersBalance = vm.$root.playersBalance + this.deposit.amount.dollars
+                        vm.working = false
+                    }, function(err) {
                         console.log(err)
+                        vm.working = false
                     })
-                }
+                })
             },
 
             flash(response) {
                 this.alert.body = response.msg || response.error.message
                 this.alert.show = true
 
-                console.log('reponse', response)
-                console.log('alert body', this.alert.body)
+                // console.log('reponse', response)
+                // console.log('alert body', this.alert.body)
 
                 this.alert.class = ( response.success ) ? 'syncAlert--success' : 'syncAlert--failed'
             },

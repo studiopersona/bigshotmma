@@ -43110,7 +43110,6 @@ exports.default = {
         this.overlay = document.getElementById('overlay');
         this.overlayClassList = this.overlay.classList;
         this.overlay.addEventListener('click', this.toogleMenu, false);
-        console.log(this.overlay);
     },
 
 
@@ -43769,7 +43768,7 @@ exports.default = {
                 // Attach the JWT header
                 headers: { 'Authorization': 'Bearer ' + token }
             }).then(function (response) {
-                console.log(response.data.profile);
+                // console.log(response.data.profile)
                 this.player = response.data.profile;
                 this.cardInfo.address = response.data.profile.address;
                 this.cardInfo.city = response.data.profile.city;
@@ -43784,6 +43783,10 @@ exports.default = {
                 this.working = false;
             });
             this.expirationYears();
+            if (this.$route.params.transactionId) this.flash({
+                msg: 'Your PayPal deposit was successful. Your transaction id is ' + this.$route.params.transactionId,
+                success: true
+            });
         },
         expirationYears: function expirationYears() {
             var thisYear,
@@ -43830,8 +43833,7 @@ exports.default = {
                 merchantId: parseInt(this.player.merchant, 10),
                 customerState: this.customerState,
                 paypalEmail: this.player.paypalEmail,
-                persistPaypal: this.persistPaypal,
-                cmd: '_xclick'
+                persistPaypal: this.persistPaypal
             },
                 vm = this,
                 depositBtn = document.getElementById('depositBtn');
@@ -43844,73 +43846,30 @@ exports.default = {
             // if there is a player stripeId
             if (this.player.stripeId !== 0) data.customerState.isCustomer = true;
 
-            if (parseInt(this.player.merchant, 10) === 1) {
-                _localforage2.default.getItem('id_token').then(function (token) {
-                    vm.$http.post(URL.base + '/api/v1/deposit', data, {
-                        // Attach the JWT header
-                        headers: { 'Authorization': 'Bearer ' + token }
-                    }).then(function (response) {
-                        vm.flash(response.data);
-                        // re-enable the deposit button
-                        depositBtn.removeAttribute('disabled');
-                        // Update players balance display
-                        if (response.data.success) vm.$root.playersBalance = vm.$root.playersBalance + this.deposit.amount.dollars;
-                        vm.working = false;
-                    }, function (err) {
-                        console.log(err);
-                        vm.working = false;
-                    });
-                });
-            } else {
-                this.$http.post('https://api.sandbox.paypal.com/v1/oauth2/token', "grant_type=client_credentials", {
-                    headers: {
-                        'Authorization': 'Basic ' + 'QVZRakNIWmpFYTJoM1ZLVm5JcE9UZkk1OVFDbzl4NlJWaHRWeFV1MFpiM0d6NnJWaXFCWGNjcGdWRmMzdUw3cDZuVzJWcm5jX3RFbDJzUHU6RUV4ZUJqRzJRbllsX1F6ZklybFVTeTZ1Q3ZvUzFOVnRoWGQxM3hFR2xOd0hYVjNNc0RsWXR2Y19LS1N1b3N3a3N0blV1dVRoVndEVHQxakQ=',
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
+            _localforage2.default.getItem('id_token').then(function (token) {
+                vm.$http.post(URL.base + '/api/v1/deposit', data, {
+                    // Attach the JWT header
+                    headers: { 'Authorization': 'Bearer ' + token }
                 }).then(function (response) {
-                    var accessToken = response.data.access_token;
-
-                    console.log(response);
-
-                    vm.$http.post('https://api.sandbox.paypal.com/v1/payments/payment', {
-                        "intent": "sale",
-                        "redirect_urls": {
-                            "return_url": "http://edward.dev/bsmma/paypal-accepted",
-                            "cancel_url": "http://edward.dev/bsmma/paypal-declined"
-                        },
-                        "payer": {
-                            "payment_method": "paypal"
-                        },
-                        "transactions": [{
-                            "amount": {
-                                "total": vm.depositTotal / 100,
-                                "currency": "USD"
-                            }
-                        }]
-                    }, {
-                        headers: {
-                            'Authorization': 'Bearer ' + accessToken
-                        }
-                    }).then(function (response) {
-                        console.log(response);
-
-                        response.data.links.forEach(function (link) {
-                            if (link.rel === 'approval_url') window.location = link.href;
-                        });
-                    }).catch(function (err) {
-                        console.log(err);
-                    });
-                }).catch(function (err) {
+                    if (response.data.approvalLink) window.location = response.data.approvalLink;
+                    vm.flash(response.data);
+                    // re-enable the deposit button
+                    depositBtn.removeAttribute('disabled');
+                    // Update players balance display
+                    if (response.data.success) vm.$root.playersBalance = vm.$root.playersBalance + this.deposit.amount.dollars;
+                    vm.working = false;
+                }, function (err) {
                     console.log(err);
+                    vm.working = false;
                 });
-            }
+            });
         },
         flash: function flash(response) {
             this.alert.body = response.msg || response.error.message;
             this.alert.show = true;
 
-            console.log('reponse', response);
-            console.log('alert body', this.alert.body);
+            // console.log('reponse', response)
+            // console.log('alert body', this.alert.body)
 
             this.alert.class = response.success ? 'syncAlert--success' : 'syncAlert--failed';
         },
@@ -43933,7 +43892,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"templateWrap\" :working=\"working\">\n    <header class=\"pageHeader\">\n        <h1 class=\"pageHeader__header\">{{ player.name }}</h1>\n        <h4 class=\"pageHeader__subheader\">\n            Fund your account with a deposit.\n        </h4>\n    </header>\n    <div class=\"deposit form container-fluid\">\n        <div class=\"col-xs-100 amountSelectionWrap\">\n            <label @click.prevent=\"selectAmount(0, 5, $event)\" for=\"amount5\" class=\"fightsList__pickButton\">\n                <input v-model=\"deposit.amount.dollars\" type=\"radio\" value=\"5\" name=\"amount\" id=\"amount5\">\n                <span :class=\"[amountIndicators[0] ? 'show' : '']\" data-amount=\"5\">$5</span>\n            </label>\n            <label @click.prevent=\"selectAmount(1, 10, $event)\" for=\"amount10\" class=\"fightsList__pickButton\">\n                <input v-model=\"deposit.amount.dollars\" type=\"radio\" value=\"10\" name=\"amount\" id=\"amount10\">\n                <span :class=\"[amountIndicators[1] ? 'show' : '']\" data-amount=\"10\">$10</span>\n            </label>\n            <label @click.prevent=\"selectAmount(2, 25, $event)\" for=\"amount25\" class=\"fightsList__pickButton\">\n                <input v-model=\"deposit.amount.dollars\" type=\"radio\" value=\"25\" name=\"amount\" id=\"amount25\">\n                <span :class=\"[amountIndicators[2] ? 'show' : '']\" data-amount=\"25\">$25</span>\n            </label>\n            <label @click.prevent=\"selectAmount(3, 50, $event)\" for=\"amount50\" class=\"fightsList__pickButton\">\n                <input v-model=\"deposit.amount.dollars\" type=\"radio\" value=\"50\" name=\"amount\" id=\"amount50\">\n                <span :class=\"[amountIndicators[3] ? 'show' : '']\" data-amount=\"50\">$50</span>\n            </label>\n            <label @click.prevent=\"selectAmount(4, 100, $event)\" for=\"amount100\" class=\"fightsList__pickButton\">\n                <input v-model=\"deposit.amount.dollars\" type=\"radio\" value=\"100\" name=\"amount\" id=\"amount100\">\n                <span :class=\"[amountIndicators[4] ? 'show' : '']\" data-amount=\"100\">$100</span>\n            </label>\n        </div>\n        <div class=\"deposit__amountWrap\">\n            The following amount:\n            <div class=\"deposit__amount\">${{ deposit.amount.dollars }}<sup>.{{ deposit.amount.cents }}</sup></div>\n        </div>\n        <!-- if credit card is preferred deppsit method -->\n        <div v-if=\"player.merchant == 1\">\n            <!-- if player has a card saved -->\n            <div v-if=\"player.stripeId !== 0 \">\n                <div class=\"deposit__billedTo\">\n                    will be billed to your<br>\n                    <span class=\"larger-text\"><span class=\"larger-text\">Credit Card</span> ending in <span class=\"larget-text\">{{ player.ccDigits }}</span></span>\n                </div>\n                <div class=\"deposit__cardTypeImage\">\n                    <img :src=\"URL.base + '/public/image/creditcards/' + player.ccImageName\" alt=\"{{ player.ccType }}\">\n                </div>\n            </div>\n            <!-- no card saved -->\n            <div v-else=\"\">\n                <div class=\"deposit__billedTo\">\n                    will be billed to your<br>\n                    <span class=\"larger-text\"><span class=\"larger-text\">Credit Card</span></span>\n                </div>\n            </div>\n            <!-- if player has card saved -->\n            <div v-if=\"player.stripeId !== 0\" class=\"profile__inputWrap form__row container-fluid\">\n                <label for=\"newCard\">\n                    <input v-model=\"customerState.currentCustomer.newCard\" type=\"checkbox\" value=\"1\" id=\"newCard\">\n                    <span class=\"checkboxText\">Use a different card for this deposit</span>\n                </label>\n            </div>\n            <!-- no card saved or player wants to use a new card -->\n            <div v-if=\"player.stripeId === 0 || customerState.currentCustomer.newCard\">\n                <div class=\"profile__inputWrap form__row\">\n                    <input v-model=\"cardInfo.name\" type=\"text\" placeholder=\"Name on Card\">\n                </div>\n                <div class=\"profile__inputWrap form__row\">\n                    <input v-model=\"cardInfo.number\" type=\"text\" placeholder=\"Card Number\">\n                </div>\n                <div class=\"profile__inputWrap form__row container-fluid\">\n                    <div class=\"col-xs-36\">\n                        <select v-model=\"cardInfo.expMonth\" class=\"card-expiry-month stripe-sensitive required\">\n                            <option value=\"00\">Month</option>\n                            <option value=\"01\">01-Jan</option>\n                            <option value=\"02\">02-Feb</option>\n                            <option value=\"03\">03-Mar</option>\n                            <option value=\"04\">04-Apr</option>\n                            <option value=\"05\">05-May</option>\n                            <option value=\"06\">06-Jun</option>\n                            <option value=\"07\">07-Jul</option>\n                            <option value=\"08\">08-Aug</option>\n                            <option value=\"09\">09-Sep</option>\n                            <option value=\"10\">10-Oct</option>\n                            <option value=\"11\">11-Nov</option>\n                            <option value=\"12\">12-Dec</option>\n                        </select>\n                    </div>\n                    <div class=\"col-xs-36 col-xs-offset-2\">\n                        <select v-model=\"cardInfo.expYear\" class=\"card-expiry-year stripe-sensitive required\">\n                            <option value=\"0000\">Year</option>\n                            <option v-for=\"year in expYears\" value=\"{{ year}}\">{{ year }}</option>\n                        </select>\n                    </div>\n                    <div class=\"col-xs-24 col-xs-offset-2\">\n                        <label for=\"cvv\">\n                            <span class=\"visuallyhidden\">CVV/CCV</span>\n                            <input v-model=\"cardInfo.cvv\" type=\"text\" placeholder=\"CVV/CCV\">\n                        </label>\n                    </div>\n                </div>\n                <!-- if player has a card saved -->\n                <div v-if=\"player.StripeId !== 0\" class=\"profile__inputWrap form__row container-fluid\">\n                    <label for=\"storeCC\">\n                        <input v-model=\"customerState.currentCustomer.saveNewCard\" type=\"checkbox\" value=\"1\" id=\"storeCC\"> <span class=\"checkboxText\">Please replace my current card with this card.</span>\n                    </label>\n                </div>\n                <!-- no card saved -->\n                <div v-else=\"\" class=\"profile__inputWrap form__row container-fluid\">\n                    <label for=\"storeCC\">\n                        <input v-model=\"customerState.addCustomer\" type=\"checkbox\" value=\"1\" id=\"storeCC\"> <span class=\"checkboxText\">Please store this information for future use.</span>\n                    </label>\n                </div>\n            </div>\n        </div>\n        <!-- paypal is preferred deposit method -->\n        <div v-else=\"\">\n            <div class=\"deposit__billedTo\">\n                will be billed to your<br>\n                <span class=\"larger-text\"><span class=\"larger-text\">PayPal Account</span></span>\n            </div>\n            <div class=\"profile__inputWrap form__row\">\n                <input v-model=\"player.paypalEmail\" type=\"text\" placeholder=\"PayPal Email\">\n            </div>\n            <div class=\"profile__inputWrap form__row container-fluid\">\n                <label for=\"storePP\">\n                    <input v-model=\"persistPaypal\" type=\"checkbox\" value=\"1\" id=\"storePP\"> <span class=\"checkboxText\">Please store this information for future use.</span>\n                </label>\n            </div>\n            <form id=\"paypal-form\" action=\"https://www.paypal.com/cgi-bin/webscr\">\n                <input type=\"hidden\" name=\"cmd\" value=\"_xclick\">\n                <input type=\"hidden\" name=\"business\" value=\"{{ player.paypalEmail }}\">\n                <input type=\"hidden\" name=\"return\" value=\"{{ URL.base + '/paypal-return' }}\">\n                <input type=\"hidden\" name=\"amount\" value=\"{{ deposit.amount.total }}\">\n            </form>\n        </div>\n        <div class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n            <div class=\"deposit__explanation\">(Includes a $0.35 Transaction Fee)</div>\n                <button id=\"depositBtn\" type=\"button\" class=\"button button--primary\" @click=\"makeDeposit\">Deposit</button>\n            </div>\n        </div>\n    </div>\n    <div :class=\"loaderClasses\">\n        <div class=\"js-global-loader loader\">\n            <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n            </svg>\n        </div>\n    </div>\n        <section :class=\"['syncAlert', alert.show ? 'show' : '']\">\n        <p :class=\"['syncAlert__body', alert.class]\">{{ alert.body }}</p>\n        <button @click=\"alertClose\" type=\"button\" class=\"syncAlert__close\">x</button>\n    </section>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"templateWrap\" :working=\"working\">\n    <header class=\"pageHeader\">\n        <h1 class=\"pageHeader__header\">{{ player.name }}</h1>\n        <h4 class=\"pageHeader__subheader\">\n            Fund your account with a deposit.\n        </h4>\n    </header>\n    <div class=\"deposit form container-fluid\">\n        <div class=\"col-xs-100 amountSelectionWrap\">\n            <label @click.prevent=\"selectAmount(0, 5, $event)\" for=\"amount5\" class=\"fightsList__pickButton\">\n                <input v-model=\"deposit.amount.dollars\" type=\"radio\" value=\"5\" name=\"amount\" id=\"amount5\">\n                <span :class=\"[amountIndicators[0] ? 'show' : '']\" data-amount=\"5\">$5</span>\n            </label>\n            <label @click.prevent=\"selectAmount(1, 10, $event)\" for=\"amount10\" class=\"fightsList__pickButton\">\n                <input v-model=\"deposit.amount.dollars\" type=\"radio\" value=\"10\" name=\"amount\" id=\"amount10\">\n                <span :class=\"[amountIndicators[1] ? 'show' : '']\" data-amount=\"10\">$10</span>\n            </label>\n            <label @click.prevent=\"selectAmount(2, 25, $event)\" for=\"amount25\" class=\"fightsList__pickButton\">\n                <input v-model=\"deposit.amount.dollars\" type=\"radio\" value=\"25\" name=\"amount\" id=\"amount25\">\n                <span :class=\"[amountIndicators[2] ? 'show' : '']\" data-amount=\"25\">$25</span>\n            </label>\n            <label @click.prevent=\"selectAmount(3, 50, $event)\" for=\"amount50\" class=\"fightsList__pickButton\">\n                <input v-model=\"deposit.amount.dollars\" type=\"radio\" value=\"50\" name=\"amount\" id=\"amount50\">\n                <span :class=\"[amountIndicators[3] ? 'show' : '']\" data-amount=\"50\">$50</span>\n            </label>\n            <label @click.prevent=\"selectAmount(4, 100, $event)\" for=\"amount100\" class=\"fightsList__pickButton\">\n                <input v-model=\"deposit.amount.dollars\" type=\"radio\" value=\"100\" name=\"amount\" id=\"amount100\">\n                <span :class=\"[amountIndicators[4] ? 'show' : '']\" data-amount=\"100\">$100</span>\n            </label>\n        </div>\n        <div class=\"deposit__amountWrap\">\n            The following amount:\n            <div class=\"deposit__amount\">${{ deposit.amount.dollars }}<sup>.{{ deposit.amount.cents }}</sup></div>\n        </div>\n        <!-- if credit card is preferred deppsit method -->\n        <div v-if=\"player.merchant == 1\">\n            <!-- if player has a card saved -->\n            <div v-if=\"player.stripeId !== 0 \">\n                <div class=\"deposit__billedTo\">\n                    will be billed to your<br>\n                    <span class=\"larger-text\"><span class=\"larger-text\">Credit Card</span> ending in <span class=\"larget-text\">{{ player.ccDigits }}</span></span>\n                </div>\n                <div class=\"deposit__cardTypeImage\">\n                    <img :src=\"URL.base + '/public/image/creditcards/' + player.ccImageName\" alt=\"{{ player.ccType }}\">\n                </div>\n            </div>\n            <!-- no card saved -->\n            <div v-else=\"\">\n                <div class=\"deposit__billedTo\">\n                    will be billed to your<br>\n                    <span class=\"larger-text\"><span class=\"larger-text\">Credit Card</span></span>\n                </div>\n            </div>\n            <!-- if player has card saved -->\n            <div v-if=\"player.stripeId !== 0\" class=\"profile__inputWrap form__row container-fluid\">\n                <label for=\"newCard\">\n                    <input v-model=\"customerState.currentCustomer.newCard\" type=\"checkbox\" value=\"1\" id=\"newCard\">\n                    <span class=\"checkboxText\">Use a different card for this deposit</span>\n                </label>\n            </div>\n            <!-- no card saved or player wants to use a new card -->\n            <div v-if=\"player.stripeId === 0 || customerState.currentCustomer.newCard\">\n                <div class=\"profile__inputWrap form__row\">\n                    <input v-model=\"cardInfo.name\" type=\"text\" placeholder=\"Name on Card\">\n                </div>\n                <div class=\"profile__inputWrap form__row\">\n                    <input v-model=\"cardInfo.number\" type=\"text\" placeholder=\"Card Number\">\n                </div>\n                <div class=\"profile__inputWrap form__row container-fluid\">\n                    <div class=\"col-xs-36\">\n                        <select v-model=\"cardInfo.expMonth\" class=\"card-expiry-month stripe-sensitive required\">\n                            <option value=\"00\">Month</option>\n                            <option value=\"01\">01-Jan</option>\n                            <option value=\"02\">02-Feb</option>\n                            <option value=\"03\">03-Mar</option>\n                            <option value=\"04\">04-Apr</option>\n                            <option value=\"05\">05-May</option>\n                            <option value=\"06\">06-Jun</option>\n                            <option value=\"07\">07-Jul</option>\n                            <option value=\"08\">08-Aug</option>\n                            <option value=\"09\">09-Sep</option>\n                            <option value=\"10\">10-Oct</option>\n                            <option value=\"11\">11-Nov</option>\n                            <option value=\"12\">12-Dec</option>\n                        </select>\n                    </div>\n                    <div class=\"col-xs-36 col-xs-offset-2\">\n                        <select v-model=\"cardInfo.expYear\" class=\"card-expiry-year stripe-sensitive required\">\n                            <option value=\"0000\">Year</option>\n                            <option v-for=\"year in expYears\" value=\"{{ year}}\">{{ year }}</option>\n                        </select>\n                    </div>\n                    <div class=\"col-xs-24 col-xs-offset-2\">\n                        <label for=\"cvv\">\n                            <span class=\"visuallyhidden\">CVV/CCV</span>\n                            <input v-model=\"cardInfo.cvv\" type=\"text\" placeholder=\"CVV/CCV\">\n                        </label>\n                    </div>\n                </div>\n                <!-- if player has a card saved -->\n                <div v-if=\"player.StripeId !== 0\" class=\"profile__inputWrap form__row container-fluid\">\n                    <label for=\"storeCC\">\n                        <input v-model=\"customerState.currentCustomer.saveNewCard\" type=\"checkbox\" value=\"1\" id=\"storeCC\"> <span class=\"checkboxText\">Please replace my current card with this card.</span>\n                    </label>\n                </div>\n                <!-- no card saved -->\n                <div v-else=\"\" class=\"profile__inputWrap form__row container-fluid\">\n                    <label for=\"storeCC\">\n                        <input v-model=\"customerState.addCustomer\" type=\"checkbox\" value=\"1\" id=\"storeCC\"> <span class=\"checkboxText\">Please store this information for future use.</span>\n                    </label>\n                </div>\n            </div>\n        </div>\n        <!-- paypal is preferred deposit method -->\n        <div v-else=\"\">\n            <div class=\"deposit__billedTo\">\n                will be billed to your<br>\n                <span class=\"larger-text\"><span class=\"larger-text\">PayPal Account</span></span>\n            </div>\n        </div>\n        <div class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n            <div class=\"deposit__explanation\">(Includes a $0.35 Transaction Fee)</div>\n                <button id=\"depositBtn\" type=\"button\" class=\"button button--primary\" @click=\"makeDeposit\">Deposit</button>\n            </div>\n        </div>\n    </div>\n    <div :class=\"loaderClasses\">\n        <div class=\"js-global-loader loader\">\n            <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n            </svg>\n        </div>\n    </div>\n        <section :class=\"['syncAlert', alert.show ? 'show' : '']\">\n        <p :class=\"['syncAlert__body', alert.class]\">{{ alert.body }}</p>\n        <button @click=\"alertClose\" type=\"button\" class=\"syncAlert__close\">x</button>\n    </section>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -46210,7 +46169,6 @@ if (!Array.prototype.findIndex) {
 
 
 _vue2.default.config.debug = false;
-
 _vue2.default.use(_vueResource2.default);
 _vue2.default.use(_vueRouter2.default);
 
@@ -46267,6 +46225,10 @@ router.map({
   },
 
   '/deposit': {
+    component: _Deposit2.default
+  },
+
+  '/deposit/paypal/:transactionId': {
     component: _Deposit2.default
   }
 
