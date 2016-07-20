@@ -149,7 +149,7 @@
                         </div>
                     </div>
                     <!-- if player has a card saved -->
-                    <div v-if="player.StripeId !== 0" class="profile__inputWrap form__row container-fluid">
+                    <div v-if="player.stripeId !== 0" class="profile__inputWrap form__row container-fluid">
                         <label for="storeCC">
                             <input v-model="customerState.currentCustomer.saveNewCard" type="checkbox" value="1" id="storeCC"> <span class="checkboxText">Please replace my current card with this card.</span>
                         </label>
