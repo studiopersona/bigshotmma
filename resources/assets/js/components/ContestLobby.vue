@@ -3,19 +3,19 @@
         <header class="pageHeader" :working.sync="working">
             <h1 class="pageHeader__header">Contest Lobby</h1>
             <div v-if="contestsEntered.indexOf(parseInt(participantsList[0].contest.contest_id, 10)) === -1">
-                <h4 v-if="! deadlinePast" class="pageHeader__subheader">
-                    {{ participantsList[0].contest.event_short_name }} / <a @click.prevent="confirmEnter">Enter</a>
+                <h4 v-if="deadlinePast  || contestFull" class="pageHeader__subheader">
+                    {{ participantsList[0].contest.event_short_name }} / Contest Closed
                 </h4>
                 <h4 v-else class="pageHeader__subheader">
-                    {{ participantsList[0].contest.event_short_name }} / Contest Closed
+                    {{ participantsList[0].contest.event_short_name }} / <a @click.prevent="confirmEnter">Enter</a>
                 </h4>
             </div>
             <div v-else>
-                <h4 v-if="! deadlinePast" class="pageHeader__subheader">
-                    {{ participantsList[0].contest.event_short_name }} / <a @click.prevent="confirmQuit">Quit Contest</a>
+                <h4 v-if="deadlinePast" class="pageHeader__subheader">
+                    {{ participantsList[0].contest.event_short_name }} / <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/results' }">Results</a>
                 </h4>
                 <h4 v-else class="pageHeader__subheader">
-                    {{ participantsList[0].contest.event_short_name }} / <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/results' }">Results</a>
+                    {{ participantsList[0].contest.event_short_name }} / <a @click.prevent="confirmQuit">Quit Contest</a>
                 </h4>
             </div>
         </header>
@@ -48,8 +48,11 @@
             <ul class="stripped-list">
                 <li class="participantsList__item" v-for="participant in participantsList[0].participants">
                     <div class="container-fluid">
-                        <div class="col-xs-15 participantsList__img">
-                            <img src="public/image/avatar/male.jpg">
+                        <div v-if="participant.avatar === ''" class="col-xs-15 participantsList__img">
+                            <img :src="'public/image/avatar/male.jpg'">
+                        </div>
+                        <div v-else class="col-xs-15 participantsList__img">
+                            <img :src="'public/image/avatar/' + participant.avatar">
                         </div>
                         <div class="col-xs-40">
                             <div class="participantsList__itemTitle">&nbsp;</div>
@@ -73,11 +76,11 @@
                 </li>
             </ul>
             <div v-if="contestsEntered.indexOf(parseInt(participantsList[0].contest.contest_id, 10)) === -1" class="container-fluid">
-                <div v-if="! deadlinePast" class="col-xs-100 button-wrap">
-                    <a @click.prevent="confirmEnter" class="button button--primary">Enter</a>
+                <div v-if="deadlinePast || contestFull" class="col-xs-100 button-wrap">
+                    This Contest is Closed <span v-if="contestFull">the Maximum Number of Players has Been Reached</span>
                 </div>
                 <div v-else class="col-xs-100 button-wrap">
-                    Contest is Closed
+                    <a @click.prevent="confirmEnter" class="button button--primary">Enter</a>
                 </div>
             </div>
             <div v-else class="container-fluid">
@@ -208,6 +211,7 @@
                 contest: {},
                 contestsEntered: [],
                 deadlinePast: false,
+                contestFull: false,
                 working: false,
                 infoModalClasses: ['infoModal'],
                 fundsModalClasses: ['fundsModal'],
@@ -270,6 +274,7 @@
                 }).then(function(response) {
                     var now = new Date(),
                         deadline;
+
                     this.participantsList = response.data.participants;
                     this.working = false;
                     // console.log(this.participantsList[0].contest);
@@ -278,6 +283,7 @@
                     // console.log(this.participantsList[0].contest.entry_deadline);
                     // console.log(deadline);
                     this.deadlinePast = ( now.getTime() > deadline.getTime() );
+                    this.contestFull = ( response.data.participants[0].participants.length >= parseInt(response.data.participants[0].contest.max_participants, 10) );
                 }, function(err) {
                     console.log(err);
                 });

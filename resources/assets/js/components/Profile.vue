@@ -7,13 +7,24 @@
             </h4>
         </header>
         <div class="profile form">
-            <div class="profile__image">
+            <div v-if="player.avatar === ''" class="profile__image">
                 <img :src="URL.base + '/public/image/avatar/male.jpg'">
-                <!--<button type="button">Upload New Image</button>-->
             </div>
-            <div class="profile__inputWrap form__row">
-                <input v-model="player.name" type="text">
+            <div v-else class="profile__image">
+                <img :src="URL.base + '/public/image/avatar/' + player.avatar">
             </div>
+            <fieldset>
+                <legend>Change Avatar</legend>
+                 <div class="profile__inputWrap form__row container-fluid">
+                    <input type="file" name="file" @change="onFileChange" placeholder="Avatar">
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Change Username</legend>
+                <div class="profile__inputWrap form__row">
+                    <input v-model="player.name" type="text">
+                </div>
+            </fieldset>
             <fieldset>
                 <legend>Change Your Password</legend>
                 <div class="profile__inputWrap form__row">
@@ -156,6 +167,37 @@
                         vm.working = false;
                     });
                 });
+            },
+
+            onFileChange (e) {
+                var file = e.target.files[0] || e.dataTransfer.files[0]
+                var vm = this
+                var uploadData = new FormData()
+
+                // this.player.avatar = file.name
+                uploadData.append('file', file)
+
+                // upload the file to the server here
+                localforage.getItem('id_token')
+                .then(function(token) {
+                    vm.$http.post(URL.base + '/api/v1/upload-avatar-image', uploadData, {
+                        headers: {
+                            'Authorization' : 'Bearer ' + token
+                        }
+                    })
+                    .then(function(response) {
+                        // console.log(response)
+                        if (response.data.success) {
+                            vm.player.avatar = response.data.fileName
+                        }
+                    })
+                    .catch(function(err) {
+                        console.log(err)
+                    })
+                })
+                .catch(function(err) {
+                   console.log(err)
+                })
             },
 
             flash(response) {

@@ -41,3 +41,15 @@
 .deposit__cardTypeImage {
 	text-align: center;
 }
+
+.notEligible {
+	padding: 0 1.5rem;
+
+	p {
+		margin: 1.7rem;
+	}
+
+	a {
+		text-decoration: underline;
+	}
+}

@@ -37,6 +37,8 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('contest/{id}/check-for-picks', 'PicksController@checkForPicks');
 	    Route::get('contest/{id}/standings/{withplayers?}', 'PicksController@getStandings');
 	    Route::get('contest/{id}/results', 'FightResultsController@getByContestId');
+	    Route::get('contest/{id}/enter-player', 'ContestsController@enterPlayer');
+	    Route::get('contest/{id}/has-player-entered', 'ContestsController@hasPlayerEntered');
 	    Route::resource('contests', 'ContestsController');
 	    Route::resource('picks', 'PicksController');
 	    Route::resource('powerups', 'PowerUpsController');
@@ -51,6 +53,8 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('deposit-profile', 'UsersController@depositProfile');
 	    Route::post('deposit-profile', 'UsersController@depositProfileUpdate');
 	    Route::post('deposit', 'UsersController@makeDeposit');
+	    //  Upload Routes ----------------------------------------------------
+	    Route::post('upload-avatar-image', 'UsersController@uploadImage');
 	});
 
 	Route::group(['prefix' => 'lander'], function()

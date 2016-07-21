@@ -3,11 +3,14 @@
 namespace Bsmma\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use Bsmma\Http\Requests;
 use Bsmma\Contest;
 use Bsmma\ContestParticipant;
 use Bsmma\User;
+use Bsmma\UserBalance;
+use Bsmma\ContestUserBalance;
 use Bsmma\divStrong\Transformers\ContestTransformer as ContestTransformer;
 use Bsmma\divStrong\Transformers\PlayerTransformer as PlayerTransformer;
 use Bsmma\divStrong\Transformers\FightTransformer as FightTransformer;
@@ -21,7 +24,9 @@ class ContestsController extends ApiController
         ContestParticipant $contestParticipant,
         ContestTransformer $contestTransformer,
         PlayerTransformer $playerTransformer,
-        FightTransformer $fightTransformer
+        FightTransformer $fightTransformer,
+        UserBalance $userBalance,
+        ContestUserBalance $contestUserBalance
     )
     {
         $this->user = $user;
@@ -30,6 +35,8 @@ class ContestsController extends ApiController
         $this->contestTransformer = $contestTransformer;
         $this->playerTransformer = $playerTransformer;
         $this->fightTransformer = $fightTransformer;
+        $this->userBalance = $userBalance;
+        $this->contestUserBalance = $contestUserBalance;
 
         $this->middleware('jwt.auth');
     }
@@ -88,6 +95,60 @@ class ContestsController extends ApiController
         return $this->respond([
             'participants' => $this->playerTransformer->transformCollection($participants),
         ]);
+    }
+
+    public function enterPlayer($contest_id)
+    {
+        $user = \JWTAuth::parseToken()->authenticate();
+
+        $hasEntered = $this->contestParticipant->where([
+                        'user_id' => $user->id,
+                        'contest_id' => $contest_id
+                    ])
+                    ->first();
+
+        if ( is_null($hasEntered) ) {
+
+            $contest = $this->contest->select('entry_fee')
+                        ->where('id', $contest_id)
+                        ->first();
+
+            if ( is_null($contest) ) return $this->respondNotFound('The contest could not be found');
+
+            DB::beginTransaction();
+
+            try {
+                $this->contestParticipant->create(['contest_id'=> $contest_id, 'user_id' => $user->id]);
+                $userBalance = $this->userBalance->create(['user_id' => $user->id, 'transaction_type_id' => 1, 'amount' => $contest->entry_fee * 100]);
+                $this->contestUserBalance->create(['contest_id' => $contest_id, 'user_balance_id' => $userBalance->id, 'is_entry' => 1]);
+
+                DB::commit();
+            }
+            catch (\Exception $e) {
+                dump($e);
+                DB::rollback();
+                return $this->respondWithError('There was a problem entering the contest');
+            }
+        }
+
+        return $this->respond([
+            'success' => true,
+            'balance' => $this->getUserBalance($user->id)
+        ]);
+    }
+
+    public function hasPlayerEntered($contest_id)
+    {
+        $user = \JWTAuth::parseToken()->authenticate();
+
+        $check = $this->contestParticipant->where([
+                        'user_id' => $user->id,
+                        'contest_id' => $contest_id
+                    ])
+                    ->first();
+        if ( is_null($check) ) return $this->respond(['hasPlayerEntered' => false]);
+
+        return $this->respond(['hasPlayerEntered' => true]);
     }
 
     public function getFights($contest_id)
@@ -233,5 +294,18 @@ class ContestsController extends ApiController
             'losses' => 0,
             'win_percentage' => 0,
         ];
+    }
+
+    private function getUserBalance($userId)
+    {
+        $credits = $this->userBalance->where('user_id', $userId)
+                    ->whereIn('transaction_type_id', [2, 4, 5, 6])
+                    ->sum('amount');
+
+        $debits = $this->userBalance->where('user_id', $userId)
+                    ->whereIn('transaction_type_id', [1, 3])
+                    ->sum('amount');
+
+        return ($credits - $debits)/100;
     }
 }

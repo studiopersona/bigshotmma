@@ -27,18 +27,24 @@
         	 			Contests
         	 		</a>
         	 	</li>
+                <li class="appDashboard__linkWrap">
+                    <a class="appDashboard__link appDashboard__link--rules" @click="showContestTypes">
+                        <img src="public/image/dashboard/contest-types.png">
+                        Contest Types
+                    </a>
+                </li>
                <li class="appDashboard__linkWrap">
                     <a class="appDashboard__link appDashboard__link--rules" @click="showHowToPlay">
                         <img src="public/image/dashboard/rules.png">
                         How to Play
                     </a>
                 </li>
-        	 	<!--<li class="appDashboard__linkWrap">
-        	 		<a class="appDashboard__link appDashboard__link--rules" @click="showContestTypes">
-        	 			<img src="public/image/dashboard/contest-types.png">
-        	 			Contest Types
-        	 		</a>
-        	 	</li>-->
+                <li class="appDashboard__linkWrap">
+                    <a class="appDashboard__link appDashboard__link--eligibility" @click="showEligibility">
+                        <img src="public/image/dashboard/eligibility.png">
+                        Eligibilty
+                    </a>
+                </li>
                 <li class="appDashboard__linkWrap">
                     <a class="appDashboard__link appDashboard__link--rules" v-link="{ path: '/deposit' }" @click="toggleMenu">
                         <img src="public/image/dashboard/deposit.png">
@@ -199,15 +205,31 @@
                 <button @click="sliderClose('#howToPlaySlider')" type="button" class="alertModal__close">x</button>
             </div>
         </section>
+        <section id="eligibility" class="rulesSlider">
+            <div :class="['eligibilitySlider__slide', 'current']">
+                <h3 class="rulesSlider__title">Eligibilty</h3>
+                <div class="rulesSlider__icon">
+                    <img :src="URL.base + '/public/image/info/eligibility.png'">
+                </div>
+                <div class="rulesSlider__description">
+                    <p class="smaller-text">Daily fantasy sports (DFS) is legal in 41 US states, but residents of the following states are not eligible to participate in paid entry contests:</p>
+                    <p>Alabama, Arizona, Hawaii, Idaho, Iowa, Louisiana, Montana, Nevada and Washington.</p>
+                </div>
+                <div class="button-wrap">
+                    <button @click="sliderClose('#eligibility')" type="button" class="button button--green">Got It</button>
+                </div>
+                <button @click="sliderClose('#eligibility')" type="button" class="alertModal__close">x</button>
+            </div>
+        </section>
         <div id="overlay" @click="toggleMenu"></div>
     </div>
 </template>
 
 <script>
 	//import auth from '../auth';
-	import {router} from '../index';
-	import auth from '../auth';
-    import localforage from 'localforage';
+	import {router} from '../index'
+	import auth from '../auth'
+    import localforage from 'localforage'
 
 	export default {
 		data: function() {
@@ -215,12 +237,14 @@
 				contestTypes: [],
 				currentRulesSlide: 0,
                 currentHowToPlaySlide: 0,
+                currentEligibility: 0,
 				loggedIn: false,
 				playersName: '',
                 playersBalance: 0,
                 appDashboardClassList: [],
                 rulesSliderClassList: [],
                 howToPlayClassList: [],
+                eligibilityClassList: [],
                 overlayClassList: [],
                 overlay: {},
 				URL: {
@@ -228,13 +252,13 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
-			};
+			}
 		},
 
 		created() {
-            var vm = this;
+            var vm = this
 
-            localforage.getItem('id_token').then(vm.fetch);
+            localforage.getItem('id_token').then(vm.fetch)
         },
 
 		ready() {
@@ -243,19 +267,20 @@
             auth.initLocalforage();
             localforage.getItem('id_token')
             .then(function(token) {
-                var params;
+                var params
 
                 if ( token ) {
                     params = auth.parseToken(token)
-                    if ( Math.round(new Date().getTime() / 1000) <= params.exp ) vm.loggedIn = true;
+                    if ( Math.round(new Date().getTime() / 1000) <= params.exp ) vm.loggedIn = true
                 }
             })
             .catch(function(err) {
-                console.log(err);
+                console.log(err)
             });
-            this.appDashboardClassList = document.querySelector('.appDashboard').classList;
-            this.rulesSliderClassList = document.querySelector('#rulesSlider').classList;
-            this.howToPlayClassList = document.querySelector('#howToPlaySlider').classList;
+            this.appDashboardClassList = document.querySelector('.appDashboard').classList
+            this.rulesSliderClassList = document.querySelector('#rulesSlider').classList
+            this.howToPlayClassList = document.querySelector('#howToPlaySlider').classList
+            this.eligibilityClassList = document.querySelector('#eligibility').classList
             this.overlay = document.getElementById('overlay')
             this.overlayClassList = this.overlay.classList
             this.overlay.addEventListener('click', this.toogleMenu, false)
@@ -273,7 +298,7 @@
                     },
                     function(err) {
                         console.log(err);
-                });
+                })
 
                 this.$http.get( URL.base + '/api/v1/player-name', {}, {
                     // Attach the JWT header
@@ -284,7 +309,7 @@
                     },
                     function(err) {
                         console.log(err);
-                });
+                })
 
                 this.$http.get( URL.base + '/api/v1/player-balance', {}, {
                     // Attach the JWT header
@@ -295,7 +320,7 @@
                     },
                     function(err) {
                         console.log(err);
-                });
+                })
             },
 
 			toggleMenu() {
@@ -308,34 +333,39 @@
 			},
 
 			showContestTypes() {
-				this.appDashboardClassList.toggle('show');
-				this.rulesSliderClassList.toggle('show');
+				this.appDashboardClassList.toggle('show')
+				this.rulesSliderClassList.toggle('show')
 			},
 
             showHowToPlay() {
-                this.appDashboardClassList.toggle('show');
-                this.howToPlayClassList.toggle('show');
+                this.appDashboardClassList.toggle('show')
+                this.howToPlayClassList.toggle('show')
+            },
+
+            showEligibility() {
+                this.appDashboardClassList.toggle('show')
+                this.eligibilityClassList.toggle('show')
             },
 
 			changeSlide(index, selector, position, sliderSelector, e) {
 				if ( index < document.querySelectorAll(selector).length - 1 ) {
-					this[position] = index + 1;
+					this[position] = index + 1
 				} else {
-					this.sliderClose(sliderSelector);
-					this[position] = 0;
+					this.sliderClose(sliderSelector)
+					this[position] = 0
 				}
 			},
 
 			sliderClose(selector) {
-				document.querySelector(selector).classList.toggle('show');
-                this.appDashboardClassList.toggle('show');
+				document.querySelector(selector).classList.toggle('show')
+                this.appDashboardClassList.toggle('show')
 			},
 
 			logout() {
-				auth.logout();
-				router.go('login');
-				this.toggleMenu();
-				this.loggedIn = false;
+				auth.logout()
+				router.go('login')
+				this.toggleMenu()
+				this.loggedIn = false
 			},
 		},
 	};

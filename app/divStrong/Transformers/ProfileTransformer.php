@@ -8,7 +8,7 @@ class ProfileTransformer extends Transformer {
         return [
             'name' => $user['player_name'],
             'email' => $user['email'],
-            'avatar' => 'this will be a hash',
+            'avatar' => $user['avatar'],
         ];
     }
 }

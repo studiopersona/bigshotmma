@@ -71,7 +71,7 @@ class UsersController extends ApiController
             'profile' => [
             	'name' => $user->player_name,
             	'email' => $user->email,
-            	'avatar' => 'will be a hash',
+            	'avatar' => $user->avatar,
             ],
         ]);
     }
@@ -84,6 +84,7 @@ class UsersController extends ApiController
                         ->first();
 
         $userInfo->player_name = $request->player_name;
+        $userInfo->avatar = $request->avatar;
 
         if ( $request->new_password !== '' && Auth::attempt(['email' => $user->email, 'password' => $request->old_password]) ) {
             $userInfo->password = bcrypt($request->new_password);
@@ -433,5 +434,28 @@ class UsersController extends ApiController
         else {
             return 'Unknown';
         }
+    }
+
+    public function uploadImage(Request $request)
+    {
+        $user = \JWTAuth::parseToken()->authenticate();
+
+        $file = $request->file('file');
+
+        if ( $file->getClientOriginalExtension() !== 'jpg' && $file->getClientOriginalExtension() !== 'jpeg' &&$file->getClientOriginalExtension() !== 'png' )
+        {
+                $this->setStatusCode(402);
+
+                return $this->respondWithError('Only jpeg or png files are allowed');
+        }
+
+        $fileName = 'profile-'.$user->id.'.'.$file->getClientOriginalExtension();
+
+        $check = $file->move(env('UPLOAD_PATH').'avatar/', $fileName);
+
+        if ( ! is_a($check, '\Symfony\Component\HttpFoundation\File\File') ) return $this->respondWithError('There was a problem uploading the file.');
+
+        return $this->respond(['success' => true, 'fileName' => $fileName]);
+
     }
 }

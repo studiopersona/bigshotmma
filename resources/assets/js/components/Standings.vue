@@ -32,8 +32,11 @@
             <ul class="stripped-list">
                 <li class="participantsList__item" v-for="participant in standingsList">
                     <div class="container-fluid">
-                        <div class="col-xs-15 participantsList__img">
-                            <img src="public/image/avatar/male.jpg">
+                        <div v-if="participant.avatar === ''" class="col-xs-15 participantsList__img">
+                            <img :src="'public/image/avatar/male.jpg'">
+                        </div>
+                        <div v-else class="col-xs-15 participantsList__img">
+                            <img :src="'public/image/avatar/' + participant.avatar">
                         </div>
                         <div class="col-xs-35">
                             <div class="participantsList__itemTitle">&nbsp;</div>

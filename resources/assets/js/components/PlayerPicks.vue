@@ -357,8 +357,23 @@
 
                 }, function(err) {
                     console.log(err);
-                    this.picksList = [];
-                    this.working = false;
+                    console.log(this.$route.params.contest_id);
+                    this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/has-player-entered', {}, {
+                         // Attach the JWT header
+                        headers: { 'Authorization' : 'Bearer ' + token }
+                    })
+                    .then(function(response) {
+                        // if no picks have been entered yet and the player has alread entered the contest redirect to the fights view
+                        if ( err.data.error.status_code === 404 && response.data.hasPlayerEntered ) {
+                            router.go('/contest/' + this.$route.params.contest_id + '/fights')
+                        } else {
+                            this.picksList = [];
+                            this.working = false;
+                        }
+                    })
+                    .catch(function(err) {
+                        console.log(err)
+                    })
                 });
             },
 

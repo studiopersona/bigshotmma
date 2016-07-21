@@ -6,7 +6,7 @@
                 Fund your account with a deposit.
             </h4>
         </header>
-        <div class="deposit form container-fluid">
+        <div v-if="eligible" class="deposit form container-fluid">
             <div class="col-xs-100 amountSelectionWrap">
                 <label
                     @click.prevent="selectAmount(0, 5, $event)"
@@ -171,7 +171,7 @@
             </div>
             <div class="container-fluid">
                 <div class="col-xs-100 button-wrap">
-                <div class="deposit__explanation">(Includes a $0.35 Transaction Fee)</div>
+                    <div class="deposit__explanation">(Includes a $0.35 Transaction Fee)</div>
                     <button
                         id="depositBtn"
                         type="button"
@@ -181,6 +181,11 @@
                 </div>
             </div>
         </div>
+        <div v-else class="notEligible">
+            <p>Sorry, your state is not eligible for paid contests, therefore you can not make deposits.</p>
+            <p>Please check your <a v-link="{ path: '/deposit-profile' }">deposit profile</a> to make sure you have entered the correct state.</p>
+            <p>You are welcome to participate in any of our free <a v-link="{ path: '/events' }">contests</a>.</p>
+        </div>
         <div :class="loaderClasses">
             <div class="js-global-loader loader">
                 <svg viewBox="0 0 32 32" width="32" height="32">
@@ -188,10 +193,6 @@
                 </svg>
             </div>
         </div>
-            <section :class="['syncAlert', alert.show ? 'show' : '']">
-            <p :class="['syncAlert__body', alert.class]">{{ alert.body }}</p>
-            <button @click="alertClose" type="button" class="syncAlert__close">x</button>
-        </section>
     </div>
 </template>
 
@@ -201,6 +202,7 @@
     import D from '../libs/d.js'
     import localforage from 'localforage'
     import paypalPay from 'paypal-rest-sdk'
+    import ineligiblStates from '../config/ineligibile-states.json'
 
     export default {
 
@@ -263,6 +265,9 @@
                     0,
                     0
                 ],
+                eligible: false,
+                eligibilityModalClasses: ['rulesSlider'],
+                ineligiblStates: [],
                 alert: {
                     body: '',
                     class: 'syncAlert--success',
@@ -286,6 +291,8 @@
                 params,
                 head,
                 script
+
+            this.ineligiblStates = ineligiblStates.states
 
             localforage.getItem('id_token').then(function(token) {
                 if ( token ) {
@@ -326,6 +333,7 @@
                 }).then(function(response) {
                     // console.log(response.data.profile)
                     this.player = response.data.profile
+                    this.checkEligibility()
                     this.cardInfo.address = response.data.profile.address
                     this.cardInfo.city = response.data.profile.city
                     this.cardInfo.state = response.data.profile.state
@@ -423,6 +431,15 @@
                         vm.working = false
                     })
                 })
+            },
+
+            checkEligibility() {
+                this.eligible = ( this.ineligiblStates.indexOf(this.player.state) === -1 )
+                if ( ! this.eligible ) this.eligibilityModalClasses = ['rulesSlider', 'show']
+            },
+
+            eligibilityModalClose() {
+                this.eligibilityModalClasses = ['rulesSlider']
             },
 
             flash(response) {

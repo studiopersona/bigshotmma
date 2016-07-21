@@ -419,12 +419,26 @@
             fetch(token) {
                 var vm = this
 
+                // enter player into contest if they haven't already been entered
+                this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/enter-player', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                })
+                .then(function(response) {
+                    // console.log(response)
+                    vm.$root.playersBalance = response.data.balance
+                })
+                .catch(function(err) {
+                    console.log(err)
+                })
+                // check if picks have already been entered and redirect to pick view if they have
                 this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/check-for-picks', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     router.go('/contest/' + this.$route.params.contest_id + '/picks')
                 }, function(err) {
+                    // if no picks have been entered yet setup the view
                     this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', {}, {
                         // Attach the JWT header
                         headers: { 'Authorization' : 'Bearer ' + token }
@@ -436,7 +450,7 @@
                     }, function(err) {
                         console.log(err)
                     })
-
+                    // get the power up info
                     this.$http.get(URL.base + '/api/v1/power-ups', {}, {
                         // Attach the JWT header
                         headers: { 'Authorization' : 'Bearer ' + token }
@@ -444,7 +458,7 @@
                         this.powerUps = response.data
                         // console.log(this.powerUps)
                     })
-
+                    // get finishes info
                     this.$http.get(URL.base + '/api/v1/finishes', {}, {
                         // Attach the JWT header
                         headers: { 'Authorization' : 'Bearer ' + token }
@@ -453,7 +467,6 @@
                     })
                 })
 
-                //if ( localStorage.getItem('newplayer') ) this.showHowToPlay()
                 localforage.getItem('newplayer')
                 .then(function(newplayer) {
                     if ( parseInt(newplayer, 10) === 1 ) vm.showHowToPlay()
@@ -467,13 +480,11 @@
 
             showHowToPlay() {
                 this.howToPlayModalClasses.push('show')
-                //localStorage.removeItem('newplayer')
                 localforage.removeItem('newplayer')
             },
 
             howToPlayModalClose(e) {
                 e.preventDefault()
-
                 this.howToPlayModalClasses = ['howToPlayModal']
             },
 

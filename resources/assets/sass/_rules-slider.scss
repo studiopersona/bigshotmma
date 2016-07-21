@@ -28,7 +28,8 @@
 }
 
 .rulesSlider__slide,
-.playSlider__slide {
+.playSlider__slide,
+.eligibilitySlider__slide {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -135,6 +136,10 @@
 	.larger {
 		font-size: 5.3rem;
 		margin-top: -1.5rem;
+	}
+
+	.smaller-text {
+		font-size: 1.4rem;
 	}
 }
 

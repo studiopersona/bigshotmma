@@ -10,6 +10,64 @@
             <fieldset>
                 <legend>Billing &amp; Payout Details</legend>
                 <div class="profile__inputWrap form__row container-fluid">
+                    <div  class="col-xs-100">
+                        <select v-model="player.state" @change="checkEligibility">
+                            <option value="">State</option>
+                            <option value="AL">Alabama</option>
+                            <option value="AK">Alaska</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="CA">California</option>
+                            <option value="CO">Colorado</option>
+                            <option value="CT">Connecticut</option>
+                            <option value="DE">Delaware</option>
+                            <option value="DC">District Of Columbia</option>
+                            <option value="FL">Florida</option>
+                            <option value="GA">Georgia</option>
+                            <option value="HI">Hawaii</option>
+                            <option value="ID">Idaho</option>
+                            <option value="IL">Illinois</option>
+                            <option value="IN">Indiana</option>
+                            <option value="IA">Iowa</option>
+                            <option value="KS">Kansas</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="MI">Michigan</option>
+                            <option value="MN">Minnesota</option>
+                            <option value="MS">Mississippi</option>
+                            <option value="MO">Missouri</option>
+                            <option value="MT">Montana</option>
+                            <option value="NE">Nebraska</option>
+                            <option value="NV">Nevada</option>
+                            <option value="NH">New Hampshire</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NM">New Mexico</option>
+                            <option value="NY">New York</option>
+                            <option value="NC">North Carolina</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="OH">Ohio</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="OR">Oregon</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="RI">Rhode Island</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="SD">South Dakota</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="TX">Texas</option>
+                            <option value="UT">Utah</option>
+                            <option value="VT">Vermont</option>
+                            <option value="VA">Virginia</option>
+                            <option value="WA">Washington</option>
+                            <option value="WV">West Virginia</option>
+                            <option value="WI">Wisconsin</option>
+                            <option value="WY">Wyoming</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="profile__inputWrap form__row container-fluid">
                     <label for="firstname" class="col-xs-100">
                         <span class="visuallyhidden">First Name</span>
                         <input v-model="player.firstname" type="text" placeholder="First Name" id="firstname">
@@ -38,62 +96,6 @@
                         <span class="visuallyhidden">City</span>
                         <input v-model="player.city" type="text" placeholder="City" id="city">
                     </label>
-                    <div  class="col-xs-offset-2 col-xs-32">
-                        <select v-model="player.state">
-                            <option value="">State</option>
-                            <option value="AL">AL</option>
-                            <option value="AK">AK</option>
-                            <option value="AZ">AZ</option>
-                            <option value="AR">AR</option>
-                            <option value="CA">CA</option>
-                            <option value="CO">CO</option>
-                            <option value="CT">CT</option>
-                            <option value="DE">DE</option>
-                            <option value="DC">DC</option>
-                            <option value="FL">FL</option>
-                            <option value="GA">GA</option>
-                            <option value="HI">HI</option>
-                            <option value="ID">ID</option>
-                            <option value="IL">IL</option>
-                            <option value="IN">IN</option>
-                            <option value="IA">IA</option>
-                            <option value="KS">KS</option>
-                            <option value="KY">KY</option>
-                            <option value="LA">LA</option>
-                            <option value="ME">ME</option>
-                            <option value="MD">MD</option>
-                            <option value="MA">MA</option>
-                            <option value="MI">MI</option>
-                            <option value="MN">MN</option>
-                            <option value="MS">MS</option>
-                            <option value="MO">MO</option>
-                            <option value="MT">MT</option>
-                            <option value="NE">NE</option>
-                            <option value="NV">NV</option>
-                            <option value="NH">NH</option>
-                            <option value="NJ">NJ</option>
-                            <option value="NM">NM</option>
-                            <option value="NY">NY</option>
-                            <option value="NC">NC</option>
-                            <option value="ND">ND</option>
-                            <option value="OH">OH</option>
-                            <option value="OK">OK</option>
-                            <option value="OR">OR</option>
-                            <option value="PA">PA</option>
-                            <option value="RI">RI</option>
-                            <option value="SC">SC</option>
-                            <option value="SD">SD</option>
-                            <option value="TN">TN</option>
-                            <option value="TX">TX</option>
-                            <option value="UT">UT</option>
-                            <option value="VT">VT</option>
-                            <option value="VA">VA</option>
-                            <option value="WA">WA</option>
-                            <option value="WV">WV</option>
-                            <option value="WI">WI</option>
-                            <option value="WY">WY</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="profile__inputWrap form__row container-fluid">
                     <div class="col-xs-50">
@@ -128,17 +130,34 @@
                 </div>
             </div>
         </div>
+        <section :class="eligibilityModalClasses">
+            <div :class="['eligibilitySlider__slide', 'current']">
+                <h3 class="rulesSlider__title">Eligibilty</h3>
+                <div class="rulesSlider__icon">
+                    <img :src="URL.base + '/public/image/info/eligibility.png'">
+                </div>
+                <div class="rulesSlider__description">
+                    <p class="smaller-text">Daily fantasy sports (DFS) is legal in 41 US states, but residents of the following states are not eligible to participate in paid entry contests:</p>
+                    <p>Alabama, Arizona, Hawaii, Idaho, Iowa, Louisiana, Montana, Nevada and Washington.</p>
+                </div>
+                <div class="button-wrap">
+                    <button @click="eligibilityModalClose" type="button" class="button button--green">Got It</button>
+                </div>
+                <button @click="eligibilityModalClose" type="button" class="alertModal__close">x</button>
+            </div>
+        </section>
+        <section :class="['syncAlert', alert.show ? 'show' : '']">
+            <p :class="['syncAlert__body', alert.class]">{{ alert.body }}</p>
+            <button @click="alertClose" type="button" class="alertModal__close">x</button>
+        </section>
     </div>
-    <section :class="['syncAlert', alert.show ? 'show' : '']">
-        <p :class="['syncAlert__body', alert.class]">{{ alert.body }}</p>
-        <button @click="alertClose" type="button" class="alertModal__close">x</button>
-    </section>
 </template>
 
 <script>
-    import auth from '../auth';
-    import {router} from '../index';
-    import localforage from 'localforage';
+    import auth from '../auth'
+    import {router} from '../index'
+    import localforage from 'localforage'
+    import ineligiblStates from '../config/ineligibile-states.json'
 
     export default {
 
@@ -164,6 +183,9 @@
                 },
                 paypalEmail: '',
                 expYears: [],
+                ineligiblStates: [],
+                eligible: false,
+                eligibilityModalClasses: ['rulesSlider'],
                 alert: {
                     body: '',
                     class: 'syncAlert--success',
@@ -179,12 +201,14 @@
         },
 
         created() {
-            this.working = true;
+            this.working = true
         },
 
         ready() {
             var vm = this,
                 params;
+
+            this.ineligiblStates = ineligiblStates.states
 
             localforage.getItem('id_token').then(function(token) {
                 if ( token ) {
@@ -192,14 +216,14 @@
                     if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
                         vm.fetch(token);
                     } else {
-                        vm.tokenRefresh(token);
+                        vm.tokenRefresh(token)
                     }
                 } else {
-                    router.go('login');
+                    router.go('login')
                 }
             })
             .catch(function(err) {
-                console.log(err);
+                console.log(err)
             });
         },
 
@@ -219,18 +243,21 @@
             },
 
             fetch(token) {
+                console.log(this.ineligiblStates)
+
                 this.$http.get(URL.base + '/api/v1/deposit-profile', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    console.log(response);
-                    this.player = response.data.profile;
-                    this.working = false;
+                    console.log(response)
+                    this.player = response.data.profile
+                    this.checkEligibility()
+                    this.working = false
                 }, function(err) {
-                    console.log(err);
-                    this.working = false;
+                    console.log(err)
+                    this.working = false
                 });
-                this.expirationYears();
+                this.expirationYears()
             },
 
             expirationYears() {
@@ -238,20 +265,20 @@
                     years = [],
                     now = new Date();
 
-                years[0] = thisYear = now.getFullYear();
+                years[0] = thisYear = now.getFullYear()
 
                 for ( var i=1; i < 10; ++i ) {
                     now.setFullYear(thisYear + i)
-                    years[i] = now.getFullYear();
+                    years[i] = now.getFullYear()
                 }
 
-                this.expYears = years;
+                this.expYears = years
             },
 
             depositUpdate() {
-                var vm = this;
+                var vm = this
 
-                this.working = true;
+                this.working = true
 
                 localforage.getItem('id_token').then(function(token) {
                     vm.$http.post(URL.base + '/api/v1/deposit-profile', {
@@ -267,31 +294,40 @@
                         // Attach the JWT header
                         headers: { 'Authorization' : 'Bearer ' + token }
                     }).then(function(response) {
-                        vm.flash(response.data);
-                        vm.working = false;
+                        vm.flash(response.data)
+                        vm.working = false
                     }, function(err) {
-                        console.log(err);
-                        vm.working = false;
-                    });
+                        console.log(err)
+                        vm.working = false
+                    })
                 });
             },
 
-            flash(response) {
-                this.alert.body = response.msg;
-                this.alert.show = true;
+            checkEligibility() {
+                this.eligible = ( this.ineligiblStates.indexOf(this.player.state) === -1 )
+                if ( ! this.eligible ) this.eligibilityModalClasses = ['rulesSlider', 'show']
+            },
 
-                this.alert.class = ( response.success ) ? 'syncAlert--success' : 'syncAlert--failed';
+            eligibilityModalClose() {
+                this.eligibilityModalClasses = ['rulesSlider']
+            },
+
+            flash(response) {
+                this.alert.body = response.msg
+                this.alert.show = true
+
+                this.alert.class = ( response.success ) ? 'syncAlert--success' : 'syncAlert--failed'
             },
 
             alertClose(e) {
-                this.alert.show = false;
+                this.alert.show = false
             },
         },
 
         computed: {
             loaderClasses() {
-                return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
+                return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden'
             },
         },
-    };
+    }
 </script>
