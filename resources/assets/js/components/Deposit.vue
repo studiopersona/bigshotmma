@@ -193,6 +193,10 @@
                 </svg>
             </div>
         </div>
+        <section :class="['syncAlert', alert.show ? 'show' : '']">
+            <p :class="['syncAlert__body', alert.class]">{{ alert.body }}</p>
+            <button @click="alertClose" type="button" class="alertModal__close">x</button>
+        </section>
     </div>
 </template>
 
