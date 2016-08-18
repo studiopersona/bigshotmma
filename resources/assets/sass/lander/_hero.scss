@@ -1,3 +1,56 @@
 .hero {
 	background: url('../../image/lander/hero-bkgd.jpg') left top/cover no-repeat;
+	text-align: center;
+}
+
+.hero__header {
+	font-size: 8.504rem;
+	font-weight: 700;
+	color: $color-white;
+	text-shadow: 4px 4px 0 $color-black;
+	text-transform: uppercase;
+	text-align: center;
+	margin-top: 10rem;
+	animation-duration: 0.375s;
+    animation-name: fadeAndScale;
+    animation-timing-function: cubic-bezier(0.71,0.55,0.62,1.57);
+}
+
+.hero__subheader {
+	color: $color-white;
+	margin-top: -1.96rem;
+	text-align: center;
+	text-shadow: 1px 1px 0 $color-black;
+	animation-duration: 0.375s;
+    animation-name: fadeAndScale;
+    animation-timing-function: cubic-bezier(0.71,0.55,0.62,1.57);
+}
+
+.hero__ctaBtn {
+	margin-top: 1.862rem;
+	animation-duration: 0.375s;
+    animation-name: fadeAndScale;
+    animation-timing-function: cubic-bezier(0.71,0.55,0.62,1.57);
+}
+
+@keyframes fadeAndScale {
+    from {
+        opacity: 0;
+        transform: scale(.65, .65);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes fadeInDown {
+	from {
+        opacity: 0;
+        transform: translate3d(0,-100%,0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
 }

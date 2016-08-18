@@ -32,4 +32,25 @@ class LanderController extends Controller
 
     	return response()->view('templates.lander', compact('event', 'powerUps'));
     }
+
+    public function policy()
+    {
+        $powerUps = $this->powerUp->get();
+
+        return response()->view('information.policy', compact('powerUps'));
+    }
+
+    public function terms()
+    {
+        $powerUps = $this->powerUp->get();
+
+        return response()->view('information.terms', compact('powerUps'));
+    }
+
+    public function contact()
+    {
+        $powerUps = $this->powerUp->get();
+
+        return response()->view('information.contact', compact('powerUps'));
+    }
 }
