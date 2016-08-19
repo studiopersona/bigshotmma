@@ -11,7 +11,8 @@
 	text-transform: uppercase;
 	text-align: center;
 	margin-top: 10rem;
-	animation-duration: 0.375s;
+	animation-delay: 0.2s;
+	animation-duration: 0.175s;
     animation-name: fadeAndScale;
     animation-timing-function: cubic-bezier(0.71,0.55,0.62,1.57);
 }
@@ -21,14 +22,16 @@
 	margin-top: -1.96rem;
 	text-align: center;
 	text-shadow: 1px 1px 0 $color-black;
-	animation-duration: 0.375s;
+	animation-delay: 0.2s;
+	animation-duration: 0.175s;
     animation-name: fadeAndScale;
     animation-timing-function: cubic-bezier(0.71,0.55,0.62,1.57);
 }
 
 .hero__ctaBtn {
 	margin-top: 1.862rem;
-	animation-duration: 0.375s;
+	animation-delay: 0.2s;
+	animation-duration: 0.175s;
     animation-name: fadeAndScale;
     animation-timing-function: cubic-bezier(0.71,0.55,0.62,1.57);
 }
