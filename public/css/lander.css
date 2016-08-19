@@ -4462,6 +4462,7 @@ h4 {
   .btn--primary[disabled] {
     background: #eee;
     color: #ccc;
+    border-color: #ccc;
     cursor: default; }
   .btn--primary[disabled]:hover {
     background: #eee;
@@ -4504,6 +4505,40 @@ h4 {
   .btn--outline:hover {
     background: #000;
     color: #fff; }
+
+.workingBtn {
+  position: relative;
+  outline: none; }
+  .workingBtn.active:hover {
+    background: #a80300;
+    color: #fff; }
+
+.workingBtn__label {
+  position: relative;
+  z-index: 3;
+  opacity: 1;
+  transform: initial;
+  transition: all 0.3s ease; }
+  .workingBtn__label.hide {
+    opacity: 0;
+    transform: scale(1.2); }
+
+.workingBtn__indicator {
+  position: absolute;
+  z-index: 2;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  top: 50%;
+  left: 50%;
+  margin-top: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0);
+  transition: all 0.3s ease; }
+  .workingBtn__indicator.show {
+    opacity: 1;
+    transform: scale(1); }
 
 .hero {
   background: url("../../image/lander/hero-bkgd.jpg") left top/cover no-repeat;
@@ -4927,6 +4962,28 @@ a.information__itemLink {
   .carousel-nav {
     top: 38%; } }
 
+.informational {
+  width: 90%;
+  max-width: 960px;
+  margin: 0 auto; }
+  .informational h1 {
+    font-weight: 700;
+    text-transform: uppercase; }
+  .informational p {
+    line-height: 1.6; }
+  .informational ol,
+  .informational ul {
+    list-style: decimal;
+    padding-left: 1.6rem;
+    margin-bottom: 3.419rem; }
+  .informational ul {
+    list-style: disc; }
+  .informational li {
+    margin-bottom: 1.44rem; }
+  .informational .form-wrap {
+    width: 80%;
+    max-width: 800px; }
+
 .form-wrap {
   margin: 5rem auto 3.5rem; }
   .form-wrap .row {
@@ -4936,11 +4993,23 @@ a.information__itemLink {
     font-weight: 600;
     text-align: center; }
   .form-wrap input,
+  .form-wrap select,
   .form-wrap textarea {
     background: #eaefe9;
     border: 1px solid #8d9292;
     padding: 1.4rem 2.1rem;
-    font-family: "open sans"; }
+    font-family: sans serif; }
+  .form-wrap select {
+    padding-bottom: 1.3rem;
+    font-family: 'Montserrat', sans serif;
+    color: #777;
+    width: 100%; }
+  .form-wrap option {
+    color: #000;
+    font-family: sans serif; }
+    .form-wrap option.placeholder {
+      color: #777;
+      font-family: 'Montserrat', sans serif; }
   .form-wrap label.text-input {
     width: 100%;
     float: left;
@@ -4975,6 +5044,26 @@ a.information__itemLink {
     font-weight: 600;
     margin: 1.4rem 0; }
 
+::-webkit-input-placeholder {
+  /* WebKit browsers */
+  font-family: 'Montserrat', sans serif;
+  font-weight: 400; }
+
+:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  font-family: 'Montserrat', sans serif;
+  font-weight: 400; }
+
+::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  font-family: 'Montserrat', sans serif;
+  font-weight: 400; }
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  font-family: 'Montserrat', sans serif;
+  font-weight: 400; }
+
 @media screen and (max-width: 768px) {
   .form-wrap .col-sm-6:first-child label {
     margin-bottom: 1.8rem; } }
@@ -5008,14 +5097,14 @@ a.information__itemLink {
   height: 320px;
   left: 120px; }
 
-.the-content .parsley-errors-list,
+.informational .parsley-errors-list,
 .parsley-errors-list {
   list-style: none;
   padding: 0;
   margin: 0;
   text-align: left;
   overflow: visible; }
-  .the-content .parsley-errors-list li,
+  .informational .parsley-errors-list li,
   .parsley-errors-list li {
     padding: 0.7rem 1.4rem;
     background: #e51937;
@@ -5024,7 +5113,7 @@ a.information__itemLink {
     display: inline-block;
     font-size: 1.4rem;
     width: auto; }
-    .the-content .parsley-errors-list li:before,
+    .informational .parsley-errors-list li:before,
     .parsley-errors-list li:before {
       content: "";
       display: block;
@@ -5061,22 +5150,6 @@ a.information__itemLink {
   .server-response.success {
     color: #2dbe0c;
     border-color: #2dbe0c; }
-
-.informational {
-  width: 90%;
-  max-width: 960px;
-  margin: 0 auto; }
-  .informational p {
-    line-height: 1.6; }
-  .informational ol,
-  .informational ul {
-    list-style: decimal;
-    padding-left: 1.6rem;
-    margin-bottom: 3.419rem; }
-  .informational ul {
-    list-style: disc; }
-  .informational li {
-    margin-bottom: 1.44rem; }
 
 .footer {
   background: #a80300;

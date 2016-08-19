@@ -12,11 +12,29 @@
 	}
 
 	input,
+	select,
 	textarea {
 		background: $sidebar-bkgd;
 		border: 1px solid $input-border;
 		padding: 1.4rem 2.1rem;
-		font-family: "open sans";
+		font-family: sans serif;
+	}
+
+	select {
+		padding-bottom: 1.3rem;
+		font-family: 'Montserrat', sans serif;
+		color: #777;
+		width: 100%;
+	}
+
+	option {
+		color: $color-black;
+		font-family: sans serif;
+
+		&.placeholder {
+			color: #777;
+			font-family: 'Montserrat', sans serif;
+		}
 	}
 
 	label.text-input {
@@ -66,6 +84,23 @@
 		font-weight: 600;
 		margin: 1.4rem 0;
 	}
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    font-family: 'Montserrat', sans serif;
+    font-weight: 400;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    font-family: 'Montserrat', sans serif;
+    font-weight: 400;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    font-family: 'Montserrat', sans serif;
+    font-weight: 400;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    font-family: 'Montserrat', sans serif;
+    font-weight: 400;
 }
 
 @media screen and (max-width: 768px) {
@@ -126,7 +161,7 @@
 
 // form errors
 
-.the-content .parsley-errors-list,
+.informational .parsley-errors-list,
 .parsley-errors-list {
 	list-style: none;
 	padding: 0;

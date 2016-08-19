@@ -5546,6 +5546,26 @@ a {
 .form__row {
   margin-bottom: 1.5rem; }
 
+::-webkit-input-placeholder {
+  /* WebKit browsers */
+  font-family: 'Montserrat';
+  font-weight: 400; }
+
+:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  font-family: 'Montserrat';
+  font-weight: 400; }
+
+::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  font-family: 'Montserrat';
+  font-weight: 400; }
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  font-family: 'Montserrat';
+  font-weight: 400; }
+
 @media screen and (max-width: 768px) {
   .form-wrap {
     padding: 0 2.4rem; } }

@@ -64,6 +64,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/terms-of-service', 'LanderController@terms');
 	Route::get('/privacy-policy', 'LanderController@policy');
 	Route::get('/contact-support', 'LanderController@contact');
+	Route::post('/contact-support', 'LanderController@contactSubmit');
 
 	Route::get('paypal-return', 'UsersController@completePaymentWithPayPal');
 	Route::get('paypal-cancel', 'UsersController@paypalPaymentRejected');

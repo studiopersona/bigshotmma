@@ -3,6 +3,11 @@
 	max-width: 960px;
 	margin: 0 auto;
 
+	h1 {
+		font-weight: 700;
+		text-transform: uppercase;
+	}
+
 	p {
 		line-height: 1.6;
 	}
@@ -20,5 +25,10 @@
 
 	li {
 		margin-bottom: 1.44rem;
+	}
+
+	.form-wrap {
+		width: 80%;
+		max-width: 800px;
 	}
 }

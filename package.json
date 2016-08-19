@@ -9,6 +9,7 @@
     "laravel-elixir": "^4.0.0",
     "laravel-elixir-vueify": "^1.0.3",
     "localforage": "^1.4.2",
+    "parsleyjs": "^2.4.4",
     "paypal-rest-sdk": "^1.6.9",
     "vue-resource": "^0.7.0",
     "vue-router": "^0.7.5",

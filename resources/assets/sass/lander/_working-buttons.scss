@@ -1,0 +1,42 @@
+.workingBtn {
+	position: relative;
+	outline: none;
+
+	&.active:hover {
+		background: $color-primary;
+		color: $color-white;
+	}
+}
+
+.workingBtn__label {
+	position: relative;
+	z-index: 3;
+	opacity: 1;
+	transform: initial;
+	transition: all 0.3s ease;
+
+	&.hide {
+		opacity: 0;
+		transform: scale(1.2);
+	}
+}
+
+.workingBtn__indicator {
+	position: absolute;
+	z-index: 2;
+	display: inline-block;
+	width: 2rem;
+	height: 2rem;
+	top: 50%;
+	left: 50%;
+	margin-top: 0;
+	opacity: 0;
+	pointer-events: none;
+	transform: scale(0);
+	transition: all 0.3s ease;
+
+	&.show {
+		opacity: 1;
+		transform: scale(1);
+	}
+}

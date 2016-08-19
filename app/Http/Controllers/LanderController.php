@@ -3,6 +3,7 @@
 namespace Bsmma\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Mail;
 
 use Bsmma\Http\Requests;
 
@@ -52,5 +53,15 @@ class LanderController extends Controller
         $powerUps = $this->powerUp->get();
 
         return response()->view('information.contact', compact('powerUps'));
+    }
+
+    public function contactSubmit(Request $request)
+    {
+        Mail::send('emails.support-request', $request->all(), function($m) {
+            $m->to('info@bsmma.com');
+            $m->subject('Support Request');
+        });
+
+        return response()->json(['msg' => 'Your request has been sent']);
     }
 }
