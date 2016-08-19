@@ -4424,13 +4424,6 @@ h4 {
 .mainLogo {
   width: 100%; }
 
-.informational {
-  width: 90%;
-  max-width: 960px;
-  margin: 0 auto; }
-  .informational p {
-    line-height: 1.6; }
-
 .btn, .btn--block, .btn--primary, .btn--green, .btn--black, .btn--outline {
   background: transparent;
   padding: 0.6em 1.5em;
@@ -5068,6 +5061,22 @@ a.information__itemLink {
   .server-response.success {
     color: #2dbe0c;
     border-color: #2dbe0c; }
+
+.informational {
+  width: 90%;
+  max-width: 960px;
+  margin: 0 auto; }
+  .informational p {
+    line-height: 1.6; }
+  .informational ol,
+  .informational ul {
+    list-style: decimal;
+    padding-left: 1.6rem;
+    margin-bottom: 3.419rem; }
+  .informational ul {
+    list-style: disc; }
+  .informational li {
+    margin-bottom: 1.44rem; }
 
 .footer {
   background: #a80300;

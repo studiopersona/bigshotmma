@@ -1,6 +1,8 @@
 @extends('templates.lander-inner')
 
-@section('title')
+@section('title', 'Conact Us')
+
+@section('page-title')
 	<h1>Contact Us</h1>
 @endsection
 

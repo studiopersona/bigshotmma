@@ -1,6 +1,8 @@
 @extends('templates.lander-inner')
 
-@section('title')
+@section('title', 'Terms of Service')
+
+@section('page-title')
 	<h1>Terms of Service</h1>
 @endsection
 

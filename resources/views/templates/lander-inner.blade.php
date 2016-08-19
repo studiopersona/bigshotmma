@@ -36,7 +36,7 @@
 	<body>
 		@include('partials.lander.hero')
 		<section class="informational">
-			@yield('title')
+			@yield('page-title')
 			@yield('updated')
 			@yield('content')
 		</section>

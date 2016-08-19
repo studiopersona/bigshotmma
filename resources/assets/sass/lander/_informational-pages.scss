@@ -1,0 +1,24 @@
+.informational {
+	width: 90%;
+	max-width: 960px;
+	margin: 0 auto;
+
+	p {
+		line-height: 1.6;
+	}
+
+	ol,
+	ul {
+		list-style: decimal;
+		padding-left: 1.6rem;
+		margin-bottom: 3.419rem;
+	}
+
+	ul {
+		list-style: disc;
+	}
+
+	li {
+		margin-bottom: 1.44rem;
+	}
+}
