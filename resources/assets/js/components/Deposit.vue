@@ -6,6 +6,7 @@
                 Fund your account with a deposit.
             </h4>
         </header>
+        <div v-if="! needsToCompleteProfile">
         <div v-if="eligible" class="deposit form container-fluid">
             <div class="col-xs-100 amountSelectionWrap">
                 <label
@@ -186,6 +187,10 @@
             <p>Please check your <a v-link="{ path: '/deposit-profile' }">deposit profile</a> to make sure you have entered the correct state.</p>
             <p>You are welcome to participate in any of our free <a v-link="{ path: '/events' }">contests</a>.</p>
         </div>
+        </div>
+        <div v-else>
+            <p style="text-align: center;">You need to complete your <a v-link="{ path: '/deposit-profile' }">deposit profile</a> before making a deposit.</p>
+        </div>
         <div :class="loaderClasses">
             <div class="js-global-loader loader">
                 <svg viewBox="0 0 32 32" width="32" height="32">
@@ -272,6 +277,7 @@
                 eligible: false,
                 eligibilityModalClasses: ['rulesSlider'],
                 ineligiblStates: [],
+                needsToCompleteProfile: false,
                 alert: {
                     body: '',
                     class: 'syncAlert--success',
@@ -335,9 +341,11 @@
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
+                    if ( response.data.profile.address === null ) this.needsToCompleteProfile = true
                     // console.log(response.data.profile)
                     this.player = response.data.profile
                     this.checkEligibility()
+                    console.log(response.data.profile.address)
                     this.cardInfo.address = response.data.profile.address
                     this.cardInfo.city = response.data.profile.city
                     this.cardInfo.state = response.data.profile.state
