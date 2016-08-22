@@ -12758,21 +12758,19 @@ var formControl = function ($, spinner, w, undefined) {
         }
         // check that recaptcha was passed
         // if ( opts.$form.parsley().validate() && grecaptcha.getResponse().length ) {
-        setTimeout(function () {
-            if (opts.$form.parsley().validate()) {
-                processForm();
-            } else {
-                // $('#site-content').outerHeight($('#contact').outerHeight() + 'px');
-                // recaptcha error
-                // if ( ! grecaptcha.getResponse().length ) {
-                // $('.g-recaptcha').after('<ul class="parsley-errors-list"><li>Are you a robot?</li></ul>');
-                // }
-                workingIndicator.stop();
-                $('.workingBtn__label').removeClass('hide');
-                $('.workingBtn__indicator').removeClass('show');
-                opts.$submitBtn.removeClass('active');
-            }
-        }, 4000);
+        if (opts.$form.parsley().validate()) {
+            processForm();
+        } else {
+            // $('#site-content').outerHeight($('#contact').outerHeight() + 'px');
+            // recaptcha error
+            // if ( ! grecaptcha.getResponse().length ) {
+            // $('.g-recaptcha').after('<ul class="parsley-errors-list"><li>Are you a robot?</li></ul>');
+            // }
+            workingIndicator.stop();
+            $('.workingBtn__label').removeClass('hide');
+            $('.workingBtn__indicator').removeClass('show');
+            opts.$submitBtn.removeClass('active');
+        }
     };
 
     var processForm = function processForm() {
