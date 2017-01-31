@@ -172,7 +172,7 @@
             </div>
             <div class="container-fluid">
                 <div class="col-xs-100 button-wrap">
-                    <div class="deposit__explanation">(Includes a $0.35 Transaction Fee)</div>
+                    <div class="deposit__explanation">(Includes a $0.50 Transaction Fee)</div>
                     <button
                         id="depositBtn"
                         type="button"
