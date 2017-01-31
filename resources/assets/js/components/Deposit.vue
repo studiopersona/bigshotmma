@@ -237,10 +237,10 @@
                 deposit: {
                     amount: {
                         dollars: 5,
-                        cents: 35,
+                        cents: 50,
                         total: this.depositTotal,
                     },
-                    fee: 35,
+                    fee: 50,
                 },
                 cardInfo: {
                     name: '',
