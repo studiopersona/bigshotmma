@@ -8,7 +8,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title">Entry Fee:</span> ${{ picksList[0].contest.buy_in }}
+                        <span class="contestDetails__title">Entry Fee:</span> ${{ picksList[0].contest.buy_in.toFixed(2) }}
                     </div>
                     <div class="col-xs-50 text-right">
                         <span class="contestDetails__title">Standing:</span> <span v-if="results.length">{{ playerRanking }}/{{ standings.length }}</span>
@@ -17,10 +17,10 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title">Prize Pool:</span> ${{ picksList[0].contest.prize_pool  }}
+                        <span class="contestDetails__title">Prize Pool:</span> ${{ picksList[0].contest.prize_pool.toFixed(2)  }}
                     </div>
                     <div class="col-xs-50 text-right">
-                        <span class="contestDetails__title">Your Winnings:</span> $0
+                        <span class="contestDetails__title">Your Winnings:</span> $0.00
                     </div>
                 </div>
             </div>
@@ -175,7 +175,7 @@
                                     <h4 class="fightPicksList__powerUpName" :style="{color: pick.power_up.color}">{{ pick.power_up.power_up_name }}</h4>
                                     <p class="fightPicksList__selectionResults" v-show="results.length">
                                         <span v-if="parseInt(outcome[pick.fight_id].power_up_points, 10) > 0">You chose a winning power up</span>
-                                        <span v-else>You're fighter did not achieve the power up</span>
+                                        <span v-else>Your fighter did not achieve the power up</span>
                                     </p>
                                     <p class="fightPicksList__selectionResults" v-else>
                                         Results not entered yet

@@ -3,7 +3,7 @@
         <header class="pageHeader">
             <h1 class="pageHeader__header">Enter a Contest</h1>
             <h4 class="pageHeader__subheader">
-                Total Prize Pool ${{ poolTotal }}
+                Total Prize Pool ${{ poolTotal.toFixed(2) }}
             </h4>
         </header>
         <div class="contestList">
@@ -25,7 +25,7 @@
                             </div>
                             <div class="col-xs-15">
                                 <div class="contestList__buyinTitle">Entry Fee</div>
-                                <div class="contestList__buyin">${{ contest.buy_in }}</div>
+                                <div class="contestList__buyin">${{ contest.buy_in.toFixed(2) }}</div>
                             </div>
                         </div>
                     </a>

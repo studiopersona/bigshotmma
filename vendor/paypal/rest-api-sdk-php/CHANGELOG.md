@@ -1,6 +1,32 @@
 PayPal PHP SDK release notes
 ============================
 
+1.11.0
+-----
+* Update third party payment sample with PayPal payment.
+* Prevent error in SSL version check if curl is not available [#706](https://github.com/paypal/PayPal-PHP-SDK/pull/706).
+* Stop auto-generating PayPal-Request-Id header values and allow SDK users to optionally set the value [#747](https://github.com/paypal/PayPal-PHP-SDK/pull/747).
+* Remove automatic retries on failed requests [#747](https://github.com/paypal/PayPal-PHP-SDK/pull/747).
+
+1.10.0
+-----
+* Updated Payments APIs [#700](https://github.com/paypal/PayPal-PHP-SDK/pull/700).
+* Minor bug fixes.
+
+1.9.0
+-----
+* Updated Payouts APIs [#692](https://github.com/paypal/PayPal-PHP-SDK/pull/692).
+* Updated Payment Experience APIs [#682](https://github.com/paypal/PayPal-PHP-SDK/pull/682).
+* Updated Payments API to use Payment Card instead of credit card [#696](https://github.com/paypal/PayPal-PHP-SDK/pull/696).
+* Fixed bug on failed Access token call. [#665](https://github.com/paypal/PayPal-PHP-SDK/pull/665).
+
+1.8.0
+-----
+* Updated Webhooks APIs [#653](https://github.com/paypal/PayPal-PHP-SDK/pull/653).
+* Updated Invoicing APIs [#657](https://github.com/paypal/PayPal-PHP-SDK/pull/657).
+* UTF-8 encoding bug fix [#655](https://github.com/paypal/PayPal-PHP-SDK/pull/655).
+* Updated PSR log [#654](https://github.com/paypal/PayPal-PHP-SDK/pull/654).
+
 1.7.4
 -----
 *  Fixed Duplicate conditional expression in PayPalCredentialManager.php [#594](https://github.com/paypal/PayPal-PHP-SDK/pull/594).

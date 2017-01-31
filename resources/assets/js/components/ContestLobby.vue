@@ -23,7 +23,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title">Entry Fee:</span> ${{ participantsList[0].contest.buy_in }}
+                        <span class="contestDetails__title">Entry Fee:</span> ${{ participantsList[0].contest.buy_in.toFixed(2) }}
                     </div>
                     <div class="col-xs-50 text-right">
                         <span class="contestDetails__title">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}
@@ -31,7 +31,7 @@
                 </div>
                 <div class="row">
                     <div v-if="parseInt(participantsList[0].contest.buy_in, 10) === 1"class="col-xs-50">
-                        <span class="contestDetails__title"><a @click="showPrizeModal">Prize Pool</a>:</span> ${{ participantsList[0].contest.prize_pool }}
+                        <span class="contestDetails__title"><a @click="showPrizeModal">Prize Pool</a>:</span> ${{ participantsList[0].contest.prize_pool.toFixed(2) }}
                     </div>
                     <div v-else class="col-xs-50">
                         <span class="contestDetails__title">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}
