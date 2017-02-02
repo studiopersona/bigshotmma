@@ -53,6 +53,7 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('deposit-profile', 'UsersController@depositProfile');
 	    Route::post('deposit-profile', 'UsersController@depositProfileUpdate');
 	    Route::post('deposit', 'UsersController@makeDeposit');
+	    Route::post('withdraw', 'UserBalancesController@makeWithdrawl');
 	    //  Upload Routes ----------------------------------------------------
 	    Route::post('upload-avatar-image', 'UsersController@uploadImage');
 	});

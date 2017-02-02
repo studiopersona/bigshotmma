@@ -60,6 +60,7 @@ import PlayerContests from './components/PlayerContests.vue'
 import Profile from './components/Profile.vue'
 import DepositProfile from './components/DepositProfile.vue'
 import Deposit from './components/Deposit.vue'
+import Withdraw from './components/Withdraw.vue'
 
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
@@ -126,7 +127,11 @@ router.map({
 
   '/deposit/paypal/:transactionId': {
     component: Deposit
-  }
+  },
+
+  '/withdrawl-request': {
+    component: Withdraw
+  },
 
 })
 

@@ -12,7 +12,7 @@
                     <div class="dashboardHeader__playerName">
                         {{ playersName }}
                         <div class="dashboardHeader__balance">
-                            Balance: <span>${{ playersBalance }}</span>
+                            Balance: <span>${{ parseFloat(playersBalance).toFixed(2) }}</span>
                         </div>
                     </div>
                 </div>
@@ -49,6 +49,12 @@
                     <a class="appDashboard__link appDashboard__link--rules" v-link="{ path: '/deposit' }" @click="toggleMenu">
                         <img src="public/image/dashboard/deposit.png">
                         Make Deposit
+                    </a>
+                </li>
+                <li class="appDashboard__linkWrap">
+                    <a class="appDashboard__link appDashboard__link--rules" v-link="{ path: '/withdrawl-request' }" @click="toggleMenu">
+                        <img src="public/image/dashboard/withdraw.png">
+                        Withdraw
                     </a>
                 </li>
         	 	<li class="appDashboard__linkWrap">

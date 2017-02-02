@@ -1,0 +1,84 @@
+.pageHeader__subheader.withdrawl__subheader {
+	font-size: 1.6rem;
+	color: $color-green;
+}
+
+.withdrawl-form {
+	padding-left: 4%;
+	text-align: center;
+
+	p {
+		margin-bottom: 1rem;
+	}
+}
+
+.form .withdrawl__inputWrap {
+
+	input {
+		width: 40%;
+		display: inline;
+	}
+}
+
+.form__inputBefore {
+	font-size: 3rem;
+	margin-right: 0.5rem;
+	vertical-align: middle;
+	line-height: 1;
+}
+
+.withdrawl__confirmation {
+	text-align: center;
+	margin-top: 4rem;
+}
+
+.withdrawl__instruction {
+	font-style: italic;
+	margin-bottom: 2rem;
+	padding-right: 4%;
+}
+
+.withdrawl__detailsWrap {
+	text-align: left;
+	display: flex;
+	justify-content: flex-start;
+	content-justify: flex-start;
+	width: 80%;
+	margin: 0 auto 4rem;
+
+	.withdrawl__totalAmount {
+		margin-left: auto;
+		font-size: 3rem;
+		vertical-align: middle;
+		padding-top: 1rem;
+	}
+}
+
+.withdrawl__confirmAmountWrap {
+    width: 45%;
+    margin: 0 auto;
+    padding: 1.5rem;
+    border: 1px solid #666;
+}
+
+@media screen and (max-width: 460px) {
+	.withdrawl__confirmAmountWrap {
+		width: 60%;
+	}
+}
+
+.withdrawl__confirmAmount {
+    font-size: 4rem;
+    color: $color-green;
+}
+
+.withdrawl__confirmTypeWrap {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 1.6rem;
+    margin-top: 1rem;
+}
+
+.withdrawl__confirmDate {
+    margin-left: auto;
+}
