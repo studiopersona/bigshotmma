@@ -1,4 +1,4 @@
-<h1 style="font-size: 18px;color:#222;">Withdrawl Request Received</h1>
+<h1 style="font-size: 18px;color:#222;">Withdrawal Request Received</h1>
 <p style="font-size:14px;color:#222;margin:18px 0;">
 	A withdrawl request has been received from {{ $user['firstname'] }} {{ $user['lastname'] }}.
 </p>

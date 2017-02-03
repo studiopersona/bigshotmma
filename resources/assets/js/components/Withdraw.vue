@@ -2,7 +2,7 @@
 	<div>
 	    <div id="templateWrap" :working="working">
 	        <header class="pageHeader">
-	            <h1 class="pageHeader__header">Make a Withdrawl</h1>
+	            <h1 class="pageHeader__header">Make a Withdrawal</h1>
 	            <h4 class="pageHeader__subheader withdrawl__subheader">
 	                Current Balance: ${{ playersBalance.toFixed(2) }}
 	            </h4>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Big Shot MMA | Withdrawl Confirmation</title>
+<title>Big Shot MMA | Withdrawal Confirmation</title>
 <style type="text/css">
         *{
             margin:0;
@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <td style="padding: 24px;">
-                <p style="font-size: 14px; color: #222; margin-bottom: 16px;">We received your withdrawl request on {{ date('d/m/Y') }} for the amount of ${{ number_format((float)$amount, 2) }}. Your request will normally be processed within 48 hours. If you've requested a check it may take 5 - 8 days to receive depending on your location.</p>
+                <p style="font-size: 14px; color: #222; margin-bottom: 16px;">We received your withdrawal request on {{ date('d/m/Y') }} for the amount of ${{ number_format((float)$amount, 2) }}. Your request will normally be processed within 48 hours. If you've requested a check it may take 5 - 8 days to receive depending on your location.</p>
                 <p style="font-size: 14px; color: #222;">Thank you for playing!!</p>
             </td>
         </tr>
