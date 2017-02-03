@@ -30,7 +30,7 @@ class SendWithdrawlRequestNotice
         Mail::send('emails.withdrawl-request', ['user' => $event->user, 'amount' => $event->amount, 'fundsMethod' => $event->fundsMethod], function ($m) {
             $m->from('admin@bsmma.com', 'Big Shot MMA');
 
-            $m->to('jim@divstong.com', 'James Doyle')->subject('Withdrawl Request from Big Shot MMA');
+            $m->to('jim@bsmma.com', 'James Doyle')->subject('Withdrawl Request from Big Shot MMA');
         });
 
         $user = $event->user;
