@@ -13,20 +13,23 @@
 	                <span class="form__inputBefore">$</span><input class="width-50" v-model="amount" type="text" placeholder="50.00">
 	            </div>
 
-	            <div v-if="player.merchant === 2" class="form__row withdrawl-type">
-	            	<div class="radioWrap">
-	            		<label for="paypal">
-	            			<img :src="URL.base + '/public/image/withdraw-paypal.png">
-	            			<input type="radio" v-model="withdrawlMethod" id="paypal" value="PayPal">
-	            		</label>
-	            	</div>
-	            	<div class="radioWrap">
-	            		<label for="check">
-	            			<img :src="URL.base + '/public/image/withdraw-check.png">
-	            			<input type="radio" v-model="withdrawlMethod" id="check" value="Check" checked>
-	            		</label>
-	            	</div>
-	            </div>
+	            <template v-if="player.merchant === 2" >
+	            	<p>How should we send this payment?</p>
+	            	<div class="form__row withdrawl-type">
+		            	<div class="radioWrap">
+		            		<label for="paypal">
+		            			<img :src="URL.base + '/public/image/icons/paypal-logo.png'">
+		            			<input type="radio" v-model="withdrawlMethod" id="paypal" value="PayPal">
+		            		</label>
+		            	</div>
+		            	<div class="radioWrap">
+		            		<label for="check">
+		            			<img :src="URL.base + '/public/image/icons/check-image.png'">
+		            			<input type="radio" v-model="withdrawlMethod" id="check" value="Check" checked>
+		            		</label>
+		            	</div>
+		            </div>
+		        </template>
 	        </div>
 	        <!-- -->
 	        <div v-if="player.merchant === 1 || withdrawlMethod === 'Check'" class="withdrawl__confirmation">
@@ -43,7 +46,7 @@
 		        	</div>
 		        </div>
 	        </div>
-	        <div v-if="player.merchant === 2 && widthdrawlMethod === 'PayPal'">
+	        <div v-if="player.merchant === 2 && withdrawlMethod === 'PayPal'">
 	        	<p class="withdrawl__instruction">Click 'Withdraw' to comfirm your intent to have a PayPal transfer sent to:</p>
 	        	<div class="withdrawl__detailsWrap">
 	        		<div class="withdrawl__paypalEmail">
@@ -75,8 +78,12 @@
                 <button @click="alertNoticeClose" type="button" class="alertModal__close">x</button>
             </div>
             <div v-if="alertNotice.action" class="button-wrap">
-                <button @click="submit" type="button" class="button button--green">Confirm</button>
+                <button @click="submit($event)" type="button" class="button button--green">Confirm</button>
             </div>
+        </section>
+        <section :class="['syncAlert', alert.show ? 'show' : '']">
+            <p :class="['syncAlert__body', alert.class]">{{ alert.body }}</p>
+            <button @click="alertClose" type="button" class="alertModal__close">x</button>
         </section>
         <div :class="loaderClasses">
             <div class="js-global-loader loader">
@@ -108,6 +115,11 @@
                     action: false,
                 },
                 alertNoticeClasses: ['alertNotice'],
+                alert: {
+                    body: '',
+                    class: 'syncAlert--success',
+                    show: false,
+                },
                 working: false,
                 URL: {
                     base: window.URL.base,
@@ -198,14 +210,14 @@
             			errorString += '<li style="color: #2dbe0c;">' + err + '</li>'
             		})
 
-            		this.alert({
+            		this.showAlert({
             			header: 'Wait',
             			subject: 'We found something wrong.',
             			body: '<ul>' + errorString + '</ul><p>&nbsp;</p><p>Please remedy the error and re-submit your request.</p>',
             			action: false,
             		})
             	} else {
-            		this.alert({
+            		this.showAlert({
             			header: 'Withdrawl',
             			subject: '<div class="withdrawl__confirmAmountWrap"><div class="withdrawl__confirmAmount">$' + parseFloat(this.amount).toFixed(2) + '</div><div class="withdrawl__confirmTypeWrap"><div class="withdrawl__confirmType">' + this.withdrawlMethod + '</div><div class="withdrawl__confirmDate">' + date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear() + '</div></div></div>',
             			body: '<p>Please note that all withdrawl requests are subject to audit though funds are typically issued within 48 hours.</p><p>Any attempts to defraud Big Shot MMA will result in account termination.',
@@ -214,11 +226,15 @@
             	}
             },
 
-            submit() {
+            submit(e) {
             	let vm = this
 
+                this.alertNoticeClose(e);
+
+                this.working = true
+
             	localforage.getItem('id_token').then(function(token) {
-                    vm.$http.post(URL.base + '/api/v1/withdraw', { amount: parseFloat(vm.amount) }, {
+                    vm.$http.post(URL.base + '/api/v1/withdraw', { amount: parseFloat(vm.amount), method: vm.withdrawlMethod }, {
                         // Attach the JWT header
                         headers: { 'Authorization' : 'Bearer ' + token }
                     }).then(function(response) {
@@ -233,13 +249,16 @@
             },
 
             flash(response) {
+                console.log('flash here')
+                console.log(response)
+
                 this.alert.body = response.msg
                 this.alert.show = true
 
                 this.alert.class = ( response.success ) ? 'syncAlert--success' : 'syncAlert--failed'
             },
 
-            alert(options) {
+            showAlert(options) {
             	console.log('Alerting')
                 this.alertNotice.header = (options.header) ? options.header : 'Alert'
                 this.alertNotice.subject = (options.subject ) ? options.subject : 'You did something wrong.'
@@ -254,6 +273,10 @@
                 e.preventDefault()
 
                 this.alertNoticeClasses = ['alertNotice']
+            },
+
+            alertClose() {
+                this.alert.show = false
             },
         },
 

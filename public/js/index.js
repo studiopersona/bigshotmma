@@ -46565,6 +46565,11 @@ exports.default = {
                 action: false
             },
             alertNoticeClasses: ['alertNotice'],
+            alert: {
+                body: '',
+                class: 'syncAlert--success',
+                show: false
+            },
             working: false,
             URL: {
                 base: window.URL.base,
@@ -46651,14 +46656,14 @@ exports.default = {
                     errorString += '<li style="color: #2dbe0c;">' + err + '</li>';
                 });
 
-                this.alert({
+                this.showAlert({
                     header: 'Wait',
                     subject: 'We found something wrong.',
                     body: '<ul>' + errorString + '</ul><p>&nbsp;</p><p>Please remedy the error and re-submit your request.</p>',
                     action: false
                 });
             } else {
-                this.alert({
+                this.showAlert({
                     header: 'Withdrawl',
                     subject: '<div class="withdrawl__confirmAmountWrap"><div class="withdrawl__confirmAmount">$' + parseFloat(this.amount).toFixed(2) + '</div><div class="withdrawl__confirmTypeWrap"><div class="withdrawl__confirmType">' + this.withdrawlMethod + '</div><div class="withdrawl__confirmDate">' + date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear() + '</div></div></div>',
                     body: '<p>Please note that all withdrawl requests are subject to audit though funds are typically issued within 48 hours.</p><p>Any attempts to defraud Big Shot MMA will result in account termination.',
@@ -46666,11 +46671,15 @@ exports.default = {
                 });
             }
         },
-        submit: function submit() {
+        submit: function submit(e) {
             var vm = this;
 
+            this.alertNoticeClose(e);
+
+            this.working = true;
+
             _localforage2.default.getItem('id_token').then(function (token) {
-                vm.$http.post(URL.base + '/api/v1/withdraw', { amount: parseFloat(vm.amount) }, {
+                vm.$http.post(URL.base + '/api/v1/withdraw', { amount: parseFloat(vm.amount), method: vm.withdrawlMethod }, {
                     // Attach the JWT header
                     headers: { 'Authorization': 'Bearer ' + token }
                 }).then(function (response) {
@@ -46684,12 +46693,15 @@ exports.default = {
             });
         },
         flash: function flash(response) {
+            console.log('flash here');
+            console.log(response);
+
             this.alert.body = response.msg;
             this.alert.show = true;
 
             this.alert.class = response.success ? 'syncAlert--success' : 'syncAlert--failed';
         },
-        alert: function alert(options) {
+        showAlert: function showAlert(options) {
             console.log('Alerting');
             this.alertNotice.header = options.header ? options.header : 'Alert';
             this.alertNotice.subject = options.subject ? options.subject : 'You did something wrong.';
@@ -46703,6 +46715,9 @@ exports.default = {
             e.preventDefault();
 
             this.alertNoticeClasses = ['alertNotice'];
+        },
+        alertClose: function alertClose() {
+            this.alert.show = false;
         }
     },
 
@@ -46713,7 +46728,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\t<div>\n\t    <div id=\"templateWrap\" :working=\"working\">\n\t        <header class=\"pageHeader\">\n\t            <h1 class=\"pageHeader__header\">Make a Withdrawl</h1>\n\t            <h4 class=\"pageHeader__subheader withdrawl__subheader\">\n\t                Current Balance: ${{ playersBalance.toFixed(2) }}\n\t            </h4>\n\t        </header>\n\t        <div class=\"withdrawl-form form\">\n\t        \t<p>How much would you like to withdraw?</p>\n\t            <div class=\"withdrawl__inputWrap form__row\">\n\t                <span class=\"form__inputBefore\">$</span><input class=\"width-50\" v-model=\"amount\" type=\"text\" placeholder=\"50.00\">\n\t            </div>\n\n\t            <div v-if=\"player.merchant === 2\" class=\"form__row withdrawl-type\">\n\t            \t<div class=\"radioWrap\">\n\t            \t\t<label for=\"paypal\">\n\t            \t\t\t<img :src=\"URL.base + '/public/image/withdraw-paypal.png\">\n\t            \t\t\t<input type=\"radio\" v-model=\"withdrawlMethod\" id=\"paypal\" value=\"PayPal\">\n\t            \t\t</label>\n\t            \t</div>\n\t            \t<div class=\"radioWrap\">\n\t            \t\t<label for=\"check\">\n\t            \t\t\t<img :src=\"URL.base + '/public/image/withdraw-check.png\">\n\t            \t\t\t<input type=\"radio\" v-model=\"withdrawlMethod\" id=\"check\" value=\"Check\" checked=\"\">\n\t            \t\t</label>\n\t            \t</div>\n\t            </div>\n\t        </div>\n\t        <!-- -->\n\t        <div v-if=\"player.merchant === 1 || withdrawlMethod === 'Check'\" class=\"withdrawl__confirmation\">\n\t        \t<p class=\"withdrawl__instruction\">Click 'Withdraw' to confirm your intent to have a check mailed to:</p>\n\t        \t<div class=\"withdrawl__detailsWrap\">\n\t\t        \t<div class=\"withdrawl__mailingAddress\">\n\t\t        \t\t{{ player.firstname }} {{ player.lastname }}<br>\n\t\t        \t\t{{ player.address }}<br>\n\t\t        \t\t<span v-if=\"player.address2 !== ''\">{{ player.address2 }}<br></span>\n\t\t        \t\t{{ player.city }},{{ player.state }} {{ player.zipcode }}\n\t\t        \t</div>\n\t\t        \t<div v-show=\"!isNaN(parseFloat(amount))\" class=\"withdrawl__totalAmount\">\n\t\t        \t\t${{ parseFloat(amount).toFixed(2) }}\n\t\t        \t</div>\n\t\t        </div>\n\t        </div>\n\t        <div v-if=\"player.merchant === 2 &amp;&amp; widthdrawlMethod === 'PayPal'\">\n\t        \t<p class=\"withdrawl__instruction\">Click 'Withdraw' to comfirm your intent to have a PayPal transfer sent to:</p>\n\t        \t<div class=\"withdrawl__detailsWrap\">\n\t        \t\t<div class=\"withdrawl__paypalEmail\">\n\t        \t\t\t{{ player.paypalEmail }}\n\t        \t\t</div>\n\t\t        \t<div v-show=\"!isNaN(parseFloat(amount))\" class=\"withdrawl__totalAmount\">\n\t\t        \t\t${{ parseFloat(amount).toFixed(2) }}\n\t\t        \t</div>\n\t\t        </div>\n\t\t    </div>\n\t\t    <!-- -->\n\t        <div class=\"container-fluid\">\n                <div class=\"col-xs-100 button-wrap\">\n                    <button type=\"button\" class=\"button button--primary\" @click=\"confirm\">Withdraw</button>\n                </div>\n            </div>\n\t    </div>\n        <section :class=\"alertNoticeClasses\">\n            <div>\n                <h2 class=\"alertNotice__header\">{{ alertNotice.header }}</h2>\n                <div class=\"alertNotice__subject\">{{{ alertNotice.subject }}}</div>\n                <div class=\"alertNotice__body\">\n                    {{{ alertNotice.body }}}\n                </div>\n                <button @click=\"alertNoticeClose\" type=\"button\" class=\"alertModal__close\">x</button>\n            </div>\n            <div v-if=\"alertNotice.action\" class=\"button-wrap\">\n                <button @click=\"submit\" type=\"button\" class=\"button button--green\">Confirm</button>\n            </div>\n        </section>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n\t</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\t<div>\n\t    <div id=\"templateWrap\" :working=\"working\">\n\t        <header class=\"pageHeader\">\n\t            <h1 class=\"pageHeader__header\">Make a Withdrawl</h1>\n\t            <h4 class=\"pageHeader__subheader withdrawl__subheader\">\n\t                Current Balance: ${{ playersBalance.toFixed(2) }}\n\t            </h4>\n\t        </header>\n\t        <div class=\"withdrawl-form form\">\n\t        \t<p>How much would you like to withdraw?</p>\n\t            <div class=\"withdrawl__inputWrap form__row\">\n\t                <span class=\"form__inputBefore\">$</span><input class=\"width-50\" v-model=\"amount\" type=\"text\" placeholder=\"50.00\">\n\t            </div>\n\n\t            <template v-if=\"player.merchant === 2\">\n\t            \t<p>How should we send this payment?</p>\n\t            \t<div class=\"form__row withdrawl-type\">\n\t\t            \t<div class=\"radioWrap\">\n\t\t            \t\t<label for=\"paypal\">\n\t\t            \t\t\t<img :src=\"URL.base + '/public/image/icons/paypal-logo.png'\">\n\t\t            \t\t\t<input type=\"radio\" v-model=\"withdrawlMethod\" id=\"paypal\" value=\"PayPal\">\n\t\t            \t\t</label>\n\t\t            \t</div>\n\t\t            \t<div class=\"radioWrap\">\n\t\t            \t\t<label for=\"check\">\n\t\t            \t\t\t<img :src=\"URL.base + '/public/image/icons/check-image.png'\">\n\t\t            \t\t\t<input type=\"radio\" v-model=\"withdrawlMethod\" id=\"check\" value=\"Check\" checked=\"\">\n\t\t            \t\t</label>\n\t\t            \t</div>\n\t\t            </div>\n\t\t        </template>\n\t        </div>\n\t        <!-- -->\n\t        <div v-if=\"player.merchant === 1 || withdrawlMethod === 'Check'\" class=\"withdrawl__confirmation\">\n\t        \t<p class=\"withdrawl__instruction\">Click 'Withdraw' to confirm your intent to have a check mailed to:</p>\n\t        \t<div class=\"withdrawl__detailsWrap\">\n\t\t        \t<div class=\"withdrawl__mailingAddress\">\n\t\t        \t\t{{ player.firstname }} {{ player.lastname }}<br>\n\t\t        \t\t{{ player.address }}<br>\n\t\t        \t\t<span v-if=\"player.address2 !== ''\">{{ player.address2 }}<br></span>\n\t\t        \t\t{{ player.city }},{{ player.state }} {{ player.zipcode }}\n\t\t        \t</div>\n\t\t        \t<div v-show=\"!isNaN(parseFloat(amount))\" class=\"withdrawl__totalAmount\">\n\t\t        \t\t${{ parseFloat(amount).toFixed(2) }}\n\t\t        \t</div>\n\t\t        </div>\n\t        </div>\n\t        <div v-if=\"player.merchant === 2 &amp;&amp; withdrawlMethod === 'PayPal'\">\n\t        \t<p class=\"withdrawl__instruction\">Click 'Withdraw' to comfirm your intent to have a PayPal transfer sent to:</p>\n\t        \t<div class=\"withdrawl__detailsWrap\">\n\t        \t\t<div class=\"withdrawl__paypalEmail\">\n\t        \t\t\t{{ player.paypalEmail }}\n\t        \t\t</div>\n\t\t        \t<div v-show=\"!isNaN(parseFloat(amount))\" class=\"withdrawl__totalAmount\">\n\t\t        \t\t${{ parseFloat(amount).toFixed(2) }}\n\t\t        \t</div>\n\t\t        </div>\n\t\t    </div>\n\t\t    <!-- -->\n\t        <div class=\"container-fluid\">\n                <div class=\"col-xs-100 button-wrap\">\n                    <button type=\"button\" class=\"button button--primary\" @click=\"confirm\">Withdraw</button>\n                </div>\n            </div>\n\t    </div>\n        <section :class=\"alertNoticeClasses\">\n            <div>\n                <h2 class=\"alertNotice__header\">{{ alertNotice.header }}</h2>\n                <div class=\"alertNotice__subject\">{{{ alertNotice.subject }}}</div>\n                <div class=\"alertNotice__body\">\n                    {{{ alertNotice.body }}}\n                </div>\n                <button @click=\"alertNoticeClose\" type=\"button\" class=\"alertModal__close\">x</button>\n            </div>\n            <div v-if=\"alertNotice.action\" class=\"button-wrap\">\n                <button @click=\"submit($event)\" type=\"button\" class=\"button button--green\">Confirm</button>\n            </div>\n        </section>\n        <section :class=\"['syncAlert', alert.show ? 'show' : '']\">\n            <p :class=\"['syncAlert__body', alert.class]\">{{ alert.body }}</p>\n            <button @click=\"alertClose\" type=\"button\" class=\"alertModal__close\">x</button>\n        </section>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n\t</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

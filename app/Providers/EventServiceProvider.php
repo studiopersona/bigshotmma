@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'Bsmma\Events\UserRegistered' => [
             'Bsmma\Listeners\AddFundsToUserAccount',
         ],
+        'Bsmma\Events\PlayerRequestedWithdrawl' => [
+            'Bsmma\Listeners\SendWithdrawlRequestNotice'
+        ],
     ];
 
     /**

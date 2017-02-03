@@ -4842,8 +4842,8 @@ a {
 
 .withdrawl__instruction {
   font-style: italic;
-  margin-bottom: 2rem;
-  padding-right: 4%; }
+  width: 90%;
+  margin: 0 auto 2rem; }
 
 .withdrawl__detailsWrap {
   text-align: left;
@@ -4884,6 +4884,37 @@ a {
 
 .withdrawl__confirmDate {
   margin-left: auto; }
+
+.form__row.withdrawl-type {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  width: 60%;
+  margin: 3rem auto; }
+  .form__row.withdrawl-type .radioWrap:last-child {
+    margin-left: auto; }
+
+.radioWrap {
+  position: relative; }
+  .radioWrap input {
+    width: 0;
+    height: 0; }
+  .radioWrap input:checked::before {
+    content: url("../../image/icons/checkmark-icon.png");
+    width: 31px;
+    height: 31px;
+    position: absolute;
+    top: 0;
+    z-index: 20; }
+  .radioWrap:last-child input:checked::before {
+    right: -3rem; }
+  .radioWrap:first-child input:checked::before {
+    left: -2rem; }
+
+.withdrawl__paypalEmail {
+  font-size: 1.3rem;
+  margin-top: 2rem; }
 
 .infoModal {
   position: fixed;
@@ -5112,7 +5143,15 @@ a {
 
 .confirmModal__image {
   margin-bottom: 3rem;
-  width: 50%; }
+  width: 20%; }
+
+@media screen and (max-width: 1300px) {
+  .confirmModal__image {
+    width: 30%; } }
+
+@media screen and (max-width: 960px) {
+  .confirmModal__image {
+    width: 50%; } }
 
 .confirmModal__close {
   position: absolute;
@@ -5428,23 +5467,21 @@ a {
 
 .rulesSlider {
   position: fixed;
-  left: 0;
-  right: 0;
+  right: -100%;
   top: 0;
   bottom: 0;
   z-index: 250;
   width: 100%;
   max-width: 600px;
   background: rgba(0, 0, 0, 0.9);
-  transition: transform 0.3s ease;
-  transform: translate3d(200%, 0, 0);
+  transition: right 0.3s ease;
   overflow: hidden;
   font-size: 1.6rem;
   font-weight: 700;
   color: #fff;
   text-align: center; }
   .rulesSlider.show {
-    transform: translate3d(0, 0, 0); }
+    right: 0; }
 
 @media screen and (max-height: 540px) {
   .rulesSlider {

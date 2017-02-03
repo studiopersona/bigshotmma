@@ -34,8 +34,8 @@
 
 .withdrawl__instruction {
 	font-style: italic;
-	margin-bottom: 2rem;
-	padding-right: 4%;
+	width: 90%;
+	margin: 0 auto 2rem;
 }
 
 .withdrawl__detailsWrap {
@@ -81,4 +81,46 @@
 
 .withdrawl__confirmDate {
     margin-left: auto;
+}
+
+.form__row.withdrawl-type {
+    display: flex;
+    justify-content: flex-start;
+    width: 60%;
+    margin: 3rem auto;
+
+    .radioWrap:last-child {
+    	margin-left: auto;
+    }
+}
+
+.radioWrap {
+	position: relative;
+
+	input {
+		width: 0;
+		height: 0;
+	}
+
+	input:checked::before {
+		content: url('../../image/icons/checkmark-icon.png');
+		width: 31px;
+		height: 31px;
+		position: absolute;
+		top: 0;
+		z-index: 20;
+	}
+
+	&:last-child input:checked::before {
+		right: -3rem;
+	}
+
+	&:first-child input:checked::before {
+		left: -2rem;
+	}
+}
+
+.withdrawl__paypalEmail {
+    font-size: 1.3rem;
+    margin-top: 2rem;
 }

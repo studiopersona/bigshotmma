@@ -50,7 +50,19 @@
 
 .confirmModal__image {
 	margin-bottom: 3rem;
-	width: 50%;
+	width: 20%;
+}
+
+@media screen and (max-width: 1300px) {
+	.confirmModal__image {
+		width: 30%;
+	}
+}
+
+@media screen and (max-width: 960px) {
+	.confirmModal__image {
+		width: 50%;
+	}
 }
 
 .confirmModal__close {
