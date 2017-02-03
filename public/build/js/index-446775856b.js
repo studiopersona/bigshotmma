@@ -46685,6 +46685,9 @@ exports.default = {
                 }).then(function (response) {
                     vm.flash(response.data);
                     vm.working = false;
+
+                    // Update players balance display
+                    if (response.data.success) vm.$root.playersBalance = vm.$root.playersBalance - vm.amount;
                     vm.fetch(token);
                 }, function (err) {
                     console.log(err);
