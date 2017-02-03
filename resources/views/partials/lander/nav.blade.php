@@ -1,5 +1,5 @@
 <section class="navigation" role="navigation">
-	<div class="content-container">
+	<div class="nav-container">
 		<div class="container-fluid">
 			<div class="col-xs-50">
 				<img class="mainLogo" src="{{ asset('public/image/lander/logo.png') }}" alt="BSMMA - Fantasy MMA - Showcase Your Skills. Win Real Money.">

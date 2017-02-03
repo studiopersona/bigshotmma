@@ -47,3 +47,7 @@ h4 {
 	@include size(h4);
 	margin-bottom: $vertical-rhythm;
 }
+
+.content-wrapper {
+	padding-top: 10.4rem;
+}

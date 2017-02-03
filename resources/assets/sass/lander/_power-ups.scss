@@ -1,15 +1,26 @@
 .powerUps {
-	background: url('../../image/lander/power-up-bkgd.jpg') left top/cover no-repeat;
+	background: url(../../image/lander/cage-bg.jpg) left bottom/100% auto no-repeat;
 	overflow: hidden;
 	position: relative;
 	text-align: center;
+	padding-bottom: 12rem;
 }
 
 .powerUps__header {
-	color: $color-white;
-	font-weight: 700;
-	text-transform: uppercase;
-	text-align: center;
+    color: $color-black;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 5.25rem;
+}
+
+.powerUps__subheader {
+	color: $color-black;
+    font-size: 2.5rem;
+    font-weight: 100;
+    margin-top: 0;
+    margin-bottom: 6rem;
 }
 
 .powerupsCarousel__itemButton {

@@ -11,7 +11,7 @@ var menuControl = (function($, w, undefined) {
 
 		e.preventDefault();
 		$('html,body').animate({
-	    	scrollTop: $(target).offset().top,
+	    	scrollTop: $(target).offset().top - 120,
 	    }, 600);
 	}
 

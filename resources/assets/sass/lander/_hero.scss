@@ -19,17 +19,18 @@
 
 .hero__subheader {
 	color: $color-white;
-	margin-top: -1.96rem;
+	margin-top: 22rem;
 	text-align: center;
-	text-shadow: 1px 1px 0 $color-black;
+	text-shadow: 2px 2px 0 $color-black;
 	animation-delay: 0.2s;
 	animation-duration: 0.175s;
     animation-name: fadeAndScale;
     animation-timing-function: cubic-bezier(0.71,0.55,0.62,1.57);
+    font-size: 5.25rem;
 }
 
 .hero__ctaBtn {
-	margin-top: 1.862rem;
+	margin-top: 0;
 	animation-delay: 0.2s;
 	animation-duration: 0.175s;
     animation-name: fadeAndScale;

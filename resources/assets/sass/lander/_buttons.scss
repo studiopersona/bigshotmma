@@ -85,13 +85,13 @@
 
 .btn--black {
 	@extend .btn;
-	color: $color-white;
-	background: $color-black;
-	border: 1px solid $color-white;
+	color: $color-black;
+	background: $color-white;
+	border: 1px solid $color-black;
 
 	&:hover {
-		background: $color-white;
-		color: $color-black;
+		background: $color-black;
+		color: $color-white;
 	}
 
 	&[disabled] {

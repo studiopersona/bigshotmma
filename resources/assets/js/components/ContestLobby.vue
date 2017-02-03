@@ -30,11 +30,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div v-if="parseInt(participantsList[0].contest.buy_in, 10) === 1"class="col-xs-50">
-                        <span class="contestDetails__title"><a @click="showPrizeModal">Prize Pool</a>:</span> ${{ participantsList[0].contest.prize_pool.toFixed(2) }}
-                    </div>
-                    <div v-else class="col-xs-50">
-                        <span class="contestDetails__title">Prize Pool:</span> ${{ participantsList[0].contest.prize_pool }}
+                    <div class="col-xs-50">
+                        <span class="contestDetails__title"><a @click="showPrizeModal">Prize Pool</a>:</span> ${{ parseFloat(prizePool.total).toFixed(2) }}
                     </div>
                     <div class="col-xs-50 contestDetails__type">
                         <a href="#" @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">
@@ -99,7 +96,7 @@
         <section v-if="parseInt(participantsList[0].contest.buy_in, 10) === 1" :class="prizeModalClasses">
             <h3 class="prizeModal__title">Prize Pool</h3>
             <div class="prizeModal__body">
-            <p>In an <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">Old School</a> contest with 10 players:</p>
+            <p>In an <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">Classic</a> contest with 10 players:</p>
                 <div class="prizeModal__entryFeeWrap">
                     <span class="prizeModal__entryFeeTitle">Entry Fee:</span> <span class="prizeModal__entryFee">$1</span>
                 </div>
@@ -113,11 +110,11 @@
                     <tbody>
                         <tr>
                             <td>1st</td>
-                            <td class="prizeModal__payout">$6.70</td>
+                            <td class="prizeModal__payout">${{ parseFloat(prizePool.firstPlace).toFixed(2) }}</td>
                         </tr>
                         <tr>
                             <td>2nd</td>
-                            <td class="prizeModal__payout">$2.30</td>
+                            <td class="prizeModal__payout">${{ parseFloat(prizePool.secondPlace).toFixed(2) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -187,6 +184,7 @@
                         contest_id: '',
                     },
                 }],
+                prizePool: {},
                 playersBalance: 0,
                 playerRecords: [],
                 contestTypes: {},
@@ -485,10 +483,23 @@
             },
         },
 
+        watch: {
+            'participantsList'() {
+                let total = (this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants) - ((this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants)*0.15)
+
+                this.prizePool = {
+                    total: total,
+                    firstPlace: total*0.7,
+                    secondPlace: total*0.3,
+                }
+            },
+        },
+
         computed: {
             loaderClasses() {
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
             },
+
         },
     };
 </script>

@@ -34,13 +34,14 @@
 		</script>
 	</head>
 	<body>
-		@include('partials.lander.hero')
 		@include('partials.lander.nav')
-		@include('partials.lander.information-panel')
-		@include('partials.lander.contests')
-		@include('partials.lander.power-ups')
-		@include('partials.lander.footer')
-		@include('partials.lander.nav')
+		<div class="content-wrapper">
+			@include('partials.lander.hero')
+			@include('partials.lander.contests')
+			@include('partials.lander.information-panel')
+			@include('partials.lander.power-ups')
+			@include('partials.lander.footer')
+		</div>
 		<!-- scripts -->
 		@yield('scripts')
 		@if ( App::environment() === 'local' )

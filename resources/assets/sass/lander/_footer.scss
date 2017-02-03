@@ -1,9 +1,9 @@
 .footer {
-	background: $color-primary;
+	background: $color-black;
 	color: $color-white;
 
 	> .content-container {
-		padding: 2rem;
+		padding: 2.2rem 2rem 0 2rem;
 	}
 
 	p {
@@ -20,7 +20,16 @@
 		margin: 0 0.5rem;
 
 		&:hover {
-			color: $color-black;
+			color: $color-gray-mid;
 		}
 	}
+}
+
+.footer__logo {
+    margin: -4.7rem auto 1rem;
+    padding: 1rem;
+    background-color: $color-white;
+    border-radius: 6px;
+    border: 1px solid $color-black;
+    width: 30rem;
 }
