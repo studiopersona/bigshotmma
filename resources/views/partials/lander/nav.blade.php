@@ -7,7 +7,7 @@
 			<div class="col-xs-50 navigation__btnWrap">
 				<button type="button" class="btn btn--outline" data-target="#information">Learn</button>
 				<button type="button" class="btn btn--outline" data-target="#contests">Contests</button>
-				<a href="{{ url('/') }}" class="btn btn--primary">Fight!</a>
+				<a href="{{ url('/play') }}" class="btn btn--primary">Fight!</a>
 			</div>
 		</div>
 	</div>

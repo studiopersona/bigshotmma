@@ -13,9 +13,11 @@
 
 Route::group(['middleware' => ['web']], function () {
 
-    Route::get('/', function ()
+    Route::get('/', 'LanderController@index');
+
+    Route::get('/play', function ()
     {
-        return view('index');
+       return view('index');
     });
 
     Route::group(['prefix' => 'api/v1'], function()
@@ -58,10 +60,6 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::post('upload-avatar-image', 'UsersController@uploadImage');
 	});
 
-	Route::group(['prefix' => 'lander'], function()
-	{
-		Route::get('/', 'LanderController@index');
-	});
 	Route::get('/terms-of-service', 'LanderController@terms');
 	Route::get('/privacy-policy', 'LanderController@policy');
 	Route::get('/contact-support', 'LanderController@contact');

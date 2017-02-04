@@ -10,7 +10,7 @@
 			<div class="container-fluid contests__list">
 				<div class="col-xs-30 contests__eventWrap">
 					<img class="contests__eventImage" src="{{ asset('public/image/events/'.$event['event_image_name']) }}">
-					<button type="button" class="btn btn--green btn--round">All Contests</button>
+					<a href="{{ env('APP_URL') }}/play" class="btn btn--green btn--round">All Contests</a>
 				</div>
 				<div class="col-xs-68 col-xs-offset-2">
 					<h3 class="contests__tableHeader">{{ $event['event_name'] }}</h3>
@@ -29,7 +29,7 @@
 											<span class="contests__tableFee">${{ $contest['entry_fee'] }}</span>
 										</td>
 										<td>
-											<a href="{{ url('/') }}" class="btn btn--green btn--round">Enter</a>
+											<a href="{{ url('/play') }}" class="btn btn--green btn--round">Enter</a>
 										</td>
 									</tr>
 								@endforeach
@@ -46,7 +46,7 @@
 											<span class="contests__tableFee">${{ $contest['entry_fee'] }}</span>
 										</td>
 										<td>
-											<a href="{{ url('/') }}" class="btn btn--green btn--round">Enter</a>
+											<a href="{{ url('/play') }}" class="btn btn--green btn--round">Enter</a>
 										</td>
 									</tr>
 								@endforeach

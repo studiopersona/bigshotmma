@@ -16,7 +16,7 @@
 	            @endforeach
 	        </div>
 	    </div>
-		<a href="{{ url('/') }}" class="btn btn--black btn--semiround">Start Playing</a>
+		<a href="{{ url('/play') }}" class="btn btn--black btn--semiround">Start Playing</a>
 	    <div class="powerupsInfo">
 	    	@foreach ($powerUps as $powerUp)
 	    		<div class="powerupsInfo__item" data-id="{{ $powerUp['id'] }}">

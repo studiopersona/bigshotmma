@@ -53,7 +53,7 @@
 							<button type="button" class="information__itemLink" data-target="contest-formats">Contest Formats</button>
 						</li>
 						<li>
-							<a href="{{ url('/') }}" class="information__itemLink">Start Playing</a>
+							<a href="{{ url('/play') }}" class="information__itemLink">Start Playing</a>
 						</li>
 					</ul>
 				</div>
