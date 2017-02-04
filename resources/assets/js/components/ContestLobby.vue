@@ -93,7 +93,7 @@
                 </div>
             </div>
         </div>
-        <section v-if="parseInt(participantsList[0].contest.buy_in, 10) === 1" :class="prizeModalClasses">
+        <section :class="prizeModalClasses">
             <h3 class="prizeModal__title">Prize Pool</h3>
             <div class="prizeModal__body">
             <p>In an <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">Classic</a> contest with 10 players:</p>
