@@ -25,7 +25,7 @@
                             </div>
                             <div class="col-xs-15">
                                 <div class="contestList__buyinTitle">Entry Fee</div>
-                                <div class="contestList__buyin">${{ contest.buy_in.toFixed(2) }}</div>
+                                <div class="contestList__buyin">${{ parseFloat(contest.buy_in).toFixed(2) }}</div>
                             </div>
                         </div>
                     </a>
