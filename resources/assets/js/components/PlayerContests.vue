@@ -2,9 +2,9 @@
     <div id="templateWrap" :working="working">
         <header class="pageHeader">
             <h1 class="pageHeader__header">Enter a Contest</h1>
-            <h4 class="pageHeader__subheader">
+            <!--<h4 class="pageHeader__subheader">
                 Total Prize Pool ${{ poolTotal.toFixed(2) }}
-            </h4>
+            </h4>-->
         </header>
         <div class="contestList">
             <ul v-if="contestsList.contests.length > 0" class="stripped-list">
