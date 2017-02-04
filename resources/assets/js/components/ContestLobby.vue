@@ -23,7 +23,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title">Entry Fee:</span> ${{ participantsList[0].contest.buy_in.toFixed(2) }}
+                        <span class="contestDetails__title">Entry Fee:</span> ${{ parseFloat(participantsList[0].contest.buy_in).toFixed(2) }}
                     </div>
                     <div class="col-xs-50 text-right">
                         <span class="contestDetails__title">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}
