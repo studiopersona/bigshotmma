@@ -2,9 +2,9 @@
     <div id="templateWrap" :working="working">
         <header class="pageHeader">
             <h1 class="pageHeader__header">Choose an Event</h1>
-            <h4 class="pageHeader__subheader">
+            <!--<h4 class="pageHeader__subheader">
                 Total Prize Pool $<span class="pageHeader--highlight">{{ poolTotal.toFixed(2) }}</span>
-            </h4>
+            </h4>-->
         </header>
         <div class="container-fluid">
             <div class="col-xs-100">
