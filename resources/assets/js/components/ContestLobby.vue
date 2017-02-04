@@ -98,7 +98,7 @@
             <div class="prizeModal__body">
             <p>In an <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">Classic</a> contest with 10 players:</p>
                 <div class="prizeModal__entryFeeWrap">
-                    <span class="prizeModal__entryFeeTitle">Entry Fee:</span> <span class="prizeModal__entryFee">${{ participantsList[0].contest.buy_in.toFixed(2) }}(</span>
+                    <span class="prizeModal__entryFeeTitle">Entry Fee:</span> <span class="prizeModal__entryFee">${{ parseFloat(participantsList[0].contest.buy_in).toFixed(2) }}</span>
                 </div>
                 <table class="prizeModal__payoutTable">
                     <thead>
