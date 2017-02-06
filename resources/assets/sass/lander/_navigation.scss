@@ -3,6 +3,7 @@
     max-width: 75em;
     margin: 0 auto;
     background-color: $color-white;
+    box-shadow: 1px 1px 2px rgba(0,0,0, 0.6);
 }
 
 .navigation {
@@ -15,7 +16,7 @@
 .navigation__btnWrap {
 	text-align: right;
 }
-
+// 980px
 @media screen and (max-width: 70rem) {
 	.navigation__btnWrap {
 
@@ -26,5 +27,27 @@
 			padding-left: 0;
 			padding-right: 0;
 		}
+	}
+}
+// 615px
+@media screen and (max-width: 38.4375rem) {
+	.mainLogo {
+		width: 144px;
+    	padding-top: 10px;
+	}
+
+	.navigation__btnWrap {
+
+		.btn {
+			font-size: 1.5em;
+			padding-left: 0.75em;
+			padding-right: 0.75em;
+			box-sizing: border-box;
+			width: auto;
+		}
+	}
+
+	.nav-container {
+		padding: 1rem 2rem;
 	}
 }

@@ -1,7 +1,7 @@
 <section id="information" class="information">
 	<div class="content-container">
 		<div class="row">
-			<div class="col-xs-45">
+			<div class="col-sm-45 col-xs-100">
 				<div class="information__itemsWrap">
 					<div class="information__item show" data-item="scoring">
 						<h1 class="information__header">Scoring</h1>
@@ -63,7 +63,7 @@
 					<img src="{{ asset('public/image/lander/ssl-logo.png') }}" class="information__thirdPartyLogo information__thirdPartyLogo--ssl">
 				</div>
 			</div>
-			<div class="col-xs-50 col-xs-offset-5">
+			<div class="col-sm-50 col-sm-offset-5">
 				<div class="information__phoneTemplateWrap">
 					<div class="information__phoneScreenWrap">
 						<div class="information__phoneScreen information__phoneScreen--scoring visible" data-item="scoring"></div>

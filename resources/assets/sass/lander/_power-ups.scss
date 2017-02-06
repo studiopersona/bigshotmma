@@ -90,3 +90,11 @@
 	font-size: 3.052rem;
 	margin-bottom: 2.4rem;
 }
+
+// 615px
+@media screen and (max-width: 38.4375rem) {
+	.powerUps__header {
+		line-height: 1;
+		margin-bottom: 1rem;
+	}
+}

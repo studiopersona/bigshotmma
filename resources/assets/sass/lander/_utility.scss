@@ -8,3 +8,32 @@
     clip: rect(0,0,0,0);
     border: 0;
 }
+
+.smaller-screens,
+.smaller-screens-block {
+	display: none;
+}
+
+.larger-screens {
+	display: inline;
+}
+
+.larger-screens-block {
+	display: block;
+}
+
+// 615px
+@media screen and (max-width: 38.4375rem) {
+	.smaller-screens {
+		display: inline;
+	}
+
+	.smaller-screens-block {
+		display: block;
+	}
+
+	.larger-screens,
+	.larger-screens-block {
+		display: none;
+	}
+}

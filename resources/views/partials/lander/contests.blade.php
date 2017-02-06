@@ -8,11 +8,11 @@
 			</div>
 		@else
 			<div class="container-fluid contests__list">
-				<div class="col-xs-30 contests__eventWrap">
+				<div class="col-xs-30 contests__eventWrap larger-screens-block">
 					<img class="contests__eventImage" src="{{ asset('public/image/events/'.$event['event_image_name']) }}">
 					<a href="{{ env('APP_URL') }}/play" class="btn btn--green btn--round">All Contests</a>
 				</div>
-				<div class="col-xs-68 col-xs-offset-2">
+				<div class="col-xs-100 col-sm-68 col-sm-offset-2">
 					<h3 class="contests__tableHeader">{{ $event['event_name'] }}</h3>
 					<table class="contests__table">
 						@if (! $event['contests']->isEmpty())
@@ -55,6 +55,9 @@
 							<tr><td class="contests__noContests">No contests have been created for this event. Check back soon for updates.</td></tr>
 						@endif
 					</table>
+					<div class="smaller-screens-block">
+						<a href="{{ env('APP_URL') }}/play" class="btn btn--green btn--round">All Contests</a>
+					</div>
 				</div>
 			</div>
 		@endif

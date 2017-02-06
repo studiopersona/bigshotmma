@@ -88,3 +88,35 @@
 	}
 
 }
+
+@media screen and (max-width: 38.4375rem) {
+	.carousel__holder {
+
+		.carousel__wrap {
+			width: 100%;
+
+			.carousel__item {
+				width: 45%;
+
+				&:nth-child(2n) {
+					margin-right: 0;
+				}
+			}
+		}
+	}
+
+	.carousel-nav {
+		display: none;
+	}
+
+	.powerupsInfo__item {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.powerupsInfo__itemImage {
+		width: 27%;
+		margin: 0 auto;
+	}
+}

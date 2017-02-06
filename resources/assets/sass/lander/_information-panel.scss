@@ -171,6 +171,9 @@ a.information__itemLink {
 
 @media screen and (max-width: 52rem) {
 	.informaion__itemLinksList {
+		list-style-image: none;
+		list-style: none;
+
 		> li {
 			float: none;
 			width: 100%;
@@ -179,5 +182,16 @@ a.information__itemLink {
 
 	.information__phoneTemplateWrap {
 		margin-top: 2rem;
+		display: none;
 	}
+
+	.information__itemLinksWrap {
+		text-align: center;
+	}
+
+	.information__itemLink {
+		font-size: 2rem;
+	}
+
+
 }

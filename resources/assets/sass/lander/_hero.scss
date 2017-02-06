@@ -7,7 +7,7 @@
 	font-size: 8.504rem;
 	font-weight: 700;
 	color: $color-white;
-	text-shadow: 4px 4px 0 $color-black;
+    text-shadow: 6px 4px 0px $color-black;
 	text-transform: uppercase;
 	text-align: center;
 	margin-top: 10rem;
@@ -35,6 +35,24 @@
 	animation-duration: 0.175s;
     animation-name: fadeAndScale;
     animation-timing-function: cubic-bezier(0.71,0.55,0.62,1.57);
+}
+
+// 615px
+@media screen and (max-width: 38.4375rem) {
+    .hero {
+        background-image: url('../../image/lander/hero-bkgd-small.jpg');
+    }
+
+    .hero__header {
+        font-size: 5.404rem;
+        padding-top: 5rem;
+        margin-bottom: 0;
+    }
+
+    .hero__subheader {
+        font-size: 2.35rem;
+        margin-top: 0;
+    }
 }
 
 @keyframes fadeAndScale {

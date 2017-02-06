@@ -4419,6 +4419,10 @@ h4 {
 .content-wrapper {
   padding-top: 10.4rem; }
 
+@media screen and (max-width: 38.4375rem) {
+  .content-wrapper {
+    padding-top: 7.6rem; } }
+
 .content-container {
   padding: 3.92rem 2rem;
   max-width: 75em;
@@ -4551,7 +4555,7 @@ h4 {
   font-size: 8.504rem;
   font-weight: 700;
   color: #fff;
-  text-shadow: 4px 4px 0 #000;
+  text-shadow: 6px 4px 0px #000;
   text-transform: uppercase;
   text-align: center;
   margin-top: 10rem;
@@ -4578,6 +4582,17 @@ h4 {
   animation-name: fadeAndScale;
   animation-timing-function: cubic-bezier(0.71, 0.55, 0.62, 1.57); }
 
+@media screen and (max-width: 38.4375rem) {
+  .hero {
+    background-image: url("../../image/lander/hero-bkgd-small.jpg"); }
+  .hero__header {
+    font-size: 5.404rem;
+    padding-top: 5rem;
+    margin-bottom: 0; }
+  .hero__subheader {
+    font-size: 2.35rem;
+    margin-top: 0; } }
+
 @keyframes fadeAndScale {
   from {
     opacity: 0;
@@ -4598,7 +4613,8 @@ h4 {
   padding: 1.92rem 2rem;
   max-width: 75em;
   margin: 0 auto;
-  background-color: #fff; }
+  background-color: #fff;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); }
 
 .navigation {
   position: fixed;
@@ -4616,6 +4632,19 @@ h4 {
     text-align: center;
     padding-left: 0;
     padding-right: 0; } }
+
+@media screen and (max-width: 38.4375rem) {
+  .mainLogo {
+    width: 144px;
+    padding-top: 10px; }
+  .navigation__btnWrap .btn, .navigation__btnWrap .btn--block, .navigation__btnWrap .btn--primary, .navigation__btnWrap .btn--green, .navigation__btnWrap .btn--black, .navigation__btnWrap .btn--outline {
+    font-size: 1.5em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    box-sizing: border-box;
+    width: auto; }
+  .nav-container {
+    padding: 1rem 2rem; } }
 
 .information {
   background: url("../../image/lander/information-panel-bkgd.jpg") left top/cover no-repeat; }
@@ -4749,11 +4778,19 @@ a.information__itemLink {
     margin-right: 1rem; } }
 
 @media screen and (max-width: 52rem) {
-  .informaion__itemLinksList > li {
-    float: none;
-    width: 100%; }
+  .informaion__itemLinksList {
+    list-style-image: none;
+    list-style: none; }
+    .informaion__itemLinksList > li {
+      float: none;
+      width: 100%; }
   .information__phoneTemplateWrap {
-    margin-top: 2rem; } }
+    margin-top: 2rem;
+    display: none; }
+  .information__itemLinksWrap {
+    text-align: center; }
+  .information__itemLink {
+    font-size: 2rem; } }
 
 .contests__header {
   text-transform: uppercase;
@@ -4819,37 +4856,12 @@ a.information__itemLink {
 .contests__tableFee {
   color: #2dbe0c; }
 
-@media screen and (max-width: 60rem) {
-  .contests__table td {
-    font-size: 1.1em; }
-  .contests__playerCount,
-  .contest__tableFee {
-    font-size: 2.2rem; }
-  .contests__eventWrap .btn, .contests__eventWrap .btn--block, .contests__eventWrap .btn--primary, .contests__eventWrap .btn--green, .contests__eventWrap .btn--black, .contests__eventWrap .btn--outline {
-    font-size: 1.2em; } }
-
-@media screen and (max-width: 50rem) {
-  .contests__table {
-    width: 100%; }
-    .contests__table tr {
-      display: block;
-      margin-bottom: 2rem;
-      width: 48%;
-      margin-right: 2%;
-      float: left;
-      border: 1px solid; }
-      .contests__table tr:nth-child(2n) {
-        background: #eee;
-        margin-right: 0; }
-      .contests__table tr:nth-child(2n+1) {
-        clear: left; }
-      .contests__table tr:nth-child(5) {
-        display: none; }
-    .contests__table td {
-      display: block;
-      border-bottom: 1px dotted; }
-      .contests__table td:last-child {
-        border-bottom: none; } }
+@media screen and (max-width: 38.4375rem) {
+  .contests__list {
+    margin-top: 1rem; }
+    .contests__list .smaller-screens-block {
+      text-align: center;
+      padding-top: 2rem; } }
 
 .powerUps {
   background: url(../../image/lander/cage-bg.jpg) left bottom/100% auto no-repeat;
@@ -4927,6 +4939,11 @@ a.information__itemLink {
   font-size: 3.052rem;
   margin-bottom: 2.4rem; }
 
+@media screen and (max-width: 38.4375rem) {
+  .powerUps__header {
+    line-height: 1;
+    margin-bottom: 1rem; } }
+
 .carousel-nav {
   position: absolute;
   top: 42%;
@@ -4989,6 +5006,26 @@ a.information__itemLink {
     font-size: 1.2rem; }
   .carousel-nav {
     top: 38%; } }
+
+@media screen and (max-width: 38.4375rem) {
+  .carousel__holder .carousel__wrap {
+    width: 100%; }
+    .carousel__holder .carousel__wrap .carousel__item {
+      width: 45%; }
+      .carousel__holder .carousel__wrap .carousel__item:nth-child(2n) {
+        margin-right: 0; }
+  .carousel-nav {
+    display: none; }
+  .powerupsInfo__item {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: center;
+    justify-content: center; }
+  .powerupsInfo__itemImage {
+    width: 27%;
+    margin: 0 auto; } }
 
 .informational {
   width: 90%;
@@ -5204,6 +5241,13 @@ a.information__itemLink {
   border: 1px solid #000;
   width: 30rem; }
 
+@media screen and (max-width: 38.4375rem) {
+  .footer__logo {
+    display: none; }
+  .footer p {
+    text-align: center;
+    margin-bottom: 1rem; } }
+
 .visuallyhidden {
   position: absolute;
   width: 1px;
@@ -5213,5 +5257,24 @@ a.information__itemLink {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0; }
+
+.smaller-screens,
+.smaller-screens-block {
+  display: none; }
+
+.larger-screens {
+  display: inline; }
+
+.larger-screens-block {
+  display: block; }
+
+@media screen and (max-width: 38.4375rem) {
+  .smaller-screens {
+    display: inline; }
+  .smaller-screens-block {
+    display: block; }
+  .larger-screens,
+  .larger-screens-block {
+    display: none; } }
 
 /*# sourceMappingURL=lander.css.map */

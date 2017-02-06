@@ -51,3 +51,9 @@ h4 {
 .content-wrapper {
 	padding-top: 10.4rem;
 }
+
+@media screen and (max-width: 38.4375rem) {
+	.content-wrapper {
+		padding-top: 7.6rem;
+	}
+}
