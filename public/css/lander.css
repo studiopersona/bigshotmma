@@ -4828,6 +4828,10 @@ a.information__itemLink {
   .information__itemLink {
     font-size: 2rem; } }
 
+@media screen and (max-width: 38.4375rem) {
+  .information {
+    text-align: center; } }
+
 .contests__header {
   text-transform: uppercase;
   font-size: 5.96rem;
@@ -4991,7 +4995,10 @@ a.information__itemLink {
 @media screen and (max-width: 38.4375rem) {
   .powerUps__header {
     line-height: 1;
-    margin-bottom: 1rem; } }
+    margin-bottom: 1rem;
+    font-size: 3.96rem; }
+  .powerUps__subheader {
+    font-size: 1.5rem; } }
 
 .carousel-nav {
   position: absolute;

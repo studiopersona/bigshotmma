@@ -21,7 +21,7 @@
 					<div class="information__item" data-item="contest-formats">
 						<h1 class="information__header">Contest Fomats</h1>
 						<ul>
-							<li><span class="highlight--pos">OLD SCHOOL</span> - top 20% of players win a prize</li>
+							<li><span class="highlight--pos">CLASSIC</span> - top 20% of players win a prize</li>
 							<li>&nbsp;</li>
 							<li><span class="highlight--pos">50/50</span> -  top 50% of players win a prize</li>
 							<li>&nbsp;</li>
