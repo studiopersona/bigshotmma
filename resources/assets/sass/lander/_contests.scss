@@ -95,3 +95,14 @@
 		}
 	}
 }
+
+// 320px
+@media screen and (max-width: 20rem) {
+	.contests__header {
+        font-size: 3.96rem;
+    }
+
+    .contests__subheader {
+        font-size: 1.5rem;
+    }
+}

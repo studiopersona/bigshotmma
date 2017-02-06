@@ -47,11 +47,70 @@
         font-size: 5.404rem;
         padding-top: 5rem;
         margin-bottom: 0;
+        margin-top: 7rem;
     }
 
     .hero__subheader {
         font-size: 2.35rem;
         margin-top: 0;
+    }
+}
+
+// 520px
+@media screen and (max-width: 32.5rem) {
+
+    .hero__header {
+        font-size: 4.804rem;
+        padding-top: 5rem;
+        margin-bottom: 0;
+        margin-top: 6rem;
+    }
+
+    .hero__subheader {
+        font-size: 1.8rem;
+        margin-top: 0;
+    }
+
+}
+
+// 460px
+@media screen and (max-width: 28.75rem) {
+
+    .hero__header {
+        font-size: 4.804rem;
+        padding-top: 5rem;
+        margin-bottom: 0;
+        margin-top: 3rem;
+    }
+
+    .hero__subheader {
+        font-size: 1.8rem;
+        margin-top: 0;
+    }
+
+}
+
+// 420px
+@media screen and (max-width: 26.25rem) {
+
+    .hero__header {
+        font-size: 4.204rem;
+        padding-top: 5rem;
+        margin-bottom: 0;
+        margin-top: 3rem;
+    }
+
+    .hero__subheader {
+        font-size: 1.4rem;
+        margin-top: 0;
+    }
+
+}
+
+@media screen and (max-width: 20rem) {
+    .hero__header {
+        font-size: 3.4rem;
+        margin-top: 1rem;
     }
 }
 
