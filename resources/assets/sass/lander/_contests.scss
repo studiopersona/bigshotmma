@@ -94,10 +94,22 @@
 			padding-top: 2rem;
 		}
 	}
-}
 
-// 320px
-@media screen and (max-width: 20rem) {
+	.contests__playerCount,
+    .contest__tableFee {
+    	font-size: 1.1rem;
+    }
+
+    .contests__table {
+	    max-width: 100%;
+	    margin: 0 auto 0 -1.1rem;
+
+	    td {
+	    	padding: 0.5rem;
+	    	font-size: 1.1rem;
+	    }
+	}
+
 	.contests__header {
         font-size: 3.96rem;
     }

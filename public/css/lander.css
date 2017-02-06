@@ -4616,7 +4616,7 @@ h4 {
 
 @media screen and (max-width: 26.25rem) {
   .hero__header {
-    font-size: 4.204rem;
+    font-size: 3.204rem;
     padding-top: 5rem;
     margin-bottom: 0;
     margin-top: 3rem; }
@@ -4649,14 +4649,14 @@ h4 {
   padding: 1.92rem 2rem;
   max-width: 75em;
   margin: 0 auto;
-  background-color: #fff;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); }
+  background-color: #fff; }
 
 .navigation {
   position: fixed;
   width: 100%;
   background-color: #fff;
-  z-index: 500; }
+  z-index: 500;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); }
 
 .navigation__btnWrap {
   text-align: right; }
@@ -4897,9 +4897,16 @@ a.information__itemLink {
     margin-top: 1rem; }
     .contests__list .smaller-screens-block {
       text-align: center;
-      padding-top: 2rem; } }
-
-@media screen and (max-width: 20rem) {
+      padding-top: 2rem; }
+  .contests__playerCount,
+  .contest__tableFee {
+    font-size: 1.1rem; }
+  .contests__table {
+    max-width: 100%;
+    margin: 0 auto 0 -1.1rem; }
+    .contests__table td {
+      padding: 0.5rem;
+      font-size: 1.1rem; }
   .contests__header {
     font-size: 3.96rem; }
   .contests__subheader {
