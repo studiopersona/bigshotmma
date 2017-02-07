@@ -3,7 +3,7 @@
 		<div class="container-fluid">
 			<div class="col-sm-33 col-xs-100">
 				<p class="footer__coopyright">
-					&copy; Copyright 2016 @if (date('Y') !== '2016') - {{date('Y')}}@endif BSMMA.com All Rights Reserved
+					&copy; Copyright 2016 @if (date('Y') !== '2016') - {{date('Y')}}@endif BSMMA.com <span class="larger-screens">All Rights Reserved</span>
 				</p>
 			</div>
 			<div class="col-sm-33 col-xs-100">
