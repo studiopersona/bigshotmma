@@ -34,6 +34,13 @@
     width: 30rem;
 }
 
+// 980px
+@media screen and (max-width: 61.9375rem) {
+	.footer {
+		padding-bottom: 2.5rem;
+	}
+}
+
 // 615px
 @media screen and (max-width: 38.4375rem) {
 	.footer__logo {

@@ -170,6 +170,10 @@ a.information__itemLink {
 }
 
 @media screen and (max-width: 52rem) {
+	.information {
+		text-align: center;
+	}
+
 	.informaion__itemLinksList {
 		list-style-image: none;
 		list-style: none;
@@ -182,7 +186,6 @@ a.information__itemLink {
 
 	.information__phoneTemplateWrap {
 		margin-top: 2rem;
-		display: none;
 	}
 
 	.information__itemLinksWrap {
@@ -194,8 +197,8 @@ a.information__itemLink {
 	}
 }
 
-@media screen and (max-width: 38.4375rem) {
-	.information {
-		text-align: center;
+@media screen and (max-width: 47.95rem) {
+	.information__phoneTemplateWrap {
+		display: none;
 	}
 }

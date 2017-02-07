@@ -9,9 +9,15 @@ import parsley from 'parsleyjs'
 
 window.onload = function() {
 	heroSizer()
+
+	$(window).on('orientationchange resize', function() {
+		$('.content-wrapper').css('paddingTop', $('.navigation').height() + 'px')
+	})
+
+	$('.content-wrapper').css('paddingTop', $('.navigation').height() + 'px')
+
 	menuControl.init()
 
-	console.log($(window).width())
 	if ( $(window).width() > 615 ) {
 		if (document.getElementById('powerupsCarousel')) {
 			var ipf = 6

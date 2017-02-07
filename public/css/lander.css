@@ -4582,6 +4582,25 @@ h4 {
   animation-name: fadeAndScale;
   animation-timing-function: cubic-bezier(0.71, 0.55, 0.62, 1.57); }
 
+@media screen and (max-width: 78.125rem) {
+  .hero__subheader {
+    margin-top: 12rem;
+    font-size: 4.25rem; } }
+
+@media screen and (max-width: 61.25rem) {
+  .hero__header {
+    font-size: 6.5rem; }
+  .hero__subheader {
+    margin-top: 6rem;
+    font-size: 3.25rem; } }
+
+@media screen and (max-width: 46.875rem) {
+  .hero__header {
+    margin-top: 3rem;
+    font-size: 5rem; }
+  .hero__subheader {
+    font-size: 2.6rem; } }
+
 @media screen and (max-width: 38.4375rem) {
   .hero {
     background-image: url("../../image/lander/hero-bkgd-small.jpg"); }
@@ -4669,7 +4688,7 @@ h4 {
     padding-left: 0;
     padding-right: 0; } }
 
-@media screen and (max-width: 38.4375rem) {
+@media screen and (max-width: 38.75rem) {
   .mainLogo {
     width: 144px;
     padding-top: 10px; }
@@ -4679,6 +4698,8 @@ h4 {
     padding-right: 0.75em;
     box-sizing: border-box;
     width: auto; }
+  .navigation__btnWrap button.btn, .navigation__btnWrap button.btn--block, .navigation__btnWrap button.btn--primary, .navigation__btnWrap button.btn--green, .navigation__btnWrap button.btn--black, .navigation__btnWrap button.btn--outline {
+    display: none; }
   .nav-container {
     padding: 1rem 2rem; } }
 
@@ -4814,6 +4835,8 @@ a.information__itemLink {
     margin-right: 1rem; } }
 
 @media screen and (max-width: 52rem) {
+  .information {
+    text-align: center; }
   .informaion__itemLinksList {
     list-style-image: none;
     list-style: none; }
@@ -4821,16 +4844,15 @@ a.information__itemLink {
       float: none;
       width: 100%; }
   .information__phoneTemplateWrap {
-    margin-top: 2rem;
-    display: none; }
+    margin-top: 2rem; }
   .information__itemLinksWrap {
     text-align: center; }
   .information__itemLink {
     font-size: 2rem; } }
 
-@media screen and (max-width: 38.4375rem) {
-  .information {
-    text-align: center; } }
+@media screen and (max-width: 47.95rem) {
+  .information__phoneTemplateWrap {
+    display: none; } }
 
 .contests__header {
   text-transform: uppercase;
@@ -4895,6 +4917,14 @@ a.information__itemLink {
 
 .contests__tableFee {
   color: #2dbe0c; }
+
+@media screen and (max-width: 61.9375rem) {
+  .contests__eventWrap {
+    margin-bottom: 3.5rem; }
+  .contests__eventImage {
+    width: 50%;
+    display: block;
+    margin: 0 auto 2.4rem; } }
 
 @media screen and (max-width: 38.4375rem) {
   .contests__list {
@@ -5019,7 +5049,7 @@ a.information__itemLink {
     right: 6%; }
   .carousel-nav:before {
     content: url("../../image/lander/carousel-arrow.png");
-    opacity: 0.8;
+    opacity: 1;
     position: absolute;
     width: 25px;
     height: 35px;
@@ -5055,13 +5085,16 @@ a.information__itemLink {
       .carousel__holder .carousel__wrap .carousel__item:last-child {
         margin-right: 0; }
 
+.powerupsCarousel__itemImage {
+  width: 100%; }
+
 @media screen and (max-width: 70rem) {
   .powerupsCarousel__itemImage {
     width: 100%; }
   .powerupsCarousel__itemTitle {
     font-size: 1.2rem; }
   .carousel-nav {
-    top: 38%; } }
+    top: 46%; } }
 
 @media screen and (max-width: 38.4375rem) {
   .carousel__holder .carousel__wrap {
@@ -5296,6 +5329,10 @@ a.information__itemLink {
   border-radius: 6px;
   border: 1px solid #000;
   width: 30rem; }
+
+@media screen and (max-width: 61.9375rem) {
+  .footer {
+    padding-bottom: 2.5rem; } }
 
 @media screen and (max-width: 38.4375rem) {
   .footer__logo {

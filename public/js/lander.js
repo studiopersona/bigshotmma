@@ -12650,9 +12650,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 window.onload = function () {
 	(0, _heroSizer2.default)();
+
+	(0, _jquery2.default)(window).on('orientationchange resize', function () {
+		(0, _jquery2.default)('.content-wrapper').css('paddingTop', (0, _jquery2.default)('.navigation').height() + 'px');
+	});
+
+	(0, _jquery2.default)('.content-wrapper').css('paddingTop', (0, _jquery2.default)('.navigation').height() + 'px');
+
 	_menuControl2.default.init();
 
-	console.log((0, _jquery2.default)(window).width());
 	if ((0, _jquery2.default)(window).width() > 615) {
 		if (document.getElementById('powerupsCarousel')) {
 			var ipf = 6;

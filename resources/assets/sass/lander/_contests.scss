@@ -84,6 +84,19 @@
 	color: $color-green;
 }
 
+// 991px (bootstrap md breakpoint)
+@media screen and (max-width: 61.9375rem) {
+	.contests__eventWrap {
+		margin-bottom: 3.5rem;
+	}
+
+	.contests__eventImage {
+	    width: 50%;
+	    display: block;
+	    margin: 0 auto 2.4rem;
+	}
+}
+
 // 615px
 @media screen and (max-width: 38.4375rem) {
 	.contests__list {

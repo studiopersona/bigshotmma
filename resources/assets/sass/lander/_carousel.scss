@@ -22,7 +22,7 @@
 
 	&:before {
 		content: url('../../image/lander/carousel-arrow.png');
-		opacity: 0.8;
+		opacity: 1;
 		position: absolute;
 		width: 25px;
 		height: 35px;
@@ -74,6 +74,10 @@
 	}
 }
 
+.powerupsCarousel__itemImage {
+	width: 100%;
+}
+
 @media screen and (max-width: 70rem) {
 	.powerupsCarousel__itemImage {
 		width: 100%;
@@ -84,7 +88,7 @@
 	}
 
 	.carousel-nav {
-		top: 38%;
+		top: 46%;
 	}
 
 }

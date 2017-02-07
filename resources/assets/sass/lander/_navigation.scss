@@ -29,8 +29,8 @@
 		}
 	}
 }
-// 615px
-@media screen and (max-width: 38.4375rem) {
+// 620px
+@media screen and (max-width: 38.75rem) {
 	.mainLogo {
 		width: 144px;
     	padding-top: 10px;
@@ -44,6 +44,10 @@
 			padding-right: 0.75em;
 			box-sizing: border-box;
 			width: auto;
+		}
+
+		button.btn {
+			display: none;
 		}
 	}
 
