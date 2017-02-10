@@ -29,7 +29,28 @@
 
 .contests__eventImage {
 	width: 90%;
-	margin-bottom: 2.4rem;
+	margin-bottom: 1.4rem;
+}
+
+.countdownHeader {
+	font-size: 3rem;
+	color: $color-primary;
+	font-weight: 700;
+	text-transform: uppercase;
+	margin-bottom: 0;
+}
+
+.countdownValue {
+	font-size: 3rem;
+	margin-right: 0.5rem;
+}
+
+.countdownLabel {
+	color: $color-primary;
+	font-size: 1.9rem;
+	text-align: baseline;
+	text-transform: uppercase;
+	margin-right: 0.5rem;
 }
 
 .contests__eventWrap {
@@ -82,6 +103,11 @@
 
 .contests__tableFee {
 	color: $color-green;
+}
+
+.all-contests-btn-wrap {
+	text-align: center;
+	padding: 2rem;
 }
 
 // 991px (bootstrap md breakpoint)

@@ -1,7 +1,7 @@
 <section class="powerUps">
 	<div class="content-container">
 		<h1 class="powerUps__header">Apply Power Ups with Caution!</h1>
-		<h2 class="powerUps__subheader">Earn bosus points for success, but risk penalty for failure.</h2>
+		<h2 class="powerUps__subheader">Earn bonus points for success, but risk penalty for failure.</h2>
 		<button class="carousel-nav" data-direction="forward"><span class="visuallyhidden">Forward</span></button>
 	    <button class="carousel-nav disabled" data-direction="backward"><span class="visuallyhidden">Backward</span></button>
 	    <div id="powerupsCarousel" class="carousel__holder">

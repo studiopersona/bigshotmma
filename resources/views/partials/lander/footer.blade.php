@@ -13,9 +13,9 @@
 			</div>
 			<div class="col-md-33 col-sm-50 col-xs-100">
 				<p class="footer__links">
-					<a  href="{{ url('terms-of-service') }}">Term of Service</a> |
-					<a href="{{ url('privacy-policy') }}">Privacy Policy</a> |
-					<a href="{{ url('contact-support') }}">Contact Support</a>
+					<a  href="{{ url('terms-of-service') }}">Terms</a> |
+					<a href="{{ url('privacy-policy') }}">Privacy</a> |
+					<a href="{{ url('contact-support') }}">Contact</a>
 				</p>
 			</div>
 		</div>

@@ -4555,10 +4555,11 @@ h4 {
   font-size: 8.504rem;
   font-weight: 700;
   color: #fff;
-  text-shadow: 6px 4px 0px #000;
-  text-transform: uppercase;
+  letter-spacing: -1.5px;
+  text-shadow: 4px 2px 0 #000, 5px 3px 0 #000, 6px 4px 0 #000, 7px 5px 0 #000, 8px 6px 0 #000, -1px -1px 0 #000, -1px -2px 0 #000;
   text-align: center;
-  margin-top: 10rem;
+  margin-top: 8rem;
+  margin-bottom: 0;
   animation-delay: 0.2s;
   animation-duration: 0.175s;
   animation-name: fadeAndScale;
@@ -4566,17 +4567,24 @@ h4 {
 
 .hero__subheader {
   color: #fff;
-  margin-top: 22rem;
+  margin-top: -1rem;
   text-align: center;
-  text-shadow: 2px 2px 0 #000;
+  text-shadow: 4px 4px 1px #000;
   animation-delay: 0.2s;
   animation-duration: 0.175s;
   animation-name: fadeAndScale;
   animation-timing-function: cubic-bezier(0.71, 0.55, 0.62, 1.57);
-  font-size: 5.25rem; }
+  font-size: 4.25rem; }
+  .hero__subheader > a {
+    color: #fff;
+    outline: none; }
+    .hero__subheader > a:hover {
+      color: #ccc; }
 
 .hero__ctaBtn {
-  margin-top: 0;
+  font-size: 3.4rem;
+  border: 2px solid #000;
+  margin-top: 4rem;
   animation-delay: 0.2s;
   animation-duration: 0.175s;
   animation-name: fadeAndScale;
@@ -4584,20 +4592,19 @@ h4 {
 
 @media screen and (max-width: 78.125rem) {
   .hero__subheader {
-    margin-top: 12rem;
     font-size: 4.25rem; } }
 
 @media screen and (max-width: 61.25rem) {
   .hero__header {
     font-size: 6.5rem; }
   .hero__subheader {
-    margin-top: 6rem;
     font-size: 3.25rem; } }
 
-@media screen and (max-width: 46.875rem) {
+@media screen and (max-width: 48.125rem) {
   .hero__header {
-    margin-top: 3rem;
-    font-size: 5rem; }
+    padding-top: 3rem;
+    font-size: 5rem;
+    margin-top: 0; }
   .hero__subheader {
     font-size: 2.6rem; } }
 
@@ -4606,47 +4613,33 @@ h4 {
     background-image: url("../../image/lander/hero-bkgd-small.jpg"); }
   .hero__header {
     font-size: 5.404rem;
-    padding-top: 5rem;
+    padding-top: 3.6rem;
     margin-bottom: 0;
-    margin-top: 7rem; }
+    margin-top: 0; }
   .hero__subheader {
-    font-size: 2.35rem;
-    margin-top: 0; } }
+    font-size: 2.35rem; } }
 
 @media screen and (max-width: 32.5rem) {
   .hero__header {
-    font-size: 4.804rem;
-    padding-top: 5rem;
-    margin-bottom: 0;
-    margin-top: 6rem; }
+    font-size: 4.804rem; }
   .hero__subheader {
-    font-size: 1.8rem;
-    margin-top: 0; } }
+    font-size: 1.8rem; } }
 
 @media screen and (max-width: 28.75rem) {
   .hero__header {
-    font-size: 4.804rem;
-    padding-top: 5rem;
-    margin-bottom: 0;
-    margin-top: 3rem; }
+    font-size: 4.804rem; }
   .hero__subheader {
-    font-size: 1.8rem;
-    margin-top: 0; } }
+    font-size: 1.8rem; } }
 
 @media screen and (max-width: 26.25rem) {
   .hero__header {
-    font-size: 3.204rem;
-    padding-top: 5rem;
-    margin-bottom: 0;
-    margin-top: 3rem; }
+    font-size: 3.204rem; }
   .hero__subheader {
-    font-size: 1.4rem;
-    margin-top: 0; } }
+    font-size: 1.4rem; } }
 
 @media screen and (max-width: 20rem) {
   .hero__header {
-    font-size: 3.4rem;
-    margin-top: 1rem; } }
+    font-size: 3.4rem; } }
 
 @keyframes fadeAndScale {
   from {
@@ -4691,17 +4684,18 @@ h4 {
 @media screen and (max-width: 38.75rem) {
   .mainLogo {
     width: 144px;
-    padding-top: 10px; }
-  .navigation__btnWrap .btn, .navigation__btnWrap .btn--block, .navigation__btnWrap .btn--primary, .navigation__btnWrap .btn--green, .navigation__btnWrap .btn--black, .navigation__btnWrap .btn--outline {
-    font-size: 1.5em;
-    padding-left: 0.75em;
-    padding-right: 0.75em;
-    box-sizing: border-box;
-    width: auto; }
-  .navigation__btnWrap button.btn, .navigation__btnWrap button.btn--block, .navigation__btnWrap button.btn--primary, .navigation__btnWrap button.btn--green, .navigation__btnWrap button.btn--black, .navigation__btnWrap button.btn--outline {
-    display: none; }
+    padding-top: 1rem; }
+  .navigation__btnWrap {
+    padding-top: 1rem; }
+    .navigation__btnWrap .btn, .navigation__btnWrap .btn--block, .navigation__btnWrap .btn--primary, .navigation__btnWrap .btn--green, .navigation__btnWrap .btn--black, .navigation__btnWrap .btn--outline {
+      font-size: 1.5em;
+      padding: 0.25rem 0.75em;
+      box-sizing: border-box;
+      width: auto; }
+    .navigation__btnWrap button.btn, .navigation__btnWrap button.btn--block, .navigation__btnWrap button.btn--primary, .navigation__btnWrap button.btn--green, .navigation__btnWrap button.btn--black, .navigation__btnWrap button.btn--outline {
+      display: none; }
   .nav-container {
-    padding: 1rem 2rem; } }
+    padding: 0 2rem 0.5rem; } }
 
 .information {
   background: url("../../image/lander/information-panel-bkgd.jpg") left top/cover no-repeat; }
@@ -4879,7 +4873,25 @@ a.information__itemLink {
 
 .contests__eventImage {
   width: 90%;
-  margin-bottom: 2.4rem; }
+  margin-bottom: 1.4rem; }
+
+.countdownHeader {
+  font-size: 3rem;
+  color: #a80300;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0; }
+
+.countdownValue {
+  font-size: 3rem;
+  margin-right: 0.5rem; }
+
+.countdownLabel {
+  color: #a80300;
+  font-size: 1.9rem;
+  text-align: baseline;
+  text-transform: uppercase;
+  margin-right: 0.5rem; }
 
 .contests__eventWrap {
   text-align: center; }
@@ -4917,6 +4929,10 @@ a.information__itemLink {
 
 .contests__tableFee {
   color: #2dbe0c; }
+
+.all-contests-btn-wrap {
+  text-align: center;
+  padding: 2rem; }
 
 @media screen and (max-width: 61.9375rem) {
   .contests__eventWrap {
@@ -5309,7 +5325,8 @@ a.information__itemLink {
   background: #000;
   color: #fff; }
   .footer > .content-container {
-    padding: 2.2rem 2rem 0 2rem; }
+    padding: 2.2rem 2rem 0 2rem;
+    height: 5.7rem; }
   .footer p {
     margin-bottom: 0;
     font-size: 1.2rem; }
@@ -5323,7 +5340,7 @@ a.information__itemLink {
       color: #ccc; }
 
 .footer__logo {
-  margin: -4.7rem auto 1rem;
+  margin: -4.3rem auto 1rem;
   padding: 1rem;
   background-color: #fff;
   border-radius: 6px;
@@ -5361,13 +5378,17 @@ a.information__itemLink {
 .larger-screens-block {
   display: block; }
 
+.larger-screens-inline-block {
+  display: inline-block; }
+
 @media screen and (max-width: 38.4375rem) {
   .smaller-screens {
     display: inline; }
   .smaller-screens-block {
     display: block; }
   .larger-screens,
-  .larger-screens-block {
+  .larger-screens-block,
+  .larger-screens-inline-block {
     display: none; } }
 
 /*# sourceMappingURL=lander.css.map */

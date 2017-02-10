@@ -7,10 +7,17 @@
 	font-size: 8.504rem;
 	font-weight: 700;
 	color: $color-white;
-    text-shadow: 6px 4px 0px $color-black;
-	text-transform: uppercase;
+    letter-spacing: -1.5px;
+    text-shadow: 4px 2px 0 $color-black,
+                 5px 3px 0 $color-black,
+                 6px 4px 0 $color-black,
+                 7px 5px 0 $color-black,
+                 8px 6px 0 $color-black,
+                 -1px -1px 0 $color-black,
+                 -1px -2px 0 $color-black;
 	text-align: center;
-	margin-top: 10rem;
+	margin-top: 8rem;
+    margin-bottom: 0;
 	animation-delay: 0.2s;
 	animation-duration: 0.175s;
     animation-name: fadeAndScale;
@@ -19,18 +26,29 @@
 
 .hero__subheader {
 	color: $color-white;
-	margin-top: 22rem;
+	margin-top: -1rem;
 	text-align: center;
-	text-shadow: 2px 2px 0 $color-black;
+	text-shadow: 4px 4px 1px $color-black;
 	animation-delay: 0.2s;
 	animation-duration: 0.175s;
     animation-name: fadeAndScale;
     animation-timing-function: cubic-bezier(0.71,0.55,0.62,1.57);
-    font-size: 5.25rem;
+    font-size: 4.25rem;
+
+    > a {
+        color: $color-white;
+        outline: none;
+
+        &:hover {
+            color: $color-gray-mid;
+        }
+    }
 }
 
 .hero__ctaBtn {
-	margin-top: 0;
+    font-size: 3.4rem;
+    border: 2px solid $color-black;
+	margin-top: 4rem;
 	animation-delay: 0.2s;
 	animation-duration: 0.175s;
     animation-name: fadeAndScale;
@@ -40,7 +58,6 @@
 // 1250px
 @media screen and (max-width: 78.125rem) {
     .hero__subheader {
-        margin-top: 12rem;
         font-size: 4.25rem;
     }
 }
@@ -52,17 +69,17 @@
     }
 
     .hero__subheader {
-        margin-top: 6rem;
         font-size: 3.25rem;
     }
 }
 
 
-// 750px
-@media screen and (max-width: 46.875rem) {
+// 770px
+@media screen and (max-width: 48.125rem) {
     .hero__header {
-        margin-top: 3rem;
+        padding-top: 3rem;
         font-size:  5rem;
+        margin-top: 0;
     }
 
     .hero__subheader {
@@ -78,14 +95,13 @@
 
     .hero__header {
         font-size: 5.404rem;
-        padding-top: 5rem;
+        padding-top: 3.6rem;
         margin-bottom: 0;
-        margin-top: 7rem;
+        margin-top: 0;
     }
 
     .hero__subheader {
         font-size: 2.35rem;
-        margin-top: 0;
     }
 }
 
@@ -94,14 +110,10 @@
 
     .hero__header {
         font-size: 4.804rem;
-        padding-top: 5rem;
-        margin-bottom: 0;
-        margin-top: 6rem;
     }
 
     .hero__subheader {
         font-size: 1.8rem;
-        margin-top: 0;
     }
 
 }
@@ -111,14 +123,10 @@
 
     .hero__header {
         font-size: 4.804rem;
-        padding-top: 5rem;
-        margin-bottom: 0;
-        margin-top: 3rem;
     }
 
     .hero__subheader {
         font-size: 1.8rem;
-        margin-top: 0;
     }
 
 }
@@ -128,14 +136,10 @@
 
     .hero__header {
         font-size: 3.204rem;
-        padding-top: 5rem;
-        margin-bottom: 0;
-        margin-top: 3rem;
     }
 
     .hero__subheader {
         font-size: 1.4rem;
-        margin-top: 0;
     }
 
 }
@@ -143,7 +147,6 @@
 @media screen and (max-width: 20rem) {
     .hero__header {
         font-size: 3.4rem;
-        margin-top: 1rem;
     }
 }
 
