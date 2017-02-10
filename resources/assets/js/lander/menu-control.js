@@ -4,6 +4,7 @@ var menuControl = (function($, w, undefined) {
 
 	var init = function() {
 		$('.navigation__btnWrap').on('click', 'button', scrollPage);
+		$('#powerupsBtn').on('click', scrollPage);
 	}
 
 	var scrollPage = function(e) {
@@ -11,7 +12,7 @@ var menuControl = (function($, w, undefined) {
 
 		e.preventDefault();
 		$('html,body').animate({
-	    	scrollTop: $(target).offset().top - 120,
+	    	scrollTop: $(target).offset().top - 100,
 	    }, 600);
 	}
 

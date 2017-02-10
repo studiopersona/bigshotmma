@@ -73,7 +73,7 @@
 											<span class="contests__playerCount">{{ count($contest['contestParticipants']) }}/{{ $contest['max_participants']}}</span>
 										</td>
 										<td>
-											<span class="contests__tableTitle">Fee: </span>
+											<span class="contests__tableTitle">Entry: </span>
 											<span class="contests__tableFee">${{ $contest['entry_fee'] }}</span>
 										</td>
 										<td>
@@ -90,7 +90,7 @@
 											<span class="contests__playerCount">{{ count($contest['contestParticipants']) }}/{{ $contest['max_participants']}}</span>
 										</td>
 										<td>
-											<span class="contests__tableTitle">Fee: </span>
+											<span class="contests__tableTitle">Entry: </span>
 											<span class="contests__tableFee">${{ $contest['entry_fee'] }}</span>
 										</td>
 										<td>

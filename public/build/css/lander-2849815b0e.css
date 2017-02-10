@@ -5038,6 +5038,9 @@ a.information__itemLink {
   font-size: 3.052rem;
   margin-bottom: 2.4rem; }
 
+.powerupsInfo__itemImage {
+  max-height: 300px; }
+
 @media screen and (max-width: 38.4375rem) {
   .powerUps__header {
     line-height: 1;
@@ -5129,7 +5132,7 @@ a.information__itemLink {
     -ms-flex-pack: center;
     justify-content: center; }
   .powerupsInfo__itemImage {
-    width: 27%;
+    width: 45%;
     margin: 0 auto; } }
 
 .informational {
