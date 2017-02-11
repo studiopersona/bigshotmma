@@ -5156,6 +5156,9 @@ a.information__itemLink {
   .informational .form-wrap {
     width: 80%;
     max-width: 800px; }
+  .informational h3 {
+    font-weight: 700;
+    color: #a80300; }
 
 .form-wrap {
   margin: 5rem auto 3.5rem; }

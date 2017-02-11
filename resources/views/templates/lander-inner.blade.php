@@ -2,7 +2,7 @@
 <html class="no-js">
 	<head>
 		<meta charset="utf-8">
-		<title>@yield('title', 'Login') | Blood Sport Fantasy MMA</title>
+		<title>@yield('title', 'Login') | Big Shot Fantasy MMA</title>
 
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta http-equiv="cleartype" content="on">
@@ -34,15 +34,17 @@
 		</script>
 	</head>
 	<body>
-		@include('partials.lander.hero')
-		<section class="informational">
-			@yield('page-title')
-			@yield('updated')
-			@yield('content')
-		</section>
-		@include('partials.lander.power-ups')
-		@include('partials.lander.footer')
-		@include('partials.lander.nav')
+		@include('partials.lander.nav-inner')
+		<div class="content-wrapper">
+			@include('partials.lander.hero')
+			<section class="informational">
+				@yield('page-title')
+				@yield('updated')
+				@yield('content')
+			</section>
+			@include('partials.lander.power-ups')
+			@include('partials.lander.footer')
+		</div>
 		<!-- scripts -->
 		@yield('scripts')
 		@if ( App::environment() === 'local' )

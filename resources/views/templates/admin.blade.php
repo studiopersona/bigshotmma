@@ -2,7 +2,7 @@
 <html class="no-js">
 	<head>
 		<meta charset="utf-8">
-		<title>@yield('title', 'Login') | Blood Sport Fantasy MMA</title>
+		<title>@yield('title', 'Login') | Big Shot Fantasy MMA</title>
 
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta http-equiv="cleartype" content="on">
