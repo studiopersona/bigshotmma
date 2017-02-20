@@ -80,6 +80,7 @@
                     <a @click.prevent="confirmEnter" class="button button--primary">Enter</a>
                 </div>
             </div>
+
             <div v-else class="container-fluid">
                 <div class="col-xs-100 button-wrap">
                     <a v-link="{ path: '/contest/' + participantsList[0].contest.contest_id + '/picks' }" class="button button--primary">My Picks</a>
@@ -168,22 +169,10 @@
 
     export default {
 
-        props: ['working'],
+        props: ['working', 'participantsList'],
 
         data() {
             return {
-                participantsList: [{
-                    contest: {
-                        event_short_name: '',
-                        event_date: '',
-                        buy_in: '',
-                        total_participants: '',
-                        max_participants: '',
-                        prize_pool: '',
-                        contest_type_name: '',
-                        contest_id: '',
-                    },
-                }],
                 prizePool: {},
                 playersBalance: 0,
                 playerRecords: [],

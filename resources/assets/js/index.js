@@ -51,10 +51,9 @@ import Register from './components/Register.vue'
 import Login from './components/Login.vue'
 import Events from './components/Events.vue'
 import Contests from './components/Contests.vue'
-import ContestLobby from './components/ContestLobby.vue'
+import Lobby from './components/Lobby.vue'
 import Fights from './components/Fights.vue'
 import PlayerPicks from './components/PlayerPicks.vue'
-import Standings from './components/Standings.vue'
 import Results from './components/Results.vue'
 import PlayerContests from './components/PlayerContests.vue'
 import Profile from './components/Profile.vue'
@@ -94,7 +93,7 @@ router.map({
   },
 
   '/contest/:contest_id/players': {
-    component: ContestLobby
+    component: Lobby
   },
 
   '/contest/:contest_id/fights': {
@@ -106,7 +105,7 @@ router.map({
   },
 
   '/contest/:contest_id/standings': {
-    component: Standings
+    // component: Standings
   },
 
   '/contest/:contest_id/results': {
