@@ -1,7 +1,14 @@
 <template>
 	<div>
-		<standings v-if="deadlinePast" :participants-list="participantsList"></standings>
+		<standings v-if="deadlinePast" :standings-list="standingsList" :player-id="playerId"></standings>
 		<contest-lobby v-else :participants-list="participantsList"></contest-lobby>
+        <div :class="loaderClasses">
+            <div class="js-global-loader loader">
+                <svg viewBox="0 0 32 32" width="32" height="32">
+                    <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
+                </svg>
+            </div>
+        </div>
 	</div>
 </template>
 
@@ -33,8 +40,9 @@
                         contest_id: '',
                     },
                 }],
+                standingsList:[],
+                playerId: 0,
             	deadlinePast: false,
-            	working: false,
                 URL: {
                     base: window.URL.base,
                     current: window.URL.current,
@@ -45,6 +53,7 @@
 
         created() {
         	this.working = true
+            console.log(this.$route.params.contest_id)
         },
 
         ready() {
@@ -87,7 +96,7 @@
             },
 
             fetch(token) {
-                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', {}, {
+                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id, {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 })
@@ -96,13 +105,49 @@
                         deadline;
 
                     this.participantsList = response.data.participants
-                    deadline = new Date(this.participantsList[0].contest.entry_deadline)
+                    deadline = new Date(this.entry_deadline)
                     this.deadlinePast = ( now.getTime() > deadline.getTime() )
+
+                    if ( now.getTime() > deadline.getTime() ) {
+                        this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings/1', {}, {
+                            // Attach the JWT header
+                            headers: { 'Authorization' : 'Bearer ' + token }
+                        }).then(function(response) {
+                            // console.log(response.data);
+                            this.standingsList = response.data.data[0].standings;
+                            this.playerId = response.data.data[0].player;
+                            // this.contest = response.data.data[0].contest[0];
+                            this.working = false;
+                        }, function(err) {
+                            console.log(err);
+                        });
+                    } else {
+                        this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', {}, {
+                            // Attach the JWT header
+                            headers: { 'Authorization' : 'Bearer ' + token }
+                        })
+                        .then(function(response) {
+                            this.participantsList = response.data.participants
+                            this.working = false
+                        })
+                        .catch(function(err) {
+                            console.log(err)
+                        })
+                    }
+
+                    this.working = false
                 })
                 .catch(function(err) {
                     console.log(err)
                 })
         	}
+        },
+
+        computed: {
+            loaderClasses() {
+                return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
+            },
+
         },
 	}
 </script>

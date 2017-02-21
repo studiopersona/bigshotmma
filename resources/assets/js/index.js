@@ -104,9 +104,9 @@ router.map({
     component: PlayerPicks
   },
 
-  '/contest/:contest_id/standings': {
+  // '/contest/:contest_id/standings': {
     // component: Standings
-  },
+  // },
 
   '/contest/:contest_id/results': {
     component: Results

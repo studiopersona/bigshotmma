@@ -96,7 +96,7 @@
 
     export default {
 
-        props: ['working'],
+        props: ['working', 'standingsList'],
 
         data() {
             return {
@@ -163,19 +163,7 @@
             },
 
             fetch(token) {
-                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/standings/1', {}, {
-                    // Attach the JWT header
-                    headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    // console.log(response.data);
-                    this.standingsList = response.data.data[0].standings;
-                    this.playerId = response.data.data[0].player;
-                    // this.contest = response.data.data[0].contest[0];
-                    this.determineRank(response.data.data[0].standings);
-                    this.working = false;
-                }, function(err) {
-                    console.log(err);
-                });
+                this.determineRank(this.standingsList);
 
                 this.$http.get( URL.base + '/api/v1/contest-types', {}, {
                     // Attach the JWT header
@@ -233,8 +221,6 @@
                         // console.log('playerId: ', vm.playerId)
                         return parseInt(standing.playerId, 10) === parseInt(vm.playerId, 10);
                     };
-
-                console.log(standings);
 
                 this.playerRanking = ( standings.findIndex(findPlayer) + 1 );
             },

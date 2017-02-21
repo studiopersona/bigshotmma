@@ -23,7 +23,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title">Entry Fee:</span> ${{ parseFloat(participantsList[0].contest.buy_in).toFixed(2) }}
+                        <span class="contestDetails__title">Entry Fee:</span> $<span v-if="! isNaN(parseFloat(participantsList[0].contest.buy_in))">{{ parseFloat(participantsList[0].contest.buy_in).toFixed(2) }}</span>
                     </div>
                     <div class="col-xs-50 text-right">
                         <span class="contestDetails__title">Entries:</span> {{ participantsList[0].contest.total_participants }}/{{ participantsList[0].contest.max_participants }}
@@ -31,7 +31,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title"><a @click="showPrizeModal">Prize Pool</a>:</span> ${{ parseFloat(prizePool.total).toFixed(2) }}
+                        <span class="contestDetails__title"><a @click="showPrizeModal">Prize Pool</a>:</span> $<span v-if="! isNaN(parseFloat(prizePool.total))">{{ parseFloat(prizePool.total).toFixed(2) }}
                     </div>
                     <div class="col-xs-50 contestDetails__type">
                         <a href="#" @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">
@@ -199,7 +199,7 @@
                 contestsEntered: [],
                 deadlinePast: false,
                 contestFull: false,
-                working: false,
+                // working: false,
                 infoModalClasses: ['infoModal'],
                 fundsModalClasses: ['fundsModal'],
                 confirmModalClasses: ['confirmModal'],
@@ -213,7 +213,7 @@
         },
 
         created() {
-            this.working = true;
+            // this.working = true;
         },
 
         ready() {
@@ -236,6 +236,8 @@
                 console.log(err);
             });
 
+
+
             this.confirmModalClassList = document.querySelector('.confirmModal').classList;
         },
 
@@ -255,6 +257,7 @@
             },
 
             fetch(token) {
+                console.log(this.participantsList)
                 this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
@@ -262,14 +265,8 @@
                     var now = new Date(),
                         deadline;
 
-                    this.participantsList = response.data.participants;
                     this.working = false;
-                    // console.log(this.participantsList[0].contest);
-                    deadline = new Date(this.participantsList[0].contest.entry_deadline);
-                    // console.log(now);
-                    // console.log(this.participantsList[0].contest.entry_deadline);
-                    // console.log(deadline);
-                    this.deadlinePast = ( now.getTime() > deadline.getTime() );
+
                     this.contestFull = ( response.data.participants[0].participants.length >= parseInt(response.data.participants[0].contest.max_participants, 10) );
                 }, function(err) {
                     console.log(err);
@@ -297,7 +294,7 @@
                 }).then(function(response) {
                     // console.log(response.data);
                     this.playerRecords = response.data.data;
-                    this.parsePlayerRecords();
+                    // this.parsePlayerRecords();
                 });
 
                 this.$http.get( URL.base + '/api/v1/player-balance', {}, {
@@ -481,6 +478,8 @@
                     firstPlace: total*0.7,
                     secondPlace: total*0.3,
                 }
+
+                this.parsePlayerRecords()
             },
         },
 

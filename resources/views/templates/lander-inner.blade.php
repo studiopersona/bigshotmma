@@ -34,6 +34,7 @@
 		</script>
 	</head>
 	<body>
+		<h2>Change here</h2>
 		@include('partials.lander.nav-inner')
 		<div class="content-wrapper">
 			@include('partials.lander.hero')
