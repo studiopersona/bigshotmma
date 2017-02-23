@@ -25,6 +25,6 @@ elixir(function(mix) {
 	// mix2.browserify('lander.js').livereload();
 // });
 
-// elixir(function(mix3) {
-	// mix3.version(['public/js/lander.js','public/css/lander.css', 'public/js/index.js','public/css/app.css']).livereload();
-// });
+elixir(function(mix3) {
+	mix3.version(['public/js/lander.js','public/css/lander.css', 'public/js/index.js','public/css/app.css']).livereload();
+});

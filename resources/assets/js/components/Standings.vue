@@ -3,22 +3,22 @@
         <header class="pageHeader" :working.sync="working">
             <h1 class="pageHeader__header">Contest Standings</h1>
             <h4 class="pageHeader__subheader">
-                {{ contest.event_short_name }} / <a v-link="{ path: '/contest/' + contest.contest_id + '/results' }">Results</a>
+                {{ contest.event_short_name }} / <a v-if="standingsList.length" v-link="{ path: '/contest/' + contest.contest_id + '/results' }">Results</a><a v-else v-link="{ path: '/contest/' + contest.contest_id + '/picks' }">My Picks</a>
             </h4>
         </header>
         <div class="contestDetails">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title">Entry Fee:</span> ${{ contest.buy_in }}
+                        <span class="contestDetails__title">Entry Fee:</span> ${{ contest.buy_in.toFixed(2) }}
                     </div>
                     <div class="col-xs-50 text-right">
-                        <span class="contestDetails__title">Rank:</span> {{ playerRanking }}/{{ standingsList.length }}
+                        <span class="contestDetails__title">Rank:</span> {{ playerRanking }}/{{ contest.max_participants }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-50">
-                    <span class="contestDetails__title">Prize Pool:</span> ${{ (parseInt(contest.buy_in, 10) * standingsList.length) * .9 }}
+                    <span class="contestDetails__title">Prize Pool:</span> ${{ ((contest.buy_in * contest.max_participants) * .85).toFixed(2) }}
                     </div>
                     <div class="col-xs-50 contestDetails__type">
                         <a href="#" @click="showContestRules" data-contest-type="{{ contest.contest_type_id }}">
@@ -29,42 +29,50 @@
             </div>
         </div>
         <div class="participantsList">
-            <ul class="stripped-list">
-                <li class="participantsList__item" v-for="participant in standingsList">
-                    <div class="container-fluid">
-                        <div v-if="participant.avatar === ''" class="col-xs-15 participantsList__img">
-                            <img :src="'public/image/avatar/male.jpg'">
-                        </div>
-                        <div v-else class="col-xs-15 participantsList__img">
-                            <img :src="'public/image/avatar/' + participant.avatar">
-                        </div>
-                        <div class="col-xs-35">
-                            <div class="participantsList__itemTitle">&nbsp;</div>
-                            <div class="participantsList__name">
-                                {{ participant.player_name }}
+            <template v-if="standingsList.length">
+                <ul class="stripped-list">
+                    <li class="participantsList__item" v-for="participant in standingsList">
+                        <div class="container-fluid">
+                            <div v-if="participant.avatar === ''" class="col-xs-15 participantsList__img">
+                                <img :src="URL.base + '/public/image/avatar/male.jpg'">
+                            </div>
+                            <div v-else class="col-xs-15 participantsList__img">
+                                <img :src="URL.base + '/public/image/avatar/' + participant.avatar">
+                            </div>
+                            <div class="col-xs-30">
+                                <div class="participantsList__itemTitle">&nbsp;</div>
+                                <div class="participantsList__name">
+                                    {{ participant.player_name }}
+                                </div>
+                            </div>
+                            <div class="col-xs-15">
+                                <div class="participantsList__itemTitle">Rank</div>
+                                <div class="standingsList__rank">
+                                    {{ $index + 1 }}
+                                </div>
+                            </div>
+                            <div class="col-xs-15">
+                                <div class="participantsList__itemTitle">Points</div>
+                                <div class="standingsList__points">
+                                    {{ participant.totalPoints }}
+                                </div>
+                            </div>
+                            <div class="col-xs-25">
+                                <div class="participantsList__itemTitle">Winnings</div>
+                                <div v-if="winnings.length" class="standingsList__winnings">
+                                    {{ winning[$index] }}
+                                </div>
+                                <div v-else class="standingsList__winnings">
+                                    --
+                                </div>
                             </div>
                         </div>
-                        <div class="col-xs-15">
-                            <div class="participantsList__itemTitle">Rank</div>
-                            <div class="standingsList__rank">
-                                {{ $index + 1 }}
-                            </div>
-                        </div>
-                        <div class="col-xs-15">
-                            <div class="participantsList__itemTitle">Points</div>
-                            <div class="standingsList__points">
-                                {{ participant.totalPoints }}
-                            </div>
-                        </div>
-                        <div class="col-xs-20">
-                            <div class="participantsList__itemTitle">Fights</div>
-                            <div class="standingsList__wins">
-                                {{ participant.fightsReported }}/5
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </template>
+            <template v-else>
+                <p style="margin-top: 1rem; text-align: center;">No results have been reported.</p>
+            </template>
             <div class="container-fluid">
                 <div class="col-xs-100 button-wrap">
                     <a v-link="{ path: '/contest/' + contest.contest_id + '/picks' }" class="button button--primary">My Picks</a>
@@ -96,12 +104,11 @@
 
     export default {
 
-        props: ['working', 'standingsList'],
+        props: ['working', 'standingsList', 'contest'],
 
         data() {
             return {
-                standingsList: [],
-                contest: {},
+                winnings: [],
                 contestTypes: {},
                 contestTypeId: '',
                 infoModalContent: {
@@ -111,8 +118,6 @@
                 },
                 playerId: 0,
                 playerRanking: 0,
-                contest: {},
-                working: false,
                 infoModalClasses: ['infoModal'],
                 URL: {
                     base: window.URL.base,
@@ -168,21 +173,27 @@
                 this.$http.get( URL.base + '/api/v1/contest-types', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    this.contestTypes = response.data;
-                }, function(err) {
-                    console.log(err);
+                })
+                .then(function(response) {
+                    this.contestTypes = response.data
+
+                    this.working = false
+                })
+                .catch(function(err) {
+                    console.log(err)
                 });
 
-                this.$http.get( URL.base + '/api/v1/contests/' + this.$route.params.contest_id, {}, {
+                this.$http.get( URL.base + '/api/v1/contest/' + contest.contest_id + '/winnings', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    // console.log(response);
-                    this.contest = response.data.contest[0];
-                }, function(err) {
-                    console.log(err);
-                });
+                })
+                .then(function(response) {
+                    this.winnings = response.data
+                })
+                .catch(function(err) {
+                    console.log('there was a problem fetching the winnings')
+                    console.log(err)
+                })
             },
 
             showContestRules(e) {
@@ -217,8 +228,6 @@
             determineRank(standings) {
                 var vm = this,
                     findPlayer = function(standing) {
-                        // console.log('standing player id: ', parseInt(standing.playerId, 10));
-                        // console.log('playerId: ', vm.playerId)
                         return parseInt(standing.playerId, 10) === parseInt(vm.playerId, 10);
                     };
 

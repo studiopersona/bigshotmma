@@ -41,6 +41,7 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('contest/{id}/results', 'FightResultsController@getByContestId');
 	    Route::get('contest/{id}/enter-player', 'ContestsController@enterPlayer');
 	    Route::get('contest/{id}/has-player-entered', 'ContestsController@hasPlayerEntered');
+	    Route::get('contest/{id}/winnings', 'ContestParticipantsController@determineWinnings');
 	    Route::resource('contests', 'ContestsController');
 	    Route::resource('picks', 'PicksController');
 	    Route::resource('powerups', 'PowerUpsController');

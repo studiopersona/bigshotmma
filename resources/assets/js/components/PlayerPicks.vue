@@ -2,7 +2,7 @@
     <div id="templateWrap" :working="working">
         <header class="pageHeader" :working.sync="working">
             <h1 class="pageHeader__header">{{ $root.playersName }}'s Picks</h1>
-            <h4 class="pageHeader__subheader">{{ picksList[0].event.event_short_name }} / <a v-link="{ path: '/contest/' + picksList[0].contest.id + '/results' }">Results</a> </h4>
+            <h4 class="pageHeader__subheader">{{ picksList[0].event.event_short_name }} / <a v-link="{ path: '/contest/' + picksList[0].contest.id + '/players' }">Standings</a>  </h4>
         </header>
         <div class="contestDetails">
             <div class="container-fluid">
@@ -17,7 +17,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title">Prize Pool:</span> ${{ picksList[0].contest.prize_pool.toFixed(2)  }}
+                        <span class="contestDetails__title">Prize Pool:</span> ${{ (picksList[0].contest.buy_in * picksList[0].contest.max_participants * 0.85).toFixed(2)  }}
                     </div>
                     <div class="col-xs-50 text-right">
                         <span class="contestDetails__title">Your Winnings:</span> $0.00
@@ -324,6 +324,8 @@
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     this.picksList = response.data.picks;
+
+                    console.log(this.picksList)
                     this.working = false;
 
                     this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', {}, {

@@ -32,7 +32,7 @@
                 </li>
             </ul>
             <ul v-else>
-                <li class="noResults">There are no contests currently avaiable for this event.</li>
+                <li class="noResults">There are no contests currently available for this event.</li>
             </ul>
             <div :class="loaderClasses">
                 <div class="js-global-loader loader">

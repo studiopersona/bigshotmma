@@ -2,15 +2,18 @@
 <html class="no-js">
 	<head>
 		<meta charset="utf-8">
-		<title>@yield('title', 'Login') | Big Shot Fantasy MMA</title>
+		<title>Big Shot Fantasy MMA</title>
 
+		<meta name="description" content="">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="cleartype" content="on">
 
 		<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
   		<meta http-equiv="PRAGMA" content="NO-CACHE">
 
-  		<meta name="viewport" content="width=device-width">
   		<meta name="apple-mobile-web-app-capable" content="yes">
   		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		@yield('meta')

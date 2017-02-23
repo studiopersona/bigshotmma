@@ -25,4 +25,9 @@ class Fight extends Model
     {
         return $this->belongsTo('Bsmma\Event');
     }
+
+    public function fightResults()
+    {
+        return $this->hasMany('Bsmma\FightResult');
+    }
 }

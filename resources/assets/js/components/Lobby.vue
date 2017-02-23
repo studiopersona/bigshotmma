@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<standings v-if="deadlinePast" :standings-list="standingsList" :player-id="playerId"></standings>
+		<standings v-if="deadlinePast" :standings-list="standingsList" :player-id="playerId" :contest="contest"></standings>
 		<contest-lobby v-else :participants-list="participantsList"></contest-lobby>
         <div :class="loaderClasses">
             <div class="js-global-loader loader">
@@ -28,6 +28,7 @@
 
 		data() {
             return {
+                contest: {},
             	participantsList: [{
                     contest: {
                         event_short_name: '',
@@ -48,12 +49,12 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
+                working: false,
             }
         },
 
         created() {
         	this.working = true
-            console.log(this.$route.params.contest_id)
         },
 
         ready() {
@@ -96,7 +97,7 @@
             },
 
             fetch(token) {
-                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id, {}, {
+                this.$http.get( URL.base + '/api/v1/contests/' + this.$route.params.contest_id, {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 })
@@ -104,8 +105,9 @@
                     var now = new Date(),
                         deadline;
 
-                    this.participantsList = response.data.participants
-                    deadline = new Date(this.entry_deadline)
+                    this.contest = response.data.contest[0]
+
+                    deadline = new Date(response.data.contest[0].entry_deadline)
                     this.deadlinePast = ( now.getTime() > deadline.getTime() )
 
                     if ( now.getTime() > deadline.getTime() ) {
@@ -113,11 +115,10 @@
                             // Attach the JWT header
                             headers: { 'Authorization' : 'Bearer ' + token }
                         }).then(function(response) {
-                            // console.log(response.data);
                             this.standingsList = response.data.data[0].standings;
                             this.playerId = response.data.data[0].player;
-                            // this.contest = response.data.data[0].contest[0];
                             this.working = false;
+
                         }, function(err) {
                             console.log(err);
                         });
@@ -127,6 +128,7 @@
                             headers: { 'Authorization' : 'Bearer ' + token }
                         })
                         .then(function(response) {
+
                             this.participantsList = response.data.participants
                             this.working = false
                         })
@@ -134,8 +136,6 @@
                             console.log(err)
                         })
                     }
-
-                    this.working = false
                 })
                 .catch(function(err) {
                     console.log(err)
@@ -145,6 +145,7 @@
 
         computed: {
             loaderClasses() {
+                console.log(this.working)
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
             },
 
