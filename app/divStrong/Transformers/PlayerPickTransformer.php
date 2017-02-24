@@ -21,6 +21,15 @@ class PlayerPickTransformer extends Transformer {
                     ->where('fight_id', $pick['fight_id'])
                     ->first();
 
+        if ( is_null($result) ) {
+            $result = [];
+        }
+        else {
+            $result = $result->toArray();
+            // add index for fightScoring
+            $result['power_ups'] = ( isset($result['powerUps']) ) ? $result['powerUps'] : [];
+        }
+
         foreach ( $pick['contest']['event']['fights'] as $fight )
         {
             if ( $fight['id'] === $fight_id ) {
@@ -29,21 +38,7 @@ class PlayerPickTransformer extends Transformer {
             }
         }
 
-        if ( (int)$result['finish_id'] !== 4 ) {
-            $this->fightScoring->determineFighterPoints($pick['winning_fighter_id'], $result['winning_fighter_id'], $this_fight['fighters']);
-            $this->fightScoring->determineFinishPoints($pick['finish_id'], $result['finish_id']);
-            $this->fightScoring->determineRoundPoints($pick['round'], $result['round']);
-            $this->fightScoring->determineMinutePoints($pick['minute'], $result['minute']);
-        } else {
-            $this->fightScoring->determineFighterPoints(0, $result['winning_fighter_id'], $this_fight['fighters']);
-            $this->fightScoring->determineFinishPoints(0, $result['finish_id']);
-            $this->fightScoring->determineRoundPoints(0, $result['round']);
-            $this->fightScoring->determineMinutePoints(0, $result['minute']);
-        }
-        // if no poweups used, no need to dtermine points
-        if ( $result['powerUps'] !== NULL ) {
-            $this->fightScoring->determinePowerupPoints($pick['power_up_id'], $result['powerUps']->toArray(), $fighter_id);
-        }
+        $this->fightScoring->handle($pick, $result, $this_fight['fighters']);
 
     	foreach ( $this_fight['fighters'] as $fighter )
     	{

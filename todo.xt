@@ -1,0 +1,13 @@
+- after entering a contest balance in dashboard shows NaN
+
+- before contest begins Results link on Picl view should be Lobby
+
+- contest standings shold show "No results reported yet" while there are no results entered
+
+- prize pool on contest standings is 0, and on my picks not reflecting full entry
+
+- create a standings only view that loads the standing partial view
+
+- scoring on my picks page for power ups is wrong
+
+- add check in determining winnings, anyone with 0 or less points gets 0

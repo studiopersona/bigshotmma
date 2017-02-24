@@ -139,22 +139,10 @@ class ContestStandings
 				if ( isset($fightResult['results'][0]) ) {
 					$results = $fightResult['results'][0];
 
+					$results = ( is_null($results) ) ? [] : $results->toArray();
+
 					if ( (int)$fightResult['fight_id'] === (int)$pick['fight_id'] ) {
-						if ( (int)$results['finish_id'] !== 4 ) {
-							$this->fightScoring->determineFighterPoints((int)$pick['winning_fighter_id'], (int)$results['winning_fighter_id'], $fightResult['fighters']->toArray());
-	                            $this->fightScoring->determineRoundPoints((int)$pick['round'], (int)$results->round);
-	                            $this->fightScoring->determineMinutePoints((int)$pick['minute'], (int)$results['minute']);
-	                            $this->fightScoring->determineFinishPoints((int)$pick['finish_id'], (int)$results['finish_id']);
-	                            $this->fightScoring->determinePowerupPoints((int)$pick['power_up_id'], $results['powerUps'], (int)$pick['winning_fighter_id']);
-	                            $score += $this->fightScoring->getTotalPoints();
-						} else {
-							$this->fightScoring->determineFighterPoints(0, (int)$results['winning_fighter_id'], $fightResult['fighters']->toArray());
-	                        $this->fightScoring->determineRoundPoints(0, (int)$results['round']);
-	                        $this->fightScoring->determineMinutePoints(0, (int)$results['minute']);
-	                        $this->fightScoring->determineFinishPoints(0, (int)$results['finish_id']);
-	                        $this->fightScoring->determinePowerupPoints((int)$pick['power_up_id'], $results['powerUps'], (int)$pick['winning_fighter_id']);
-	                        $score += $this->fightScoring->getTotalPoints();
-						}
+						$score += $this->fightScoring->handle($pick, $results, $fightResult['fighters']->toArray());
 					}
 				}
 			});
@@ -230,8 +218,8 @@ class ContestStandings
 
 				if ( $currentScore === $user['score'] || $index === 0 ){
 					$firstPass = false;
-					array_push($standings[$place], $user);
 					$currentScore = $user['score'];
+					if ($currentScore > 0) array_push($standings[$place], $user);
 				} else {
 					$place += 1;
 					if ( $place === (int)$winningPlaces ) {
@@ -239,7 +227,7 @@ class ContestStandings
 					} else {
 
 						$currentScore = $user['score'];
-						array_push($standings[$place], $user);
+						if ($currentScore > 0) array_push($standings[$place], $user);
 					}
 				}
 			});

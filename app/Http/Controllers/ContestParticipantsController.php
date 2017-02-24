@@ -53,6 +53,6 @@ class ContestParticipantsController extends ApiController
 
         $start = count($winnings) + 1;
 
-        return $this->respond(['winning' => $winnings]);
+        return $this->respond(['winnings' => $winnings]);
     }
 }

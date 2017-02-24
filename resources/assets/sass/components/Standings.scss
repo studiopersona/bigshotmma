@@ -1,7 +1,16 @@
 .standingsList__rank,
 .standingsList__points,
-.standingsList__wins {
+.standingsList__wins,
+.standingsList__winnings {
 	font-size: 2rem;
 	text-align: center;
 	margin-top: 0.5rem;
+}
+
+.standingsList__winnings {
+	text-align: center;
+
+	.highlight {
+		color: $color-green;
+	}
 }

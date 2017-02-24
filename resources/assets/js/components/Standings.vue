@@ -60,7 +60,8 @@
                             <div class="col-xs-25">
                                 <div class="participantsList__itemTitle">Winnings</div>
                                 <div v-if="winnings.length" class="standingsList__winnings">
-                                    {{ winning[$index] }}
+                                    <span v-if="winnings[$index]" class="highlight">${{ winnings[$index].payout.toFixed(2) }}</span>
+                                    <span v-else>---</span>
                                 </div>
                                 <div v-else class="standingsList__winnings">
                                     --
@@ -168,7 +169,12 @@
             },
 
             fetch(token) {
-                this.determineRank(this.standingsList);
+                let vm = this
+
+                this.$nextTick(function() {
+                    console.log(vm.standingsList)
+                    vm.determineRank(vm.standingsList);
+                })
 
                 this.$http.get( URL.base + '/api/v1/contest-types', {}, {
                     // Attach the JWT header
@@ -183,12 +189,13 @@
                     console.log(err)
                 });
 
-                this.$http.get( URL.base + '/api/v1/contest/' + contest.contest_id + '/winnings', {}, {
+                this.$http.get( URL.base + '/api/v1/contest/' + this.contest.contest_id + '/winnings', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 })
                 .then(function(response) {
-                    this.winnings = response.data
+                    console.log(response)
+                    this.winnings = response.data.winnings
                 })
                 .catch(function(err) {
                     console.log('there was a problem fetching the winnings')

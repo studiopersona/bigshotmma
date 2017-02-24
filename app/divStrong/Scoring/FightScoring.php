@@ -32,6 +32,31 @@ class FightScoring
 		$this->powerUps = $this->powerUp->get()->toArray();
 	}
 
+	public function handle($playersPicks, $fightResults, $fighters)
+	{	$this->fighterPoints = 0;
+		$this->roundPoints = 0;
+		$this->minutePoints = 0;
+		$this->finishPoints = 0;
+		$this->powerupPoints = 0;
+		$tally = 0;
+
+		if ( empty($fightResults) ) return $tally;
+
+		if ( (int)$fightResults['finish_id'] !== 4  ) {
+            $this->determineFighterPoints((int)$playersPicks['winning_fighter_id'], (int)$fightResults['winning_fighter_id'], $fighters);
+            $this->determineRoundPoints((int)$playersPicks['round'], (int)$fightResults['round']);
+            $this->determineMinutePoints((int)$playersPicks['minute'], (int)$fightResults['minute']);
+            $this->determineFinishPoints((int)$playersPicks['finish_id'], (int)$fightResults['finish_id']);
+            $this->determinePowerupPoints($playersPicks['power_up_id'], $fightResults['power_ups'], (int)$playersPicks['winning_fighter_id']);
+            $tally += $this->getTotalPoints();
+        } else {
+            $this->fightScoring->determinePowerupPoints($playersPicks['power_up_id'], $fightResults['power_ups'], (int)$playersPicks['winning_fighter_id']);
+            $tally += $this->getTotalPoints();
+        }
+
+        return $tally;
+	}
+
 	public function determineFighterPoints($selectedFighterId, $winningFighterId, $fighters = [])
 	{
 		if ( (int)$selectedFighterId === (int)$winningFighterId ) {
