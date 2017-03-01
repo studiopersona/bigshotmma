@@ -156,6 +156,4 @@ class FightScoring
 	{
 		 return $this->fighterPoints + $this->finishPoints + $this->roundPoints + $this->minutePoints + $this->powerupPoints;
 	}
-
-
 }
