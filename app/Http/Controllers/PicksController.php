@@ -147,8 +147,13 @@ class PicksController extends ApiController
                     ->where('user_id', $user->id)
                     ->get();
 
-        if ( $picks->isEmpty() )
-        {
+        if ( $picks->isEmpty() ) {
+            $contest = $this->contest->with('event')->where('id', $contest_id)->first();
+            if ( strtotime($contest->event->date_time.' -30 minutes') < strtotime(date('Y-m-d H:i:s')) ) {
+                $this->setStatusCode(204);
+                return $this->respondWithError('No picks made, contest is closed');
+            }
+
             return $this->respondNotFound('No Picks Found');
         }
 

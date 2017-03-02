@@ -216,6 +216,7 @@ class ContestsController extends ApiController
                         'contestType',
                         'event.fights.fighters',
                         'event',
+                        'contestParticipants',
                         'users'
                     ]);
 
@@ -223,8 +224,8 @@ class ContestsController extends ApiController
 
         if ( ! is_null($playerId) )
         {
-            $query->whereHas('users', function($q) use ($playerId) {
-                $q->where('id', (int)$playerId);
+            $query->whereHas('contestParticipants', function($q) use ($playerId) {
+                $q->where('user_id', (int)$playerId);
             });
         }
 

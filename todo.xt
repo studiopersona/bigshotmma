@@ -2,12 +2,19 @@
 
 - before contest begins Results link on Picl view should be Lobby
 
-- contest standings shold show "No results reported yet" while there are no results entered
-
-- prize pool on contest standings is 0, and on my picks not reflecting full entry
-
 - create a standings only view that loads the standing partial view
 
-- scoring on my picks page for power ups is wrong
+- fix entries icon to be proper height and remove style rule placed on the dashboard button
 
-- add check in determining winnings, anyone with 0 or less points gets 0
+- my picks needs to check if contest has started ( show message that contest has started )
+
+- add new power ups
+
+
+
+
+
+
+
+
+

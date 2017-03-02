@@ -2,7 +2,7 @@
     <div id="templateWrap" :working="working">
         <header class="pageHeader" :working.sync="working">
             <h1 class="pageHeader__header">{{ $root.playersName }}'s Picks</h1>
-            <h4 class="pageHeader__subheader">{{ picksList[0].event.event_short_name }} / <a v-link="{ path: '/contest/' + picksList[0].contest.id + '/players' }">Standings</a>  </h4>
+            <h4 class="pageHeader__subheader">{{ picksList[0].event.event_short_name }} <span v-if="picksList[0].contest"> / <a v-link="{ path: '/contest/' + picksList[0].contest.id + '/players' }">Standings</a></span></h4>
         </header>
         <div class="contestDetails">
             <div class="container-fluid">
@@ -27,7 +27,7 @@
         </div>
 
         <div v-if="picksList.length === 0" class="fightPicksList">
-            <p>You did not make any picks for this contest.</p>
+            <p style="padding:1rem;text-align:center;font-size:1.4rem;">You didn't make any picks for this contest and it is closed.</p>
         </div>
         <div v-else class="fightPicksList">
             <ul class="stripped-list">
@@ -321,8 +321,9 @@
                 this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/picks', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    this.picksList = response.data.picks;
+                })
+                .then(function(response) {
+                    this.picksList = (response.data.picks) ? response.data.picks : []
 
                     console.log(this.picksList)
                     this.working = false;
@@ -356,9 +357,8 @@
                         // console.log(this.finishes);
                     });
 
-                }, function(err) {
-                    console.log(err);
-                    console.log(this.$route.params.contest_id);
+                })
+                .catch(function(err) {
                     this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/has-player-entered', {}, {
                          // Attach the JWT header
                         headers: { 'Authorization' : 'Bearer ' + token }
