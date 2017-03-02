@@ -5244,8 +5244,7 @@ a {
   position: absolute;
   left: 0;
   right: 0;
-  top: -90px;
-  /* top paddding on #app */
+  top: -20px;
   z-index: 200;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
