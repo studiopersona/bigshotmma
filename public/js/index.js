@@ -43663,7 +43663,7 @@ exports.default = {
             deadlinePast: false,
             contestFull: false,
             prizePoolPayouts: {
-                classic: {
+                Classic: {
                     10: [0.7, 0.3],
                     20: [0.5, 0.25, 0.15, 0.10],
                     50: [0.365, 0.21, 0.15, 0.10, 0.05, 0.025, 0.025, 0.025, 0.025, 0.025],
