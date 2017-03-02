@@ -5250,7 +5250,7 @@ a {
   background: rgba(0, 0, 0, 0.9);
   transition: transform 0.2s ease;
   transform: translate3d(-100%, 0, 0);
-  overflow: hidden;
+  overflow: scroll;
   color: #fff;
   text-align: center; }
   .prizeModal.show {
