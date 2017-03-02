@@ -29,7 +29,7 @@
         	 	</li>
                 <li class="appDashboard__linkWrap">
                     <a class="appDashboard__link appDashboard__link--contests" v-link="{ path: '/entries/' + playerId }" @click="toggleMenu">
-                        <img src="public/image/dashboard/entries.png">
+                        <img src="public/image/dashboard/entries.png" style="max-height:42px;">
                         Entries
                     </a>
                 </li>
