@@ -5240,11 +5240,10 @@ a {
   padding: 0 1.1rem 0.4rem; }
 
 .prizeModal {
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
   top: 0;
-  bottom: 0;
   z-index: 200;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
