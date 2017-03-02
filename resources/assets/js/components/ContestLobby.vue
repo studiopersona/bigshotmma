@@ -109,7 +109,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="payout of prizePool.payouts">
+                        <tr v-for="payout of prizePool.payouts" track-by="$index">
                             <td>{{ $index + 1 }}</td>
                             <td class="prizeModal__payout">${{ parseFloat(payout).toFixed(2) }}</td>
                         </tr>
