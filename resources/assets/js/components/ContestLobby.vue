@@ -97,7 +97,7 @@
         <section :class="prizeModalClasses">
             <h3 class="prizeModal__title">Prize Pool</h3>
             <div class="prizeModal__body">
-            <p>In an <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">Classic</a> contest with 10 players:</p>
+            <p>In an <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">Classic</a> contest with {{ participantsList[0].contest.max_participants }} players:</p>
                 <div class="prizeModal__entryFeeWrap">
                     <span class="prizeModal__entryFeeTitle">Entry Fee:</span> <span class="prizeModal__entryFee">${{ parseFloat(participantsList[0].contest.buy_in).toFixed(2) }}</span>
                 </div>
@@ -109,13 +109,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1st</td>
-                            <td class="prizeModal__payout">${{ parseFloat(prizePool.firstPlace).toFixed(2) }}</td>
-                        </tr>
-                        <tr>
-                            <td>2nd</td>
-                            <td class="prizeModal__payout">${{ parseFloat(prizePool.secondPlace).toFixed(2) }}</td>
+                        <tr v-for="payout in prizePool.payouts">
+                            <td>{{ $index + 1 }}</td>
+                            <td class="prizeModal__payout">${{ parseFloat(payout).toFixed(2) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -199,6 +195,14 @@
                 contestsEntered: [],
                 deadlinePast: false,
                 contestFull: false,
+                prizePoolPayouts: {
+                    classic: {
+                        10: [0.7, 0.3],
+                        20: [0.5, 0.25, 0.15, 0.10],
+                        50: [0.365, 0.21, 0.15, 0.10, 0.05, 0.025, 0.025, 0.025, 0.025, 0.025],
+                        100: [0.03275, 0.150, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.0275, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150],
+                    },
+                },
                 // working: false,
                 infoModalClasses: ['infoModal'],
                 fundsModalClasses: ['fundsModal'],
@@ -473,10 +477,19 @@
             'participantsList'() {
                 let total = (this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants) - ((this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants)*0.15)
 
+                let type = participantsList[0].contest.contest_type_name
+                let numOfParticipants = participantsList[0].contest.max_participants
+
+                let payoutArray = this.prizePoolPayouts[type][numOfParticipants]
+                let placePayouts = [];
+
+                for(i=0; i < payoutArray.length; i++) {
+                    placePayouts.push(total*payoutArray[i])
+                }
+
                 this.prizePool = {
                     total: total,
-                    firstPlace: total*0.7,
-                    secondPlace: total*0.3,
+                    payouts: placePayouts,
                 }
 
                 this.parsePlayerRecords()
