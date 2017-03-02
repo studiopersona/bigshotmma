@@ -21,6 +21,7 @@ a {
 	max-width: 600px;
 	margin: 0 auto;
 	padding-top: 90px;
+	position: relative;
 }
 
 #overlay {
@@ -40,7 +41,6 @@ a {
 
 #templateWrap {
 	transition: filter 0.3s ease;
-	position: relative;
 
 	&.blur {
 		-webkit-filter: blur(2px);

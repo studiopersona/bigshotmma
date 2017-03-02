@@ -4023,7 +4023,8 @@ a {
 #app {
   max-width: 600px;
   margin: 0 auto;
-  padding-top: 90px; }
+  padding-top: 90px;
+  position: relative; }
 
 #overlay {
   display: none;
@@ -4038,8 +4039,7 @@ a {
     display: block; }
 
 #templateWrap {
-  transition: filter 0.3s ease;
-  position: relative; }
+  transition: filter 0.3s ease; }
   #templateWrap.blur {
     filter: blur(2px); }
 
@@ -5244,7 +5244,8 @@ a {
   position: absolute;
   left: 0;
   right: 0;
-  top: 0;
+  top: -90px;
+  /* top paddding on #app */
   z-index: 200;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
