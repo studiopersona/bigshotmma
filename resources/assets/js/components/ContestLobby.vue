@@ -477,8 +477,8 @@
             'participantsList'() {
                 let total = (this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants) - ((this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants)*0.15)
 
-                let type = participantsList[0].contest.contest_type_name
-                let numOfParticipants = participantsList[0].contest.max_participants
+                let type = this.participantsList[0].contest.contest_type_name
+                let numOfParticipants = this.participantsList[0].contest.max_participants
 
                 let payoutArray = this.prizePoolPayouts[type][numOfParticipants]
                 let placePayouts = [];

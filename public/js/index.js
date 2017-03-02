@@ -43917,21 +43917,11 @@ exports.default = {
     },
 
     watch: {
-        'participantsList': function (_participantsList) {
-            function participantsList() {
-                return _participantsList.apply(this, arguments);
-            }
-
-            participantsList.toString = function () {
-                return _participantsList.toString();
-            };
-
-            return participantsList;
-        }(function () {
+        'participantsList': function participantsList() {
             var total = this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants - this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants * 0.15;
 
-            var type = participantsList[0].contest.contest_type_name;
-            var numOfParticipants = participantsList[0].contest.max_participants;
+            var type = this.participantsList[0].contest.contest_type_name;
+            var numOfParticipants = this.participantsList[0].contest.max_participants;
 
             var payoutArray = this.prizePoolPayouts[type][numOfParticipants];
             var placePayouts = [];
@@ -43946,7 +43936,7 @@ exports.default = {
             };
 
             this.parsePlayerRecords();
-        })
+        }
     },
 
     computed: {
