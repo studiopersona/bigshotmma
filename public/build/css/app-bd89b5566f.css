@@ -4038,7 +4038,9 @@ a {
     display: block; }
 
 #templateWrap {
-  transition: filter 0.3s ease; }
+  transition: filter 0.3s ease;
+  position: relative;
+  padding-top: 114px; }
   #templateWrap.blur {
     filter: blur(2px); }
 
