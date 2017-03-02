@@ -4007,12 +4007,14 @@ strong {
 
 html {
   font-size: 62.5%;
-  /* Sets up Base 10 stuff */ }
+  /* Sets up Base 10 stuff */
+  height: 100%; }
 
 body {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
-  padding: 2rem 0; }
+  padding: 2rem 0;
+  height: 100%; }
 
 a {
   color: #a80300;
@@ -4022,6 +4024,7 @@ a {
 
 #app {
   max-width: 600px;
+  min-height: calc(100% + 4rem);
   margin: 0 auto;
   padding-top: 90px;
   position: relative; }
@@ -5245,6 +5248,7 @@ a {
   left: 0;
   right: 0;
   top: -20px;
+  min-height: 100%;
   z-index: 200;
   padding: 5.5rem 2rem 2rem;
   background: rgba(0, 0, 0, 0.9);
