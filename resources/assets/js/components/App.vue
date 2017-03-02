@@ -28,6 +28,12 @@
         	 		</a>
         	 	</li>
                 <li class="appDashboard__linkWrap">
+                    <a class="appDashboard__link appDashboard__link--contests" v-link="{ path: '/entries/' + playerId }" @click="toggleMenu">
+                        <img src="public/image/dashboard/entries.png">
+                        Entries
+                    </a>
+                </li>
+                <li class="appDashboard__linkWrap">
                     <a class="appDashboard__link appDashboard__link--rules" @click="showContestTypes">
                         <img src="public/image/dashboard/contest-types.png">
                         Contest Types
@@ -245,6 +251,7 @@
                 currentHowToPlaySlide: 0,
                 currentEligibility: 0,
 				loggedIn: false,
+                playerId: 0,
 				playersName: '',
                 playersBalance: 0,
                 appDashboardClassList: [],
@@ -295,6 +302,9 @@
 		methods: {
 
             fetch(token) {
+                let params = auth.parseToken(token)
+                this.playerId = params.sub
+
                 this.$http.get( URL.base + '/api/v1/contest-types', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }

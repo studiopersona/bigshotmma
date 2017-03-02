@@ -44,7 +44,6 @@
             return {
                 eventsList: { 'events':[] },
                 poolTotal: 0,
-                working: false,
                 URL: {
                     base: window.URL.base,
                     current: window.URL.current,

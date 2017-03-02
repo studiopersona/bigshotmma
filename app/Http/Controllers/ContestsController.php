@@ -50,10 +50,7 @@ class ContestsController extends ApiController
     {
         $contests = $this->getContests($playerId);
 
-        if ( $contests->isEmpty() )
-        {
-            return $this->respondNotFound('No contests found');
-        }
+        if ( $contests->isEmpty() ) return $this->respondNotFound('No contests found');
 
         return $this->respond([
             'contests' => $this->contestTransformer->transformCollection($contests->toArray()),
@@ -200,15 +197,29 @@ class ContestsController extends ApiController
         ]);
     }
 
-    private function getContests($playerId, $eventId = NULL)
+    public function getPlayerEntries($playerId)
+    {
+        $contests = $this->getContests($playerId, NULL, false);
+
+        if ( $contests->isEmpty() ) return $this->respondNotFound('No contests found');
+
+        $sorted = $contests->sortByDesc('event.date_time')->values();
+
+        return $this->respond([
+            'contests' => $this->contestTransformer->transformCollection($sorted->toArray()),
+        ]);
+    }
+
+    private function getContests($playerId, $eventId = NULL, $useDeadline = true)
     {
         $query = $this->contest->with([
                         'contestType',
                         'event.fights.fighters',
                         'event',
                         'users'
-                    ])
-                    ->where('deadline', '>', date('Y-m-d H:i:s', strtotime('-1 week')));
+                    ]);
+
+        if ( $useDeadline ) $query->where('deadline', '>', date('Y-m-d H:i:s', strtotime('-1 week')));
 
         if ( ! is_null($playerId) )
         {

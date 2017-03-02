@@ -50,6 +50,7 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('finishes', 'FinishesController@index');
 	    Route::get('player-name', 'UsersController@getPlayerName');
 	    Route::get('player-balance', 'UsersController@getPlayerBalance');
+	    Route::get('player/{playerId}/entries', 'ContestsController@getPlayerEntries');
 	    // Profile Routes ----------------------------------------------------
 	    Route::get('profile', 'UsersController@profile');
 	    Route::post('profile', 'UsersController@update');

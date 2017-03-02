@@ -51,6 +51,7 @@ import Register from './components/Register.vue'
 import Login from './components/Login.vue'
 import Events from './components/Events.vue'
 import Contests from './components/Contests.vue'
+import Entries from './components/Entries.vue'
 import Lobby from './components/Lobby.vue'
 import Fights from './components/Fights.vue'
 import PlayerPicks from './components/PlayerPicks.vue'
@@ -130,6 +131,10 @@ router.map({
 
   '/withdrawl-request': {
     component: Withdraw
+  },
+
+  '/entries/:player_id': {
+    component: Entries
   },
 
 })
