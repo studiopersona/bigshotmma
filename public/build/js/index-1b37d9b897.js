@@ -43928,7 +43928,7 @@ exports.default = {
             var payoutArray = this.prizePoolPayouts[type][numOfParticipants];
             var placePayouts = [];
 
-            for (i = 0; i < payoutArray.length; i++) {
+            for (var i = 0; i < payoutArray.length; i++) {
                 placePayouts.push(total * payoutArray[i]);
             }
 

@@ -485,7 +485,7 @@
                 let payoutArray = this.prizePoolPayouts[type][numOfParticipants]
                 let placePayouts = [];
 
-                for(i=0; i < payoutArray.length; i++) {
+                for(var i=0; i < payoutArray.length; i++) {
                     placePayouts.push(total*payoutArray[i])
                 }
 
