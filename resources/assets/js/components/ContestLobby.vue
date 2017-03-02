@@ -494,7 +494,7 @@
                     payouts: placePayouts,
                 }
 
-                console.log(prizePool.payouts)
+                console.log(this.prizePool.payouts)
 
                 this.parsePlayerRecords()
             },
