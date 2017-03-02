@@ -480,6 +480,8 @@
                 let type = this.participantsList[0].contest.contest_type_name
                 let numOfParticipants = this.participantsList[0].contest.max_participants
 
+                console.log(type)
+
                 let payoutArray = this.prizePoolPayouts[type][numOfParticipants]
                 let placePayouts = [];
 

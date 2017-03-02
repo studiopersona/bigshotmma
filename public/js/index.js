@@ -43923,6 +43923,8 @@ exports.default = {
             var type = this.participantsList[0].contest.contest_type_name;
             var numOfParticipants = this.participantsList[0].contest.max_participants;
 
+            console.log(type);
+
             var payoutArray = this.prizePoolPayouts[type][numOfParticipants];
             var placePayouts = [];
 
