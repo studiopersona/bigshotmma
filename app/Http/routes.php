@@ -71,9 +71,3 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('paypal-cancel', 'UsersController@paypalPaymentRejected');
 
 });
-
-
-
-Route::auth();
-
-Route::get('/home', 'HomeController@index');
