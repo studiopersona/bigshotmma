@@ -4254,8 +4254,11 @@ a {
   font-size: 1rem; }
 
 .participantsList__name {
-  padding-left: 1rem;
-  line-height: 1.2; }
+  text-align: left;
+  padding: 0 0 0 1rem;
+  overflow: hidden;
+  font-size: 1.2rem;
+  font-weight: 700; }
 
 .participantsList__record,
 .participantsList__wins {

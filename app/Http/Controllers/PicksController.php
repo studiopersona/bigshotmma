@@ -230,6 +230,7 @@ class PicksController extends ApiController
             {
                 $user_info = $this->user->find($value['playerId']);
                 $standings[$key]['player_name'] = $user_info->player_name;
+                $standings[$key]['avatar'] = $user_info->avatar;
             }
         }
 
