@@ -3,12 +3,12 @@
 	left: 0;
 	right: 0;
 	top: -20px;
-	min-height: calc(200% + 20px);
+	min-height: calc(100% + 20px);
 	z-index: 200;
 	padding: 5.5rem 2rem 2rem;
 	background: rgba(0,0,0, 0.9);
 	transition: transform 0.2s ease;
-	transform: translate3d(-100%, 0, 0);
+	transform: translate3d(-200%, 0, 0);
 	overflow: hidden;
 	color: $color-white;
 	text-align: center;
