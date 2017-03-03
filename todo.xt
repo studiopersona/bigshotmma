@@ -1,7 +1,3 @@
-- power ups panel under how to play still showing danielsan and bunyan, not showing newly added power ups
-
-- fix player names on standings view
-
 - after entering a contest balance in dashboard shows NaN
 
 - before contest begins Results link on Picl view should be Lobby
