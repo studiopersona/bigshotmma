@@ -43331,12 +43331,10 @@ exports.default = {
         this.initLocalforage();
         context.working = true;
         context.$http.post(LOGIN_URL, creds).then(function (response) {
-            //storage.setItem('id_token', response.data.token);
-            console.log(response.data.token);
             _localforage2.default.setItem('id_token', response.data.token).then(function (value) {
                 // Redirect to a specified route
                 if (redirect) {
-                    //router.go(redirect);
+                    _index.router.go(redirect);
                 }
             }).catch(function (err) {
                 console.log(err);
