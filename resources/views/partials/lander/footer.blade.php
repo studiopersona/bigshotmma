@@ -8,7 +8,7 @@
 			</div>
 			<div class="col-md-33 hidden-sm hidden-xs">
 				<div class="footer__logo">
-					<img src="{{ url() }}/public/image/lander/footer-logo.png">
+					<img src="{{ url('/') }}/public/image/lander/footer-logo.png">
 				</div>
 			</div>
 			<div class="col-md-33 col-sm-50 col-xs-100">
