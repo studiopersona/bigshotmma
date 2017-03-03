@@ -18,6 +18,7 @@ export default {
         context.$http.post(LOGIN_URL, creds)
             .then(function(response) {
                 //storage.setItem('id_token', response.data.token);
+                console.log(response.data.token)
                 localforage.setItem('id_token', response.data.token)
                 .then(function(value) {
                     // Redirect to a specified route

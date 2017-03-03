@@ -43332,6 +43332,7 @@ exports.default = {
         context.working = true;
         context.$http.post(LOGIN_URL, creds).then(function (response) {
             //storage.setItem('id_token', response.data.token);
+            console.log(response.data.token);
             _localforage2.default.setItem('id_token', response.data.token).then(function (value) {
                 // Redirect to a specified route
                 if (redirect) {
