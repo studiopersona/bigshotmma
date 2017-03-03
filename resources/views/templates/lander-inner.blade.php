@@ -24,7 +24,6 @@
 		@else
 			<link href="/public{{ elixir('css/lander.css') }}" rel=stylesheet >
 		@endif
-
 		<script>
 			var URL = {
 				'base' : '{{ URL::to('/') }}',
