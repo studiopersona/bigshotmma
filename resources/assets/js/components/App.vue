@@ -178,23 +178,15 @@
                                 <div style="color: #dd03ff">Cindarella</div>
                             </div>
                             <div class="col-xs-25">
-                                <img :src="URL.base + '/public/image/powerups/danielsan.png'">
-                                <div style="color: #ff2203">Danielsan</div>
-                            </div>
-                            <div class="col-xs-25">
                                 <img :src="URL.base + '/public/image/powerups/minuteman.png'">
                                 <div style="color: #fd880a">Minuteman</div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xs-25">
                                 <img :src="URL.base + '/public/image/powerups/slater.png'">
                                 <div style="color: #f8d86b">Slater</div>
                             </div>
-                            <div class="col-xs-25">
-                                <img :src="URL.base + '/public/image/powerups/bunyan.png'">
-                                <div style="color: #0377ff">Bunyan</div>
-                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xs-25">
                                 <img :src="URL.base + '/public/image/powerups/flawless.png'">
                                 <div style="color: #03ff1b">Flawless</div>
@@ -202,6 +194,14 @@
                             <div class="col-xs-25">
                                 <img :src="URL.base + '/public/image/powerups/debo.png'">
                                 <div style="color: #ce8534">Debo</div>
+                            </div>
+                            <div class="col-xs-25">
+                                <img :src="URL.base + '/public/image/powerups/hoyce.png'">
+                                <div style="color: #929497">Hoyce</div>
+                            </div>
+                            <div class="col-xs-25">
+                                <img :src="URL.base + '/public/image/powerups/denied.png'">
+                                <div style="color: #57747a">Denied</div>
                             </div>
                         </div>
                     </div>
