@@ -22,7 +22,7 @@ export default {
                 .then(function(value) {
                     // Redirect to a specified route
                     if(redirect) {
-                        router.go(redirect);
+                        //router.go(redirect);
                     }
                 })
                 .catch(function(err) {
@@ -121,10 +121,12 @@ export default {
     },
 
     parseToken(token) {
-        var base64Url = token.split('.')[1],
-            base64 = base64Url.replace('-', '+').replace('_', '/');
+        if (token) {
+            var base64Url = token.split('.')[1],
+                base64 = base64Url.replace('-', '+').replace('_', '/');
 
-        return JSON.parse(window.atob(base64));
+            return JSON.parse(window.atob(base64));
+        }
     },
 
     Storage(){

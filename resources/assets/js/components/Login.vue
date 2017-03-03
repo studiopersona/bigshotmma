@@ -106,15 +106,19 @@
 			tokenRefresh(token) {
                 var vm = this;
 
-                this.$http.post(URL.base + '/api/v1/refresh', {}, {
-                    headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    localforage.setItem('id_token', response.data.token).then(function() {
-                    	router.go('/events');
-                    });
-                }, function(err) {
-                    router.go('login');
-                });
+                if (token) {
+	                this.$http.post(URL.base + '/api/v1/refresh', {}, {
+	                    headers: { 'Authorization' : 'Bearer ' + token }
+	                }).then(function(response) {
+	                    localforage.setItem('id_token', response.data.token).then(function() {
+	                    	router.go('/events');
+	                    });
+	                }, function(err) {
+	                    router.go('login');
+	                });
+	            } else {
+	            	router.go('login');
+	            }
             },
 
 			submit() {

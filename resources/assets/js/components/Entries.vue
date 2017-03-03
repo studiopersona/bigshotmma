@@ -58,6 +58,7 @@
             return {
                 contestsList: { 'contests':{} },
                 contestsEntered: [],
+                working: false,
                 poolTotal: 0,
                 URL: {
                     base: window.URL.base,

@@ -43335,7 +43335,7 @@ exports.default = {
             _localforage2.default.setItem('id_token', response.data.token).then(function (value) {
                 // Redirect to a specified route
                 if (redirect) {
-                    _index.router.go(redirect);
+                    //router.go(redirect);
                 }
             }).catch(function (err) {
                 console.log(err);
@@ -43425,10 +43425,12 @@ exports.default = {
         return;
     },
     parseToken: function parseToken(token) {
-        var base64Url = token.split('.')[1],
-            base64 = base64Url.replace('-', '+').replace('_', '/');
+        if (token) {
+            var base64Url = token.split('.')[1],
+                base64 = base64Url.replace('-', '+').replace('_', '/');
 
-        return JSON.parse(window.atob(base64));
+            return JSON.parse(window.atob(base64));
+        }
     },
     Storage: function Storage() {
         var storage = {
@@ -43542,34 +43544,36 @@ exports.default = {
     methods: {
         fetch: function fetch(token) {
             var params = _auth2.default.parseToken(token);
-            this.playerId = params.sub;
+            if (params) {
+                this.playerId = params.sub;
 
-            this.$http.get(URL.base + '/api/v1/contest-types', {}, {
-                // Attach the JWT header
-                headers: { 'Authorization': 'Bearer ' + token }
-            }).then(function (response) {
-                this.contestTypes = response.data;
-            }, function (err) {
-                console.log(err);
-            });
+                this.$http.get(URL.base + '/api/v1/contest-types', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization': 'Bearer ' + token }
+                }).then(function (response) {
+                    this.contestTypes = response.data;
+                }, function (err) {
+                    console.log(err);
+                });
 
-            this.$http.get(URL.base + '/api/v1/player-name', {}, {
-                // Attach the JWT header
-                headers: { 'Authorization': 'Bearer ' + token }
-            }).then(function (response) {
-                this.playersName = response.data.player_name;
-            }, function (err) {
-                console.log(err);
-            });
+                this.$http.get(URL.base + '/api/v1/player-name', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization': 'Bearer ' + token }
+                }).then(function (response) {
+                    this.playersName = response.data.player_name;
+                }, function (err) {
+                    console.log(err);
+                });
 
-            this.$http.get(URL.base + '/api/v1/player-balance', {}, {
-                // Attach the JWT header
-                headers: { 'Authorization': 'Bearer ' + token }
-            }).then(function (response) {
-                this.playersBalance = response.data.playerBalance;
-            }, function (err) {
-                console.log(err);
-            });
+                this.$http.get(URL.base + '/api/v1/player-balance', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization': 'Bearer ' + token }
+                }).then(function (response) {
+                    this.playersBalance = response.data.playerBalance;
+                }, function (err) {
+                    console.log(err);
+                });
+            }
         },
         toggleMenu: function toggleMenu() {
             var templateWrapClassList;
@@ -43605,7 +43609,7 @@ exports.default = {
         },
         logout: function logout() {
             _auth2.default.logout();
-            _index.router.go('login');
+            _index.router.go('/login');
             this.toggleMenu();
             this.loggedIn = false;
         }
@@ -44598,6 +44602,7 @@ exports.default = {
         return {
             contestsList: { 'contests': {} },
             contestsEntered: [],
+            working: false,
             poolTotal: 0,
             URL: {
                 base: window.URL.base,
@@ -45832,15 +45837,19 @@ exports.default = {
 		tokenRefresh: function tokenRefresh(token) {
 			var vm = this;
 
-			this.$http.post(URL.base + '/api/v1/refresh', {}, {
-				headers: { 'Authorization': 'Bearer ' + token }
-			}).then(function (response) {
-				_localforage2.default.setItem('id_token', response.data.token).then(function () {
-					_index.router.go('/events');
+			if (token) {
+				this.$http.post(URL.base + '/api/v1/refresh', {}, {
+					headers: { 'Authorization': 'Bearer ' + token }
+				}).then(function (response) {
+					_localforage2.default.setItem('id_token', response.data.token).then(function () {
+						_index.router.go('/events');
+					});
+				}, function (err) {
+					_index.router.go('login');
 				});
-			}, function (err) {
+			} else {
 				_index.router.go('login');
-			});
+			}
 		},
 		submit: function submit() {
 			var credentials = {
