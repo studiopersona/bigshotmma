@@ -104,7 +104,7 @@
 						@endif
 					</table>
 					<div class="all-contests-btn-wrap">
-						<a href="{{ env('APP_URL') }}/play" class="btn btn--green btn--round">View All Contests</a>
+						<a href="{{ url('/play') }}" class="btn btn--green btn--round">View All Contests</a>
 					</div>
 				</div>
 			</div>
