@@ -24,6 +24,9 @@
 							<input type="password" placeholder="PASSWORD" v-model="credentials.password">
 						</label>
 					</div>
+					<div class="col-xs-50 col-xs-offset-50 forgotPassword">
+						<a v-link="{ path: '/forgot-password' }">forgot password?</a>
+					</div>
 				</div>
 				<div class="row form_row">
 					<p>iPhone users please turn off <a target="_blank" href="https://support.apple.com/en-us/HT203036">Private Mode</a> to login</p>
@@ -51,7 +54,7 @@
 		<div class="container-fluid">
 			<div class="col-xs-100">
 				<div class="logo">
-					<img :src="URL.base + '/public/image/logo.png'" alt="Blood Sport Fantasy MMA Logo">
+					<img :src="URL.base + '/public/image/logo.png'" alt="Big Shot Fantasy MMA Logo">
 				</div>
 			</div>
 		</div>
@@ -76,7 +79,6 @@
 				},
 				error: '',
 				alertType: '',
-				working: false,
                 URL: {
                     base: window.URL.base,
                     current: window.URL.current,

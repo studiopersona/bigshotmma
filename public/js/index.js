@@ -43467,7 +43467,7 @@ exports.default = {
     }
 };
 
-},{"../index":222,"../libs/d":224,"localforage":117}],204:[function(require,module,exports){
+},{"../index":223,"../libs/d":225,"localforage":117}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -43628,7 +43628,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-54fea208", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],205:[function(require,module,exports){
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -43978,7 +43978,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-02ccbfcb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],206:[function(require,module,exports){
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44084,7 +44084,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f53a16f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],207:[function(require,module,exports){
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44378,7 +44378,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7ebe3885", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../config/ineligibile-states.json":221,"../index":222,"../libs/d.js":224,"localforage":117,"paypal-rest-sdk":126,"vue":201,"vue-hot-reload-api":198}],208:[function(require,module,exports){
+},{"../auth":203,"../config/ineligibile-states.json":222,"../index":223,"../libs/d.js":225,"localforage":117,"paypal-rest-sdk":126,"vue":201,"vue-hot-reload-api":198}],208:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44574,7 +44574,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c5a165d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../config/ineligibile-states.json":221,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],209:[function(require,module,exports){
+},{"../auth":203,"../config/ineligibile-states.json":222,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44680,7 +44680,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1b0d5d77", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],210:[function(require,module,exports){
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44804,7 +44804,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-142229fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],211:[function(require,module,exports){
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45616,7 +45616,80 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-15c8a168", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"../libs/animatedScrollTo.js":223,"../libs/d.js":224,"localforage":117,"vue":201,"vue-hot-reload-api":198}],212:[function(require,module,exports){
+},{"../auth":203,"../index":223,"../libs/animatedScrollTo.js":224,"../libs/d.js":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],212:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _auth = require('../auth');
+
+var _auth2 = _interopRequireDefault(_auth);
+
+var _index = require('../index');
+
+var _localforage = require('localforage');
+
+var _localforage2 = _interopRequireDefault(_localforage);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+
+	components: {},
+
+	props: ['working'],
+
+	data: function data() {
+		return {
+			email: '',
+			error: '',
+			URL: window.URL
+		};
+	},
+	created: function created() {
+		this.working = true;
+	},
+	ready: function ready() {
+		this.working = false;
+	},
+
+
+	watch: {},
+
+	computed: {
+		loaderClasses: function loaderClasses() {
+			return this.working ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
+		}
+	},
+
+	methods: {
+		submit: function submit() {
+			this.$http.post(this.URL.base + '/api/v1/forgot-password', {}, {}).then(function (res) {
+				var response = res.json();
+			}).catch(function (err) {
+				console.log('');
+				console.log(err);
+			});
+		}
+	},
+
+	events: {}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\" :loggedin.sync=\"false\">\n\t<header class=\"pageHeader\">\n\t\t<h1 class=\"pageHeader__header\">Reset Password</h1>\n\t\t<h4 class=\"pageHeader__subheader\">\n\t\t\tRequest a password reset\n\t\t</h4>\n\t</header>\n\t<div class=\"loginForm form\">\n\t\t<div class=\"container-fluid\">\n\t    \t<div class=\"row form__row\">\n\t\t        <div class=\"col-xs-100\">\n                    <label for=\"email\" class=\"col-md-4 control-label\">\n                    \t<span class=\"visuallyhidden\">E-Mail Address</span>\n                    \t<input id=\"email\" type=\"email\" class=\"form-control\" name=\"email\" v-model=\"email\" placeholder=\"EMAIL ADDRESS\">\n                    </label>\n                </div>\n            </div>\n      \t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">x</span>\n\t\t\t\t</div>\n\t\t\t</div>\n            <div class=\"row\">\n                <div class=\"col-xs-100\">\n                    <button type=\"submit\" class=\"button button--primary\" @click=\"submit()\">Send Request</button>\n                </div>\n            </div>\n\t    </div>\n\t    <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n\t<div class=\"container-fluid\">\n\t\t<div class=\"col-xs-100\">\n\t\t\t<div class=\"logo\">\n\t\t\t\t<img :src=\"URL.base + '/public/image/logo.png'\" alt=\"Big Shot Fantasy MMA Logo\">\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-3a806d47", module.exports)
+  } else {
+    hotAPI.update("_v-3a806d47", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45775,7 +45848,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7b1ce97d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"./ContestLobby.vue":205,"./Standings.vue":219,"localforage":117,"vue":201,"vue-hot-reload-api":198}],213:[function(require,module,exports){
+},{"../auth":203,"../index":223,"./ContestLobby.vue":205,"./Standings.vue":220,"localforage":117,"vue":201,"vue-hot-reload-api":198}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45807,7 +45880,6 @@ exports.default = {
 			},
 			error: '',
 			alertType: '',
-			working: false,
 			URL: {
 				base: window.URL.base,
 				current: window.URL.current,
@@ -45878,7 +45950,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\" :loggedin.sync=\"false\">\n\t<header class=\"pageHeader\">\n\t\t<h1 class=\"pageHeader__header\">Player Login</h1>\n\t\t<h4 class=\"pageHeader__subheader\">\n\t\t\tDon't have an account yet?\n\t\t\t<a v-link=\"{ path: '/register' }\">Sign Up</a>\n\t\t</h4>\n\t</header>\n\t<div class=\"loginForm form\">\n\t\t<div class=\"container-fluid\">\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"email\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.email\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"password\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form_row\">\n\t\t\t\t<p>iPhone users please turn off <a target=\"_blank\" href=\"https://support.apple.com/en-us/HT203036\">Private Mode</a> to login</p>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">x</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Login</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n\t</div>\n\t<div class=\"container-fluid\">\n\t\t<div class=\"col-xs-100\">\n\t\t\t<div class=\"logo\">\n\t\t\t\t<img :src=\"URL.base + '/public/image/logo.png'\" alt=\"Blood Sport Fantasy MMA Logo\">\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :working=\"working\" :loggedin.sync=\"false\">\n\t<header class=\"pageHeader\">\n\t\t<h1 class=\"pageHeader__header\">Player Login</h1>\n\t\t<h4 class=\"pageHeader__subheader\">\n\t\t\tDon't have an account yet?\n\t\t\t<a v-link=\"{ path: '/register' }\">Sign Up</a>\n\t\t</h4>\n\t</header>\n\t<div class=\"loginForm form\">\n\t\t<div class=\"container-fluid\">\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"email\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Email</span>\n\t\t\t\t\t\t<input type=\"email\" placeholder=\"EMAIL ADDRESS\" v-model=\"credentials.email\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<label for=\"password\">\n\t\t\t\t\t\t<span class=\"visuallyhidden\">Password</span>\n\t\t\t\t\t\t<input type=\"password\" placeholder=\"PASSWORD\" v-model=\"credentials.password\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-xs-50 col-xs-offset-50 forgotPassword\">\n\t\t\t\t\t<a v-link=\"{ path: '/forgot-password' }\">forgot password?</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row form_row\">\n\t\t\t\t<p>iPhone users please turn off <a target=\"_blank\" href=\"https://support.apple.com/en-us/HT203036\">Private Mode</a> to login</p>\n\t\t\t</div>\n\t\t\t<div class=\"row form__row\" v-if=\"error\">\n\t\t\t\t<div :class=\"alertClasses\" :type=\"alertType\">\n\t\t\t\t\t<p>{{ error }}</p>\n\t\t\t\t\t<span class=\"Alert__close\" @click=\"error = flase\">x</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-100\">\n\t\t\t\t\t<button @click=\"submit()\" type=\"submit\" class=\"button button--primary\">Login</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n\t</div>\n\t<div class=\"container-fluid\">\n\t\t<div class=\"col-xs-100\">\n\t\t\t<div class=\"logo\">\n\t\t\t\t<img :src=\"URL.base + '/public/image/logo.png'\" alt=\"Big Shot Fantasy MMA Logo\">\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -45889,7 +45961,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e21a08e0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],214:[function(require,module,exports){
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46004,7 +46076,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-92d42d6e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],215:[function(require,module,exports){
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46274,7 +46346,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4edf0ef8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],216:[function(require,module,exports){
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46445,7 +46517,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-cd61a3e0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],217:[function(require,module,exports){
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46529,7 +46601,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-370c9968", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"localforage":117,"vue":201,"vue-hot-reload-api":198}],218:[function(require,module,exports){
+},{"../auth":203,"localforage":117,"vue":201,"vue-hot-reload-api":198}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46667,7 +46739,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6fbff1dd", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"babel-runtime/helpers/defineProperty":16,"localforage":117,"vue":201,"vue-hot-reload-api":198}],219:[function(require,module,exports){
+},{"../auth":203,"../index":223,"babel-runtime/helpers/defineProperty":16,"localforage":117,"vue":201,"vue-hot-reload-api":198}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46829,7 +46901,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-09eb2964", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],220:[function(require,module,exports){
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -47039,13 +47111,13 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-a91ff79a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],221:[function(require,module,exports){
+},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],222:[function(require,module,exports){
 module.exports={
 	"states": [
 		"AL", "AZ", "HI", "ID", "IA", "LA", "MT", "NV", "WA"
 	]
 }
-},{}],222:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -47116,6 +47188,10 @@ var _Deposit2 = _interopRequireDefault(_Deposit);
 var _Withdraw = require('./components/Withdraw.vue');
 
 var _Withdraw2 = _interopRequireDefault(_Withdraw);
+
+var _ForgotPassword = require('./components/ForgotPassword.vue');
+
+var _ForgotPassword2 = _interopRequireDefault(_ForgotPassword);
 
 var _vueRouter = require('vue-router');
 
@@ -47246,6 +47322,10 @@ router.map({
 
   '/entries/:player_id': {
     component: _Entries2.default
+  },
+
+  '/forgot-password': {
+    component: _ForgotPassword2.default
   }
 
 });
@@ -47258,7 +47338,7 @@ router.redirect({
 // Start the app on the #app div
 router.start(_App2.default, '#app');
 
-},{"./components/App.vue":204,"./components/Contests.vue":206,"./components/Deposit.vue":207,"./components/DepositProfile.vue":208,"./components/Entries.vue":209,"./components/Events.vue":210,"./components/Fights.vue":211,"./components/Lobby.vue":212,"./components/Login.vue":213,"./components/PlayerContests.vue":214,"./components/PlayerPicks.vue":215,"./components/Profile.vue":216,"./components/Register.vue":217,"./components/Results.vue":218,"./components/Withdraw.vue":220,"vue":201,"vue-resource":199,"vue-router":200}],223:[function(require,module,exports){
+},{"./components/App.vue":204,"./components/Contests.vue":206,"./components/Deposit.vue":207,"./components/DepositProfile.vue":208,"./components/Entries.vue":209,"./components/Events.vue":210,"./components/Fights.vue":211,"./components/ForgotPassword.vue":212,"./components/Lobby.vue":213,"./components/Login.vue":214,"./components/PlayerContests.vue":215,"./components/PlayerPicks.vue":216,"./components/Profile.vue":217,"./components/Register.vue":218,"./components/Results.vue":219,"./components/Withdraw.vue":221,"vue":201,"vue-resource":199,"vue-router":200}],224:[function(require,module,exports){
 'use strict';
 
 (function (window) {
@@ -47318,7 +47398,7 @@ router.start(_App2.default, '#app');
     }
 })(window);
 
-},{}],224:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -47837,6 +47917,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })();
 
 }).call(this,require('_process'))
-},{"_process":154}]},{},[222]);
+},{"_process":154}]},{},[223]);
 
 //# sourceMappingURL=index.js.map

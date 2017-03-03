@@ -2,6 +2,8 @@
 
 - before contest begins Results link on Picl view should be Lobby
 
+- make sure contest_participants is updated when player quits
+
 - forgot password
 
 - change all modals to work like the prize modal
@@ -9,6 +11,19 @@
 - create a standings only view that loads the standing partial view
 
 - fix entries icon to be proper height and remove style rule placed on the dashboard button
+
+- fix issue when logging out from entries view
+
+================================================================================================
+
+- allow fight to be set as cancelled
+	- this will prevent future participants from selecting this fight
+
+- need to be able to edit picks after entered, until the deadline is reached
+
+
+
+
 
 
 

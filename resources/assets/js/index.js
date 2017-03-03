@@ -61,6 +61,7 @@ import Profile from './components/Profile.vue'
 import DepositProfile from './components/DepositProfile.vue'
 import Deposit from './components/Deposit.vue'
 import Withdraw from './components/Withdraw.vue'
+import ForgotPassword from './components/ForgotPassword.vue'
 
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
@@ -135,6 +136,10 @@ router.map({
 
   '/entries/:player_id': {
     component: Entries
+  },
+
+  '/forgot-password': {
+    component: ForgotPassword
   },
 
 })
