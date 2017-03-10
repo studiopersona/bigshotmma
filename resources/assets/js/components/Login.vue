@@ -13,7 +13,7 @@
 					<div class="col-xs-100">
 						<label for="email">
 							<span class="visuallyhidden">Email</span>
-							<input type="email" placeholder="EMAIL ADDRESS" v-model="credentials.email">
+							<input type="email" placeholder="EMAIL ADDRESS" v-model="credentials.email" autofocus>
 						</label>
 					</div>
 				</div>
@@ -25,11 +25,11 @@
 						</label>
 					</div>
 					<div class="col-xs-50 col-xs-offset-50 forgotPassword">
-						<a v-link="{ path: '/forgot-password' }">forgot password?</a>
+						<a v-link="{ path: '/forgot-password' }" tabindex="200">forgot password?</a>
 					</div>
 				</div>
 				<div class="row form_row">
-					<p>iPhone users please turn off <a target="_blank" href="https://support.apple.com/en-us/HT203036">Private Mode</a> to login</p>
+					<p>iPhone users please turn off <a target="_blank" tabindex="-1"href="https://support.apple.com/en-us/HT203036">Private Mode</a> to login</p>
 				</div>
 				<div class="row form__row" v-if="error">
 					<div :class="alertClasses" :type="alertType">
