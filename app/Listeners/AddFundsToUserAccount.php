@@ -28,6 +28,6 @@ class AddFundsToUserAccount
      */
     public function handle(UserRegistered $event)
     {
-        $this->userBalance->insert(['user_id'=>$event->user->id, 'amount'=>100, 'transaction_type_id'=>4]);
+        // $this->userBalance->insert(['user_id'=>$event->user->id, 'amount'=>100, 'transaction_type_id'=>4]);
     }
 }
