@@ -141,7 +141,7 @@
 
     .contests__table {
 	    max-width: 100%;
-	    margin: 0 auto 0 -1.1rem;
+	    margin: 0 auto 0 0;
 
 	    td {
 	    	padding: 0.5rem;
@@ -156,4 +156,11 @@
     .contests__subheader {
         font-size: 1.5rem;
     }
+}
+
+// 365px
+@media screen and (max-width: 22.8125rem) {
+	.all-contests-btn-wrap > .btn {
+		font-size: 1.1em;
+	}
 }

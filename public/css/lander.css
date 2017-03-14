@@ -4878,7 +4878,20 @@ a.information__itemLink {
 
 @media screen and (max-width: 47.95rem) {
   .information__phoneTemplateWrap {
-    display: none; } }
+    display: none; }
+  .information__thirdPartyLogosWrap {
+    overflow: auto; }
+  .information__thirdPartyLogo {
+    float: none;
+    margin: 4rem 1% 0 0; }
+  .information__thirdPartyLogo--ssl {
+    width: 34%;
+    position: relative;
+    top: 5px; }
+  .information__thirdPartyLogo--creditCards {
+    width: 24%; }
+  .information__thirdPartyLogo--paypal {
+    width: 18%; } }
 
 .contests__header {
   text-transform: uppercase;
@@ -4985,7 +4998,7 @@ a.information__itemLink {
     font-size: 1.1rem; }
   .contests__table {
     max-width: 100%;
-    margin: 0 auto 0 -1.1rem; }
+    margin: 0 auto 0 0; }
     .contests__table td {
       padding: 0.5rem;
       font-size: 1.1rem; }
@@ -4993,6 +5006,10 @@ a.information__itemLink {
     font-size: 3.96rem; }
   .contests__subheader {
     font-size: 1.5rem; } }
+
+@media screen and (max-width: 22.8125rem) {
+  .all-contests-btn-wrap > .btn, .all-contests-btn-wrap > .btn--block, .all-contests-btn-wrap > .btn--primary, .all-contests-btn-wrap > .btn--green, .all-contests-btn-wrap > .btn--black, .all-contests-btn-wrap > .btn--outline {
+    font-size: 1.1em; } }
 
 .powerUps {
   background: url(../../image/lander/cage-bg.jpg) left bottom/100% auto no-repeat;
