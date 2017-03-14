@@ -17,7 +17,9 @@ elixir.config.js.browserify.watchify.options.poll = true;
 
 elixir(function(mix) {
     mix.sass('app.scss')
+    .sass('lander.scss')
     .browserify('index.js')
+    .browserify('lander.js')
     .version(['public/js/lander.js','public/css/lander.css', 'public/js/index.js','public/css/app.css'])
     .livereload();
 });

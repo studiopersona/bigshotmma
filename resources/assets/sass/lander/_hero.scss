@@ -55,6 +55,30 @@
     animation-timing-function: cubic-bezier(0.71,0.55,0.62,1.57);
 }
 
+// hero for inner pages
+.heroInner {
+    height: 180px;
+    background: url('../../image/lander/header-bg.jpg') left top/auto 100% no-repeat;
+    margin-bottom: 4rem;
+
+    h1 {
+        color: $color-white;
+        font-size: 6rem;
+        font-weight: 700;
+        text-align: center;
+        line-height: 6rem;
+        margin-top: calc(90px - 3rem - 3.92rem);
+        text-transform: uppercase;
+        text-shadow: 4px 2px 0 $color-black,
+                     5px 3px 0 $color-black,
+                     6px 4px 0 $color-black,
+                     7px 5px 0 $color-black,
+                     8px 6px 0 $color-black,
+                     -1px -1px 0 $color-black,
+                     -1px -2px 0 $color-black;
+    }
+}
+
 // 1250px
 @media screen and (max-width: 78.125rem) {
     .hero__subheader {
@@ -103,6 +127,12 @@
     .hero__subheader {
         font-size: 2.35rem;
     }
+
+    .heroInner {
+        h1 {
+            font-size: 4rem;
+        }
+    }
 }
 
 // 520px
@@ -140,6 +170,12 @@
 
     .hero__subheader {
         font-size: 1.4rem;
+    }
+
+    .heroInner {
+        h1 {
+            font-size: 3rem;
+        }
     }
 
 }

@@ -37,22 +37,25 @@ class LanderController extends Controller
     public function policy()
     {
         $powerUps = $this->powerUp->get();
+        $title = 'Privacy Policy';
 
-        return response()->view('information.policy', compact('powerUps'));
+        return response()->view('information.policy', compact('powerUps', 'title'));
     }
 
     public function terms()
     {
         $powerUps = $this->powerUp->get();
+        $title = 'Terms of Service';
 
-        return response()->view('information.terms', compact('powerUps'));
+        return response()->view('information.terms', compact('powerUps', 'title'));
     }
 
     public function contact()
     {
         $powerUps = $this->powerUp->get();
+        $title = 'Contact Us';
 
-        return response()->view('information.contact', compact('powerUps'));
+        return response()->view('information.contact', compact('powerUps', 'title'));
     }
 
     public function contactSubmit(Request $request)

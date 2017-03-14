@@ -12982,7 +12982,7 @@ var heroSizer = function heroSizer() {
 		heroEl.style.height = parseInt(heroEl.scrollWidth * (1071 / 1998), 10) + 'px';
 	};
 
-	if (document.querySelector('.hero') !== undefined) {
+	if (document.querySelector('.hero')) {
 		sizeHero();
 		window.addEventListener('resize', sizeHero);
 	}
