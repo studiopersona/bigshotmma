@@ -97,7 +97,7 @@
         <section :class="prizeModalClasses">
             <h3 class="prizeModal__title">Prize Pool</h3>
             <div class="prizeModal__body">
-            <p>In an <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">Classic</a> contest with {{ participantsList[0].contest.max_participants }} players:</p>
+            <p>In a <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">{{ participantsList[0].contest.contest_type_name }}</a> contest with {{ participantsList[0].contest.max_participants }} players:</p>
                 <div class="prizeModal__entryFeeWrap">
                     <span class="prizeModal__entryFeeTitle">Entry Fee:</span> <span class="prizeModal__entryFee">${{ parseFloat(participantsList[0].contest.buy_in).toFixed(2) }}</span>
                 </div>
@@ -202,6 +202,7 @@
                         50: [0.365, 0.21, 0.15, 0.10, 0.05, 0.025, 0.025, 0.025, 0.025, 0.025],
                         100: [0.03275, 0.150, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.0275, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150],
                     },
+                    Greed: [1],
                 },
                 // working: false,
                 infoModalClasses: ['infoModal'],
@@ -482,7 +483,7 @@
 
                 console.log(type)
 
-                let payoutArray = this.prizePoolPayouts[type][numOfParticipants]
+                let payoutArray = (this.participantsList[0].contest.contest_type_id == 1) ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type]
                 let placePayouts = [];
 
                 for(var i=0; i < payoutArray.length; i++) {
