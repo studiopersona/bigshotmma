@@ -172,6 +172,7 @@
                 prizePool: {},
                 playersBalance: 0,
                 playerRecords: [],
+                playerOverallScores: [],
                 contestTypes: {},
                 contestTypeId: '',
                 infoModalContent: {
@@ -203,6 +204,7 @@
                         100: [0.03275, 0.150, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.0275, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150],
                     },
                     Greed: [1],
+                    '50/50': [1],
                 },
                 // working: false,
                 infoModalClasses: ['infoModal'],
@@ -293,13 +295,22 @@
                     this.contestTypes = response.data;
                 });
 
+                /*
                 this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players-records', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     // console.log(response.data);
                     this.playerRecords = response.data.data;
-                    // this.parsePlayerRecords();
+                });
+                */
+
+                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players-overall-scores', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                }).then(function(response) {
+                    // console.log(response.data);
+                    this.playerOverallScores = response.data.data;
                 });
 
                 this.$http.get( URL.base + '/api/v1/player-balance', {}, {
@@ -381,6 +392,24 @@
                 });
 
                 // console.log(this.participantsList[0].participants);
+            },
+
+            parsePlayerScores() {
+                var vm = this;
+
+                this.playerOverallScores.forEach(function(player, index) {
+                    var findPlayer = function(player) {
+                        // console.log('player_id: ', player.id);
+                        // console.log('currentPlayerId: ', currentPlayerId);
+                        return parseInt(player.id, 10) === parseInt(currentPlayerId, 10);
+                    },
+                    match,
+                    currentPlayerId;
+
+                    currentPlayerId = player.id;
+                    match  = vm.participantsList[0].participants.find(findPlayer);
+                    match.overallPoints = player.points
+                });
             },
 
             confirmQuit(e) {
@@ -497,7 +526,7 @@
 
                 console.log(this.prizePool.payouts)
 
-                this.parsePlayerRecords()
+                // this.parsePlayerRecords()
             },
         },
 
