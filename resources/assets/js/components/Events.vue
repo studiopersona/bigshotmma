@@ -9,7 +9,7 @@
         <div class="container-fluid">
             <div class="col-xs-100">
                 <div class="eventList clearfix">
-                    <ul>
+                    <ul v-if="eventsList.events.length">
                         <li class="eventList__item" v-for="event in eventsList.events">
                             <a v-link="{ path: '/event/' + event.event_id + '/contests' }" href="#">
                                 <img class="eventList__img" :src="URL.base + '/public/image/events/' + event.event_image_file" alt="{{ event.event_name }} Image">
@@ -18,6 +18,9 @@
                             </a>
                         </li>
                     </ul>
+                    <p v-else style="margin: 0 1.4rem;text-align:center;">
+                        There are no Events available at this time. Check back soon for our next set of contests.
+                    </p>
                     <div :class="loaderClasses">
                         <div class="js-global-loader loader">
                             <svg viewBox="0 0 32 32" width="32" height="32">

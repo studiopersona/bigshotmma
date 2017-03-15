@@ -1,3 +1,7 @@
+- test that user is removed from contest_partcipants table when they quit a contest
+
+- take past contests out of contest view (have entries to replace this) (this will take care of the picks button task also)
+
 - after entering a contest balance in dashboard shows NaN
 
 - before contest begins Results link on Picl view should be Lobby
