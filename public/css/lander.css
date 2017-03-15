@@ -38,8 +38,10 @@ figure,
 footer,
 header,
 main,
+menu,
 nav,
-section {
+section,
+summary {
   display: block; }
 
 ol,
@@ -4590,6 +4592,20 @@ h4 {
   animation-name: fadeAndScale;
   animation-timing-function: cubic-bezier(0.71, 0.55, 0.62, 1.57); }
 
+.heroInner {
+  height: 180px;
+  background: url("../../image/lander/header-bg.jpg") left top/auto 100% no-repeat;
+  margin-bottom: 4rem; }
+  .heroInner h1 {
+    color: #fff;
+    font-size: 6rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 6rem;
+    margin-top: calc(90px - 3rem - 3.92rem);
+    text-transform: uppercase;
+    text-shadow: 4px 2px 0 #000, 5px 3px 0 #000, 6px 4px 0 #000, 7px 5px 0 #000, 8px 6px 0 #000, -1px -1px 0 #000, -1px -2px 0 #000; }
+
 @media screen and (max-width: 78.125rem) {
   .hero__subheader {
     font-size: 4.25rem; } }
@@ -4617,7 +4633,9 @@ h4 {
     margin-bottom: 0;
     margin-top: 0; }
   .hero__subheader {
-    font-size: 2.35rem; } }
+    font-size: 2.35rem; }
+  .heroInner h1 {
+    font-size: 4rem; } }
 
 @media screen and (max-width: 32.5rem) {
   .hero__header {
@@ -4635,7 +4653,9 @@ h4 {
   .hero__header {
     font-size: 3.204rem; }
   .hero__subheader {
-    font-size: 1.4rem; } }
+    font-size: 1.4rem; }
+  .heroInner h1 {
+    font-size: 3rem; } }
 
 @media screen and (max-width: 20rem) {
   .hero__header {
@@ -4692,7 +4712,19 @@ h4 {
       padding: 0.25rem 0.75em;
       box-sizing: border-box;
       width: auto; }
-    .navigation__btnWrap button.btn, .navigation__btnWrap button.btn--block, .navigation__btnWrap button.btn--primary, .navigation__btnWrap button.btn--green, .navigation__btnWrap button.btn--black, .navigation__btnWrap button.btn--outline {
+    .navigation__btnWrap button.btn, .navigation__btnWrap button.btn--block, .navigation__btnWrap button.btn--primary, .navigation__btnWrap button.btn--green, .navigation__btnWrap button.btn--black, .navigation__btnWrap button.btn--outline,
+    .navigation__btnWrap a.btn:nth-child(1),
+    .navigation__btnWrap a.btn--block:nth-child(1),
+    .navigation__btnWrap a.btn--primary:nth-child(1),
+    .navigation__btnWrap a.btn--green:nth-child(1),
+    .navigation__btnWrap a.btn--black:nth-child(1),
+    .navigation__btnWrap a.btn--outline:nth-child(1),
+    .navigation__btnWrap a.btn:nth-child(2),
+    .navigation__btnWrap a.btn--block:nth-child(2),
+    .navigation__btnWrap a.btn--primary:nth-child(2),
+    .navigation__btnWrap a.btn--green:nth-child(2),
+    .navigation__btnWrap a.btn--black:nth-child(2),
+    .navigation__btnWrap a.btn--outline:nth-child(2) {
       display: none; }
   .nav-container {
     padding: 0 2rem 0.5rem; } }
@@ -4846,7 +4878,20 @@ a.information__itemLink {
 
 @media screen and (max-width: 47.95rem) {
   .information__phoneTemplateWrap {
-    display: none; } }
+    display: none; }
+  .information__thirdPartyLogosWrap {
+    overflow: auto; }
+  .information__thirdPartyLogo {
+    float: none;
+    margin: 4rem 1% 0 0; }
+  .information__thirdPartyLogo--ssl {
+    width: 34%;
+    position: relative;
+    top: 5px; }
+  .information__thirdPartyLogo--creditCards {
+    width: 24%; }
+  .information__thirdPartyLogo--paypal {
+    width: 18%; } }
 
 .contests__header {
   text-transform: uppercase;
@@ -4953,7 +4998,7 @@ a.information__itemLink {
     font-size: 1.1rem; }
   .contests__table {
     max-width: 100%;
-    margin: 0 auto 0 -1.1rem; }
+    margin: 0 auto 0 0; }
     .contests__table td {
       padding: 0.5rem;
       font-size: 1.1rem; }
@@ -4961,6 +5006,10 @@ a.information__itemLink {
     font-size: 3.96rem; }
   .contests__subheader {
     font-size: 1.5rem; } }
+
+@media screen and (max-width: 22.8125rem) {
+  .all-contests-btn-wrap > .btn, .all-contests-btn-wrap > .btn--block, .all-contests-btn-wrap > .btn--primary, .all-contests-btn-wrap > .btn--green, .all-contests-btn-wrap > .btn--black, .all-contests-btn-wrap > .btn--outline {
+    font-size: 1.1em; } }
 
 .powerUps {
   background: url(../../image/lander/cage-bg.jpg) left bottom/100% auto no-repeat;

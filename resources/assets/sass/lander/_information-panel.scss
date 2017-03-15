@@ -201,4 +201,27 @@ a.information__itemLink {
 	.information__phoneTemplateWrap {
 		display: none;
 	}
+
+	.information__thirdPartyLogosWrap {
+		overflow: auto;
+	}
+
+	.information__thirdPartyLogo {
+		float: none;
+		margin: 4rem 1% 0 0;
+	}
+
+	.information__thirdPartyLogo--ssl {
+		width: 34%;
+		position: relative;
+    	top: 5px;
+	}
+
+	.information__thirdPartyLogo--creditCards {
+		width: 24%;
+	}
+
+	.information__thirdPartyLogo--paypal {
+		width: 18%;
+	}
 }

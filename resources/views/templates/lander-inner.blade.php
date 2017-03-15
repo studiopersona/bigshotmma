@@ -33,12 +33,10 @@
 		</script>
 	</head>
 	<body>
-		<h2>Change here</h2>
 		@include('partials.lander.nav-inner')
 		<div class="content-wrapper">
-			@include('partials.lander.hero')
+			@include('partials.lander.hero-inner')
 			<section class="informational">
-				@yield('page-title')
 				@yield('updated')
 				@yield('content')
 			</section>

@@ -97,7 +97,7 @@
         <section :class="prizeModalClasses">
             <h3 class="prizeModal__title">Prize Pool</h3>
             <div class="prizeModal__body">
-            <p>In an <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">Classic</a> contest with {{ participantsList[0].contest.max_participants }} players:</p>
+            <p>In a <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">{{ participantsList[0].contest.contest_type_name }}</a> contest with {{ participantsList[0].contest.max_participants }} players:</p>
                 <div class="prizeModal__entryFeeWrap">
                     <span class="prizeModal__entryFeeTitle">Entry Fee:</span> <span class="prizeModal__entryFee">${{ parseFloat(participantsList[0].contest.buy_in).toFixed(2) }}</span>
                 </div>
@@ -172,6 +172,7 @@
                 prizePool: {},
                 playersBalance: 0,
                 playerRecords: [],
+                playerOverallScores: [],
                 contestTypes: {},
                 contestTypeId: '',
                 infoModalContent: {
@@ -202,6 +203,8 @@
                         50: [0.365, 0.21, 0.15, 0.10, 0.05, 0.025, 0.025, 0.025, 0.025, 0.025],
                         100: [0.03275, 0.150, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.0275, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150],
                     },
+                    Greed: [1],
+                    '50/50': [1],
                 },
                 // working: false,
                 infoModalClasses: ['infoModal'],
@@ -292,13 +295,22 @@
                     this.contestTypes = response.data;
                 });
 
+                /*
                 this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players-records', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
                     // console.log(response.data);
                     this.playerRecords = response.data.data;
-                    // this.parsePlayerRecords();
+                });
+                */
+
+                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players-overall-scores', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                }).then(function(response) {
+                    // console.log(response.data);
+                    this.playerOverallScores = response.data.data;
                 });
 
                 this.$http.get( URL.base + '/api/v1/player-balance', {}, {
@@ -380,6 +392,24 @@
                 });
 
                 // console.log(this.participantsList[0].participants);
+            },
+
+            parsePlayerScores() {
+                var vm = this;
+
+                this.playerOverallScores.forEach(function(player, index) {
+                    var findPlayer = function(player) {
+                        // console.log('player_id: ', player.id);
+                        // console.log('currentPlayerId: ', currentPlayerId);
+                        return parseInt(player.id, 10) === parseInt(currentPlayerId, 10);
+                    },
+                    match,
+                    currentPlayerId;
+
+                    currentPlayerId = player.id;
+                    match  = vm.participantsList[0].participants.find(findPlayer);
+                    match.overallPoints = player.points
+                });
             },
 
             confirmQuit(e) {
@@ -482,7 +512,7 @@
 
                 console.log(type)
 
-                let payoutArray = this.prizePoolPayouts[type][numOfParticipants]
+                let payoutArray = (this.participantsList[0].contest.contest_type_id == 1) ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type]
                 let placePayouts = [];
 
                 for(var i=0; i < payoutArray.length; i++) {
@@ -496,7 +526,7 @@
 
                 console.log(this.prizePool.payouts)
 
-                this.parsePlayerRecords()
+                // this.parsePlayerRecords()
             },
         },
 

@@ -128,7 +128,7 @@
                             headers: { 'Authorization' : 'Bearer ' + token }
                         })
                         .then(function(response) {
-
+                            console.log(response.data.participants)
                             this.participantsList = response.data.participants
                             this.working = false
                         })
