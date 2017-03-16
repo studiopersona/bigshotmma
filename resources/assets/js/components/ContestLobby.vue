@@ -57,16 +57,10 @@
                                 {{ participant.player_name }}
                             </div>
                         </div>
-                        <div class="col-xs-25">
-                            <div class="participantsList__itemTitle">Record</div>
-                            <div class="participantsList__record">
-                                {{ participant.record.correctPicks }} - {{ participant.record.incorrectPicks }}
-                            </div>
-                        </div>
-                        <div class="col-xs-20">
-                            <div class="participantsList__itemTitle">Win %</div>
+                        <div class="col-xs-45">
+                            <div class="participantsList__itemTitle">Total Points</div>
                             <div class="participantsList__wins">
-                                {{ participant.record.percent }}%
+                                {{ participant.overallPoints }}
                             </div>
                         </div>
                     </div>
@@ -172,7 +166,7 @@
                 prizePool: {},
                 playersBalance: 0,
                 playerRecords: [],
-                playerOverallScores: [],
+                playersOverallScores: [],
                 contestTypes: {},
                 contestTypeId: '',
                 infoModalContent: {
@@ -191,7 +185,7 @@
                     image: '',
                     body: '',
                 },
-                confirmModalClasList: [],
+                confirmModalClassList: [],
                 contest: {},
                 contestsEntered: [],
                 deadlinePast: false,
@@ -305,13 +299,16 @@
                 });
                 */
 
+                /*
                 this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players-overall-scores', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    // console.log(response.data);
-                    this.playerOverallScores = response.data.data;
+                    console.log('players overall scores')
+                    console.log(response.data);
+                    this.playersOverallScores = response.data;
                 });
+                */
 
                 this.$http.get( URL.base + '/api/v1/player-balance', {}, {
                     // Attach the JWT header
@@ -397,7 +394,7 @@
             parsePlayerScores() {
                 var vm = this;
 
-                this.playerOverallScores.forEach(function(player, index) {
+                this.playersOverallScores.forEach(function(player, index) {
                     var findPlayer = function(player) {
                         // console.log('player_id: ', player.id);
                         // console.log('currentPlayerId: ', currentPlayerId);
@@ -408,7 +405,7 @@
 
                     currentPlayerId = player.id;
                     match  = vm.participantsList[0].participants.find(findPlayer);
-                    match.overallPoints = player.points
+                    match.overallPoints = (player.totalPoints === null) ? 0 : player.totalPoints
                 });
             },
 
@@ -527,6 +524,7 @@
                 console.log(this.prizePool.payouts)
 
                 // this.parsePlayerRecords()
+                this.parsePlayerScores()
             },
         },
 

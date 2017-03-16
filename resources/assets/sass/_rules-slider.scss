@@ -76,38 +76,25 @@
 		line-height: 1.4;
 	}
 
-	table {
-		width: 100%;
-		max-width: 400px;
-		margin: 1.5em auto .75em auto;
-		border-collapse: collapse;
-		text-align: left;
-		font-size: 1rem;
+	.rulesSlider__pointSystemRow {
+		display: flex;
+		justify-content: space-between;
+		margin: 0 auto 3rem;
+		width: 80%;
+	}
 
-		tbody tr {
-			background: #535456;
-			border-bottom: 10px solid #000;
-			border-top: 10px solid #000;
-			padding: 1em 0;
+	.rulesSlider__pointSystemItem {
+		margin-right: 1rem;
+
+		> p {
+			font-size: 1.1rem;
 		}
+	}
 
-		th {
-			text-transform: uppercase;
-			text-align: left;
-			padding: 0.5rem 1rem;
-
-			&.center {
-				text-align: center;
-			}
-		}
-
-		tbody td {
-			padding: 6px;
-			font-weight: normal !important;
-
-			&.points {
-				text-align: center;
-			}
+	// 470px
+	@media screen and (max-width: 29.375rem) {
+		.rulesSlider__pointSystemRow {
+			width: 100%;
 		}
 	}
 

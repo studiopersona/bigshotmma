@@ -4,6 +4,7 @@ namespace Bsmma\Http\Controllers;
 
 use Bsmma\Contest;
 use Bsmma\ContestParticipant;
+use Bsmma\ContestParticipantsArchive;
 use Bsmma\Http\Requests;
 use Bsmma\divStrong\Reports\ContestStandings;
 use Illuminate\Http\Request;
@@ -12,10 +13,17 @@ class ContestParticipantsController extends ApiController
 {
     private $contest;
     private $contestStandings;
+    private $contestParticipantsArchive;
 
-    public function __construct(ContestParticipant $contestParticipant, Contest $contest, ContestStandings $contestStandings)
+    public function __construct(
+        ContestParticipant $contestParticipant,
+        Contest $contest,
+        ContestStandings $contestStandings,
+        ContestParticipantsArchive $contestParticipantsArchive
+    )
     {
     	$this->contestParticipant = $contestParticipant;
+        $this->contestParticipantsArchive = $contestParticipantsArchive;
         $this->contest = $contest;
         $this->contestStandings = $contestStandings;
     }
@@ -54,5 +62,19 @@ class ContestParticipantsController extends ApiController
         $start = count($winnings) + 1;
 
         return $this->respond(['winnings' => $winnings]);
+    }
+
+    public function playersScores($contestId)
+    {
+        $players = $this->contestParticipant->where('contest_id', $contestId)->with('user')->get();
+
+        $playersScores = $players->map(function($player, $playerIndex) {
+            return [
+                'id' => $player->user->id,
+                'totalPoints' => $this->contestParticipantsArchive->where('user_id', $player->user->id)->sum('score'),
+            ];
+        });
+
+        return $this->respond($playersScores);
     }
 }

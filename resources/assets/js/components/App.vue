@@ -95,11 +95,11 @@
             <div :class="['playSlider__slide', currentHowToPlaySlide === 0 ? 'current' : '']">
                 <h3 class="rulesSlider__title">How to Play</h3>
                 <div class="rulesSlider__icon">
-                    <img :src="URL.base + '/public/image/info/fighter.png'">
+                    <img :src="URL.base + '/public/image/info/how-to-play.png'">
                 </div>
                 <div class="rulesSlider__description">
-                    <p>Each player picks a total of five (5) fighters from the event lineup and decides how &amp; when each fight will end.</p>
-                    <!--<p>In the event of an injury, one "Reserve" fighter is set as a backup.</p>-->
+                    <p>Pick five (5) fighters by clicking their avatar, then decide how and when each fight will end.</p>
+                    <p>Choose up to three (3) power ups to score bonus points.</p>
                 </div>
                 <div class="rulesSlider__positionIndicator">
                     <span class="rulesSlider__indicator current"></span>
@@ -112,46 +112,44 @@
                 <button @click="sliderClose('#howToPlaySlider')" type="button" class="alertModal__close">x</button>
             </div>
             <div :class="['playSlider__slide', currentHowToPlaySlide === 1 ? 'current' : '']">
-                <h3 class="rulesSlider__title">Scoring</h3>
+                <h3 class="rulesSlider__title">Point System</h3>
                 <div class="rulesSlider__description">
                     <p>Points are earned by making correct choices:</p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Result</th>
-                                <th>Choices</th>
-                                <th class="center">Points</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Winning Fighter</td>
-                                <td>Underdog<br>Favorite</td>
-                                <td class="points"><strong>5<br>3</strong></td>
-                            </tr>
-                            <tr>
-                                <td>Correct Finish</td>
-                                <td>TKO/KO, Submission<br>Decision</td>
-                                <td class="points"><strong>10<br>7</strong></td>
-                            </tr>
-                            <tr>
-                                <td>Correct Round</td>
-                                <td>1,2,3 (4,5 if applicable)</td>
-                                <td class="points"><strong>2</strong></td>
-                            </tr>
-                            <tr>
-                                <td>Correct Minute</td>
-                                <td>1,2,3,4,5</td>
-                                <td class="points"><strong>1</strong></td>
-                            </tr>
-                            <tr>
-                                <td>Draw</td>
-                                <td>Should never happen</td>
-                                <td class="points"><strong>0</strong></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!--<p>In the event of an injury, one "Reserve" fighter is set as a backup.</p>-->
+                    <div class="rulesSlider__pointSystem">
+                        <div class="rulesSlider__pointSystemRow">
+                            <div class="rulesSlider__pointSystemItem">
+                                &nbsp;
+                            </div>
+                            <div class="rulesSlider__pointSystemItem">
+                                <img :src="URL.base + '/public/image/info/scoring-underdog.png'">
+                                <p>Underdog Wins</p>
+                            </div>
+                            <div class="rulesSlider__pointSystemItem">
+                                &nbsp;
+                            </div>
+                            <div class="rulesSlider__pointSystemItem">
+                                <img :src="URL.base + '/public/image/info/scoring-finish.png'">
+                                <p>Correct Finish</p>
+                            </div>
+                            <div class="rulesSlider__pointSystemItem">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="rulesSlider__pointSystemRow">
+                            <div class="rulesSlider__pointSystemItem">
+                                <img :src="URL.base + '/public/image/info/scoring-favorite.png'">
+                                <p>Favorite Wins</p>
+                            </div>
+                            <div class="rulesSlider__pointSystemItem">
+                                <img :src="URL.base + '/public/image/info/scoring-round.png'">
+                                <p>Correct Round</p>
+                            </div>
+                            <div class="rulesSlider__pointSystemItem">
+                                <img :src="URL.base + '/public/image/info/scoring-minute.png'">
+                                <p>Correct Minute</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="rulesSlider__positionIndicator">
                     <span class="rulesSlider__indicator"></span>

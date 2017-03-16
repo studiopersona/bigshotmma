@@ -5574,29 +5574,20 @@ a {
   .rulesSlider__description > p {
     margin-bottom: 2.2rem;
     line-height: 1.4; }
-  .rulesSlider__description table {
-    width: 100%;
-    max-width: 400px;
-    margin: 1.5em auto .75em auto;
-    border-collapse: collapse;
-    text-align: left;
-    font-size: 1rem; }
-    .rulesSlider__description table tbody tr {
-      background: #535456;
-      border-bottom: 10px solid #000;
-      border-top: 10px solid #000;
-      padding: 1em 0; }
-    .rulesSlider__description table th {
-      text-transform: uppercase;
-      text-align: left;
-      padding: 0.5rem 1rem; }
-      .rulesSlider__description table th.center {
-        text-align: center; }
-    .rulesSlider__description table tbody td {
-      padding: 6px;
-      font-weight: normal !important; }
-      .rulesSlider__description table tbody td.points {
-        text-align: center; }
+  .rulesSlider__description .rulesSlider__pointSystemRow {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin: 0 auto 3rem;
+    width: 80%; }
+  .rulesSlider__description .rulesSlider__pointSystemItem {
+    margin-right: 1rem; }
+    .rulesSlider__description .rulesSlider__pointSystemItem > p {
+      font-size: 1.1rem; }
+  @media screen and (max-width: 29.375rem) {
+    .rulesSlider__description .rulesSlider__pointSystemRow {
+      width: 100%; } }
   .rulesSlider__description .powerups-list {
     font-size: 0.8rem;
     text-transform: uppercase; }

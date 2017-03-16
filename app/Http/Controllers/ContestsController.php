@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Bsmma\Http\Requests;
 use Bsmma\Contest;
 use Bsmma\ContestParticipant;
+use Bsmma\ContestParticipantsArchive;
 use Bsmma\User;
 use Bsmma\UserBalance;
 use Bsmma\ContestUserBalance;
@@ -26,12 +27,14 @@ class ContestsController extends ApiController
         PlayerTransformer $playerTransformer,
         FightTransformer $fightTransformer,
         UserBalance $userBalance,
-        ContestUserBalance $contestUserBalance
+        ContestUserBalance $contestUserBalance,
+        ContestParticipantsArchive $contestParticipantsArchive
     )
     {
         $this->user = $user;
         $this->contest = $contest;
         $this->contestParticipant = $contestParticipant;
+        $this->contestParticipantsArchive = $contestParticipantsArchive;
         $this->contestTransformer = $contestTransformer;
         $this->playerTransformer = $playerTransformer;
         $this->fightTransformer = $fightTransformer;
@@ -87,11 +90,18 @@ class ContestsController extends ApiController
         foreach($participants[0]['users'] as $key => $participant)
         {
             $participants[0]['users'][$key]['record'] = $this->getPlayerRecord($participant['id']);
+            $playersScore = $this->getPlayersScore($participant['id']);
+            $participants[0]['users'][$key]['overallPoints'] = (is_null($playersScore)) ? 0 : $playersScore;
         }
 
         return $this->respond([
             'participants' => $this->playerTransformer->transformCollection($participants),
         ]);
+    }
+
+    private function getPlayersScore($userId)
+    {
+        return $this->contestParticipantsArchive->where('user_id', $userId)->sum('score');
     }
 
     public function enterPlayer($contest_id)

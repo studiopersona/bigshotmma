@@ -60,4 +60,9 @@ class User extends Authenticatable
         return $this->hasMany('Bsmma\UserBalance');
     }
 
+    public function contestParticipantsArchive()
+    {
+        return $this->hasMany('Bsmma\ContestParticipantsArchive');
+    }
+
 }

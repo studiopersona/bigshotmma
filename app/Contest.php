@@ -51,4 +51,9 @@ class Contest extends Model
     {
         return $this->belongsToMany('Bsmma\UserBalance');
     }
+
+    public function contestParticipantsArchive()
+    {
+        return $this->hasMany('Bsmma\ContestParticipantsArchive');
+    }
 }

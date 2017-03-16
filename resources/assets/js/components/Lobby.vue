@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<standings v-if="deadlinePast" :standings-list="standingsList" :player-id="playerId" :contest="contest"></standings>
-		<contest-lobby v-else :participants-list="participantsList"></contest-lobby>
+		<contest-lobby v-else :participants-list="participantsList" :working="working"></contest-lobby>
         <div :class="loaderClasses">
             <div class="js-global-loader loader">
                 <svg viewBox="0 0 32 32" width="32" height="32">
@@ -26,6 +26,8 @@
 			'contest-lobby': ContestLobby,
 		},
 
+        props: ['working'],
+
 		data() {
             return {
                 contest: {},
@@ -49,7 +51,6 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
-                working: false,
             }
         },
 
