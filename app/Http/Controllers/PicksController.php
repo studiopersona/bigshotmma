@@ -297,6 +297,13 @@ class PicksController extends ApiController
         return $this->respond(['data' => ['eventId' => $contest->event_id]]);
     }
 
+    public function getPicksforContestByPlayer(Request $request)
+    {
+        $user = \JWTAuth::parseToken()->authenticate();
+
+        return $this->respond($this->pick->where('contest_id', $request->cid)->where('user_id', $user->id)->get()->toArray());
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

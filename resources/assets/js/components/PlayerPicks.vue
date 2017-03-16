@@ -224,6 +224,15 @@
                     >Standings</button>
                 </div>
             </div>
+            <div v-if="!results.length">
+                <div class="col-xs-100 button-wrap">
+                    <button
+                        type="button"
+                        class="button button--primary"
+                        v-link="{ path: '/contest/' + picksList[0].contest.id + '/fights' }"
+                    >Edit Picks</button>
+                </div>
+            </div>
             <div :class="loaderClasses">
                 <div class="js-global-loader loader">
                     <svg viewBox="0 0 32 32" width="32" height="32">

@@ -346,6 +346,7 @@
                 powerUpId: '',
                 totalPowerUps: 0,
                 playerPicks: [],
+                playerPreviousPicks: [],
                 fightData: [],
                 fighterImages: [],
                 powerupIndicatorsClasses: [
@@ -436,35 +437,20 @@
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
-                    router.go('/contest/' + this.$route.params.contest_id + '/picks')
-                }, function(err) {
-                    // if no picks have been entered yet setup the view
-                    this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', {}, {
-                        // Attach the JWT header
+                    this.$http.get(URL.base + '/api/v1/player/get-picks?cid=' + this.$route.params.contest_id, {}, {
                         headers: { 'Authorization' : 'Bearer ' + token }
-                    }).then(function(response) {
-                        // console.log(response.data.fights)
-                        this.fightsList = response.data.fights
-                        this.initializeFightData(response.data.fights[0].fights)
-                        this.working = false
-                    }, function(err) {
+                    })
+                    .then(function(res) {
+                        console.log(res)
+                        this.playerPreviousPicks = res.data
+                        this.setupView(token)
+                    })
+                    .catch(function(err) {
+                        console.log('')
                         console.log(err)
                     })
-                    // get the power up info
-                    this.$http.get(URL.base + '/api/v1/power-ups', {}, {
-                        // Attach the JWT header
-                        headers: { 'Authorization' : 'Bearer ' + token }
-                    }).then(function(response) {
-                        this.powerUps = response.data
-                        // console.log(this.powerUps)
-                    })
-                    // get finishes info
-                    this.$http.get(URL.base + '/api/v1/finishes', {}, {
-                        // Attach the JWT header
-                        headers: { 'Authorization' : 'Bearer ' + token }
-                    }).then(function(response) {
-                        this.finishes = response.data
-                    })
+                }, function(err) {
+                    this.setupView(token)
                 })
 
                 localforage.getItem('newplayer')
@@ -472,6 +458,36 @@
                     if ( parseInt(newplayer, 10) === 1 ) vm.showHowToPlay()
                 })
 
+            },
+
+            setupView(token) {
+                // if no picks have been entered yet setup the view
+                this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                }).then(function(response) {
+                    // console.log(response.data.fights)
+                    this.fightsList = response.data.fights
+                    this.initializeFightData(response.data.fights[0].fights)
+                    this.working = false
+                }, function(err) {
+                    console.log(err)
+                })
+                // get the power up info
+                this.$http.get(URL.base + '/api/v1/power-ups', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                }).then(function(response) {
+                    this.powerUps = response.data
+                    // console.log(this.powerUps)
+                })
+                // get finishes info
+                this.$http.get(URL.base + '/api/v1/finishes', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                }).then(function(response) {
+                    this.finishes = response.data
+                })
             },
 
             showDashboard() {
@@ -506,6 +522,45 @@
                             image: fighter.fighter_image_name,
                         })
                     })
+                })
+
+                // if (this.playerPreviousPicks.length) this.parsePlayersPicks()
+            },
+
+            parsePlayersPicks() {
+                let vm = this
+
+                this.playerPreviousPicks.forEach(function(pick) {
+                    let fightEl = docuemnt.querySelector('.fightsList__clickableArea[data-fight-id="' + pick.fight_id + '"]')
+                    let fightOffset = fightEl.getBoundingClientRect().top + window.scrollY - 200
+                    let fightId = parseInt(pick.fight_id, 10)
+                    let finishId = parseInt(pick.finish_id, 10)
+                    let minute = parseInt(pick.minute, 10)
+                    let round = parseInf(pick.round, 10)
+
+                    vm.fightData[parseInt(fightId, 10)] = {
+                        finishId: finishId,
+                        round: round,
+                        minute: minute,
+                    }
+
+                    vm.updatePicks({
+                        fighterId: pick.winning_fighter_id,
+                        fightId: fightId,
+                        offset: fightOffset,
+                    })
+
+                    let desicionButton = document.querySelector()
+                    vm.selectDesicion(fightId, finishId, desicionButton)
+
+
+                    if ( parseInt(finishId, 10) !== 3 ) {
+                        let roundButton = document.querySelector()
+                        let minuteButton = document.querySelector()
+
+                        vm.selectRound(fightId, round, roundButton)
+                        vm.selectMinute(fightId, minute, minuteButton)
+                    }
                 })
             },
 
@@ -669,6 +724,8 @@
             },
 
             selectRound(fightId, id, e) {
+                console.log(e.target)
+
                 var siblingButtons = document.querySelectorAll('.fightsList__pick[data-fight-id="' + fightId + '"] input[name="round"] + span')
 
                 document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__roundPointsIndicator').classList.add('show')
@@ -732,7 +789,7 @@
                     clearBtnNode.classList.add('show')
 
                     if ( this.currentFightId !== e.target.dataset.fightId ) {
-                        this.switchFight(e)
+                        if (!e.ignoreSwitchFight) this.switchFight(e)
                         this.updatePicks({
                             fighterId: e.target.dataset.fighterId,
                             fightId: e.target.dataset.fightId,
