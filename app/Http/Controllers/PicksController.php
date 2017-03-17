@@ -104,13 +104,24 @@ class PicksController extends ApiController
 
         foreach ( $requestData['picks'] as $pickRow )
         {
+
+            $currentPick = $this->pick->where('user_id', $user->id)
+                ->where('contest_id', $pickRow['contest_id'])
+                ->where('fight_id', $pickRow['fight_id'])
+                ->first();
+
             foreach ( $pickRow as $column => $value )
             {
                 if ( (int)$value === 0 ) $value = NULL;
                 $data[$column] = $value;
             }
 
-            $this->pick->insert($data);
+            if ( is_null($currentPick) ) {
+                $this->pick->insert($data);
+            }
+            else {
+                $this->pick->where('id', $currentPick->id)->update($data);
+            }
         }
 
         return $this->respond([
@@ -301,7 +312,7 @@ class PicksController extends ApiController
     {
         $user = \JWTAuth::parseToken()->authenticate();
 
-        return $this->respond($this->pick->where('contest_id', $request->cid)->where('user_id', $user->id)->get()->toArray());
+        return $this->respond($this->pick->with('powerUp')->where('contest_id', $request->cid)->where('user_id', $user->id)->get()->toArray());
     }
 
     /**
@@ -335,6 +346,8 @@ class PicksController extends ApiController
      */
     public function destroy($id)
     {
-        //
+        $this->pick->where('id', $id)->delete();
+
+        return $this->respond(['delete' => 'ok']);
     }
 }

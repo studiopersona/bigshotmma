@@ -154,7 +154,7 @@
                                         id="finish{{ finish.id }}"
                                         data-points="{{ finish.points }}"
                                     >
-                                    <span data-fight-id="{{ fight.id }}">{{ finish.name }}</span>
+                                    <span data-fight-id="{{ fight.id }}" data-finish-id="{{ finish.id }}">{{ finish.name }}</span>
                                 </label>
                             </div>
                             <!-- round selector -->
@@ -174,7 +174,7 @@
                                         id="round{{ round + 1 }}"
                                         data-points="2"
                                     >
-                                    <span data-fight-id="{{ fight.id }}">{{ round + 1 }}</span>
+                                    <span data-fight-id="{{ fight.id }}" data-round="{{ round + 1 }}">{{ round + 1 }}</span>
                                 </label>
                             </div>
                             <!-- minute selectors -->
@@ -194,7 +194,7 @@
                                         id="minute{{ minute + 1 }}"
                                         data-points="1"
                                     >
-                                    <span data-fight-id="{{ fight.id }}">{{ minute + 1 }}</span>
+                                    <span data-fight-id="{{ fight.id }}" data-minute="{{ minute + 1 }}">{{ minute + 1 }}</span>
                                 </label>
                             </div>
                             <div class="col-xs-100">
@@ -461,32 +461,36 @@
             },
 
             setupView(token) {
-                // if no picks have been entered yet setup the view
-                this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', {}, {
-                    // Attach the JWT header
-                    headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    // console.log(response.data.fights)
-                    this.fightsList = response.data.fights
-                    this.initializeFightData(response.data.fights[0].fights)
-                    this.working = false
-                }, function(err) {
-                    console.log(err)
-                })
-                // get the power up info
                 this.$http.get(URL.base + '/api/v1/power-ups', {}, {
-                    // Attach the JWT header
-                    headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
+                        // Attach the JWT header
+                        headers: { 'Authorization' : 'Bearer ' + token }
+                })
+                .then(function(response) {
                     this.powerUps = response.data
                     // console.log(this.powerUps)
-                })
-                // get finishes info
-                this.$http.get(URL.base + '/api/v1/finishes', {}, {
-                    // Attach the JWT header
-                    headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    this.finishes = response.data
+
+                    // get finishes info
+                    this.$http.get(URL.base + '/api/v1/finishes', {}, {
+                        // Attach the JWT header
+                        headers: { 'Authorization' : 'Bearer ' + token }
+                    })
+                    .then(function(response) {
+                        this.finishes = response.data
+
+                        // if no picks have been entered yet setup the view
+                        this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/fights', {}, {
+                            // Attach the JWT header
+                            headers: { 'Authorization' : 'Bearer ' + token }
+                        })
+                        .then(function(response) {
+                            // console.log(response.data.fights)
+                            this.fightsList = response.data.fights
+                            this.initializeFightData(response.data.fights[0].fights)
+                            this.working = false
+                        }, function(err) {
+                            console.log(err)
+                        })
+                    })
                 })
             },
 
@@ -524,43 +528,8 @@
                     })
                 })
 
-                // if (this.playerPreviousPicks.length) this.parsePlayersPicks()
-            },
-
-            parsePlayersPicks() {
-                let vm = this
-
-                this.playerPreviousPicks.forEach(function(pick) {
-                    let fightEl = docuemnt.querySelector('.fightsList__clickableArea[data-fight-id="' + pick.fight_id + '"]')
-                    let fightOffset = fightEl.getBoundingClientRect().top + window.scrollY - 200
-                    let fightId = parseInt(pick.fight_id, 10)
-                    let finishId = parseInt(pick.finish_id, 10)
-                    let minute = parseInt(pick.minute, 10)
-                    let round = parseInf(pick.round, 10)
-
-                    vm.fightData[parseInt(fightId, 10)] = {
-                        finishId: finishId,
-                        round: round,
-                        minute: minute,
-                    }
-
-                    vm.updatePicks({
-                        fighterId: pick.winning_fighter_id,
-                        fightId: fightId,
-                        offset: fightOffset,
-                    })
-
-                    let desicionButton = document.querySelector()
-                    vm.selectDesicion(fightId, finishId, desicionButton)
-
-
-                    if ( parseInt(finishId, 10) !== 3 ) {
-                        let roundButton = document.querySelector()
-                        let minuteButton = document.querySelector()
-
-                        vm.selectRound(fightId, round, roundButton)
-                        vm.selectMinute(fightId, minute, minuteButton)
-                    }
+                th.$nextTick(function() {
+                    if (this.playerPreviousPicks.length) this.parsePlayersPicks()
                 })
             },
 
@@ -584,6 +553,7 @@
             },
 
             selectPowerUp(fightId, powerUpId, powerUpImage, e) {
+                console.log(e)
                 var findFight = function(playerPick) {
                         return parseInt(playerPick.fightId, 10) === parseInt(fightId, 10)
                     },
@@ -598,7 +568,7 @@
                     if (this.fightData[fightId].powerupId === 0) ++this.totalPowerUps
                     this.fightData[fightId].powerupId = powerUpId
                     this.fightData[fightId].powerupImage = powerUpImage
-                    this.powerUpModalClose(e)
+                    if (e !== null ) this.powerUpModalClose(e)
                     // sjow the poinst indicator
                     document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__powerupPointsIndicator').classList.add('show')
                     powerupData = this.powerUps.find(findPowerUp)
@@ -694,6 +664,7 @@
                     fightData,
                     finishData
 
+                console.log(this.finishes)
                 finishData = this.finishes.find(findFinish)
                 this.finishPoints = finishData.points
                 document.querySelector('.fightsList__pick[data-fight-id="' + fightId + '"] .fightsList__finishPointsIndicator').classList.add('show')
@@ -724,7 +695,6 @@
             },
 
             selectRound(fightId, id, e) {
-                console.log(e.target)
 
                 var siblingButtons = document.querySelectorAll('.fightsList__pick[data-fight-id="' + fightId + '"] input[name="round"] + span')
 
@@ -770,7 +740,7 @@
                         this.updatePicks({
                             fighterId: e.target.dataset.fighterId,
                             fightId: e.target.dataset.fightId,
-                            offset: e.target.getBoundingClientRect().top + window.scrollY - 200,
+                            // offset: e.target.getBoundingClientRect().top + window.scrollY - 200,
                         })
                     } else {
                         this.alert({
@@ -793,14 +763,14 @@
                         this.updatePicks({
                             fighterId: e.target.dataset.fighterId,
                             fightId: e.target.dataset.fightId,
-                            offset: e.target.getBoundingClientRect().top + window.scrollY - 200,
+                            // offset: e.target.getBoundingClientRect().top + window.scrollY - 200,
                         })
 
                     } else {
                         this.updatePicks({
                             fighterId: e.target.dataset.fighterId,
                             fightId: e.target.dataset.fightId,
-                            offset: e.target.getBoundingClientRect().top + window.scrollY - 200,
+                            // offset: e.target.getBoundingClientRect().top + window.scrollY - 200,
                         })
                     }
                 }
@@ -907,7 +877,7 @@
 
             clearFight(fightId, e) {
                 var findPick = function(playerPick) {
-                        return parseInt(playerPick.fightId, 10) === parseInt(fightId, 10)
+                        return (parseInt(playerPick.fightId, 10) === parseInt(fightId, 10)) || (parseInt(playerPick.fight_id, 10) === parseInt(fightId, 10))
                     },
                     fightersEls,
                     fighterIndicatorEls,
@@ -1004,6 +974,19 @@
 
                 }
 
+                // search for this fight in picks
+                let prevPickDataIndex = this.playerPreviousPicks.findIndex(findPick)
+
+                if ( prevPickDataIndex !== -1 ) {
+                    let vm = this
+
+                    localforage.getItem('id_token').then(function(token) {
+                        vm.$http.delete(URL.base + '/api/v1/player/pick/' + vm.playerPreviousPicks[prevPickDataIndex].id, {}, {
+                            // Attach the JWT header
+                            headers: { 'Authorization' : 'Bearer ' + token }
+                        })
+                    })
+                }
             },
 
             selectFighter(fighterId, fightId) {
@@ -1064,6 +1047,40 @@
                 selectedFighter = selectedFight.fighters.find(findFighter)
 
                 this.currentFighterName = selectedFighter.firstname // + ' ' + selectedFighter.lastname
+            },
+
+            parsePlayersPicks() {
+                let vm = this
+
+                this.playerPreviousPicks.forEach(function(pick) {
+                    let fightEl = document.querySelector('.fightsList__clickableArea[data-fight-id="' + pick.fight_id + '"][data-fighter-id="' + pick.winning_fighter_id + '"]')
+                    let fightOffset = fightEl.getBoundingClientRect().top + window.scrollY - 200
+                    let fightId = parseInt(pick.fight_id, 10)
+                    let finishId = parseInt(pick.finish_id, 10)
+                    let minute = parseInt(pick.minute, 10)
+                    let round = parseInt(pick.round, 10)
+
+                    // vm.fightData[parseInt(fightId, 10)] = {
+                    //     finishId: finishId,
+                    //     round: round,
+                    //     minute: minute,
+                    // }
+
+                    // vm.currentFightId = fightId
+
+                    vm.selectFight({ target: fightEl })
+
+                    let desicionButton = document.querySelector('.fightsList__pickButton span[data-fight-id="' + fightId + '"][data-finish-id="' + finishId + '"]')
+                    vm.selectDecision(fightId, finishId, { target: desicionButton })
+
+                    let roundButton = document.querySelector('.fightsList__pickButton span[data-fight-id="' + fightId + '"][data-round="' + round + '"]')
+                    let minuteButton = document.querySelector('.fightsList__pickButton span[data-fight-id="' + fightId + '"][data-minute="' + minute + '"]')
+
+                    vm.selectRound(fightId, round, { target: roundButton })
+                    vm.selectMinute(fightId, minute,{ target: minuteButton })
+
+                    if (pick.power_up_id) vm.selectPowerUp(fightId, pick.power_up_id, pick.power_up.power_up_image_name, null)
+                })
             },
 
             commitPicks() {

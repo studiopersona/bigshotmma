@@ -53,6 +53,7 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::get('player-balance', 'UsersController@getPlayerBalance');
 	    Route::get('player/{playerId}/entries', 'ContestsController@getPlayerEntries');
 	    Route::get('player/get-picks', 'PicksController@getPicksforContestByPlayer');
+	    Route::delete('player/pick/{id}', 'PicksController@destroy');
 	    // Profile Routes ----------------------------------------------------
 	    Route::get('profile', 'UsersController@profile');
 	    Route::post('profile', 'UsersController@update');
