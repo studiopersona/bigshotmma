@@ -59,6 +59,7 @@ class PlayerPickTransformer extends Transformer {
             ],
             'event' => [
             	'event_short_name' => $pick['contest']['event']['event_short_name'],
+                'event_closed' => ( strtotime($pick['contest']['event']['date_time'].' -30 minutes') < strtotime(date('Y-m-d H:i:s')) ) ?: false
             ],
             'fight_id' => $pick['fight_id'],
             'fighter' => [

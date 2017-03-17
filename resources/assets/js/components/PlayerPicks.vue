@@ -224,7 +224,7 @@
                     >Standings</button>
                 </div>
             </div>
-            <div v-if="!results.length">
+            <div v-if="!results.length && !picksList[0].event.event_closed">
                 <div class="col-xs-100 button-wrap">
                     <button
                         type="button"
@@ -258,6 +258,7 @@
                 picksList: [{
                     event: {
                         event_short_name: '',
+                        event_closed: true,
                     },
                     contest: {
                         buy_in: '',
@@ -332,6 +333,7 @@
                     headers: { 'Authorization' : 'Bearer ' + token }
                 })
                 .then(function(response) {
+
                     this.picksList = (response.data.picks) ? response.data.picks : []
 
                     console.log(this.picksList)
