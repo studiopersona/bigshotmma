@@ -98,7 +98,7 @@
 				if ( ! auth.validate() ) {
 					vm.tokenRefresh(token);
 				} else {
-					router.go('/events');
+					router.go('/contests');
 				}
 				vm.working = false;
 			});
@@ -113,7 +113,7 @@
 	                    headers: { 'Authorization' : 'Bearer ' + token }
 	                }).then(function(response) {
 	                    localforage.setItem('id_token', response.data.token).then(function() {
-	                    	router.go('/events');
+	                    	router.go('/contests');
 	                    });
 	                }, function(err) {
 	                    router.go('login');
@@ -131,7 +131,7 @@
 
 				// We need to pass the component's this context
 				// to properly make use of http in the auth service
-				auth.login(this, credentials, 'events')
+				auth.login(this, credentials, 'contests')
 			}
 		},
 

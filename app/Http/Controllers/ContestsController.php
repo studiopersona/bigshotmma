@@ -220,7 +220,7 @@ class ContestsController extends ApiController
         ]);
     }
 
-    private function getContests($playerId, $eventId = NULL, $useDeadline = true)
+    private function getContests($playerId = NULL, $eventId = NULL, $useDeadline = true)
     {
         $query = $this->contest->with([
                         'contestType',

@@ -86,6 +86,10 @@ router.map({
     component: Events
   },
 
+  '/contests': {
+    component: Contests,
+  },
+
   '/event/:event_id/contests': {
     component: Contests
   },

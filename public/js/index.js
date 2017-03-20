@@ -44086,7 +44086,9 @@ exports.default = {
             });
         },
         fetch: function fetch(token) {
-            this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', {}, {
+            var route = this.$route.params.event_id ? URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests' : URL.base + '/api/v1/contests';
+
+            this.$http.get(route, {}, {
                 // Attach the JWT header
                 headers: { 'Authorization': 'Bearer ' + token }
             }).then(function (response) {
@@ -46000,7 +46002,7 @@ exports.default = {
 			if (!_auth2.default.validate()) {
 				vm.tokenRefresh(token);
 			} else {
-				_index.router.go('/events');
+				_index.router.go('/contests');
 			}
 			vm.working = false;
 		});
@@ -46016,7 +46018,7 @@ exports.default = {
 					headers: { 'Authorization': 'Bearer ' + token }
 				}).then(function (response) {
 					_localforage2.default.setItem('id_token', response.data.token).then(function () {
-						_index.router.go('/events');
+						_index.router.go('/contests');
 					});
 				}, function (err) {
 					_index.router.go('login');
@@ -46033,7 +46035,7 @@ exports.default = {
 
 			// We need to pass the component's this context
 			// to properly make use of http in the auth service
-			_auth2.default.login(this, credentials, 'events');
+			_auth2.default.login(this, credentials, 'contests');
 		}
 	},
 
@@ -47375,6 +47377,10 @@ router.map({
 
   '/events': {
     component: _Events2.default
+  },
+
+  '/contests': {
+    component: _Contests2.default
   },
 
   '/event/:event_id/contests': {

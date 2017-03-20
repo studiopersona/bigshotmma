@@ -109,7 +109,9 @@
             },
 
             fetch(token) {
-                this.$http.get(URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests', {}, {
+                let route = ( this.$route.params.event_id ) ? URL.base + '/api/v1/event/' + this.$route.params.event_id + '/contests' : URL.base + '/api/v1/contests'
+
+                this.$http.get(route, {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
                 }).then(function(response) {
