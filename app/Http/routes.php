@@ -10,6 +10,10 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::get('password/email', 'Auth\PasswordController@getEmail');
+Route::post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
+Route::post('password/reset', 'Auth\PasswordController@reset');
+Route::get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
 
 Route::group(['middleware' => ['web']], function () {
 

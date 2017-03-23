@@ -25,7 +25,7 @@ class LanderController extends Controller
     					'contests.contestType',
     					'contests.contestParticipants'
     				])
-    				->where('date_time', '>=', date('Y-m-d'))
+    				->where('date_time', '>=', date('Y-m-d H:i:s'))
     				->orderBy('date_time', 'asc')
     				->first();
 

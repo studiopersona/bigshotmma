@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => env('MAIL_FROM', 'info@bsmma.com'), 'name' => env('MAIL_NAME', 'Big Shot MMA')],
 
     /*
     |--------------------------------------------------------------------------

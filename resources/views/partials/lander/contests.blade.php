@@ -4,7 +4,7 @@
 		<h4 class="contests__subheader">Compete for real cash in our fantasy MMA contests which offer a variety of formats and entry fees for players of all skill levels:</h4>
 		@if ( is_null($event) )
 			<div class="contests__noEvents">
-				<p>There are no events schedueled at this time.<br>Please check back soon for a list of current contests.</p>
+				<p>There are no contests available at this time.<br>Please check back soon for a list of current contests.</p>
 			</div>
 		@else
 			<div class="container-fluid contests__list">

@@ -25,7 +25,7 @@
 						</label>
 					</div>
 					<div class="col-xs-50 col-xs-offset-50 forgotPassword">
-						<a v-link="{ path: '/forgot-password' }" tabindex="200">forgot password?</a>
+						<a :href="URL.base + '/password/email'" tabindex="200">forgot password?</a>
 					</div>
 				</div>
 				<div class="row form_row">

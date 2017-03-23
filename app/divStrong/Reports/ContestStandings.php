@@ -209,7 +209,7 @@ class ContestStandings
 			$currentScore = 0;
 			$standings = [];
 
-			for ($i = 0; $i < $winningPlaces; ++$i) {
+			for ($i = 0; $i <= $winningPlaces; ++$i) {
 				$standings[$i] = [];
 			}
 
