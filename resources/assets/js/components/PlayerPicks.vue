@@ -17,7 +17,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title">Prize Pool:</span> ${{ (picksList[0].contest.buy_in * picksList[0].contest.max_participants * 0.85).toFixed(2)  }}
+                        <span class="contestDetails__title"><a @click="showPrizeModal">Prize Pool</a>:</span> $<span v-if="! isNaN(parseFloat(prizePool.total))">{{ parseFloat(prizePool.total).toFixed(2) }}
                     </div>
                     <div class="col-xs-50 text-right">
                         <span class="contestDetails__title">Your Winnings:</span> $0.00
@@ -241,6 +241,33 @@
                 </div>
             </div>
         </div>
+        <section :class="prizeModalClasses">
+            <h3 class="prizeModal__title">Prize Pool</h3>
+            <div class="prizeModal__body">
+            <p>In a <a @click="showContestRules" data-contest-type="{{ picksList[0].contest.contest_type_id }}">{{ picksList[0].contest.contest_type_name }}</a> contest with {{ picksList[0].contest.max_participants }} players:</p>
+                <div class="prizeModal__entryFeeWrap">
+                    <span class="prizeModal__entryFeeTitle">Entry Fee:</span> <span class="prizeModal__entryFee">${{ parseFloat(picksList[0].contest.buy_in).toFixed(2) }}</span>
+                </div>
+                <table class="prizeModal__payoutTable">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Prize</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="payout of prizePool.payouts" track-by="$index">
+                            <td>{{ $index + 1 }}</td>
+                            <td class="prizeModal__payout">${{ parseFloat(payout).toFixed(2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="button-wrap">
+                <button @click="prizeModalClose" type="button" class="button button--green">Got It</button>
+            </div>
+            <button @click="prizeModalClose" type="button" class="infoModal__close">x</button>
+        </section>
     </div>
 </template>
 
@@ -279,6 +306,18 @@
                 playerId: 0,
                 playerRanking: 0,
                 numberNames: ['One', 'Two', 'Three', 'Four', 'Five'],
+                prizePool: {},
+                prizePoolPayouts: {
+                    Classic: {
+                        10: [0.7, 0.3],
+                        20: [0.5, 0.25, 0.15, 0.10],
+                        50: [0.365, 0.21, 0.15, 0.10, 0.05, 0.025, 0.025, 0.025, 0.025, 0.025],
+                        100: [0.03275, 0.150, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.0275, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150],
+                    },
+                    Greed: [1],
+                    '50/50': [1],
+                },
+                prizeModalClasses: ['prizeModal'],
                 URL: {
                     base: window.URL.base,
                     current: window.URL.current,
@@ -494,11 +533,46 @@
 
                 this.playerRanking = ( standings.findIndex(findPlayer) + 1 );
             },
+
+             showPrizeModal() {
+                this.prizeModalClasses.push('show');
+            },
+
+            prizeModalClose(e) {
+                e.preventDefault();
+
+                this.prizeModalClasses = ['prizeModal'];
+            },
         },
 
         computed: {
             loaderClasses() {
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
+            },
+        },
+
+        watch: {
+            'picksList'() {
+                let total = (this.picksList[0].contest.buy_in * this.picksList[0].contest.max_participants) - ((this.picksList[0].contest.buy_in * this.picksList[0].contest.max_participants)*0.15)
+
+                let type = this.picksList[0].contest.contest_type_name
+                let numOfParticipants = this.picksList[0].contest.max_participants
+
+                console.log(type)
+
+                let payoutArray = (this.picksList[0].contest.contest_type_id == 1) ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type]
+                let placePayouts = [];
+
+                for(var i=0; i < payoutArray.length; i++) {
+                    placePayouts.push(total*payoutArray[i])
+                }
+
+                this.prizePool = {
+                    total: total,
+                    payouts: placePayouts,
+                }
+
+                // console.log(this.prizePool.payouts)
             },
         },
     };

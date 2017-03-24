@@ -13,6 +13,8 @@ class PlayerPickTransformer extends Transformer {
 
 	public function transform($pick)
     {
+        // dump($pick['contest']);
+
         $fighter_id = (int)$pick['winning_fighter_id'];
         $fight_id = (int)$pick['fight_id'];
 
@@ -56,6 +58,8 @@ class PlayerPickTransformer extends Transformer {
                 'max_participants' => $pick['contest']['max_participants'],
                 'total_participants' => count($pick['contest']['users']),
                 'prize_pool' => count($pick['contest']['users']) * $pick['contest']['entry_fee'],
+                'contest_type_id' => $pick['contest']['contest_type_id'],
+                'contest_type_name' => $pick['contest']['contest_type']['contest_type_name'],
             ],
             'event' => [
             	'event_short_name' => $pick['contest']['event']['event_short_name'],

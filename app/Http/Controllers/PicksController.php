@@ -146,6 +146,7 @@ class PicksController extends ApiController
 
         $picks = $this->pick->with([
                         'contest',
+                        'contest.contestType',
                         'contest.event',
                         'contest.users',
                         'contest.event.fights.fighters',
