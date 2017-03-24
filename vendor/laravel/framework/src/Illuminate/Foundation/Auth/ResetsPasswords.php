@@ -80,6 +80,8 @@ trait ResetsPasswords
             $this->resetEmailBuilder()
         );
 
+        dd($response);
+
         switch ($response) {
             case Password::RESET_LINK_SENT:
                 return $this->getSendResetLinkEmailSuccessResponse($response);

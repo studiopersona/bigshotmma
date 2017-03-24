@@ -4281,17 +4281,25 @@ a {
 
 .Alert {
   position: relative;
-  background: #ddd;
-  border: 1px solid #c4c4c4;
-  padding: 1em; }
+  background: #fff;
+  border-width: 1px;
+  border-style: solid;
+  padding: 1em;
+  font-size: 1.6rem;
+  border-radius: 4px;
+  width: 60%;
+  margin: 0 auto; }
+  .Alert > p {
+    margin: 0;
+    font-weight: 700; }
 
 .Alert--Success {
-  background: #87f66d;
-  border: 1px solid #38ee0f; }
+  color: #2dbe0c;
+  border-color: #2dbe0c; }
 
 .Alert--Error {
-  background: #f5a2ae;
-  border: 1px solid #eb465e; }
+  color: #e51937;
+  border-color: #e51937; }
 
 .Alert__close {
   position: absolute;
@@ -4303,7 +4311,8 @@ a {
   vertical-align: middle;
   border-radius: 50%;
   padding: 0 5px 2px;
-  background: #fff; }
+  background: #fff;
+  display: none; }
 
 .fightsList {
   position: relative;
