@@ -34,7 +34,7 @@ body {font-family: 'Montserrat', sans-serif; background:#fff;}
         <div class="email-verify">
             <h3 style="line-height:1em;">Password Reset Request</h3>
 			<p>We received a password change request for your email address. To complete the password reset follow this link: <br><a class="button" href="{{ $link = url('password/reset', $token).'?email='.urlencode($user->getEmailForPasswordReset()) }}">Reset Link</a></p>
-            <a href="{{ url('/') }}"><img src="http://www.bsmma.com/public/image/logo.png" /></a>
+            <a href="{{ url('/') }}"><img src="{{ url('/public/image/logo.png') }}" /></a>
         </div>
 	</div>
 </div>
