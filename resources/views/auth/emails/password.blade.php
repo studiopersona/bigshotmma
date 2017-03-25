@@ -10,7 +10,7 @@ body {font-family: 'Montserrat', sans-serif; background:#fff;}
 #email img {display:block; text-align:center; margin:1.5em auto 3em auto;width: 80%;}
 #email p {font-size:1.15em; margin:0 1em 1em 1em; font-weight:300; line-height:1.25em;}
 #email p a {font-size:16px;}
-#email .button { display: inline-block; margin-top: 1rem; padding: 1rem; background-color: #e51937; color: #fff; text-transform: uppercase; text-decoration: none; font-weight: 700; }
+#email .button { display: inline-block; margin-top: 1rem; padding: 1rem; background-color: #a80300; color: #fff; text-transform: uppercase; text-decoration: none; font-weight: 700; }
 #email h3 {font-size:2.25em; text-transform:uppercase; font-weight:900; margin:1em auto .5em auto;}
 #email h4 {font-size:2em; font-weight:900;}
 #email h5 {font-size:1.6em; font-weight:normal; margin-bottom:0.15em;}
