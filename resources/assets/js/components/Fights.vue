@@ -202,7 +202,13 @@
                             </div>
                             <div class="col-xs-100 powerUpsList">
                                 <div class="col-xs-24 col-xs-offset-1" v-for="powerUp in powerUps">
-                                    <button class="powerUpList__btn" type="button">
+                                    <button
+                                        @click="confirmPowerUp"
+                                        data-power-up="{{ powerUp.power_up_id }}"
+                                        data-fight-id="{{ fight.id }}"
+                                        class="powerUpList__btn"
+                                        type="button"
+                                    >
                                         <span class="visuallyhidden">{{ powerUp.name }}</span>
                                         <img
                                             :src="'public/image/powerups/' + powerUp.image_name"

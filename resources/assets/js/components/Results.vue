@@ -193,7 +193,7 @@
                         </div>
                     </li>
                 </ul>
-                <div class="container-fluid">
+                <div v-if="hasPicks" class="container-fluid">
                     <div class="col-xs-100 button-wrap">
                         <a v-link="{ path: '/contest/' + contestId + '/picks' }" class="button button--primary">My Picks</a>
                     </div>
@@ -229,6 +229,7 @@
                 numberNames: ['One', 'Two', 'Three', 'Four', 'Five'],
                 working: false,
                 contestId: this.$route.params.contest_id,
+                hasPicks: true,
                 URL: {
                     base: window.URL.base,
                     current: window.URL.current,
@@ -306,6 +307,17 @@
                 }).then(function(response) {
                     this.finishes = response.data;
                 });
+
+                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/check-for-picks', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                })
+                .then(function(response) {
+                    if ( ! response.data.count ) this.hasPicks = false
+                })
+                .catch(function(err) {
+                    if ( err.status === 404 ) this.hasPicks = false
+                })
             },
 
             findPowerUp(powerUp) {

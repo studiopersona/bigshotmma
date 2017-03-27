@@ -74,7 +74,7 @@
             <template v-else>
                 <p style="margin-top: 1rem; text-align: center;">No results have been reported.</p>
             </template>
-            <div class="container-fluid">
+            <div v-if="hasPicks" class="container-fluid">
                 <div class="col-xs-100 button-wrap">
                     <a v-link="{ path: '/contest/' + contest.contest_id + '/picks' }" class="button button--primary">My Picks</a>
                 </div>
@@ -120,6 +120,7 @@
                 playerId: 0,
                 playerRanking: 0,
                 infoModalClasses: ['infoModal'],
+                hasPicks: true,
                 URL: {
                     base: window.URL.base,
                     current: window.URL.current,
@@ -200,6 +201,17 @@
                 .catch(function(err) {
                     console.log('there was a problem fetching the winnings')
                     console.log(err)
+                })
+
+                this.$http.get( URL.base + '/api/v1/contest/' + this.contest.contest_id + '/check-for-picks', {}, {
+                    // Attach the JWT header
+                    headers: { 'Authorization' : 'Bearer ' + token }
+                })
+                .then(function(response) {
+                    if ( ! response.data.count ) this.hasPicks = false
+                })
+                .catch(function(err) {
+                    if ( err.status === 404 ) this.hasPicks = false
                 })
             },
 
