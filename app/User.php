@@ -65,4 +65,9 @@ class User extends Authenticatable
         return $this->hasMany('Bsmma\ContestParticipantsArchive');
     }
 
+    public function bogoPromosToUsers()
+    {
+        return $this->hasMany('Bsmma\BogoPromosToUser');
+    }
+
 }

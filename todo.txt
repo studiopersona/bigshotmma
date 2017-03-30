@@ -1,6 +1,5 @@
 - *** debug total points not correct if fighter loses and power up is achieved ***
 
-- *** entries not being made in contest_participants_archive table after results are made offcial ***
 
 - test that user is removed from contest_partcipants table when they quit a contest
 
@@ -17,6 +16,8 @@
 - fix entries icon to be proper height and remove style rule placed on the dashboard button
 
 - add working indictaor to buttons
+
+- avatar uploading isn't working
 
 ================================================================================================
 

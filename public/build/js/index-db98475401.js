@@ -43327,60 +43327,6 @@ var SIGNUP_URL = API_URL + 'register';
 var REFRESH_URL = API_URL + 'refresh';
 
 exports.default = {
-    login: function login(context, creds, redirect) {
-        this.initLocalforage();
-        context.working = true;
-        context.$http.post(LOGIN_URL, creds).then(function (response) {
-            _localforage2.default.setItem('id_token', response.data.token).then(function (value) {
-                // Redirect to a specified route
-                if (redirect) {
-                    _index.router.go(redirect);
-                }
-            }).catch(function (err) {
-                console.log(err);
-            });
-        }).catch(function (err) {
-            if (err.data) {
-                context.error = err.data.error.message;
-                context.alertType = 'error';
-                context.working = false;
-            }
-            console.log(err);
-        });
-    },
-    signup: function signup(context, creds, redirect) {
-        this.initLocalforage();
-
-        context.$http.post(SIGNUP_URL, creds).then(function (response) {
-            // if this is the production site fire the fb pixel
-            if (URL.base === 'https://www.bsmma.com') {
-                // facebook pixel
-                !function (f, b, e, v, n, t, s) {
-                    if (f.fbq) return;n = f.fbq = function () {
-                        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-                    };if (!f._fbq) f._fbq = n;
-                    n.push = n;n.loaded = !0;n.version = '2.0';n.queue = [];t = b.createElement(e);t.async = !0;
-                    t.src = v;s = b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t, s);
-                }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-                fbq('init', '1014779411913260'); // Insert your pixel ID here.
-                fbq('track', 'PageView');
-            }
-
-            _localforage2.default.setItem('id_token', response.data.token).then(function (value) {
-                if (redirect) {
-                    _index.router.go(redirect);
-                }
-            }).catch(function (err) {
-                consloe.log(err);
-            });
-        }).catch(function (err) {
-            if (err.data) {
-                context.error = err.data.error.message;
-                context.alertType = 'error';
-            }
-            console.log(err);
-        });
-    },
     logout: function logout() {
         this.initLocalforage();
 
@@ -43462,12 +43408,12 @@ exports.default = {
     },
     initLocalforage: function initLocalforage() {
         _localforage2.default.config({
-            name: 'Blood Sport MMA'
+            name: 'Big Shoot MMA'
         });
     }
 };
 
-},{"../index":223,"../libs/d":225,"localforage":117}],204:[function(require,module,exports){
+},{"../index":225,"../libs/d":227,"localforage":117}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -43612,12 +43558,18 @@ exports.default = {
             this.toggleMenu();
             this.loggedIn = false;
         }
+    },
+
+    events: {
+        'logged-in': function loggedIn() {
+            this.loggedIn = true;
+        }
     }
 };
 
 //import auth from '../auth';
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n    \t<div v-if=\"loggedIn\" class=\"appHeader\">\n            <!--<a v-link=\"\" class=\"appHeader__backBtn\"><img :src=\"'public/image/icons/back.png'\"> Back</a>-->\n            <button type=\"button\" @click=\"toggleMenu\" class=\"appHeader__menuBtn\">Dashboard <img :src=\"'public/image/menu-icon.png'\"></button>\n        </div>\n        <router-view></router-view>\n        <nav class=\"appDashboard\">\n        \t<header class=\"dashboardHeader\">\n                <div class=\"dashboardHeader__playerWrap clearfix\">\n                    <img src=\"public/image/avatar/male.jpg\" class=\"dashboardHeader__avatar\">\n                    <div class=\"dashboardHeader__playerName\">\n                        {{ playersName }}\n                        <div class=\"dashboardHeader__balance\">\n                            Balance: <span>${{ parseFloat(playersBalance).toFixed(2) }}</span>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"dashboardHeader__logoutWrap\">\n                    <a class=\"dashboardHeader__logout\" @click.prevent=\"logout\" v-link=\"{path: '/logout'}\">Logout</a>\n                </div>\n            </header>\n        \t <ul class=\"appDashboard__list clearfix\">\n        \t \t<li class=\"appDashboard__linkWrap\">\n        \t \t\t<a class=\"appDashboard__link appDashboard__link--contests\" v-link=\"{ path: '/player/contests' }\" @click=\"toggleMenu\">\n        \t \t\t\t<img src=\"public/image/dashboard/contests.png\">\n        \t \t\t\tContests\n        \t \t\t</a>\n        \t \t</li>\n                <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--contests\" v-link=\"{ path: '/entries/' + playerId }\" @click=\"toggleMenu\">\n                        <img src=\"public/image/dashboard/entries.png\" style=\"max-height:42px;\">\n                        Entries\n                    </a>\n                </li>\n                <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--rules\" @click=\"showContestTypes\">\n                        <img src=\"public/image/dashboard/contest-types.png\">\n                        Contest Types\n                    </a>\n                </li>\n               <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--rules\" @click=\"showHowToPlay\">\n                        <img src=\"public/image/dashboard/rules.png\">\n                        How to Play\n                    </a>\n                </li>\n                <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--eligibility\" @click=\"showEligibility\">\n                        <img src=\"public/image/dashboard/eligibility.png\">\n                        Eligibilty\n                    </a>\n                </li>\n                <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--rules\" v-link=\"{ path: '/deposit' }\" @click=\"toggleMenu\">\n                        <img src=\"public/image/dashboard/deposit.png\">\n                        Make Deposit\n                    </a>\n                </li>\n                <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--rules\" v-link=\"{ path: '/withdrawl-request' }\" @click=\"toggleMenu\">\n                        <img src=\"public/image/dashboard/withdraw.png\">\n                        Withdraw\n                    </a>\n                </li>\n        \t \t<li class=\"appDashboard__linkWrap\">\n        \t \t\t<a class=\"appDashboard__link appDashboard__link--profile\" v-link=\"{ path: '/profile' }\" @click=\"toggleMenu\">\n        \t \t\t\t<img src=\"public/image/dashboard/profile.png\">\n        \t \t\t\tProfile\n        \t \t\t</a>\n        \t \t</li>\n        \t </ul>\n        </nav>\n        <section id=\"rulesSlider\" class=\"rulesSlider\">\n        \t<div v-for=\"type in contestTypes\" :class=\"['rulesSlider__slide', currentRulesSlide === $index ? 'current' : '']\">\n        \t\t<h3 class=\"rulesSlider__title\">{{ type.contest_type_name }}</h3>\n        \t\t<div class=\"rulesSlider__icon\">\n        \t\t\t<img :src=\"URL.base + '/public/image/info/' + type.image_name\">\n        \t\t</div>\n        \t\t<div class=\"rulesSlider__description\">\n        \t\t\t{{{ type.contest_type_rules }}}\n        \t\t</div>\n        \t\t<div class=\"rulesSlider__positionIndicator\">\n        \t\t\t<span data-slide-number=\"0\" :class=\"['rulesSlider__indicator', $index === 0 ? 'current' : '']\"></span>\n        \t\t\t<span data-slide-number=\"1\" :class=\"['rulesSlider__indicator', $index === 1 ? 'current' : '']\"></span>\n        \t\t\t<span data-slide-number=\"2\" :class=\"['rulesSlider__indicator', $index === 2 ? 'current' : '']\"></span>\n        \t\t</div>\n        \t\t<div class=\"button-wrap\">\n\t                <button @click.prevent=\"changeSlide($index, '.rulesSlider__slide', 'currentRulesSlide', '#rulesSlider', $event)\" type=\"button\" class=\"button button--green\">Got It</button>\n\t            </div>\n\t            <button @click=\"sliderClose('#rulesSlider')\" type=\"button\" class=\"alertModal__close\">x</button>\n\t        </div>\n\t    </section>\n        <section id=\"howToPlaySlider\" class=\"rulesSlider\">\n            <div :class=\"['playSlider__slide', currentHowToPlaySlide === 0 ? 'current' : '']\">\n                <h3 class=\"rulesSlider__title\">How to Play</h3>\n                <div class=\"rulesSlider__icon\">\n                    <img :src=\"URL.base + '/public/image/info/how-to-play.png'\">\n                </div>\n                <div class=\"rulesSlider__description\">\n                    <p>Pick five (5) fighters by clicking their avatar, then decide how and when each fight will end.</p>\n                    <p>Choose up to three (3) power ups to score bonus points.</p>\n                </div>\n                <div class=\"rulesSlider__positionIndicator\">\n                    <span class=\"rulesSlider__indicator current\"></span>\n                    <span class=\"rulesSlider__indicator\"></span>\n                    <span class=\"rulesSlider__indicator\"></span>\n                </div>\n                <div class=\"button-wrap\">\n                    <button @click.prevent=\"changeSlide(0, '.playSlider__slide', 'currentHowToPlaySlide', '#howToPlaySlider', $event)\" type=\"button\" class=\"button button--green\">Got It</button>\n                </div>\n                <button @click=\"sliderClose('#howToPlaySlider')\" type=\"button\" class=\"alertModal__close\">x</button>\n            </div>\n            <div :class=\"['playSlider__slide', currentHowToPlaySlide === 1 ? 'current' : '']\">\n                <h3 class=\"rulesSlider__title\">Point System</h3>\n                <div class=\"rulesSlider__description\">\n                    <p>Points are earned by making correct choices:</p>\n                    <div class=\"rulesSlider__pointSystem\">\n                        <div class=\"rulesSlider__pointSystemRow\">\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                &nbsp;\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                <img :src=\"URL.base + '/public/image/info/scoring-underdog.png'\">\n                                <p>Underdog Wins</p>\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                &nbsp;\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                <img :src=\"URL.base + '/public/image/info/scoring-finish.png'\">\n                                <p>Correct Finish</p>\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                &nbsp;\n                            </div>\n                        </div>\n                        <div class=\"rulesSlider__pointSystemRow\">\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                <img :src=\"URL.base + '/public/image/info/scoring-favorite.png'\">\n                                <p>Favorite Wins</p>\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                <img :src=\"URL.base + '/public/image/info/scoring-round.png'\">\n                                <p>Correct Round</p>\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                <img :src=\"URL.base + '/public/image/info/scoring-minute.png'\">\n                                <p>Correct Minute</p>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"rulesSlider__positionIndicator\">\n                    <span class=\"rulesSlider__indicator\"></span>\n                    <span class=\"rulesSlider__indicator current\"></span>\n                    <span class=\"rulesSlider__indicator\"></span>\n                </div>\n                <div class=\"button-wrap\">\n                    <button @click.prevent=\"changeSlide(1, '.playSlider__slide', 'currentHowToPlaySlide', '#howToPlaySlider', $event)\" type=\"button\" class=\"button button--green\">Got It</button>\n                </div>\n                <button @click=\"sliderClose('#howToPlaySlider')\" type=\"button\" class=\"alertModal__close\">x</button>\n            </div>\n            <div :class=\"['playSlider__slide', currentHowToPlaySlide === 2 ? 'current' : '']\">\n                <h3 class=\"rulesSlider__title\">Power Ups</h3>\n                <div class=\"rulesSlider__description\">\n                    <p>Apply up to three (3) per contest, one (1) per fight to score bonus points.</p>\n                    <div class=\"container-fluid powerups-list\">\n                        <div class=\"row\">\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/bonecrusher.png'\">\n                                <div style=\"color: #90a5d4\">Bonecrusher</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/cindarella.png'\">\n                                <div style=\"color: #dd03ff\">Cindarella</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/minuteman.png'\">\n                                <div style=\"color: #fd880a\">Minuteman</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/slater.png'\">\n                                <div style=\"color: #f8d86b\">Slater</div>\n                            </div>\n                        </div>\n                        <div class=\"row\">\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/flawless.png'\">\n                                <div style=\"color: #03ff1b\">Flawless</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/debo.png'\">\n                                <div style=\"color: #ce8534\">Debo</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/hoyce.png'\">\n                                <div style=\"color: #929497\">Hoyce</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/denied.png'\">\n                                <div style=\"color: #57747a\">Denied</div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"rulesSlider__positionIndicator\">\n                    <span class=\"rulesSlider__indicator\"></span>\n                    <span class=\"rulesSlider__indicator\"></span>\n                    <span class=\"rulesSlider__indicator current\"></span>\n                </div>\n                <div class=\"button-wrap\">\n                    <button @click.prevent=\"changeSlide(2, '.playSlider__slide', 'currentHowToPlaySlide', '#howToPlaySlider', $event)\" type=\"button\" class=\"button button--green\">Got It</button>\n                </div>\n                <button @click=\"sliderClose('#howToPlaySlider')\" type=\"button\" class=\"alertModal__close\">x</button>\n            </div>\n        </section>\n        <section id=\"eligibility\" class=\"rulesSlider\">\n            <div :class=\"['eligibilitySlider__slide', 'current']\">\n                <h3 class=\"rulesSlider__title\">Eligibilty</h3>\n                <div class=\"rulesSlider__icon\">\n                    <img :src=\"URL.base + '/public/image/info/eligibility.png'\">\n                </div>\n                <div class=\"rulesSlider__description\">\n                    <p class=\"smaller-text\">Daily fantasy sports (DFS) is legal in 41 US states, but residents of the following states are not eligible to participate in paid entry contests:</p>\n                    <p>Alabama, Arizona, Hawaii, Idaho, Iowa, Louisiana, Montana, Nevada and Washington.</p>\n                </div>\n                <div class=\"button-wrap\">\n                    <button @click=\"sliderClose('#eligibility')\" type=\"button\" class=\"button button--green\">Got It</button>\n                </div>\n                <button @click=\"sliderClose('#eligibility')\" type=\"button\" class=\"alertModal__close\">x</button>\n            </div>\n        </section>\n        <div id=\"overlay\" @click=\"toggleMenu\"></div>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n    \t<div v-if=\"loggedIn\" class=\"appHeader\">\n            <!--<a v-link=\"\" class=\"appHeader__backBtn\"><img :src=\"'public/image/icons/back.png'\"> Back</a>-->\n            <button type=\"button\" @click=\"toggleMenu\" class=\"appHeader__menuBtn\">Menu <img :src=\"'public/image/menu-icon.png'\"></button>\n        </div>\n        <router-view></router-view>\n        <nav class=\"appDashboard\">\n        \t<header class=\"dashboardHeader\">\n                <div class=\"dashboardHeader__playerWrap clearfix\">\n                    <img src=\"public/image/avatar/male.jpg\" class=\"dashboardHeader__avatar\">\n                    <div class=\"dashboardHeader__playerName\">\n                        {{ playersName }}\n                        <div class=\"dashboardHeader__balance\">\n                            Balance: <span>${{ parseFloat(playersBalance).toFixed(2) }}</span>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"dashboardHeader__logoutWrap\">\n                    <a class=\"dashboardHeader__logout\" @click.prevent=\"logout\" v-link=\"{path: '/logout'}\">Logout</a>\n                </div>\n            </header>\n        \t <ul class=\"appDashboard__list clearfix\">\n        \t \t<li class=\"appDashboard__linkWrap\">\n        \t \t\t<a class=\"appDashboard__link appDashboard__link--contests\" v-link=\"{ path: '/player/contests' }\" @click=\"toggleMenu\">\n        \t \t\t\t<img src=\"public/image/dashboard/contests.png\">\n        \t \t\t\tContests\n        \t \t\t</a>\n        \t \t</li>\n                <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--contests\" v-link=\"{ path: '/entries/' + playerId }\" @click=\"toggleMenu\">\n                        <img src=\"public/image/dashboard/entries.png\" style=\"max-height:42px;\">\n                        Entries\n                    </a>\n                </li>\n                <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--rules\" @click=\"showContestTypes\">\n                        <img src=\"public/image/dashboard/contest-types.png\">\n                        Contest Types\n                    </a>\n                </li>\n               <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--rules\" @click=\"showHowToPlay\">\n                        <img src=\"public/image/dashboard/rules.png\">\n                        How to Play\n                    </a>\n                </li>\n                <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--eligibility\" @click=\"showEligibility\">\n                        <img src=\"public/image/dashboard/eligibility.png\">\n                        Eligibilty\n                    </a>\n                </li>\n                <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--rules\" v-link=\"{ path: '/deposit' }\" @click=\"toggleMenu\">\n                        <img src=\"public/image/dashboard/deposit.png\">\n                        Make Deposit\n                    </a>\n                </li>\n                <li class=\"appDashboard__linkWrap\">\n                    <a class=\"appDashboard__link appDashboard__link--rules\" v-link=\"{ path: '/withdrawl-request' }\" @click=\"toggleMenu\">\n                        <img src=\"public/image/dashboard/withdraw.png\">\n                        Withdraw\n                    </a>\n                </li>\n        \t \t<li class=\"appDashboard__linkWrap\">\n        \t \t\t<a class=\"appDashboard__link appDashboard__link--profile\" v-link=\"{ path: '/profile' }\" @click=\"toggleMenu\">\n        \t \t\t\t<img src=\"public/image/dashboard/profile.png\">\n        \t \t\t\tProfile\n        \t \t\t</a>\n        \t \t</li>\n        \t </ul>\n        </nav>\n        <section id=\"rulesSlider\" class=\"rulesSlider\">\n        \t<div v-for=\"type in contestTypes\" :class=\"['rulesSlider__slide', currentRulesSlide === $index ? 'current' : '']\">\n        \t\t<h3 class=\"rulesSlider__title\">{{ type.contest_type_name }}</h3>\n        \t\t<div class=\"rulesSlider__icon\">\n        \t\t\t<img :src=\"URL.base + '/public/image/info/' + type.image_name\">\n        \t\t</div>\n        \t\t<div class=\"rulesSlider__description\">\n        \t\t\t{{{ type.contest_type_rules }}}\n        \t\t</div>\n        \t\t<div class=\"rulesSlider__positionIndicator\">\n        \t\t\t<span data-slide-number=\"0\" :class=\"['rulesSlider__indicator', $index === 0 ? 'current' : '']\"></span>\n        \t\t\t<span data-slide-number=\"1\" :class=\"['rulesSlider__indicator', $index === 1 ? 'current' : '']\"></span>\n        \t\t\t<span data-slide-number=\"2\" :class=\"['rulesSlider__indicator', $index === 2 ? 'current' : '']\"></span>\n        \t\t</div>\n        \t\t<div class=\"button-wrap\">\n\t                <button @click.prevent=\"changeSlide($index, '.rulesSlider__slide', 'currentRulesSlide', '#rulesSlider', $event)\" type=\"button\" class=\"button button--green\">Got It</button>\n\t            </div>\n\t            <button @click=\"sliderClose('#rulesSlider')\" type=\"button\" class=\"alertModal__close\">x</button>\n\t        </div>\n\t    </section>\n        <section id=\"howToPlaySlider\" class=\"rulesSlider\">\n            <div :class=\"['playSlider__slide', currentHowToPlaySlide === 0 ? 'current' : '']\">\n                <h3 class=\"rulesSlider__title\">How to Play</h3>\n                <div class=\"rulesSlider__icon\">\n                    <img :src=\"URL.base + '/public/image/info/how-to-play.png'\">\n                </div>\n                <div class=\"rulesSlider__description\">\n                    <p>Pick five (5) fighters by clicking their avatar, then decide how and when each fight will end.</p>\n                    <p>Choose up to three (3) power ups to score bonus points.</p>\n                </div>\n                <div class=\"rulesSlider__positionIndicator\">\n                    <span class=\"rulesSlider__indicator current\"></span>\n                    <span class=\"rulesSlider__indicator\"></span>\n                    <span class=\"rulesSlider__indicator\"></span>\n                </div>\n                <div class=\"button-wrap\">\n                    <button @click.prevent=\"changeSlide(0, '.playSlider__slide', 'currentHowToPlaySlide', '#howToPlaySlider', $event)\" type=\"button\" class=\"button button--green\">Got It</button>\n                </div>\n                <button @click=\"sliderClose('#howToPlaySlider')\" type=\"button\" class=\"alertModal__close\">x</button>\n            </div>\n            <div :class=\"['playSlider__slide', currentHowToPlaySlide === 1 ? 'current' : '']\">\n                <h3 class=\"rulesSlider__title\">Point System</h3>\n                <div class=\"rulesSlider__description\">\n                    <p>Points are earned by making correct choices:</p>\n                    <div class=\"rulesSlider__pointSystem\">\n                        <div class=\"rulesSlider__pointSystemRow\">\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                &nbsp;\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                <img :src=\"URL.base + '/public/image/info/scoring-underdog.png'\">\n                                <p>Underdog Wins</p>\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                &nbsp;\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                <img :src=\"URL.base + '/public/image/info/scoring-finish.png'\">\n                                <p>Correct Finish</p>\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                &nbsp;\n                            </div>\n                        </div>\n                        <div class=\"rulesSlider__pointSystemRow\">\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                <img :src=\"URL.base + '/public/image/info/scoring-favorite.png'\">\n                                <p>Favorite Wins</p>\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                <img :src=\"URL.base + '/public/image/info/scoring-round.png'\">\n                                <p>Correct Round</p>\n                            </div>\n                            <div class=\"rulesSlider__pointSystemItem\">\n                                <img :src=\"URL.base + '/public/image/info/scoring-minute.png'\">\n                                <p>Correct Minute</p>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"rulesSlider__positionIndicator\">\n                    <span class=\"rulesSlider__indicator\"></span>\n                    <span class=\"rulesSlider__indicator current\"></span>\n                    <span class=\"rulesSlider__indicator\"></span>\n                </div>\n                <div class=\"button-wrap\">\n                    <button @click.prevent=\"changeSlide(1, '.playSlider__slide', 'currentHowToPlaySlide', '#howToPlaySlider', $event)\" type=\"button\" class=\"button button--green\">Got It</button>\n                </div>\n                <button @click=\"sliderClose('#howToPlaySlider')\" type=\"button\" class=\"alertModal__close\">x</button>\n            </div>\n            <div :class=\"['playSlider__slide', currentHowToPlaySlide === 2 ? 'current' : '']\">\n                <h3 class=\"rulesSlider__title\">Power Ups</h3>\n                <div class=\"rulesSlider__description\">\n                    <p>Apply up to three (3) per contest, one (1) per fight to score bonus points.</p>\n                    <div class=\"container-fluid powerups-list\">\n                        <div class=\"row\">\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/bonecrusher.png'\">\n                                <div style=\"color: #90a5d4\">Bonecrusher</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/cindarella.png'\">\n                                <div style=\"color: #dd03ff\">Cindarella</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/minuteman.png'\">\n                                <div style=\"color: #fd880a\">Minuteman</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/slater.png'\">\n                                <div style=\"color: #f8d86b\">Slater</div>\n                            </div>\n                        </div>\n                        <div class=\"row\">\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/flawless.png'\">\n                                <div style=\"color: #03ff1b\">Flawless</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/debo.png'\">\n                                <div style=\"color: #ce8534\">Debo</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/hoyce.png'\">\n                                <div style=\"color: #929497\">Hoyce</div>\n                            </div>\n                            <div class=\"col-xs-25\">\n                                <img :src=\"URL.base + '/public/image/powerups/denied.png'\">\n                                <div style=\"color: #57747a\">Denied</div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"rulesSlider__positionIndicator\">\n                    <span class=\"rulesSlider__indicator\"></span>\n                    <span class=\"rulesSlider__indicator\"></span>\n                    <span class=\"rulesSlider__indicator current\"></span>\n                </div>\n                <div class=\"button-wrap\">\n                    <button @click.prevent=\"changeSlide(2, '.playSlider__slide', 'currentHowToPlaySlide', '#howToPlaySlider', $event)\" type=\"button\" class=\"button button--green\">Got It</button>\n                </div>\n                <button @click=\"sliderClose('#howToPlaySlider')\" type=\"button\" class=\"alertModal__close\">x</button>\n            </div>\n        </section>\n        <section id=\"eligibility\" class=\"rulesSlider\">\n            <div :class=\"['eligibilitySlider__slide', 'current']\">\n                <h3 class=\"rulesSlider__title\">Eligibilty</h3>\n                <div class=\"rulesSlider__icon\">\n                    <img :src=\"URL.base + '/public/image/info/eligibility.png'\">\n                </div>\n                <div class=\"rulesSlider__description\">\n                    <p class=\"smaller-text\">Daily fantasy sports (DFS) is legal in 41 US states, but residents of the following states are not eligible to participate in paid entry contests:</p>\n                    <p>Alabama, Arizona, Hawaii, Idaho, Iowa, Louisiana, Montana, Nevada and Washington.</p>\n                </div>\n                <div class=\"button-wrap\">\n                    <button @click=\"sliderClose('#eligibility')\" type=\"button\" class=\"button button--green\">Got It</button>\n                </div>\n                <button @click=\"sliderClose('#eligibility')\" type=\"button\" class=\"alertModal__close\">x</button>\n            </div>\n        </section>\n        <div id=\"overlay\" @click=\"toggleMenu\"></div>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -43628,7 +43580,45 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-54fea208", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],205:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],205:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+
+	components: {},
+
+	props: [],
+
+	data: function data() {
+		return {};
+	},
+	ready: function ready() {},
+
+
+	watch: {},
+
+	computed: {},
+
+	methods: {},
+
+	events: {}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\tCnotest list will go here.\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-169a4fdd", module.exports)
+  } else {
+    hotAPI.update("_v-169a4fdd", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":201,"vue-hot-reload-api":198}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44011,7 +44001,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-02ccbfcb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],206:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44119,7 +44109,179 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f53a16f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],207:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],208:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _auth = require('../auth');
+
+var _auth2 = _interopRequireDefault(_auth);
+
+var _index = require('../index');
+
+var _localforage = require('localforage');
+
+var _localforage2 = _interopRequireDefault(_localforage);
+
+var _ContestListWidget = require('./ContestListWidget.vue');
+
+var _ContestListWidget2 = _interopRequireDefault(_ContestListWidget);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+
+    components: {
+        'contest-list-widget': _ContestListWidget2.default
+    },
+
+    data: function data() {
+        return {
+            player: {
+                name: '',
+                avatar: '',
+                promo: {
+                    id: 0,
+                    status: ''
+                }
+            },
+            showPromoField: false,
+            promoCodeError: {
+                show: false,
+                message: ''
+            },
+            alert: {
+                body: '',
+                class: 'syncAlert--success',
+                show: false
+            },
+            working: false,
+            URL: {
+                base: window.URL.base,
+                current: window.URL.current,
+                full: window.URL.full
+            }
+        };
+    },
+    created: function created() {
+        this.working = true;
+    },
+    ready: function ready() {
+        var vm = this,
+            params;
+
+        _localforage2.default.getItem('id_token').then(function (token) {
+            if (token) {
+                params = _auth2.default.parseToken(token);
+                if (Math.round(new Date().getTime() / 1000) <= params.exp) {
+                    vm.fetch(token);
+                } else {
+                    vm.tokenRefresh(token);
+                }
+            } else {
+                _index.router.go('login');
+            }
+        }).catch(function (err) {
+            console.log(err);
+        });
+    },
+
+
+    methods: {
+        tokenRefresh: function tokenRefresh(token) {
+            var vm = this;
+
+            this.$http.post(URL.base + '/api/v1/refresh', {}, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            }).then(function (response) {
+                _localforage2.default.setItem('id_token', response.data.token).then(function () {
+                    vm.fetch(token);
+                });
+            }).catch(function (err) {
+                _index.router.go('login');
+            });
+        },
+        fetch: function fetch(token) {
+            this.$http.get(URL.base + '/api/v1/profile', {}, {
+                // Attach the JWT header
+                headers: { 'Authorization': 'Bearer ' + token }
+            }).then(function (response) {
+                console.log('player', response);
+
+                this.player.name = response.data.profile.name;
+                this.player.avatar = response.data.profile.avatar;
+                this.player.points = response.data.profile.points;
+                this.player.balance = response.data.profile.balance;
+                this.player.promo = response.data.profile.promo;
+
+                this.working = false;
+            }).catch(function (err) {
+                console.log(err);
+                this.working = false;
+            });
+        },
+        checkPromoCode: function checkPromoCode() {
+            var vm = this;
+
+            _localforage2.default.getItem('id_token').then(function (token) {
+
+                this.$http.post(URL.base + '/api/v1/validate-promo-code', { promoCode: this.newPromoCode }, {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                }).then(function (res) {
+                    var response = res.data;
+
+                    console.log('promo check', response);
+
+                    if (response.valid) {
+                        vm.player.promo.id = response.promo.id;
+                        vm.player.promo.status = response.promo.status;
+
+                        vm.showPromoField = false;
+                    } else {
+                        vm.promoCodeError = response.error;
+                    }
+                }).catch(function (err) {
+                    console.log('there was an error while trying to validate the code');
+                    console.log(err);
+                });
+            }).catch(function (err) {
+                console.log('there was an error getting the token');
+                console.log(err);
+            });
+        },
+        flash: function flash(response) {
+            this.alert.body = response.msg;
+            this.alert.show = true;
+
+            this.alert.class = response.success ? 'syncAlert--success' : 'syncAlert--failed';
+        },
+        alertClose: function alertClose(e) {
+            this.alert.show = false;
+        }
+    },
+
+    computed: {
+        loaderClasses: function loaderClasses() {
+            return this.working ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"templateWrap\" :working=\"working\">\n    <header class=\"pageHeader\">\n        <h1 class=\"pageHeader__header\">Dashboard</h1>\n        <h4 class=\"pageHeader__subheader\"></h4>\n    </header>\n    <div class=\"profile form\">\n        <div v-if=\"player.avatar === ''\" class=\"profile__image\">\n            <img :src=\"URL.base + '/public/image/avatar/male.jpg'\">\n        </div>\n        <div v-else=\"\" class=\"profile__image\">\n            <img :src=\"URL.base + '/public/image/avatar/' + player.avatar\">\n        </div>\n        <div class=\"profle__playerName\">\n            {{ player.name }}\n        </div>\n        <ul class=\"profile__details\">\n            <li class=\"profile__detail\">\n                <label class=\"profile__detailsLabel profile__detailsHighlight\">Balance:</label>\n                <span class=\"profile__detailsItem profile__detailsHighlight\">{{ player.balance }}</span>\n            </li>\n            <li class=\"profile__detail\">\n                <label class=\"profile__detailsLabel\">Points:</label>\n                <span class=\"profile__detailsItem profile__detailsHighlight\">{{ player.points }}</span>\n            </li>\n            <li clas=\"profile__detail\">\n                <label class=\"profile__detailsLabel\">Promos:</label>\n\n                <span v-if=\"player.promos.id === 0\" class=\"profile__detailsItem\">\n                    <button class=\"promoRevealBtn\" @click=\"showPromoField = !showPromoField\">Enter Promo Code</button>\n                </span>\n                <span v-else=\"\" class=\"profile__detailsItem\">\n                    {{ player.promo.status }}\n                </span>\n            </li>\n            <li v-if=\"showPromoField\" transition=\"fade\">\n                <label for=\"bogoPromoCode\">\n                    <input id=\"bogoPromoCode\" @change=\"checkPromoCode\" type=\"text\" class=\"\">\n                </label>\n                <div if=\"promoCodeError.show\" transition=\"fade\" class=\"promoCodeError\">\n                    {{ promoCodeError.message }}\n                </div>\n            </li>\n        </ul>\n        <div class=\"contestsList\">\n            <contest-list-widget></contest-list-widget>\n        </div>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n</div>\n<section :class=\"['syncAlert', alert.show ? 'show' : '']\">\n    <p :class=\"['syncAlert__body', alert.class]\">{{ alert.body }}</p>\n    <button @click=\"alertClose\" type=\"button\" class=\"alertModal__close\">x</button>\n</section>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-52ee6c8a", module.exports)
+  } else {
+    hotAPI.update("_v-52ee6c8a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../auth":203,"../index":225,"./ContestListWidget.vue":205,"localforage":117,"vue":201,"vue-hot-reload-api":198}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44413,7 +44575,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7ebe3885", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../config/ineligibile-states.json":222,"../index":223,"../libs/d.js":225,"localforage":117,"paypal-rest-sdk":126,"vue":201,"vue-hot-reload-api":198}],208:[function(require,module,exports){
+},{"../auth":203,"../config/ineligibile-states.json":224,"../index":225,"../libs/d.js":227,"localforage":117,"paypal-rest-sdk":126,"vue":201,"vue-hot-reload-api":198}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44609,7 +44771,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c5a165d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../config/ineligibile-states.json":222,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],209:[function(require,module,exports){
+},{"../auth":203,"../config/ineligibile-states.json":224,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44715,7 +44877,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1b0d5d77", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],210:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44839,7 +45001,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-142229fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],211:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45720,7 +45882,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-15c8a168", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"../libs/animatedScrollTo.js":224,"../libs/d.js":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],212:[function(require,module,exports){
+},{"../auth":203,"../index":225,"../libs/animatedScrollTo.js":226,"../libs/d.js":227,"localforage":117,"vue":201,"vue-hot-reload-api":198}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45793,7 +45955,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3a806d47", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],213:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45953,7 +46115,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7b1ce97d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"./ContestLobby.vue":205,"./Standings.vue":220,"localforage":117,"vue":201,"vue-hot-reload-api":198}],214:[function(require,module,exports){
+},{"../auth":203,"../index":225,"./ContestLobby.vue":206,"./Standings.vue":222,"localforage":117,"vue":201,"vue-hot-reload-api":198}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45972,13 +46134,18 @@ var _localforage2 = _interopRequireDefault(_localforage);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// URL and endpoint constants
+var API_URL = URL.base + '/api/v1/';
+var LOGIN_URL = API_URL + 'authenticate';
+var SIGNUP_URL = API_URL + 'register';
+var REFRESH_URL = API_URL + 'refresh';
+
 exports.default = {
 
 	props: ['working'],
 
 	data: function data() {
 		return {
-
 			credentials: {
 				email: '',
 				password: ''
@@ -46002,7 +46169,8 @@ exports.default = {
 			if (!_auth2.default.validate()) {
 				vm.tokenRefresh(token);
 			} else {
-				_index.router.go('/contests');
+				this.$dispatch('logged-in');
+				_index.router.go('/dashboard');
 			}
 			vm.working = false;
 		});
@@ -46014,13 +46182,15 @@ exports.default = {
 			var vm = this;
 
 			if (token) {
+
 				this.$http.post(URL.base + '/api/v1/refresh', {}, {
 					headers: { 'Authorization': 'Bearer ' + token }
 				}).then(function (response) {
 					_localforage2.default.setItem('id_token', response.data.token).then(function () {
-						_index.router.go('/contests');
+						this.$dispatch('logged-in');
+						_index.router.go('/dashboard');
 					});
-				}, function (err) {
+				}).catch(function (err) {
 					_index.router.go('login');
 				});
 			} else {
@@ -46035,7 +46205,70 @@ exports.default = {
 
 			// We need to pass the component's this context
 			// to properly make use of http in the auth service
-			_auth2.default.login(this, credentials, 'contests');
+			this.login(this, credentials, 'dashboard');
+		},
+		login: function login(context, creds, redirect) {
+			this.initLocalforage();
+
+			context.working = true;
+
+			context.$http.post(LOGIN_URL, creds).then(function (response) {
+				_localforage2.default.setItem('id_token', response.data.token).then(function (value) {
+					// Redirect to a specified route
+					if (redirect) {
+						context.$dispatch('logged-in');
+						_index.router.go(redirect);
+					}
+				}).catch(function (err) {
+					console.log(err);
+				});
+			}).catch(function (err) {
+				if (err.data) {
+					context.error = err.data.error.message;
+					context.alertType = 'error';
+					context.working = false;
+				}
+				console.log(err);
+			});
+		},
+		signup: function signup(context, creds, redirect) {
+			this.initLocalforage();
+
+			context.$http.post(SIGNUP_URL, creds).then(function (response) {
+				// if this is the production site fire the fb pixel
+				if (URL.base === 'https://www.bsmma.com') {
+					// facebook pixel
+					!function (f, b, e, v, n, t, s) {
+						if (f.fbq) return;n = f.fbq = function () {
+							n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+						};if (!f._fbq) f._fbq = n;
+						n.push = n;n.loaded = !0;n.version = '2.0';n.queue = [];t = b.createElement(e);t.async = !0;
+						t.src = v;s = b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t, s);
+					}(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+					fbq('init', '1014779411913260'); // Insert your pixel ID here.
+					fbq('track', 'PageView');
+				}
+
+				_localforage2.default.setItem('id_token', response.data.token).then(function (value) {
+					if (redirect) {
+						context.$dispatch('logged-in');
+						_index.router.go(redirect);
+					}
+				}).catch(function (err) {
+					consloe.log(err);
+				});
+			}).catch(function (err) {
+				if (err.data) {
+					context.error = err.data.error.message;
+					context.alertType = 'error';
+				}
+				console.log(err);
+			});
+		},
+		initLocalforage: function initLocalforage() {
+			_localforage2.default.config({
+				name: 'Big Shoot MMA'
+			});
 		}
 	},
 
@@ -46066,7 +46299,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e21a08e0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],215:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46181,7 +46414,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-92d42d6e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],216:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46498,7 +46731,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4edf0ef8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],217:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46669,7 +46902,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-cd61a3e0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],218:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46753,7 +46986,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-370c9968", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"localforage":117,"vue":201,"vue-hot-reload-api":198}],219:[function(require,module,exports){
+},{"../auth":203,"localforage":117,"vue":201,"vue-hot-reload-api":198}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46900,7 +47133,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6fbff1dd", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"babel-runtime/helpers/defineProperty":16,"localforage":117,"vue":201,"vue-hot-reload-api":198}],220:[function(require,module,exports){
+},{"../auth":203,"../index":225,"babel-runtime/helpers/defineProperty":16,"localforage":117,"vue":201,"vue-hot-reload-api":198}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -47072,7 +47305,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-09eb2964", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],221:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -47282,13 +47515,13 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-a91ff79a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../auth":203,"../index":223,"localforage":117,"vue":201,"vue-hot-reload-api":198}],222:[function(require,module,exports){
+},{"../auth":203,"../index":225,"localforage":117,"vue":201,"vue-hot-reload-api":198}],224:[function(require,module,exports){
 module.exports={
 	"states": [
 		"AL", "AZ", "HI", "ID", "IA", "LA", "MT", "NV", "WA"
 	]
 }
-},{}],223:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -47363,6 +47596,10 @@ var _Withdraw2 = _interopRequireDefault(_Withdraw);
 var _ForgotPassword = require('./components/ForgotPassword.vue');
 
 var _ForgotPassword2 = _interopRequireDefault(_ForgotPassword);
+
+var _Dashboard = require('./components/Dashboard.vue');
+
+var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
 var _vueRouter = require('vue-router');
 
@@ -47439,6 +47676,10 @@ router.map({
     component: _Register2.default
   },
 
+  '/dashboard': {
+    component: _Dashboard2.default
+  },
+
   '/events': {
     component: _Events2.default
   },
@@ -47513,7 +47754,7 @@ router.redirect({
 // Start the app on the #app div
 router.start(_App2.default, '#app');
 
-},{"./components/App.vue":204,"./components/Contests.vue":206,"./components/Deposit.vue":207,"./components/DepositProfile.vue":208,"./components/Entries.vue":209,"./components/Events.vue":210,"./components/Fights.vue":211,"./components/ForgotPassword.vue":212,"./components/Lobby.vue":213,"./components/Login.vue":214,"./components/PlayerContests.vue":215,"./components/PlayerPicks.vue":216,"./components/Profile.vue":217,"./components/Register.vue":218,"./components/Results.vue":219,"./components/Withdraw.vue":221,"vue":201,"vue-resource":199,"vue-router":200}],224:[function(require,module,exports){
+},{"./components/App.vue":204,"./components/Contests.vue":207,"./components/Dashboard.vue":208,"./components/Deposit.vue":209,"./components/DepositProfile.vue":210,"./components/Entries.vue":211,"./components/Events.vue":212,"./components/Fights.vue":213,"./components/ForgotPassword.vue":214,"./components/Lobby.vue":215,"./components/Login.vue":216,"./components/PlayerContests.vue":217,"./components/PlayerPicks.vue":218,"./components/Profile.vue":219,"./components/Register.vue":220,"./components/Results.vue":221,"./components/Withdraw.vue":223,"vue":201,"vue-resource":199,"vue-router":200}],226:[function(require,module,exports){
 'use strict';
 
 (function (window) {
@@ -47573,7 +47814,7 @@ router.start(_App2.default, '#app');
     }
 })(window);
 
-},{}],225:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -48092,6 +48333,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })();
 
 }).call(this,require('_process'))
-},{"_process":154}]},{},[223]);
+},{"_process":154}]},{},[225]);
 
 //# sourceMappingURL=index.js.map

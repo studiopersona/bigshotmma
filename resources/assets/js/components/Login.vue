@@ -62,6 +62,12 @@
 </template>
 
   <script>
+	// URL and endpoint constants
+	const API_URL = URL.base + '/api/v1/';
+	const LOGIN_URL = API_URL + 'authenticate';
+	const SIGNUP_URL = API_URL + 'register';
+	const REFRESH_URL = API_URL + 'refresh';
+
   	import auth from '../auth';
     import {router} from '../index';
     import localforage from 'localforage';
@@ -72,7 +78,6 @@
 
 		data() {
 			return {
-
 				credentials: {
 					email: '',
 					password: ''
@@ -92,13 +97,15 @@
 		},
 
 		ready() {
-			var vm = this;
+			let vm = this;
 
-			localforage.getItem('id_token').then(function(token) {
+			localforage.getItem('id_token')
+			.then(function(token) {
 				if ( ! auth.validate() ) {
 					vm.tokenRefresh(token);
 				} else {
-					router.go('/contests');
+					this.$dispatch('logged-in')
+					router.go('/dashboard')
 				}
 				vm.working = false;
 			});
@@ -106,38 +113,115 @@
 
 		methods: {
 			tokenRefresh(token) {
-                var vm = this;
+                let vm = this;
 
                 if (token) {
+
 	                this.$http.post(URL.base + '/api/v1/refresh', {}, {
 	                    headers: { 'Authorization' : 'Bearer ' + token }
-	                }).then(function(response) {
+	                })
+	                .then(function(response) {
 	                    localforage.setItem('id_token', response.data.token).then(function() {
-	                    	router.go('/contests');
+							this.$dispatch('logged-in')
+	                    	router.go('/dashboard');
 	                    });
-	                }, function(err) {
+	                })
+	                .catch(function(err) {
 	                    router.go('login');
-	                });
+	                })
+
 	            } else {
 	            	router.go('login');
 	            }
             },
 
 			submit() {
-				var credentials = {
+				let credentials = {
 					email: this.credentials.email,
 					password: this.credentials.password
 				}
 
 				// We need to pass the component's this context
 				// to properly make use of http in the auth service
-				auth.login(this, credentials, 'contests')
-			}
+				this.login(this, credentials, 'dashboard')
+			},
+
+			login(context, creds, redirect) {
+		        this.initLocalforage();
+
+		        context.working = true;
+
+		        context.$http.post(LOGIN_URL, creds)
+	            .then(function(response) {
+	                localforage.setItem('id_token', response.data.token)
+	                .then(function(value) {
+	                    // Redirect to a specified route
+	                    if(redirect) {
+	                    	context.$dispatch('logged-in')
+	                        router.go(redirect);
+	                    }
+	                })
+	                .catch(function(err) {
+	                    console.log(err);
+	                });
+	            })
+	            .catch(function(err) {
+	                if (err.data ) {
+	                    context.error = err.data.error.message;
+	                    context.alertType = 'error';
+	                    context.working = false;
+	                }
+	                console.log(err);
+	            });
+		    },
+
+		    signup(context, creds, redirect) {
+		        this.initLocalforage();
+
+		        context.$http.post(SIGNUP_URL, creds)
+		        .then(function(response) {
+		            // if this is the production site fire the fb pixel
+		            if ( URL.base === 'https://www.bsmma.com') {
+		                // facebook pixel
+		                !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+		                n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+		                n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+		                t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+		                document,'script','https://connect.facebook.net/en_US/fbevents.js');
+		                fbq('init', '1014779411913260'); // Insert your pixel ID here.
+		                fbq('track', 'PageView');
+		            }
+
+		            localforage.setItem('id_token', response.data.token)
+		            .then(function(value) {
+		                if(redirect) {
+		                	context.$dispatch('logged-in')
+		                    router.go(redirect);
+		                }
+		            })
+		            .catch(function(err) {
+		                consloe.log(err);
+		            });
+		        })
+		        .catch(function(err) {
+		            if ( err.data ) {
+		                context.error = err.data.error.message;
+		                context.alertType = 'error';
+		            }
+		            console.log(err);
+		        });
+		    },
+
+		    initLocalforage() {
+		        localforage.config({
+		            name: 'Big Shoot MMA',
+		        });
+		    },
 		},
 
     	computed: {
 			alertClasses() {
-				var type = this.alertType;
+				let type = this.alertType;
 
 				return {
 					'Alert': true,
