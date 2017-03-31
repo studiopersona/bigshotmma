@@ -4993,6 +4993,36 @@ a {
   .contestWidgetList__item:last-child {
     margin-right: 0; }
 
+.contestList__details {
+  font-size: 0.9rem;
+  text-align: left;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+  justify-content: space-between; }
+
+.contestList__contestType {
+  font-style: italic; }
+
+.contestsList {
+  margin-top: 2.5rem; }
+
+.promoCodeError {
+  margin: 1rem 0;
+  padding: 1.5rem;
+  border: 1px solid #a80300;
+  color: #a80300;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  background: #efefef; }
+
+.bogoPromoStatus {
+  color: #2dbe0c;
+  font-size: 1.35rem;
+  display: inline-block;
+  margin-left: 4rem; }
+
 .passwordLayout__header {
   text-align: center;
   margin-bottom: 1rem; }

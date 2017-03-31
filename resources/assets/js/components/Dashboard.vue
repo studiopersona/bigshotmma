@@ -17,31 +17,31 @@
             <ul class="profile__details">
                 <li class="profile__detail">
                     <label class="profile__detailsLabel profile__detailsHighlight">Balance:</label>
-                    <span class="profile__detailsItem profile__detailsHighlight">$25.00</span>
+                    <span class="profile__detailsItem profile__detailsHighlight">${{ player.balance.toFixed(2) }}</span>
                 </li>
                 <li class="profile__detail">
                     <label class="profile__detailsLabel">Points:</label>
-                    <span class="profile__detailsItem">25000</span>
+                    <span class="profile__detailsItem">{{ player.points }}</span>
                 </li>
                 <li class="profile__detail">
-                    <label class="profile__detailsLabel">Promos:</label>
+                    <label class="profile__detailsLabel">Promo:</label>
 
                     <span v-if="player.promo.id === 0" class="profile__detailsItem">
                         <button class="promoRevealBtn" @click="showPromoField = !showPromoField">Have a Promo Code?</button>
                     </span>
                     <span v-else class="profile__detailsItem">
-                        {{ player.promo.status }}
+                        {{ player.promo.code }}<br><span class="bogoPromoStatus">{{ player.promo.status }}</span>
                     </span>
                 </li>
                 <li v-if="showPromoField" transition="fade" class="profile__detail">
                     <label for="bogoPromoCode">
-                        <input id="bogoPromoCode" type="text" placeholder="ENTER PROMO CODE">
+                        <input id="bogoPromoCode" v-model="newPromoCode" type="text" placeholder="ENTER PROMO CODE" autofocus>
                     </label>
+                    <div v-if="promoCodeError.show" transition="fade" class="promoCodeError">
+                        {{ promoCodeError.message }}
+                    </div>
                     <div class="button-wrap">
                         <button class="button button--primary"@click="checkPromoCode">Verify Code</button>
-                    </div>
-                    <div if="promoCodeError.show" transition="fade" class="promoCodeError">
-                        {{ promoCodeError.message }}
                     </div>
                 </li>
             </ul>
@@ -82,8 +82,11 @@
                     avatar: '',
                     promo: {
                         id: 0,
+                        code: '',
                         status: '',
                     },
+                    points: '',
+                    balance: 0,
                 },
                 showPromoField: false,
                 promoCodeError: {
@@ -159,7 +162,7 @@
                     this.player.avatar  = response.data.profile.avatar
                     this.player.points  = response.data.profile.points
                     this.player.balance = response.data.profile.balance
-                    // this.player.promo   = response.data.profile.promo
+                    this.player.promo   = response.data.profile.promo
 
                     this.working = false
                 })
@@ -172,10 +175,12 @@
             checkPromoCode() {
                 let vm = this
 
+                this.promoCodeError.show = false
+
                 localforage.getItem('id_token')
                 .then(function(token) {
 
-                    this.$http.post(URL.base + '/api/v1/validate-promo-code', { promoCode: this.newPromoCode }, {
+                    vm.$http.post(URL.base + '/api/v1/validate-promo-code', { promoCode: vm.newPromoCode }, {
                         headers: { 'Authorization' : 'Bearer ' + token }
                     })
                     .then(function(res) {
@@ -186,10 +191,12 @@
                         if ( response.valid ) {
                             vm.player.promo.id = response.promo.id
                             vm.player.promo.status = response.promo.status
+                            vm.player.promo.code = response.promo.code
 
                             vm.showPromoField = false
                         } else {
-                            vm.promoCodeError = response.error
+                            vm.promoCodeError.message = response.error
+                            vm.promoCodeError.show = true
                         }
                     })
                     .catch(function(err) {

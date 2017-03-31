@@ -19,15 +19,7 @@ class UserBalancesController extends Controller
     {
     	$user = \JWTAuth::parseToken()->authenticate();
 
-    	$credits = $this->userBalance->where('user_id', $user->id)
-                    ->whereIn('transaction_type_id', [2, 4, 5, 6])
-                    ->sum('amount');
-
-        $debits = $this->userBalance->where('user_id', $user->id)
-                    ->whereIn('transaction_type_id', [1, 3])
-                    ->sum('amount');
-
-        $balance = $credits - $debits;
+    	$balance = calculatePlayersBalance($this->userBalance, $user->id);
 
         if ( (int)$balance >= (int)$request->amount*100  ) {
 

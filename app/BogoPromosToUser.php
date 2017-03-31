@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class BogoPromosToUser extends Model
 {
-    public function bogoPromos()
+	protected $guarded = [];
+
+    public function bogoPromo()
     {
     	return $this->belongsTo('Bsmma\BogoPromo');
     }
 
-    public function users()
+    public function user()
     {
     	return $this->belongsTo('Bsmma\User');
     }

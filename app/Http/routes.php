@@ -67,6 +67,8 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::post('withdraw', 'UserBalancesController@makeWithdrawl');
 	    //  Upload Routes ----------------------------------------------------
 	    Route::post('upload-avatar-image', 'UsersController@uploadImage');
+	    // Bogo Promo Routes -------------------------------------------------
+	    Route::post('validate-promo-code', 'BogoPromoController@validateCode');
 	});
 
 	Route::get('/terms-of-service', 'LanderController@terms');

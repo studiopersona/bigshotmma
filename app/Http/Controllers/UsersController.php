@@ -2,27 +2,27 @@
 
 namespace Bsmma\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Auth;
-use Session;
-
+use Bsmma\BogoPromosToUser;
+use Bsmma\CreditCardType;
 use Bsmma\Http\Requests;
-use Illuminate\Support\Facades\DB;
-
+use Bsmma\Http\Requests\DepositProfileRequest;
+use Bsmma\Http\Requests\ProfileRequest;
+use Bsmma\MerchantTransaction;
+use Bsmma\PaypalEmail;
+use Bsmma\StripeDetail;
 use Bsmma\User;
 use Bsmma\UserBalance;
-use Bsmma\PaypalEmail;
-use Bsmma\MerchantTransaction;
-use Bsmma\CreditCardType;
-use Bsmma\StripeDetail;
 use Bsmma\divStrong\Transformers\ProfileTransformer as ProfileTransformer;
-use Bsmma\Http\Requests\ProfileRequest;
-use Bsmma\Http\Requests\DepositProfileRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Session;
 
 class UsersController extends ApiController
 {
     private $stripe;
     private $paypal;
+    private $bogoPromosToUser;
 
     public function __construct(
         User $user,
@@ -30,7 +30,8 @@ class UsersController extends ApiController
         UserBalance $userBalance,
         MerchantTransaction $merchantTransaction,
         CreditCardType $creditCardType,
-        StripeDetail $stripeDetail
+        StripeDetail $stripeDetail,
+        BogoPromosToUser $bogoPromosToUser
     )
     {
     	$this->user = $user;
@@ -39,6 +40,7 @@ class UsersController extends ApiController
         $this->merchantTransaction = $merchantTransaction;
         $this->creditCardType = $creditCardType;
         $this->stripeDetail = $stripeDetail;
+        $this->bogoPromosToUser = $bogoPromosToUser;
     }
 
     public function getPlayerName()
@@ -52,26 +54,34 @@ class UsersController extends ApiController
     {
         $user = \JWTAuth::parseToken()->authenticate();
 
-        $credits = $this->userBalance->where('user_id', $user->id)
-                    ->whereIn('transaction_type_id', [2, 4, 5, 6])
-                    ->sum('amount');
+        $balance = calculatePlayersBalance($user->id);
 
-        $debits = $this->userBalance->where('user_id', $user->id)
-                    ->whereIn('transaction_type_id', [1, 3])
-                    ->sum('amount');
-
-        return response()->json(['playerBalance' => ($credits - $debits)/100 ]);
+        return response()->json(['playerBalance' => $balance/100 ]);
     }
 
     public function profile()
     {
     	$user = \JWTAuth::parseToken()->authenticate();
 
+        $userBalance     = calculatePlayersBalance($user->id)/100;
+        $userTotalPoints = calculatePlayersTotalPoints($user->id);
+
+        $userPromo = $this->bogoPromosToUser->where('user_id', $user->id)
+                        ->with('bogoPromo')
+                        ->where('is_complete', 0)
+                        ->whereNotNull('entered_code_on')
+                        ->first();
+
+        $promo = ( is_null($userPromo) ) ? ['id' => 0, 'code' => '', 'status' => ''] : ['id' => $userPromo->id, 'code' => $userPromo->bogoPromo->code, 'status' => determineBogoStatus($userPromo)];
+
     	return $this->respond([
             'profile' => [
-            	'name' => $user->player_name,
-            	'email' => $user->email,
-            	'avatar' => $user->avatar,
+                'name'    => $user->player_name,
+                'email'   => $user->email,
+                'avatar'  => $user->avatar,
+                'balance' => $userBalance,
+                'points'  => $userTotalPoints,
+                'promo'   => $promo,
             ],
         ]);
     }
@@ -92,10 +102,10 @@ class UsersController extends ApiController
 
         return ($userInfo->save()) ? $this->respond([
             'success' => true,
-            'msg' => 'Your profile was updated successfully',
+            'msg'     => 'Your profile was updated successfully',
         ]) : $this->respond([
             'success' => false,
-            'msg' => 'There was a problem updating your profile'
+            'msg'     => 'There was a problem updating your profile'
         ]);
     }
 
@@ -113,18 +123,18 @@ class UsersController extends ApiController
 
         return $this->respond([
             'profile' => [
-                'name' => $user->player_name,
-                'email' => $user->email,
-                'lastname' => $user->lastname,
-                'firstname' => $user->firstname,
-                'address' => $user->address1,
-                'address2' => $user->address2,
-                'city' => $user->city,
-                'state' => $user->state,
-                'zipcode' => $user->zipcode,
-                'merchant' => $user->merchant_id,
-                'stripeId' => (is_null($userInfo->stripeDetail)) ? 0 : $userInfo->stripeDetail->stripe_id,
-                'ccDigits' => (is_null($userInfo->stripeDetail)) ? '' : $userInfo->stripeDetail->cc_digits,
+                'name'        => $user->player_name,
+                'email'       => $user->email,
+                'lastname'    => $user->lastname,
+                'firstname'   => $user->firstname,
+                'address'     => $user->address1,
+                'address2'    => $user->address2,
+                'city'        => $user->city,
+                'state'       => $user->state,
+                'zipcode'     => $user->zipcode,
+                'merchant'    => $user->merchant_id,
+                'stripeId'    => (is_null($userInfo->stripeDetail)) ? 0 : $userInfo->stripeDetail->stripe_id,
+                'ccDigits'    => (is_null($userInfo->stripeDetail)) ? '' : $userInfo->stripeDetail->cc_digits,
                 'ccImageName' => (is_null($userInfo->stripeDetail)) ? '' : $userInfo->stripeDetail->creditCardType->image_name,
                 'paypalEmail' => (is_null($userInfo->paypalEmail)) ? '' : $userInfo->paypalEmail->email,
             ],
@@ -138,13 +148,13 @@ class UsersController extends ApiController
         $userInfo = $this->user->where('id', $user->id)
                         ->first();
 
-        $userInfo->lastname = $request->lastname;
-        $userInfo->firstname = $request->firstname;
-        $userInfo->address1 = $request->address;
-        $userInfo->address2 = $request->address2;
-        $userInfo->city = $request->city;
-        $userInfo->state = $request->state;
-        $userInfo->zipcode = $request->zipcode;
+        $userInfo->lastname    = $request->lastname;
+        $userInfo->firstname   = $request->firstname;
+        $userInfo->address1    = $request->address;
+        $userInfo->address2    = $request->address2;
+        $userInfo->city        = $request->city;
+        $userInfo->state       = $request->state;
+        $userInfo->zipcode     = $request->zipcode;
         $userInfo->merchant_id = (int)$request->merchant_id;
 
         return ($userInfo->save()) ? $this->respond([
@@ -269,8 +279,8 @@ class UsersController extends ApiController
             $this->merchantTransaction->create([
                 'merchant_id'      => 2,
                 'user_balances_id' => $balance->id,
-                'transaction_id' => $chargeOutcome['transactionId'],
-                'payment_id' => $chargeOutcome['paymentId'],
+                'transaction_id'   => $chargeOutcome['transactionId'],
+                'payment_id'       => $chargeOutcome['paymentId'],
             ]);
         });
 
@@ -304,7 +314,7 @@ class UsersController extends ApiController
     private function chargeCustomer($userInfo, $request)
     {
         $chargeInfo = [
-            'customer' => $userInfo['stripeDetail']['stripe_id'],
+            'customer'    => $userInfo['stripeDetail']['stripe_id'],
             'amount'      => $request->amount,
             'description' => 'BSMMA Funds deposit for '.$userInfo['firstname'].' '.$userInfo['lastname'],
         ];
@@ -322,13 +332,13 @@ class UsersController extends ApiController
         if ( isset($tokenResponse['failed']) ) return ['success' => false, 'msg' => $tokenResponse['msg']];
 
         $customerInfo = [
-            'source' => $tokenResponse['id'],
+            'source'      => $tokenResponse['id'],
             'description' => 'BSMMA Customer Account',
-            'metadata' => [
+            'metadata'    => [
                 'name' => $userInfo['firstname'].' '.$userInfo['lastname'],
-                'id' => $userInfo['id'],
+                'id'   => $userInfo['id'],
             ],
-            'email' => $userInfo['email'],
+            'email'       => $userInfo['email'],
         ];
 
         $customerAccountId = $this->stripe->createCustomer($customerInfo);
@@ -336,10 +346,10 @@ class UsersController extends ApiController
         $ccBrand = $this->cardBrand($cardInfo['cardNumber']);
 
         $chargeInfo = [
-            'customer' => $customerAccountId,
-            'amount'   => $request->amount,
+            'customer'    => $customerAccountId,
+            'amount'      => $request->amount,
             'description' => 'BSMMA Funds deposit for '.$userInfo['firstname'].' '.$userInfo['lastname'],
-            'cardBrand' => $ccBrand,
+            'cardBrand'   => $ccBrand,
         ];
 
         return $this->performCharge($chargeInfo);
@@ -356,7 +366,7 @@ class UsersController extends ApiController
 
         $this->stripe->updateCustomer([
             'customer' => $userInfo['stripeDetail']['stripe_id'],
-            'source' => $tokenResponse['id'],
+            'source'   => $tokenResponse['id'],
         ]);
 
         return $this->chargeCustomer($userInfo, $request);
@@ -371,9 +381,9 @@ class UsersController extends ApiController
         if ( isset($chargeResponse['failed']) ) return ['success' => false, 'msg' => $chargeResponse['msg']];
 
         $return = [
-            'success' => true,
+            'success'       => true,
             'transactionId' => $chargeResponse['transactionId'],
-            'ccDigits' => $chargeResponse['ccDigits'],
+            'ccDigits'      => $chargeResponse['ccDigits'],
         ];
 
         if ( isset($chargeInfo['customer']) ) $return['customerId'] = $chargeInfo['customer'];
@@ -387,9 +397,9 @@ class UsersController extends ApiController
         $cardType = $this->creditCardType->where('name', $responseData['cardBrand'])->first();
 
         $this->stripeDetail->insert([
-            'user_id'      => $user->id,
-            'stripe_id'    => $responseData['customerId'],
-            'cc_digits'    => $responseData['ccDigits'],
+            'user_id'             => $user->id,
+            'stripe_id'           => $responseData['customerId'],
+            'cc_digits'           => $responseData['ccDigits'],
             'credit_card_type_id' => $cardType->id,
         ]);
     }
@@ -399,8 +409,8 @@ class UsersController extends ApiController
         $cardType = $this->creditCardType->where('name', $responseData['cardBrand'])->first();
 
         $this->stripeDetail->where('user_id', $user->id)->update([
-            'stripe_id'    => $responseData['customerId'],
-            'cc_digits'    => $responseData['ccDigits'],
+            'stripe_id'           => $responseData['customerId'],
+            'cc_digits'           => $responseData['ccDigits'],
             'credit_card_type_id' => $cardType->id,
         ]);
     }

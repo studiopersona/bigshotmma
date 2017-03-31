@@ -6,6 +6,10 @@
 				<a v-link="{ path: '/contest/' + contest.contest_id + '/players' }">
 	                <img class="contestList__img" :src="URL.base + '/public/image/events/' + contest.event_image_file" alt="{{ contest.event_name }} Image">
 	            </a>
+	            <div class="contestList__details">
+	            	<span class="contestList__contestType">{{ contest.contest_type_name }}</span>
+	            	Entry Fee: ${{ parseFloat(contest.buy_in).toFixed(2) }}
+	            </div>
 	        </div>
 		</div>
 	</div>
