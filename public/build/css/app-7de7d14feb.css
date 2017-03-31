@@ -4950,6 +4950,49 @@ a {
   font-size: 1.3rem;
   margin-top: 2rem; }
 
+.profile__playerName {
+  font-size: 2rem;
+  font-weight: 300; }
+
+.profile__details {
+  font-size: 1.6rem;
+  margin: 1.5rem 0;
+  padding: 0 1.4rem; }
+
+.profile__detail {
+  padding: 1rem 1.5rem;
+  text-align: left; }
+  .profile__detail:nth-child(odd) {
+    background-color: #efefef; }
+
+.profile__detailsLabel {
+  text-transform: uppercase;
+  width: 40%;
+  margin-left: 4rem;
+  display: inline-block; }
+
+.profile__detailsHighlight {
+  color: #2dbe0c; }
+
+.promoRevealBtn {
+  background: transparent;
+  color: #e51937;
+  border: none; }
+
+.contestWidgetList {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding: 0 1rem; }
+
+.contestWidgetList__item {
+  width: 33%;
+  margin-right: 1rem; }
+  .contestWidgetList__item:last-child {
+    margin-right: 0; }
+
 .passwordLayout__header {
   text-align: center;
   margin-bottom: 1rem; }

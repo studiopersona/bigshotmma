@@ -69,6 +69,12 @@
         	 			Profile
         	 		</a>
         	 	</li>
+                <li class="appDashboard__linkWrap">
+                    <a class="appDashboard__link appDashboard__link--profile" v-link="{ path: '/dashboard' }" @click="toggleMenu">
+                        <img src="public/image/dashboard/profile.png">
+                        Dashboard
+                    </a>
+                </li>
         	 </ul>
         </nav>
         <section id="rulesSlider" class="rulesSlider">

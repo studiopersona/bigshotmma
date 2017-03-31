@@ -1,0 +1,52 @@
+.profile__playerName {
+	font-size: 2rem;
+	font-weight: 300;
+}
+
+.profile__details {
+	font-size: 1.6rem;
+	margin: 1.5rem 0;
+	padding: 0 1.4rem;
+}
+
+.profile__detail {
+	padding: 1rem 1.5rem;
+	text-align: left;
+
+	&:nth-child(odd) {
+		background-color: #efefef;
+	}
+}
+
+.profile__detailsLabel {
+	text-transform: uppercase;
+	width: 40%;
+	margin-left: 4rem;
+	display: inline-block;
+}
+
+.profile__detailsHighlight {
+	color: $color-green;
+}
+
+.promoRevealBtn {
+	background: transparent;
+	color: $color-red;
+	border: none;
+}
+
+.contestWidgetList {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 1rem;
+	padding: 0 1rem;
+}
+
+.contestWidgetList__item {
+	width: 33%;
+	margin-right: 1rem;
+
+	&:last-child {
+		margin-right: 0;
+	}
+}

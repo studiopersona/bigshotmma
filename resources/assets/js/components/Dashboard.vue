@@ -11,32 +11,35 @@
             <div v-else class="profile__image">
                 <img :src="URL.base + '/public/image/avatar/' + player.avatar">
             </div>
-            <div class="profle__playerName">
+            <div class="profile__playerName">
                 {{ player.name }}
             </div>
             <ul class="profile__details">
                 <li class="profile__detail">
                     <label class="profile__detailsLabel profile__detailsHighlight">Balance:</label>
-                    <span class="profile__detailsItem profile__detailsHighlight">{{ player.balance }}</span>
+                    <span class="profile__detailsItem profile__detailsHighlight">$25.00</span>
                 </li>
                 <li class="profile__detail">
                     <label class="profile__detailsLabel">Points:</label>
-                    <span class="profile__detailsItem profile__detailsHighlight">{{ player.points }}</span>
+                    <span class="profile__detailsItem">25000</span>
                 </li>
-                <li clas="profile__detail">
+                <li class="profile__detail">
                     <label class="profile__detailsLabel">Promos:</label>
 
-                    <span v-if="player.promos.id === 0" class="profile__detailsItem">
-                        <button class="promoRevealBtn" @click="showPromoField = !showPromoField">Enter Promo Code</button>
+                    <span v-if="player.promo.id === 0" class="profile__detailsItem">
+                        <button class="promoRevealBtn" @click="showPromoField = !showPromoField">Have a Promo Code?</button>
                     </span>
                     <span v-else class="profile__detailsItem">
                         {{ player.promo.status }}
                     </span>
                 </li>
-                <li v-if="showPromoField" transition="fade">
+                <li v-if="showPromoField" transition="fade" class="profile__detail">
                     <label for="bogoPromoCode">
-                        <input id="bogoPromoCode" @change="checkPromoCode" type="text" class="">
+                        <input id="bogoPromoCode" type="text" placeholder="ENTER PROMO CODE">
                     </label>
+                    <div class="button-wrap">
+                        <button class="button button--primary"@click="checkPromoCode">Verify Code</button>
+                    </div>
                     <div if="promoCodeError.show" transition="fade" class="promoCodeError">
                         {{ promoCodeError.message }}
                     </div>
@@ -156,7 +159,7 @@
                     this.player.avatar  = response.data.profile.avatar
                     this.player.points  = response.data.profile.points
                     this.player.balance = response.data.profile.balance
-                    this.player.promo   = response.data.profile.promo
+                    // this.player.promo   = response.data.profile.promo
 
                     this.working = false
                 })
