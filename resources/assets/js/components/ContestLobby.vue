@@ -165,6 +165,12 @@
             return {
                 prizePool: {},
                 playersBalance: 0,
+                playerPromo: {
+                    promoUserId: 0,
+                    id: 0,
+                    code: '',
+                    status: [],
+                },
                 playerRecords: [],
                 playersOverallScores: [],
                 contestTypes: {},
@@ -289,27 +295,6 @@
                     this.contestTypes = response.data;
                 });
 
-                /*
-                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players-records', {}, {
-                    // Attach the JWT header
-                    headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    // console.log(response.data);
-                    this.playerRecords = response.data.data;
-                });
-                */
-
-                /*
-                this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players-overall-scores', {}, {
-                    // Attach the JWT header
-                    headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    console.log('players overall scores')
-                    console.log(response.data);
-                    this.playersOverallScores = response.data;
-                });
-                */
-
                 this.$http.get( URL.base + '/api/v1/player-balance', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
@@ -422,31 +407,63 @@
                 var vm = this,
                     params,
                     playersBalance
-                // get the players balance from the server
+
+                // get the players balance and promo from the server
                 var fetch = function(token) {
                     vm.$http.get( URL.base + '/api/v1/player-balance', {}, {
                         // Attach the JWT header
                         headers: { 'Authorization' : 'Bearer ' + token }
-                    }).then(
-                        function(response) {
+                    })
+                    .then(function(response) {
                             playersBalance = response.data.playerBalance;
                             vm.$root.playersBalance = response.data.playerBalance;
-                            if ( playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10) ) {
-                                vm.confirmModalContent.action = 'enter';
-                                vm.confirmModalContent.title = 'Enter Contest';
-                                vm.confirmModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
-                                vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
 
-                                vm.confirmModalClassList.add('show');
-                            } else {
-                                vm.fundsModalContent.title = 'Insufficent Funds';
-                                vm.fundsModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
-                                vm.fundsModalContent.body = '<p>Your current balance is <span class="highlight">$' + vm.playersBalance + '</span> you need a minimum balance of <span class="highlight">$' + vm.participantsList[0].contest.buy_in + '</span> in order to enter this contest.';
+                            vm.$http.get(URL.base + '/api/v1/player-promo', {}, {
+                                headers: { 'Autorization' : 'Bearer ' + token }
+                            })
+                            .then(function(response) {
+                                vm.playerPromo = response.data.promo
 
-                                vm.fundsModalClasses.push('show');
-                            }
-                        },
-                        function(err) {
+                                // has a balance to cover entry and no active promo
+                                if ( playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10) &&  vm.playerPromo.id === 0 ) {
+                                    vm.confirmModalContent.action = 'enter';
+                                    vm.confirmModalContent.title = 'Enter Contest';
+                                    vm.confirmModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
+                                    vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
+
+                                    vm.confirmModalClassList.add('show');
+                                  // has a balance to cover the entry and haas and active promo in stage 1 (need to enter paid contest)
+                                } else if ( playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10) &&  vm.playerPromo.status.stage === 1 ) {
+                                    vm.confirmModalContent.action = 'enter';
+                                    vm.confirmModalContent.title = 'Enter Contest';
+                                    vm.confirmModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
+                                    // this needs to be changed to panel for entering paid contest for promo
+                                    vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
+
+                                    vm.confirmModalClassList.add('show');
+                                } else if ( vm.playerPromo.status.stage === 3 ) {
+                                    vm.confirmModalContent.action = 'enter';
+                                    vm.confirmModalContent.title = 'Enter Contest';
+                                    vm.confirmModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
+                                    // this needs to be changed to panel for entering free contest for promo
+                                    vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
+
+                                    vm.confirmModalClassList.add('show');
+                                } else {
+                                    vm.fundsModalContent.title = 'Insufficent Funds';
+                                    vm.fundsModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
+                                    vm.fundsModalContent.body = '<p>Your current balance is <span class="highlight">$' + vm.playersBalance + '</span> you need a minimum balance of <span class="highlight">$' + vm.participantsList[0].contest.buy_in + '</span> in order to enter this contest.';
+
+                                    vm.fundsModalClasses.push('show');
+                                }
+                            })
+                            .catch(function(err) {
+                                console.log('there was a problem checking for players promotions')
+                                console.log(err)
+                            })
+                        })
+                        .catch(function(err) {
+                            console.log('there was an problem getting the players balance')
                             console.log(err);
                     });
                 }
@@ -490,10 +507,24 @@
                             headers: { 'Authorization' : 'Bearer ' + token }
                         }).then(function(response) {
                             // console.log(response);
+
+                            // !!!!! if player has a promo running need to set it back a stage
+                            if ( vm.playerPromo.id !== 0 ) vm.$http.post(URL.base + '/api/v1/backup-promo', {
+                                'promoUserId': vm.playerPromo.promoUserId
+                            });
+
                             vm.$root.playersBalance = vm.$root.playersBalance + parseInt(vm.participantsList[0].contest.buy_in, 10);
                             router.go('/event/' + response.data.data.eventId + '/contests');
                         });
                     } else if ( actionData.action === 'enter' ) {
+                        // !!!!! if the player has an active promo move to stage 2
+                        if ( vm.playerPromo.id !== 0 ) {
+                            vm.$http.post(URL.base + '/api/v1/update-promo', {
+                                'stage': 2,
+                                'paid_contest_id': actionData.contestId,
+                                'promoUserId': vm.playerPromo.promoUserId,
+                            })
+                        }
                         router.go(actionData.path);
                     }
                 });

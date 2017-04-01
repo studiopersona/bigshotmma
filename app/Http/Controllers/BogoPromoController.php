@@ -9,17 +9,34 @@ use Illuminate\Http\Request;
 class BogoPromoController extends ApiController
 {
 	private $bogoPromo;
+	private $user;
 
 
 	public function __construct(BogoPromotion $bogoPromo)
 	{
 		$this->bogoPromo = $bogoPromo;
+    	$this->user = \JWTAuth::parseToken()->authenticate();
 	}
 
 	public function validateCode(Request $request)
 	{
-    	$user = \JWTAuth::parseToken()->authenticate();
+		return $this->respond($this->bogoPromo->validateCode($request, $this->user));
+	}
 
-		return $this->respond($this->bogoPromo->validateCode($request, $user));
+	public function checkForActiveCode()
+	{
+		return $this->respond($this->bogoPromo->checkForActiveCode($this->user));
+	}
+
+	public function updateStage(Request $request)
+	{
+		$method = 'moveToStage'.$request->stage;
+
+		$this->bogoPromo->{$method}($request, $this->user);
+	}
+
+	public function backupStage(Request $request)
+	{
+		$this->bogoPromo->backupStage($request);
 	}
 }

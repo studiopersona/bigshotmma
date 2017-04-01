@@ -30,7 +30,7 @@
                         <button class="promoRevealBtn" @click="showPromoField = !showPromoField">Have a Promo Code?</button>
                     </span>
                     <span v-else class="profile__detailsItem">
-                        {{ player.promo.code }}<br><span class="bogoPromoStatus">{{ player.promo.status }}</span>
+                        {{ player.promo.code }}<br><span class="bogoPromoStatus">{{ player.promo.status.display }}</span>
                     </span>
                 </li>
                 <li v-if="showPromoField" transition="fade" class="profile__detail">

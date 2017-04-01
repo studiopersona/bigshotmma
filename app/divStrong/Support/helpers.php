@@ -22,19 +22,34 @@ function calculatePlayersTotalPoints($playerId)
 
 function determineBogoStatus($data)
 {
-	if ( !is_null($data->completed_paid_contest_on) ) {
-		return 'Free Contest Redeemed';
+	if ( $data->is_complete ) {
+		return [
+			'stage' => 5,
+			'display' => 'Free Contest Redeemed',
+		];
 	}
 	elseif ( !is_null($data->entered_free_contest_on) ) {
-		return 'Free Contest Entered';
+		return [
+			'stage' => 4,
+			'display' => 'Free Contest Entered'
+		];
 	}
-	elseif ( !is_null($data->completed_paid_contest) ) {
-		return 'Free Contest Unlocked';
+	elseif ( !is_null($data->completed_paid_contest_on) ) {
+		return [
+			'stage' => 3,
+			'display' => 'Free Contest Unlocked'
+		];
 	}
 	elseif ( !is_null($data->entered_paid_contest_on) ) {
-		return 'Entered Eligible Paid Contest';
+		return [
+			'stage' => 2,
+			'display' => 'Entered Eligible Paid Contest'
+		];
 	}
 	else {
-		return 'Awaiting Eligible Contest Entry';
+		return [
+			'stage' => 1,
+			'display' => 'Awaiting Eligible Contest Entry'
+		];
 	}
 }

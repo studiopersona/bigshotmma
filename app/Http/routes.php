@@ -69,6 +69,9 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::post('upload-avatar-image', 'UsersController@uploadImage');
 	    // Bogo Promo Routes -------------------------------------------------
 	    Route::post('validate-promo-code', 'BogoPromoController@validateCode');
+	    Route::get('player-promo', 'BogoPromoController@checkForActiveCode');
+	    Route::post('update-promo', 'BogoPromoController@updateStage');
+	    Route::post('backup-promo', 'BogoPromoController@backupStage');
 	});
 
 	Route::get('/terms-of-service', 'LanderController@terms');
