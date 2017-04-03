@@ -25,7 +25,7 @@ class BogoPromoController extends ApiController
 
 	public function checkForActiveCode()
 	{
-		return $this->respond($this->bogoPromo->checkForActiveCode($this->user));
+		return $this->respond($this->bogoPromo->checkForActiveCode($this->user->id));
 	}
 
 	public function updateStage(Request $request)

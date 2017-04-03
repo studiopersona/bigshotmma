@@ -36,9 +36,21 @@
 		text-transform: uppercase;
 	}
 
+	.highlight-red {
+		color: $color-primary;
+	}
+
 	.larger {
 		font-size: 5.3rem;
 		margin-top: -1.5rem;
+	}
+
+	.small {
+		font-size: 1.2rem;
+	}
+
+	.strike-through {
+		text-decoration: line-through;
 	}
 }
 

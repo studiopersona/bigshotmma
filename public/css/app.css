@@ -5248,9 +5248,18 @@ a {
   color: #2dbe0c;
   text-transform: uppercase; }
 
+.confirmModal__body .highlight-red {
+  color: #a80300; }
+
 .confirmModal__body .larger {
   font-size: 5.3rem;
   margin-top: -1.5rem; }
+
+.confirmModal__body .small {
+  font-size: 1.2rem; }
+
+.confirmModal__body .strike-through {
+  text-decoration: line-through; }
 
 .confirmModal__title {
   font-size: 3rem;

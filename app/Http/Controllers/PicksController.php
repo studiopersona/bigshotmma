@@ -2,25 +2,27 @@
 
 namespace Bsmma\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Bsmma\Http\Requests;
-use Bsmma\User;
-use Bsmma\Pick;
+use Bsmma\BogoPromosToUser;
 use Bsmma\Contest;
+use Bsmma\ContestParticipant;
+use Bsmma\ContestUserBalance;
 use Bsmma\Event;
 use Bsmma\FightResult;
-use Bsmma\ContestParticipant;
+use Bsmma\Http\Requests;
+use Bsmma\Pick;
+use Bsmma\User;
 use Bsmma\UserBalance;
-use Bsmma\ContestUserBalance;
+use Bsmma\divStrong\Reports\PlayerRecords;
+use Bsmma\divStrong\Scoring\FightScoring;
+use Bsmma\divStrong\Transformers\ContestTransformer;
 use Bsmma\divStrong\Transformers\PickTransformer;
 use Bsmma\divStrong\Transformers\PlayerPickTransformer;
-use Bsmma\divStrong\Transformers\ContestTransformer;
-use Bsmma\divStrong\Scoring\FightScoring;
-use Bsmma\divStrong\Reports\PlayerRecords;
+use Illuminate\Http\Request;
 
 class PicksController extends ApiController
 {
+    private $bogoPromosToUser;
+
     public function __construct(
         Pick $pick,
         User $user,
@@ -34,7 +36,8 @@ class PicksController extends ApiController
         PlayerPickTransformer $playerPickTransformer,
         ContestTransformer $contestTransformer,
         FightScoring $fightScoring,
-        PlayerRecords $playerRecords
+        PlayerRecords $playerRecords,
+        BogoPromosToUser $bogoPromosToUser
     )
     {
         $this->pick = $pick;
@@ -50,6 +53,7 @@ class PicksController extends ApiController
         $this->fightResult = $fightResult;
         $this->fightScoring = $fightScoring;
         $this->playerRecords = $playerRecords;
+        $this->bogoPromosToUser = $bogoPromosToUser;
     }
 
     /**
@@ -303,8 +307,15 @@ class PicksController extends ApiController
                     ->where('id', $contestId)
                     ->first();
 
-        $userBalance = $this->userBalance->create(['user_id' => $user->id, 'transaction_type_id' => 5, 'amount' => $contest->entry_fee * 100]);
-        $this->contestUserBalance->create(['contest_id' => $contestId, 'user_balance_id' => $userBalance->id]);
+        $promoCheck = $this->bogoPromosToUser->where('user_id', $user->id)
+                        ->where('paid_contest_id', $contestId)
+                        ->first();
+
+        // if the entry fee wasn't free then credit the players balance
+        if ( is_null($promoCheck) || is_null($promoCheck->free_contest_id) ) {
+            $userBalance = $this->userBalance->create(['user_id' => $user->id, 'transaction_type_id' => 5, 'amount' => $contest->entry_fee * 100]);
+            $this->contestUserBalance->create(['contest_id' => $contestId, 'user_balance_id' => $userBalance->id]);
+        }
 
         return $this->respond(['data' => ['eventId' => $contest->event_id]]);
     }

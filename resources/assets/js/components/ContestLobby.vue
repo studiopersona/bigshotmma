@@ -170,6 +170,7 @@
                     id: 0,
                     code: '',
                     status: [],
+                    validEntryFees: [],
                 },
                 playerRecords: [],
                 playersOverallScores: [],
@@ -395,12 +396,67 @@
             },
 
             confirmQuit(e) {
-                this.confirmModalContent.action = 'quit';
-                this.confirmModalContent.title = 'Quit Contest';
-                this.confirmModalContent.image = URL.base + '/public/image/events/' + this.participantsList[0].contest.event_image;
-                this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + '<br>' + this.participantsList[0].contest.total_participants + ' / ' + this.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to quit this contest?</p>';
+                var vm = this,
+                    params
 
-                this.confirmModalClassList.add('show');
+                // get the players balance and promo from the server
+                var fetch = function(token) {
+                    vm.$http.get( URL.base + '/api/v1/player-balance', {}, {
+                        // Attach the JWT header
+                        headers: { 'Authorization' : 'Bearer ' + token }
+                    })
+                    .then(function(response) {
+                        vm.$root.playersBalance = response.data.playerBalance;
+
+                        vm.$http.get(URL.base + '/api/v1/player-promo', {}, {
+                            headers: { 'Authorization' : 'Bearer ' + token }
+                        })
+                        .then(function(response) {
+
+                            if (response.data.valid) vm.playerPromo = response.data.promo
+
+                            this.confirmModalContent.action = 'quit';
+                            this.confirmModalContent.title = 'Quit Contest';
+                            this.confirmModalContent.image = URL.base + '/public/image/events/' + this.participantsList[0].contest.event_image;
+                            this.confirmModalContent.body = '<p>' + this.participantsList[0].contest.contest_type_name + '<br>' + this.participantsList[0].contest.total_participants + ' / ' + this.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + this.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to quit this contest?</p>';
+
+                            this.confirmModalClassList.add('show');
+                        })
+                        .catch(function(err) {
+                            console.log('there was an error while fetching the player promo from quit')
+                            console.log(err)
+                        })
+                    })
+                    .catch(function(err) {
+                        console.log('there was an error while fetching the players balance')
+                        console.log(err)
+                    })
+                }
+                // get token and re-query server to get players true balance (protect against client side changes to balance total)
+                localforage.getItem('id_token').then(function(token) {
+                    if ( token ) {
+                        params = auth.parseToken(token);
+                        if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
+                            fetch(token);
+                        } else {
+                            vm.$http.post(URL.base + '/api/v1/refresh', {}, {
+                                headers: { 'Authorization' : 'Bearer ' + token }
+                            }).then(function(response) {
+                                localforage.setItem('id_token', response.data.token).then(function() {
+                                    fetch(token);
+                                });
+                            }, function(err) {
+                                router.go('login');
+                            });
+                        }
+                    } else {
+                        router.go('login');
+                    }
+                })
+                .catch(function(err) {
+                    console.log(err);
+                });
+
             },
 
             confirmEnter(e) {
@@ -419,37 +475,56 @@
                             vm.$root.playersBalance = response.data.playerBalance;
 
                             vm.$http.get(URL.base + '/api/v1/player-promo', {}, {
-                                headers: { 'Autorization' : 'Bearer ' + token }
+                                headers: { 'Authorization' : 'Bearer ' + token }
                             })
                             .then(function(response) {
-                                vm.playerPromo = response.data.promo
+
+                                if (response.data.valid) vm.playerPromo = response.data.promo
+
+                                console.log(vm.playerPromo)
 
                                 // has a balance to cover entry and no active promo
-                                if ( playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10) &&  vm.playerPromo.id === 0 ) {
+                                // a) check that player has balance to cover entry fee
+                                // b) check that player has either
+                                //    i) no valid promo code
+                                //    ii) has a valid promo code but the entry fee doesn't match the valid entry fees
+                                //    iii) the entry fee matchs one in the valid entry fees, but is not the fee used in the paid contest
+                                // all of these conditions would lead to a standard paided entry
+                                if ( (playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10))
+                                    && (vm.playerPromo.id === 0
+                                        || (vm.playerPromo.id !== 0
+                                            && !vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString()))
+                                        || (vm.playerPromo.id !== 0
+                                            && vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString())
+                                            && (vm.playerPromo.status.stage !== 3 && vm.playerPromo.status.stage === 4 )))
+                                    ) {
+
                                     vm.confirmModalContent.action = 'enter';
                                     vm.confirmModalContent.title = 'Enter Contest';
                                     vm.confirmModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
                                     vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
 
                                     vm.confirmModalClassList.add('show');
-                                  // has a balance to cover the entry and haas and active promo in stage 1 (need to enter paid contest)
-                                } else if ( playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10) &&  vm.playerPromo.status.stage === 1 ) {
+                                  // has a balance to cover the entry and has and active promo in stage 1 (need to enter paid contest)
+                                } else if ( playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10) && vm.playerPromo.status.stage === 1 && vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString()) ) {
+
                                     vm.confirmModalContent.action = 'enter';
                                     vm.confirmModalContent.title = 'Enter Contest';
                                     vm.confirmModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
-                                    // this needs to be changed to panel for entering paid contest for promo
-                                    vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
+                                    vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p class="highlight small">Earn Promo ' + vm.playerPromo.code + ' if you complete this contest, entitling you to a free $' + vm.participantsList[0].contest.buy_in + ' entry.</p><p>Are you sure you want to enter this contest?</p>';
 
                                     vm.confirmModalClassList.add('show');
-                                } else if ( vm.playerPromo.status.stage === 3 ) {
+                                  // check if a free contest has been earned and the entry fee matches the entry fee of the paid contest
+                                } else if ( vm.playerPromo.status.stage === 3 && vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString()) && (vm.playerPromo.paidContestEntryFee === vm.participantsList[0].contest.buy_in) ) {
+
                                     vm.confirmModalContent.action = 'enter';
                                     vm.confirmModalContent.title = 'Enter Contest';
                                     vm.confirmModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
-                                    // this needs to be changed to panel for entering free contest for promo
-                                    vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
+                                    vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight-red strike-through">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p class="highlight">Promo Fee: $0</p><p>Are you sure you want to enter this contest?</p>';
 
                                     vm.confirmModalClassList.add('show');
                                 } else {
+
                                     vm.fundsModalContent.title = 'Insufficent Funds';
                                     vm.fundsModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
                                     vm.fundsModalContent.body = '<p>Your current balance is <span class="highlight">$' + vm.playersBalance + '</span> you need a minimum balance of <span class="highlight">$' + vm.participantsList[0].contest.buy_in + '</span> in order to enter this contest.';
@@ -507,22 +582,43 @@
                             headers: { 'Authorization' : 'Bearer ' + token }
                         }).then(function(response) {
                             // console.log(response);
+                            console.log(vm.playerPromo.id)
+                            console.log(vm.playerPromo)
+                            console.log(vm.participantsList[0].contest.buy_in.toString())
+                            // if player has a promo running need to set it back a stage
+                            if ( vm.playerPromo.id !== 0 && vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString()) ) {
+                                vm.$http.post(URL.base + '/api/v1/backup-promo', {
+                                    'promoUserId': vm.playerPromo.promoUserId
+                                }, {
+                                    // Attach the JWT header
+                                    headers: { 'Authorization' : 'Bearer ' + token }
+                                })
+                                .then(function() {
+                                    vm.$root.playersBalance = vm.$root.playersBalance + parseInt(vm.participantsList[0].contest.buy_in, 10);
+                                    router.go('/event/' + response.data.data.eventId + '/contests');
+                                })
+                                .catch(function(err) {
+                                    console.log('an error was encountered while backing up promo')
+                                    console.log(err)
+                                })
+                            } else {
+                                vm.$root.playersBalance = vm.$root.playersBalance + parseInt(vm.participantsList[0].contest.buy_in, 10);
+                                router.go('/event/' + response.data.data.eventId + '/contests');
+                            }
 
-                            // !!!!! if player has a promo running need to set it back a stage
-                            if ( vm.playerPromo.id !== 0 ) vm.$http.post(URL.base + '/api/v1/backup-promo', {
-                                'promoUserId': vm.playerPromo.promoUserId
-                            });
-
-                            vm.$root.playersBalance = vm.$root.playersBalance + parseInt(vm.participantsList[0].contest.buy_in, 10);
-                            router.go('/event/' + response.data.data.eventId + '/contests');
                         });
                     } else if ( actionData.action === 'enter' ) {
-                        // !!!!! if the player has an active promo move to stage 2
-                        if ( vm.playerPromo.id !== 0 ) {
+                        // if the player has a valid active promo move to stage 2
+                        if ( vm.playerPromo.id !== 0 && vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString()) ) {
                             vm.$http.post(URL.base + '/api/v1/update-promo', {
-                                'stage': 2,
+                                'stage': vm.playerPromo.status.stage + 1,
                                 'paid_contest_id': actionData.contestId,
+                                'free_contest_id': actionData.contestId,
                                 'promoUserId': vm.playerPromo.promoUserId,
+                                'entryFee': vm.participantsList[0].contest.buy_in,
+                            }, {
+                                // Attach the JWT header
+                                headers: { 'Authorization' : 'Bearer ' + token }
                             })
                         }
                         router.go(actionData.path);

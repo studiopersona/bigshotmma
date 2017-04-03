@@ -1,23 +1,23 @@
 <?php
 namespace Bsmma\divStrong\Promotions;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
-use Illuminate\Http\Request;
-
 use Bsmma\BogoPromo;
 use Bsmma\BogoPromosToUser;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BogoPromotion
 {
 	private $bogoPromo;
-	private $bogoPromoToUser;
+	private $bogoPromosToUser;
 
 
-	public function __construct(BogoPromo $bogoPromo, BogoPromosToUser $bogoPromoToUser)
+	public function __construct(BogoPromo $bogoPromo, BogoPromosToUser $bogoPromosToUser)
 	{
 		$this->bogoPromo = $bogoPromo;
-		$this->bogoPromoToUser = $bogoPromoToUser;
+		$this->bogoPromosToUser = $bogoPromosToUser;
 	}
 
 	public function validateCode(Request $request, $user)
@@ -51,36 +51,39 @@ class BogoPromotion
             'id' => 0,
             'code' => '',
             'status' => [],
+            'validEntryFees' => [],
         ];
 
-        return $this->prepResponseData($codeCheck->bogoPromo, $codeCheck->id);
+        return $this->prepResponseData($codeCheck, $codeCheck->id);
     }
 
     public function backupStage($request)
     {
-        $userPromo = $this->bogoPromoToUser->where('id', $request->userPromoId)->first();
+        $userPromo = $this->bogoPromosToUser->where('id', $request->promoUserId)->first();
 
-        if ( $userPromo->entered_free_contest_on !== '0000-00-00 00:00:00' ) {
+        if ( !is_null($userPromo->free_contest_id) ) {
             $userPromo->entered_free_contest_on = NULL;
+            $userPromor->free_contest_id = NULL;
         } else {
             $userPromo->entered_paid_contest_on = NULL;
+            $userPromo->paid_contest_id = NULL;
         }
 
         $userPromo->save();
     }
 
-    public function moveToStage2($request, $userId)
+    public function moveToStage2(Request $request, \Bsmma\User $user)
     {
         DB::beginTransaction();
 
         try {
-            $this->bogoPromoToUser->where('id', $request->promoUserId)
-                ->update(['paid_contest_id', $request->paid_contest_id, 'entered_paid_contest_on' => date('Y-m-d H:i:s')]);
+            $this->bogoPromosToUser->where('id', $request->promoUserId)
+                ->update(['paid_contest_id'=> $request->paid_contest_id, 'entered_paid_contest_on' => date('Y-m-d H:i:s'), 'paid_contest_entry_fee' => $request->entryFee]);
         }
         catch(\Exception $e) {
             DB::rollback();
 
-            Log::error('Couldn\'t update promo to stage 2', ['user_id' => $userId, 'promoUserId' => $request->promoUserId, 'date' => date()]);
+            Log::error('Couldn\'t update promo to stage 2', ['user_id' => $user->id, 'promoUserId' => $request->promoUserId, 'date' => date('Y-m-d H:i:s'), 'exception' => $e]);
 
             // create a adminNotifier service that will alert admins to the error
         }
@@ -88,18 +91,18 @@ class BogoPromotion
         DB::commit();
     }
 
-    public function moveToStage3($request)
+    public function moveToStage3(Request $request, \Bsmma\User $user)
     {
         DB::beginTransaction();
 
         try {
-            $this->bogoPromoToUser->where('id', $request->promoUserId)
+            $this->bogoPromosToUser->where('id', $request->promoUserId)
                 ->update(['completed_paid_contest_on' => date('Y-m-d H:i:s')]);
         }
         catch(\Exception $e) {
             DB::rollback();
 
-            Log::error('Couldn\'t update promo to stage 3', ['user_id' => $userId, 'promoUserId' => $request->promoUserId, 'date' => date()]);
+            Log::error('Couldn\'t update promo to stage 3', ['user_id' => $user->id, 'promoUserId' => $request->promoUserId, 'date' => date(), 'exception' => $e]);
 
             // create a adminNotifier service that will alert admins to the error
         }
@@ -107,18 +110,18 @@ class BogoPromotion
         DB::commit();
     }
 
-    public function moveToStage4($request)
+    public function moveToStage4(Request $request, \Bsmma\User $user)
     {
         DB::beginTransaction();
 
         try {
-            $this->bogoPromoToUser->where('id', $request->promoUserId)
-                ->update(['free_contest_id', $request->free_contest_id, 'entered_free_contest_on' => date('Y-m-d H:i:s')]);
+            $this->bogoPromosToUser->where('id', $request->promoUserId)
+                ->update(['free_contest_id' => $request->free_contest_id, 'entered_free_contest_on' => date('Y-m-d H:i:s')]);
         }
         catch(\Exception $e) {
             DB::rollback();
 
-            Log::error('Couldn\'t update promo to stage 4', ['user_id' => $userId, 'promoUserId' => $request->promoUserId, 'date' => date()]);
+            Log::error('Couldn\'t update promo to stage 4', ['user_id' => $user->id, 'promoUserId' => $request->promoUserId, 'date' => date(), 'exception' => $e]);
 
             // create a adminNotifier service that will alert admins to the error
         }
@@ -126,18 +129,18 @@ class BogoPromotion
         DB::commit();
     }
 
-    public function moveToStage5($request)
+    public function moveToStage5(Request $request, \Bsmma\User $user)
     {
         DB::beginTransaction();
 
         try {
-            $this->bogoPromoToUser->where('id', $request->promoUserId)
+            $this->bogoPromosToUser->where('id', $request->promoUserId)
                 ->update(['is_complete' => 1]);
         }
         catch(\Exception $e) {
             DB::rollback();
 
-            Log::error('Couldn\'t update promo to stage 5', ['user_id' => $userId, 'promoUserId' => $request->promoUserId, 'date' => date()]);
+            Log::error('Couldn\'t update promo to stage 5', ['user_id' => $user->id, 'promoUserId' => $request->promoUserId, 'date' => date(), 'exception' => $e]);
 
             // create a adminNotifier service that will alert admins to the error
         }
@@ -147,7 +150,7 @@ class BogoPromotion
 
     protected function enterPlayerPromo($promo, $userId)
     {
-        $promoUserId = $this->bogoPromoToUser->create([
+        $promoUserId = $this->bogoPromosToUser->create([
             'bogo_promo_id' => $promo->id,
             'user_id' => $userId,
             'entered_code_on' => date('Y-m-d H:i:s'),
@@ -163,8 +166,10 @@ class BogoPromotion
             'promo' => [
                 'promoUserId' => $promoUserId,
                 'id' => $data->id,
-                'code' => $data->code,
+                'code' => $data->bogoPromo->code,
                 'status' => determineBogoStatus($data),
+                'validEntryFees' => explode(',', $data->bogoPromo->valid_entry_fees),
+                'paidContestEntryFee' => $data->paid_contest_entry_fee,
             ],
         ];
     }

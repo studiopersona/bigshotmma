@@ -28,7 +28,7 @@ function determineBogoStatus($data)
 			'display' => 'Free Contest Redeemed',
 		];
 	}
-	elseif ( !is_null($data->entered_free_contest_on) ) {
+	elseif ( !is_null($data->free_contest_id) ) {
 		return [
 			'stage' => 4,
 			'display' => 'Free Contest Entered'
@@ -40,7 +40,7 @@ function determineBogoStatus($data)
 			'display' => 'Free Contest Unlocked'
 		];
 	}
-	elseif ( !is_null($data->entered_paid_contest_on) ) {
+	elseif ( !is_null($data->paid_contest_id) ) {
 		return [
 			'stage' => 2,
 			'display' => 'Entered Eligible Paid Contest'
