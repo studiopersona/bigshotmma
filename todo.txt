@@ -1,3 +1,9 @@
+- admin files changed eventserviceprovider 20, fightresultscontroller 123
+
+- free entry still charging
+
+- promo code can be used twice
+
 - *** debug total points not correct if fighter loses and power up is achieved ***
 
 
@@ -8,8 +14,6 @@
 - before contest begins Results link on Picks view should be Lobby
 
 - make sure contest_participants is updated when player quits
-
-- forgot password
 
 - create a standings only view that loads the standing partial view
 

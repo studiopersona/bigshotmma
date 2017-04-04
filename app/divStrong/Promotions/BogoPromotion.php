@@ -33,9 +33,21 @@ class BogoPromotion
 
     	$codeCheck = $codeCheck->shift();
 
+        if ( $this->hasCodeBeenUsedByPlayer($codeCheck, $user->id) ) return ['error' => 'You have already redeemed this code.'];
+
     	$promoUserId = $this->enterPlayerPromo($codeCheck, $user->id);
 
-        return $this->prepResponseData($codeCheck, $promoUserId);
+        return [
+            'valid' => true,
+            'promo' => [
+                'promoUserId' => $user->id,
+                'id' => $codeCheck->id,
+                'code' => $codeCheck->code,
+                'status' => determineBogoStatus($codeCheck),
+                'validEntryFees' => explode(',', $codeCheck->valid_entry_fees),
+                'paidContestEntryFee' => $codeCheck->paid_contest_entry_fee,
+            ],
+        ];
     }
 
     public function checkForActiveCode($userId)
@@ -47,11 +59,15 @@ class BogoPromotion
                         ->first();
 
         if ( is_null($codeCheck) ) return [
-            'promoUserId' => 0,
-            'id' => 0,
-            'code' => '',
-            'status' => [],
-            'validEntryFees' => [],
+            'valid' => false,
+            'promo' => [
+                'promoUserId' => 0,
+                'id' => 0,
+                'code' => '',
+                'status' => [],
+                'validEntryFees' => [],
+                'paidContestEntryFee' => -1,
+            ],
         ];
 
         return $this->prepResponseData($codeCheck, $codeCheck->id);
@@ -59,14 +75,14 @@ class BogoPromotion
 
     public function backupStage($request)
     {
-        $userPromo = $this->bogoPromosToUser->where('id', $request->promoUserId)->first();
+        $userPromo = $this->bogoPromosToUser->where('id', $request->promoUserId)->where('is_complete', 0)->first();
 
-        if ( !is_null($userPromo->free_contest_id) ) {
-            $userPromo->entered_free_contest_on = NULL;
-            $userPromor->free_contest_id = NULL;
-        } else {
+        if ( is_null($userPromo->free_contest_id) ) {
             $userPromo->entered_paid_contest_on = NULL;
             $userPromo->paid_contest_id = NULL;
+        } else {
+            $userPromo->entered_free_contest_on = NULL;
+            $userPromo->free_contest_id = NULL;
         }
 
         $userPromo->save();
@@ -157,6 +173,13 @@ class BogoPromotion
         ]);
 
         return $promoUserId;
+    }
+
+    protected function hasCodeBeenUsedByPlayer($codeData, $userId)
+    {
+        return !$this->bogoPromosToUser->where('user_id', $userId)
+                ->where('bogo_promo_id', $codeData->id)
+                ->get()->isEmpty();
     }
 
     protected function prepResponseData($data, $promoUserId)

@@ -43992,23 +43992,8 @@ exports.default = {
 
                         console.log(vm.playerPromo);
 
-                        // has a balance to cover entry and no active promo
-                        // a) check that player has balance to cover entry fee
-                        // b) check that player has either
-                        //    i) no valid promo code
-                        //    ii) has a valid promo code but the entry fee doesn't match the valid entry fees
-                        //    iii) the entry fee matchs one in the valid entry fees, but is not the fee used in the paid contest
-                        // all of these conditions would lead to a standard paided entry
-                        if (playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10) && (vm.playerPromo.id === 0 || vm.playerPromo.id !== 0 && !vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString()) || vm.playerPromo.id !== 0 && vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString()) && vm.playerPromo.status.stage !== 3 && vm.playerPromo.status.stage === 4)) {
-
-                            vm.confirmModalContent.action = 'enter';
-                            vm.confirmModalContent.title = 'Enter Contest';
-                            vm.confirmModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
-                            vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
-
-                            vm.confirmModalClassList.add('show');
-                            // has a balance to cover the entry and has and active promo in stage 1 (need to enter paid contest)
-                        } else if (playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10) && vm.playerPromo.status.stage === 1 && vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString())) {
+                        // has a balance to cover the entry and has and active promo in stage 1 (need to enter paid contest)
+                        if (playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10) && vm.playerPromo.status.stage === 1 && vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString())) {
 
                             vm.confirmModalContent.action = 'enter';
                             vm.confirmModalContent.title = 'Enter Contest';
@@ -44025,13 +44010,20 @@ exports.default = {
                             vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight-red strike-through">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p class="highlight">Promo Fee: $0</p><p>Are you sure you want to enter this contest?</p>';
 
                             vm.confirmModalClassList.add('show');
-                        } else {
+                        } else if (playersBalance < parseInt(vm.participantsList[0].contest.buy_in, 10)) {
 
                             vm.fundsModalContent.title = 'Insufficent Funds';
                             vm.fundsModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
                             vm.fundsModalContent.body = '<p>Your current balance is <span class="highlight">$' + vm.playersBalance + '</span> you need a minimum balance of <span class="highlight">$' + vm.participantsList[0].contest.buy_in + '</span> in order to enter this contest.';
 
                             vm.fundsModalClasses.push('show');
+                        } else {
+                            vm.confirmModalContent.action = 'enter';
+                            vm.confirmModalContent.title = 'Enter Contest';
+                            vm.confirmModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
+                            vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p>Are you sure you want to enter this contest?</p>';
+
+                            vm.confirmModalClassList.add('show');
                         }
                     }).catch(function (err) {
                         console.log('there was a problem checking for players promotions');

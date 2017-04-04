@@ -4982,14 +4982,16 @@ a {
 .contestWidgetList {
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
   margin-top: 1rem;
   padding: 0 1rem; }
 
 .contestWidgetList__item {
-  width: 33%;
-  margin-right: 1rem; }
+  width: calc(33% - 1rem);
+  margin: 0 1rem 1.5rem 0; }
   .contestWidgetList__item:last-child {
     margin-right: 0; }
 

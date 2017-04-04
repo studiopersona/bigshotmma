@@ -2,22 +2,24 @@
 
 namespace Bsmma\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-
-use Bsmma\Http\Requests;
 use Bsmma\Contest;
 use Bsmma\ContestParticipant;
 use Bsmma\ContestParticipantsArchive;
+use Bsmma\ContestUserBalance;
+use Bsmma\Http\Requests;
 use Bsmma\User;
 use Bsmma\UserBalance;
-use Bsmma\ContestUserBalance;
+use Bsmma\divStrong\Promotions\BogoPromotion;
 use Bsmma\divStrong\Transformers\ContestTransformer as ContestTransformer;
-use Bsmma\divStrong\Transformers\PlayerTransformer as PlayerTransformer;
 use Bsmma\divStrong\Transformers\FightTransformer as FightTransformer;
+use Bsmma\divStrong\Transformers\PlayerTransformer as PlayerTransformer;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ContestsController extends ApiController
 {
+    private $bogoPromo;
+
 
     public function __construct(
         User $user,
@@ -28,7 +30,8 @@ class ContestsController extends ApiController
         FightTransformer $fightTransformer,
         UserBalance $userBalance,
         ContestUserBalance $contestUserBalance,
-        ContestParticipantsArchive $contestParticipantsArchive
+        ContestParticipantsArchive $contestParticipantsArchive,
+        BogoPromotion $bogoPromo
     )
     {
         $this->user = $user;
@@ -40,6 +43,7 @@ class ContestsController extends ApiController
         $this->fightTransformer = $fightTransformer;
         $this->userBalance = $userBalance;
         $this->contestUserBalance = $contestUserBalance;
+        $this->bogoPromo = $bogoPromo;
 
         $this->middleware('jwt.auth');
     }
@@ -108,35 +112,45 @@ class ContestsController extends ApiController
     {
         $user = \JWTAuth::parseToken()->authenticate();
 
-        $hasEntered = $this->contestParticipant->where([
-                        'user_id' => $user->id,
-                        'contest_id' => $contest_id
-                    ])
+        $hasPlayerEntered = $this->hasPlayerEntered($contest_id, $user);
+
+        if ( $hasPlayerEntered ) return $this->respondWithError('Player already entered this contest.');
+
+        $contest = $this->contest->select('entry_fee')
+                    ->where('id', $contest_id)
                     ->first();
 
-        if ( is_null($hasEntered) ) {
+        if ( is_null($contest) ) return $this->respondNotFound('The contest could not be found');
 
-            $contest = $this->contest->select('entry_fee')
-                        ->where('id', $contest_id)
-                        ->first();
+        // grab the bogo promo if the player has one
+        $bogoPromoCode = $this->bogoPromo->checkForActiveCode($user->id);
 
-            if ( is_null($contest) ) return $this->respondNotFound('The contest could not be found');
+        DB::beginTransaction();
 
-            DB::beginTransaction();
+        try {
+            $this->contestParticipant->create(['contest_id'=> $contest_id, 'user_id' => $user->id]);
 
-            try {
-                $this->contestParticipant->create(['contest_id'=> $contest_id, 'user_id' => $user->id]);
+            // if the players bogo promo is at stage 3 (unlocked free entry) and the entry fee is the same as the paid contest
+            // entry fee, then waive the entry fee
+            dump($bogoPromoCode['promo']['status']['stage']);
+            dump($bogoPromoCode['promo']['paidContestEntryFee']);
+            dd($contest->entry_fee);
+
+            if ( $bogoPromoCode['promo']['status']['stage'] === 3 && ($bogoPromoCode['promo']['paidContestEntryFee'] === $contest->entry_fee) ) {
+                $userBalance = $this->userBalance->create(['user_id' => $user->id, 'transaction_type_id' => 1, 'amount' => 0]);
+             } else {
                 $userBalance = $this->userBalance->create(['user_id' => $user->id, 'transaction_type_id' => 1, 'amount' => $contest->entry_fee * 100]);
-                $this->contestUserBalance->create(['contest_id' => $contest_id, 'user_balance_id' => $userBalance->id, 'is_entry' => 1]);
+            }
 
-                DB::commit();
-            }
-            catch (\Exception $e) {
-                dump($e);
-                DB::rollback();
-                return $this->respondWithError('There was a problem entering the contest');
-            }
+            $this->contestUserBalance->create(['contest_id' => $contest_id, 'user_balance_id' => $userBalance->id, 'is_entry' => 1]);
         }
+        catch (\Exception $e) {
+            dump($e);
+            DB::rollback();
+            return $this->respondWithError('There was a problem entering the contest');
+        }
+
+        DB::commit();
 
         return $this->respond([
             'success' => true,
@@ -144,18 +158,19 @@ class ContestsController extends ApiController
         ]);
     }
 
-    public function hasPlayerEntered($contest_id)
+    public function hasPlayerEntered($contest_id, $user = NULL)
     {
-        $user = \JWTAuth::parseToken()->authenticate();
+        $player = (is_null($user)) ? \JWTAuth::parseToken()->authenticate() : $user;
 
         $check = $this->contestParticipant->where([
-                        'user_id' => $user->id,
+                        'user_id' => $player->id,
                         'contest_id' => $contest_id
                     ])
                     ->first();
-        if ( is_null($check) ) return $this->respond(['hasPlayerEntered' => false]);
 
-        return $this->respond(['hasPlayerEntered' => true]);
+        if ( is_null($check) ) return ( is_null($user) ) ? $this->respond(['hasPlayerEntered' => false]) : false;
+
+        return ( is_null($user) ) ? $this->respond(['hasPlayerEntered' => true]) : true;
     }
 
     public function getFights($contest_id)
@@ -220,7 +235,7 @@ class ContestsController extends ApiController
         ]);
     }
 
-    private function getContests($playerId = NULL, $eventId = NULL, $useDeadline = true)
+    protected function getContests($playerId = NULL, $eventId = NULL, $useDeadline = true)
     {
         $query = $this->contest->with([
                         'contestType',
@@ -249,12 +264,12 @@ class ContestsController extends ApiController
         return $query->get();
     }
 
-    private function getTotalParticipants($contestId)
+    protected function getTotalParticipants($contestId)
     {
         return $this->contestParticipant->where('contest_id', $contestId)->count();
     }
 
-    private function getPlayerRecord($user_id)
+    protected function getPlayerRecord($user_id)
     {
         return [
             'wins' => 0,
@@ -263,7 +278,7 @@ class ContestsController extends ApiController
         ];
     }
 
-    private function getUserBalance($userId)
+    protected function getUserBalance($userId)
     {
         $credits = $this->userBalance->where('user_id', $userId)
                     ->whereIn('transaction_type_id', [2, 4, 5, 6])

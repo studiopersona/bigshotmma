@@ -37,14 +37,15 @@
 
 .contestWidgetList {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
+	flex-wrap: wrap;
 	margin-top: 1rem;
 	padding: 0 1rem;
 }
 
 .contestWidgetList__item {
-	width: 33%;
-	margin-right: 1rem;
+	width: calc(33% - 1rem);
+	margin: 0 1rem 1.5rem 0;
 
 	&:last-child {
 		margin-right: 0;
