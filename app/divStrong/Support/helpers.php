@@ -20,7 +20,7 @@ function calculatePlayersTotalPoints($playerId)
 	return \Bsmma\ContestParticipantsArchive::where('user_id', $playerId)->sum('score');
 }
 
-function determineBogoStatus($data, array $validEntryFees)
+function determineBogoStatus(\Bsmma\BogoPromosToUser $data, array $validEntryFees)
 {
 	if ( $data->is_complete ) {
 		return [

@@ -43,7 +43,10 @@ class BogoPromotion
                 'promoUserId' => $user->id,
                 'id' => $codeCheck->id,
                 'code' => $codeCheck->code,
-                'status' => determineBogoStatus($codeCheck),
+                'status' => [
+                    'stage' => 1,
+                    'display' => 'Enter an eligible contest ($'.implode(', $', explode(',', $codeCheck->valid_entry_fees)).')',
+                ],
                 'validEntryFees' => explode(',', $codeCheck->valid_entry_fees),
                 'paidContestEntryFee' => $codeCheck->paid_contest_entry_fee,
             ],
@@ -57,8 +60,6 @@ class BogoPromotion
                         ->where('is_complete', 0)
                         ->whereNotNull('entered_code_on')
                         ->first();
-
-        dump(get_class($codeCheck));
 
         if ( is_null($codeCheck) ) return [
             'valid' => false,

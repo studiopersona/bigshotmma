@@ -4965,19 +4965,34 @@ a {
   .profile__detail:nth-child(odd) {
     background-color: #efefef; }
 
+.profile__detailLimiter {
+  width: 80%;
+  margin: 0 auto;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: start;
+  justify-content: flex-start; }
+
+@media screen and (max-width: 375px) {
+  .profile__detailLimiter {
+    width: 67%; } }
+
 .profile__detailsLabel {
   text-transform: uppercase;
-  width: 40%;
-  margin-left: 4rem;
   display: inline-block; }
 
 .profile__detailsHighlight {
   color: #2dbe0c; }
 
+.profile__detailsItem {
+  margin-left: auto; }
+
 .promoRevealBtn {
   background: transparent;
   color: #e51937;
-  border: none; }
+  border: none;
+  text-decoration: underline;
+  cursor: pointer; }
 
 .contestWidgetList {
   display: -ms-flexbox;
@@ -5023,7 +5038,7 @@ a {
   color: #2dbe0c;
   font-size: 1.35rem;
   display: inline-block;
-  margin-left: 4rem; }
+  text-align: right; }
 
 .passwordLayout__header {
   text-align: center;

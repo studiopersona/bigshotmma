@@ -16,22 +16,31 @@
             </div>
             <ul class="profile__details">
                 <li class="profile__detail">
-                    <label class="profile__detailsLabel profile__detailsHighlight">Balance:</label>
-                    <span class="profile__detailsItem profile__detailsHighlight">${{ player.balance.toFixed(2) }}</span>
+                    <div class="profile__detailLimiter">
+                        <label class="profile__detailsLabel profile__detailsHighlight">Balance:</label>
+                        <span class="profile__detailsItem profile__detailsHighlight">${{ player.balance.toFixed(2) }}</span>
+                    </div>
                 </li>
                 <li class="profile__detail">
-                    <label class="profile__detailsLabel">Points:</label>
-                    <span class="profile__detailsItem">{{ player.points }}</span>
+                    <div class="profile__detailLimiter">
+                        <label class="profile__detailsLabel">Points:</label>
+                        <span class="profile__detailsItem">{{ player.points }}</span>
+                    </div>
                 </li>
                 <li class="profile__detail">
-                    <label class="profile__detailsLabel">Promo:</label>
+                    <div class="profile__detailLimiter">
+                        <label class="profile__detailsLabel">Promo:</label>
 
-                    <span v-if="player.promo.id === 0" class="profile__detailsItem">
-                        <button class="promoRevealBtn" @click="showPromoField = !showPromoField">Have a Promo Code?</button>
-                    </span>
-                    <span v-else class="profile__detailsItem">
-                        {{ player.promo.code }}<br><span class="bogoPromoStatus">{{ player.promo.status.display }}</span>
-                    </span>
+                        <span v-if="player.promo.id === 0" class="profile__detailsItem">
+                            <button class="promoRevealBtn" @click="showPromoField = !showPromoField">Have a Promo Code?</button>
+                        </span>
+                        <span v-else class="profile__detailsItem">
+                            {{ player.promo.code }}
+                        </span>
+                    </div>
+                    <div class="profile__detailLimiter">
+                        <span class="bogoPromoStatus profile__detailsItem">{{ player.promo.status.display }}</span>
+                    </div>
                 </li>
                 <li v-if="showPromoField" transition="fade" class="profile__detail">
                     <label for="bogoPromoCode">
