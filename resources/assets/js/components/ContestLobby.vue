@@ -489,7 +489,7 @@
                                     vm.confirmModalContent.action = 'enter';
                                     vm.confirmModalContent.title = 'Enter Contest';
                                     vm.confirmModalContent.image = URL.base + '/public/image/events/' + vm.participantsList[0].contest.event_image;
-                                    vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p class="highlight small">Earn Promo ' + vm.playerPromo.code + ' if you complete this contest, entitling you to a free $' + vm.participantsList[0].contest.buy_in + ' entry.</p><p>Are you sure you want to enter this contest?</p>';
+                                    vm.confirmModalContent.body = '<p>' + vm.participantsList[0].contest.contest_type_name + '<br>' + vm.participantsList[0].contest.total_participants + ' / ' + vm.participantsList[0].contest.max_participants + ' players</p><p class="highlight">Entry Fee: $' + vm.participantsList[0].contest.buy_in + '</p><p class="highlight small">UNLOCK PROMO ' + vm.playerPromo.code + ' IF YOU COMPLETE THIS CONTEST. <br> EARN A FREE $' + vm.participantsList[0].contest.buy_in + ' ENTRY.</p><p>Are you sure you want to enter this contest?</p>';
 
                                     vm.confirmModalClassList.add('show');
                                   // check if a free contest has been earned and the entry fee matches the entry fee of the paid contest

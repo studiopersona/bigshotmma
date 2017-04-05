@@ -72,7 +72,7 @@ class UsersController extends ApiController
                         ->whereNotNull('entered_code_on')
                         ->first();
 
-        $promo = ( is_null($userPromo) ) ? ['id' => 0, 'code' => '', 'status' => ''] : ['id' => $userPromo->id, 'code' => $userPromo->bogoPromo->code, 'status' => determineBogoStatus($userPromo)];
+        $promo = ( is_null($userPromo) ) ? ['id' => 0, 'code' => '', 'status' => ''] : ['id' => $userPromo->id, 'code' => $userPromo->bogoPromo->code, 'status' => determineBogoStatus($userPromo, explode(',',$userPromo->bogoPromo->valid_entry_fees))];
 
     	return $this->respond([
             'profile' => [

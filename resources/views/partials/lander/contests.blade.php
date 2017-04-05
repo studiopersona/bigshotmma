@@ -63,7 +63,9 @@
 				<div class="col-xs-100 col-sm-100 col-md-68 col-sm-offset-2">
 					<h3 class="contests__tableHeader">{{ $event['event_name'] }}</h3>
 					<table class="contests__table">
-						@if (! $event['contests']->isEmpty())
+						@if ($event['contests']->isEmpty())
+							<tr><td class="contests__noContests">No contests have been created for this event. Check back soon for updates.</td></tr>
+						@else
 							@if ($event['contests']->count() >= 5)
 								@foreach ($event['contests']->random(5) as $contest)
 									<tr>
@@ -99,8 +101,6 @@
 									</tr>
 								@endforeach
 							@endif
-						@else
-							<tr><td class="contests__noContests">No contests have been created for this event. Check back soon for updates.</td></tr>
 						@endif
 					</table>
 					<div class="all-contests-btn-wrap">

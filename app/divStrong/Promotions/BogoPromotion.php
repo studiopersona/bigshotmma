@@ -58,6 +58,8 @@ class BogoPromotion
                         ->whereNotNull('entered_code_on')
                         ->first();
 
+        dump(get_class($codeCheck));
+
         if ( is_null($codeCheck) ) return [
             'valid' => false,
             'promo' => [
@@ -190,7 +192,7 @@ class BogoPromotion
                 'promoUserId' => $promoUserId,
                 'id' => $data->id,
                 'code' => $data->bogoPromo->code,
-                'status' => determineBogoStatus($data),
+                'status' => determineBogoStatus($data, explode(',',$data->bogoPromo->valid_entry_fees)),
                 'validEntryFees' => explode(',', $data->bogoPromo->valid_entry_fees),
                 'paidContestEntryFee' => $data->paid_contest_entry_fee,
             ],
