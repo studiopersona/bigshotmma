@@ -58,8 +58,15 @@
   </template>
 
   <script>
+  // URL and endpoint constants
+	const API_URL = URL.base + '/api/v1/';
+	const LOGIN_URL = API_URL + 'authenticate';
+	const SIGNUP_URL = API_URL + 'register';
+	const REFRESH_URL = API_URL + 'refresh';
+
 	import auth from '../auth';
     import localforage from 'localforage';
+    import {router} from '../index';
 
 	export default {
 
@@ -95,9 +102,52 @@
 				localforage.setItem('newplayer', 1).then(function() {
 					// We need to pass the component's this context
 					// to properly make use of http in the auth service
-					auth.signup(vm, credentials, 'events')
+					vm.signup(vm, credentials, 'dashboard')
 				});
-			}
+			},
+
+		    signup(context, creds, redirect) {
+		        this.initLocalforage();
+
+		        context.$http.post(SIGNUP_URL, creds)
+		        .then(function(response) {
+		            // if this is the production site fire the fb pixel
+		            if ( URL.base === 'https://www.bsmma.com') {
+		                // facebook pixel
+		                !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+		                n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+		                n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+		                t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+		                document,'script','https://connect.facebook.net/en_US/fbevents.js');
+		                fbq('init', '1014779411913260'); // Insert your pixel ID here.
+		                fbq('track', 'PageView');
+		            }
+
+		            localforage.setItem('id_token', response.data.token)
+		            .then(function(value) {
+		                if(redirect) {
+		                	context.$dispatch('logged-in')
+		                    router.go(redirect);
+		                }
+		            })
+		            .catch(function(err) {
+		                consloe.log(err);
+		            });
+		        })
+		        .catch(function(err) {
+		            if ( err.data ) {
+		                context.error = err.data.error.message;
+		                context.alertType = 'error';
+		            }
+		            console.log(err);
+		        });
+		    },
+
+		    initLocalforage() {
+		        localforage.config({
+		            name: 'Big Shoot MMA',
+		        });
+		    },
 		},
 
 		computed: {

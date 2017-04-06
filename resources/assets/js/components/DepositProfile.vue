@@ -103,7 +103,7 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset>
+            <fieldset style="display:none;">
                 <legend>Preferred Payment Method</legend>
                 <div class="profile__inputWrap form__row">
                     <select v-model="player.merchant">
@@ -173,7 +173,7 @@
                     city: '',
                     state: '',
                     zipcode: '',
-                    merchant: 0,
+                    merchant: 1,
                 },
                 cardInfo: {
                     number: '',
