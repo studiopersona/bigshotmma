@@ -1,11 +1,6 @@
-- admin files changed eventserviceprovider 20, fightresultscontroller 123
-
-- free entry still charging
-
-- promo code can be used twice
-
 - *** debug total points not correct if fighter loses and power up is achieved ***
 
+- need to display validation errors on deposit profile view
 
 - test that user is removed from contest_partcipants table when they quit a contest
 
