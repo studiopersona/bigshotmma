@@ -74,8 +74,6 @@
 
 	export default {
 
-  		props: ['working'],
-
 		data() {
 			return {
 				credentials: {
@@ -89,11 +87,8 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
+                working: true,
 			}
-		},
-
-		ceated() {
-			this.working = true;
 		},
 
 		ready() {
@@ -101,13 +96,18 @@
 
 			localforage.getItem('id_token')
 			.then(function(token) {
-				if ( ! auth.validate() ) {
-					vm.tokenRefresh(token);
+				if (token) {
+					let params = vm.parseToken(token)
+
+					if ( Math.round(new Date().getTime() / 1000) >= params.exp ) {
+						vm.tokenRefresh(token);
+					} else {
+						console.log('going from ready')
+						vm.$dispatch('logged-in', 'dashboard', token)
+					}
 				} else {
-					this.$dispatch('logged-in')
-					router.go('/dashboard')
+					vm.working = false
 				}
-				vm.working = false;
 			});
 		},
 
@@ -122,8 +122,8 @@
 	                })
 	                .then(function(response) {
 	                    localforage.setItem('id_token', response.data.token).then(function() {
-							this.$dispatch('logged-in')
-	                    	router.go('/dashboard');
+	                    	console.log('going from refresh')
+							vm.$dispatch('logged-in', '/dashboard', response.data.token)
 	                    });
 	                })
 	                .catch(function(err) {
@@ -131,7 +131,7 @@
 	                })
 
 	            } else {
-	            	router.go('login');
+	            	this.working = false
 	            }
             },
 
@@ -141,6 +141,8 @@
 					password: this.credentials.password
 				}
 
+				this.working = true
+
 				// We need to pass the component's this context
 				// to properly make use of http in the auth service
 				this.login(this, credentials, 'dashboard')
@@ -149,16 +151,14 @@
 			login(context, creds, redirect) {
 		        this.initLocalforage();
 
-		        context.working = true;
-
 		        context.$http.post(LOGIN_URL, creds)
 	            .then(function(response) {
 	                localforage.setItem('id_token', response.data.token)
 	                .then(function(value) {
 	                    // Redirect to a specified route
 	                    if(redirect) {
-	                    	context.$dispatch('logged-in')
-	                        router.go(redirect);
+	                    	console.log('going from login')
+	                    	context.$dispatch('logged-in', redirect, value)
 	                    }
 	                })
 	                .catch(function(err) {
@@ -175,47 +175,19 @@
 	            });
 		    },
 
-		    signup(context, creds, redirect) {
-		        this.initLocalforage();
-
-		        context.$http.post(SIGNUP_URL, creds)
-		        .then(function(response) {
-		            // if this is the production site fire the fb pixel
-		            if ( URL.base === 'https://www.bsmma.com') {
-		                // facebook pixel
-		                !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-		                n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-		                n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-		                t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-		                document,'script','https://connect.facebook.net/en_US/fbevents.js');
-		                fbq('init', '1014779411913260'); // Insert your pixel ID here.
-		                fbq('track', 'PageView');
-		            }
-
-		            localforage.setItem('id_token', response.data.token)
-		            .then(function(value) {
-		                if(redirect) {
-		                	context.$dispatch('logged-in')
-		                    router.go(redirect);
-		                }
-		            })
-		            .catch(function(err) {
-		                consloe.log(err);
-		            });
-		        })
-		        .catch(function(err) {
-		            if ( err.data ) {
-		                context.error = err.data.error.message;
-		                context.alertType = 'error';
-		            }
-		            console.log(err);
-		        });
-		    },
-
 		    initLocalforage() {
 		        localforage.config({
 		            name: 'Big Shoot MMA',
 		        });
+		    },
+
+		    parseToken(token) {
+		        if (token) {
+		            var base64Url = token.split('.')[1],
+		                base64 = base64Url.replace('-', '+').replace('_', '/');
+
+		            return JSON.parse(window.atob(base64));
+		        }
 		    },
 		},
 

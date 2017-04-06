@@ -26,8 +26,11 @@ export default {
 
         localforage.getItem('id_token')
         .then(function(token) {
+            console.log('token from auth validate: ', token)
              if ( token ) {
                 params = vm.parseToken(token)
+                console.log('params exp: ', params.exp)
+                console.log('current time: ', Math.round(new Date().getTime() / 1000))
                 return Math.round(new Date().getTime() / 1000) <= params.exp;
             } else {
                 return false;

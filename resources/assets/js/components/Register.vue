@@ -90,6 +90,10 @@
 			}
 		},
 
+		ready() {
+			localforage.removeItem('id_token');
+		},
+
 		methods: {
 			submit() {
 				var credentials = {
@@ -126,8 +130,7 @@
 		            localforage.setItem('id_token', response.data.token)
 		            .then(function(value) {
 		                if(redirect) {
-		                	context.$dispatch('logged-in')
-		                    router.go(redirect);
+		                	context.$dispatch('logged-in', redirect, value)
 		                }
 		            })
 		            .catch(function(err) {

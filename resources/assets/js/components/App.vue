@@ -269,6 +269,7 @@
                     current: window.URL.current,
                     full: window.URL.full,
                 },
+                working: false,
 			}
 		},
 
@@ -288,7 +289,10 @@
 
                 if ( token ) {
                     params = auth.parseToken(token)
-                    if ( Math.round(new Date().getTime() / 1000) <= params.exp ) vm.loggedIn = true
+                    if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
+                        vm.loggedIn = true
+                        vm.fetch(token)
+                    }
                 }
             })
             .catch(function(err) {
@@ -305,8 +309,11 @@
 
 		methods: {
 
-            fetch(token) {
+            fetch(token, redirect) {
                 let params = auth.parseToken(token)
+
+                this.working = true
+
                 if (params) {
                     this.playerId = params.sub
 
@@ -327,17 +334,20 @@
                     }).then(
                         function(response) {
                             this.playersName = response.data.player_name;
-                        },
-                        function(err) {
-                            console.log(err);
-                    })
 
-                    this.$http.get( URL.base + '/api/v1/player-balance', {}, {
-                        // Attach the JWT header
-                        headers: { 'Authorization' : 'Bearer ' + token }
-                    }).then(
-                        function(response) {
-                            this.playersBalance = response.data.playerBalance;
+                            this.$http.get( URL.base + '/api/v1/player-balance', {}, {
+                                // Attach the JWT header
+                                headers: { 'Authorization' : 'Bearer ' + token }
+                            }).then(
+                                function(response) {
+                                    this.playersBalance = response.data.playerBalance;
+                                    this.woking = false
+
+                                    if (redirect) router.go(redirect)
+                                },
+                                function(err) {
+                                    console.log(err);
+                            })
                         },
                         function(err) {
                             console.log(err);
@@ -384,6 +394,9 @@
 			},
 
 			logout() {
+                this.playerId = 0
+                this.playersName = ''
+                this. playersBalance = 0
 				auth.logout()
 				router.go('/login')
 				this.toggleMenu()
@@ -392,8 +405,10 @@
 		},
 
         events: {
-            'logged-in': function() {
+            'logged-in': function(redirect, token) {
                 this.loggedIn = true
+
+                if (redirect) this.fetch(token, redirect)
             }
         },
 	};

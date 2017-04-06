@@ -43339,8 +43339,11 @@ exports.default = {
         this.initLocalforage();
 
         _localforage2.default.getItem('id_token').then(function (token) {
+            console.log('token from auth validate: ', token);
             if (token) {
                 params = vm.parseToken(token);
+                console.log('params exp: ', params.exp);
+                console.log('current time: ', Math.round(new Date().getTime() / 1000));
                 return Math.round(new Date().getTime() / 1000) <= params.exp;
             } else {
                 return false;
@@ -43453,7 +43456,8 @@ exports.default = {
                 base: window.URL.base,
                 current: window.URL.current,
                 full: window.URL.full
-            }
+            },
+            working: false
         };
     },
 
@@ -43471,7 +43475,10 @@ exports.default = {
 
             if (token) {
                 params = _auth2.default.parseToken(token);
-                if (Math.round(new Date().getTime() / 1000) <= params.exp) vm.loggedIn = true;
+                if (Math.round(new Date().getTime() / 1000) <= params.exp) {
+                    vm.loggedIn = true;
+                    vm.fetch(token);
+                }
             }
         }).catch(function (err) {
             console.log(err);
@@ -43487,8 +43494,11 @@ exports.default = {
 
 
     methods: {
-        fetch: function fetch(token) {
+        fetch: function fetch(token, redirect) {
             var params = _auth2.default.parseToken(token);
+
+            this.working = true;
+
             if (params) {
                 this.playerId = params.sub;
 
@@ -43506,15 +43516,18 @@ exports.default = {
                     headers: { 'Authorization': 'Bearer ' + token }
                 }).then(function (response) {
                     this.playersName = response.data.player_name;
-                }, function (err) {
-                    console.log(err);
-                });
 
-                this.$http.get(URL.base + '/api/v1/player-balance', {}, {
-                    // Attach the JWT header
-                    headers: { 'Authorization': 'Bearer ' + token }
-                }).then(function (response) {
-                    this.playersBalance = response.data.playerBalance;
+                    this.$http.get(URL.base + '/api/v1/player-balance', {}, {
+                        // Attach the JWT header
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    }).then(function (response) {
+                        this.playersBalance = response.data.playerBalance;
+                        this.woking = false;
+
+                        if (redirect) _index.router.go(redirect);
+                    }, function (err) {
+                        console.log(err);
+                    });
                 }, function (err) {
                     console.log(err);
                 });
@@ -43553,6 +43566,9 @@ exports.default = {
             this.appDashboardClassList.toggle('show');
         },
         logout: function logout() {
+            this.playerId = 0;
+            this.playersName = '';
+            this.playersBalance = 0;
             _auth2.default.logout();
             _index.router.go('/login');
             this.toggleMenu();
@@ -43561,8 +43577,10 @@ exports.default = {
     },
 
     events: {
-        'logged-in': function loggedIn() {
+        'logged-in': function loggedIn(redirect, token) {
             this.loggedIn = true;
+
+            if (redirect) this.fetch(token, redirect);
         }
     }
 };
@@ -46306,9 +46324,6 @@ var SIGNUP_URL = API_URL + 'register';
 var REFRESH_URL = API_URL + 'refresh';
 
 exports.default = {
-
-	props: ['working'],
-
 	data: function data() {
 		return {
 			credentials: {
@@ -46321,23 +46336,26 @@ exports.default = {
 				base: window.URL.base,
 				current: window.URL.current,
 				full: window.URL.full
-			}
+			},
+			working: true
 		};
-	},
-	ceated: function ceated() {
-		this.working = true;
 	},
 	ready: function ready() {
 		var vm = this;
 
 		_localforage2.default.getItem('id_token').then(function (token) {
-			if (!_auth2.default.validate()) {
-				vm.tokenRefresh(token);
+			if (token) {
+				var params = vm.parseToken(token);
+
+				if (Math.round(new Date().getTime() / 1000) >= params.exp) {
+					vm.tokenRefresh(token);
+				} else {
+					console.log('going from ready');
+					vm.$dispatch('logged-in', 'dashboard', token);
+				}
 			} else {
-				this.$dispatch('logged-in');
-				_index.router.go('/dashboard');
+				vm.working = false;
 			}
-			vm.working = false;
 		});
 	},
 
@@ -46352,14 +46370,14 @@ exports.default = {
 					headers: { 'Authorization': 'Bearer ' + token }
 				}).then(function (response) {
 					_localforage2.default.setItem('id_token', response.data.token).then(function () {
-						this.$dispatch('logged-in');
-						_index.router.go('/dashboard');
+						console.log('going from refresh');
+						vm.$dispatch('logged-in', '/dashboard', response.data.token);
 					});
 				}).catch(function (err) {
 					_index.router.go('login');
 				});
 			} else {
-				_index.router.go('login');
+				this.working = false;
 			}
 		},
 		submit: function submit() {
@@ -46368,6 +46386,8 @@ exports.default = {
 				password: this.credentials.password
 			};
 
+			this.working = true;
+
 			// We need to pass the component's this context
 			// to properly make use of http in the auth service
 			this.login(this, credentials, 'dashboard');
@@ -46375,14 +46395,12 @@ exports.default = {
 		login: function login(context, creds, redirect) {
 			this.initLocalforage();
 
-			context.working = true;
-
 			context.$http.post(LOGIN_URL, creds).then(function (response) {
 				_localforage2.default.setItem('id_token', response.data.token).then(function (value) {
 					// Redirect to a specified route
 					if (redirect) {
-						context.$dispatch('logged-in');
-						_index.router.go(redirect);
+						console.log('going from login');
+						context.$dispatch('logged-in', redirect, value);
 					}
 				}).catch(function (err) {
 					console.log(err);
@@ -46396,44 +46414,18 @@ exports.default = {
 				console.log(err);
 			});
 		},
-		signup: function signup(context, creds, redirect) {
-			this.initLocalforage();
-
-			context.$http.post(SIGNUP_URL, creds).then(function (response) {
-				// if this is the production site fire the fb pixel
-				if (URL.base === 'https://www.bsmma.com') {
-					// facebook pixel
-					!function (f, b, e, v, n, t, s) {
-						if (f.fbq) return;n = f.fbq = function () {
-							n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-						};if (!f._fbq) f._fbq = n;
-						n.push = n;n.loaded = !0;n.version = '2.0';n.queue = [];t = b.createElement(e);t.async = !0;
-						t.src = v;s = b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t, s);
-					}(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-					fbq('init', '1014779411913260'); // Insert your pixel ID here.
-					fbq('track', 'PageView');
-				}
-
-				_localforage2.default.setItem('id_token', response.data.token).then(function (value) {
-					if (redirect) {
-						context.$dispatch('logged-in');
-						_index.router.go(redirect);
-					}
-				}).catch(function (err) {
-					consloe.log(err);
-				});
-			}).catch(function (err) {
-				if (err.data) {
-					context.error = err.data.error.message;
-					context.alertType = 'error';
-				}
-				console.log(err);
-			});
-		},
 		initLocalforage: function initLocalforage() {
 			_localforage2.default.config({
 				name: 'Big Shoot MMA'
 			});
+		},
+		parseToken: function parseToken(token) {
+			if (token) {
+				var base64Url = token.split('.')[1],
+				    base64 = base64Url.replace('-', '+').replace('_', '/');
+
+				return JSON.parse(window.atob(base64));
+			}
 		}
 	},
 
@@ -47113,6 +47105,9 @@ exports.default = {
 			}
 		};
 	},
+	ready: function ready() {
+		_localforage2.default.removeItem('id_token');
+	},
 
 
 	methods: {
@@ -47150,8 +47145,7 @@ exports.default = {
 
 				_localforage2.default.setItem('id_token', response.data.token).then(function (value) {
 					if (redirect) {
-						context.$dispatch('logged-in');
-						_index.router.go(redirect);
+						context.$dispatch('logged-in', redirect, value);
 					}
 				}).catch(function (err) {
 					consloe.log(err);
