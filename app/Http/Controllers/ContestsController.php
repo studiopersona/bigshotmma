@@ -125,6 +125,8 @@ class ContestsController extends ApiController
         // grab the bogo promo if the player has one
         $bogoPromoCode = $this->bogoPromo->checkForActiveCode($user->id);
 
+        dump($bogoPromoCode);
+
         DB::beginTransaction();
 
         try {
