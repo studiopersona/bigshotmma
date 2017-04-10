@@ -125,10 +125,6 @@ class ContestsController extends ApiController
         // grab the bogo promo if the player has one
         $bogoPromoCode = $this->bogoPromo->checkForActiveCode($user->id);
 
-        dump($bogoPromoCode['promo']['status']['stage']);
-        // dump($bogoPromoCode['promo']['paidContestEntryFee']);
-        // dd($contest->entry_fee);
-
         DB::beginTransaction();
 
         try {
@@ -136,11 +132,14 @@ class ContestsController extends ApiController
 
             // if the players bogo promo is at stage 3 (unlocked free entry) and the entry fee is the same as the paid contest
             // entry fee, then waive the entry fee
+            if ( ! empty($bogoPromoCode['promo']['status']) ) {
+                if ( $bogoPromoCode['promo']['status']['stage'] === 4 && ($bogoPromoCode['promo']['paidContestEntryFee'] === $contest->entry_fee) ) {
 
-            if ( $bogoPromoCode['promo']['status']['stage'] === 4 && ($bogoPromoCode['promo']['paidContestEntryFee'] === $contest->entry_fee) ) {
-
-                $userBalance = $this->userBalance->create(['user_id' => $user->id, 'transaction_type_id' => 1, 'amount' => 0]);
-             } else {
+                    $userBalance = $this->userBalance->create(['user_id' => $user->id, 'transaction_type_id' => 1, 'amount' => 0]);
+                 } else {
+                    $userBalance = $this->userBalance->create(['user_id' => $user->id, 'transaction_type_id' => 1, 'amount' => $contest->entry_fee * 100]);
+                }
+            } else {
                 $userBalance = $this->userBalance->create(['user_id' => $user->id, 'transaction_type_id' => 1, 'amount' => $contest->entry_fee * 100]);
             }
 
