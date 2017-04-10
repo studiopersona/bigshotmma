@@ -287,7 +287,7 @@
         </section>
         <section :class="howToPlayModalClasses">
             <h3 class="howToPlayModal__title">How to Play</h3>
-            <img class="howToPlayModal__image" :src="'public/image/logo.png'" alt="Blood Sport MMA">
+            <img class="howToPlayModal__image" :src="'public/image/logo.png'" alt="Big Shot MMA">
             <div class="howToPlayModal__body">
                 <p>Tap a fighters avatar to choose that fighter as the winner of that fight. Then, in the revealed selection area, choose how &amp; when you think the fight will end.</p>
                 <p>Apply a power up to your chosen fighter by tapping its icon. A detail of the power up will appear and ask you to confirm your choice.</p>

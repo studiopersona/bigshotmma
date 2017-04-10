@@ -19,7 +19,7 @@
 						<a href="{{ url('') }}">Forgot Password?</a>
 					</div>
 					<div class="logo">
-						<img src="{{ url('public/images/logo.jpg') }}" alt="Blood Sport Fantasy MMA Logo">
+						<img src="{{ url('public/images/logo.jpg') }}" alt="Big Shot Fantasy MMA Logo">
 					</div>
 				</login>
 			</div>
@@ -34,7 +34,7 @@
 					</header>
 					@include('partials.register')
 					<div class="logo">
-						<img src="{{ url('public/images/logo.jpg') }}" alt="Blood Sport Fantasy MMA Logo">
+						<img src="{{ url('public/images/logo.jpg') }}" alt="Big Shot Fantasy MMA Logo">
 					</div>
 				</register>
 			</div>

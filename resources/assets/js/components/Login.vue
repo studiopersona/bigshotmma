@@ -102,7 +102,6 @@
 					if ( Math.round(new Date().getTime() / 1000) >= params.exp ) {
 						vm.tokenRefresh(token);
 					} else {
-						console.log('going from ready')
 						vm.$dispatch('logged-in', 'dashboard', token)
 					}
 				} else {
@@ -122,7 +121,6 @@
 	                })
 	                .then(function(response) {
 	                    localforage.setItem('id_token', response.data.token).then(function() {
-	                    	console.log('going from refresh')
 							vm.$dispatch('logged-in', '/dashboard', response.data.token)
 	                    });
 	                })
@@ -157,7 +155,6 @@
 	                .then(function(value) {
 	                    // Redirect to a specified route
 	                    if(redirect) {
-	                    	console.log('going from login')
 	                    	context.$dispatch('logged-in', redirect, value)
 	                    }
 	                })
@@ -177,7 +174,7 @@
 
 		    initLocalforage() {
 		        localforage.config({
-		            name: 'Big Shoot MMA',
+		            name: 'Big Shot MMA',
 		        });
 		    },
 
