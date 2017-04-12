@@ -5555,7 +5555,8 @@ a {
   text-align: center;
   text-transform: uppercase;
   text-decoration: none;
-  position: relative; }
+  position: relative;
+  cursor: pointer; }
   .appDashboard__link:hover {
     color: #fff;
     opacity: 0.8; }

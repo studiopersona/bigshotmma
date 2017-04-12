@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="col-xs-45">
-                            <div class="participantsList__itemTitle">Total Points</div>
+                            <div class="participantsList__itemTitle">Career Points</div>
                             <div class="participantsList__wins">
                                 {{ participant.overallPoints }}
                             </div>
