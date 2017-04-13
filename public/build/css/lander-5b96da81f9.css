@@ -4653,13 +4653,14 @@ h4 {
   .hero__header {
     font-size: 3.204rem; }
   .hero__subheader {
-    font-size: 1.4rem; }
+    font-size: 1.4rem;
+    margin-top: 0; }
   .heroInner h1 {
     font-size: 3rem; } }
 
 @media screen and (max-width: 20rem) {
   .hero__header {
-    font-size: 3.4rem; } }
+    font-size: 3.1rem; } }
 
 @keyframes fadeAndScale {
   from {

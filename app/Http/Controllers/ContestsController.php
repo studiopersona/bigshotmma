@@ -246,7 +246,7 @@ class ContestsController extends ApiController
                         'users'
                     ]);
 
-        if ( $useDeadline ) $query->where('deadline', '>', date('Y-m-d H:i:s', strtotime('-1 week')));
+        if ( $useDeadline ) $query->where('deadline', '>', date('Y-m-d H:i:s'));
 
         if ( ! is_null($playerId) )
         {

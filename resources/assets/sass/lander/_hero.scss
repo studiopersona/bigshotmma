@@ -170,6 +170,7 @@
 
     .hero__subheader {
         font-size: 1.4rem;
+        margin-top: 0;
     }
 
     .heroInner {
@@ -182,7 +183,7 @@
 
 @media screen and (max-width: 20rem) {
     .hero__header {
-        font-size: 3.4rem;
+        font-size: 3.1rem;
     }
 }
 
