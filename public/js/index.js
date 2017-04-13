@@ -43753,7 +43753,7 @@ exports.default = {
                     10: [0.7, 0.3],
                     20: [0.5, 0.25, 0.15, 0.10],
                     50: [0.365, 0.21, 0.15, 0.10, 0.05, 0.025, 0.025, 0.025, 0.025, 0.025],
-                    100: [0.03275, 0.150, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.0275, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150]
+                    100: [0.3275, 0.150, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.0275, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150]
                 },
                 Greed: [1],
                 '50/50': [1]
@@ -47357,6 +47357,7 @@ exports.default = {
 
     data: function data() {
         return {
+            prizePool: {},
             winnings: [],
             contestTypes: {},
             contestTypeId: '',
@@ -47369,6 +47370,17 @@ exports.default = {
             playerRanking: 0,
             infoModalClasses: ['infoModal'],
             hasPicks: true,
+            prizePoolPayouts: {
+                Classic: {
+                    10: [0.7, 0.3],
+                    20: [0.5, 0.25, 0.15, 0.10],
+                    50: [0.365, 0.21, 0.15, 0.10, 0.05, 0.025, 0.025, 0.025, 0.025, 0.025],
+                    100: [0.3275, 0.150, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.0275, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150]
+                },
+                Greed: [1],
+                '50/50': [1]
+            },
+            prizeModalClasses: ['prizeModal'],
             URL: {
                 base: window.URL.base,
                 current: window.URL.current,
@@ -47483,6 +47495,38 @@ exports.default = {
             };
 
             this.playerRanking = standings.findIndex(findPlayer) + 1;
+        },
+        showPrizeModal: function showPrizeModal() {
+            this.prizeModalClasses.push('show');
+        },
+        prizeModalClose: function prizeModalClose(e) {
+            e.preventDefault();
+
+            this.prizeModalClasses = ['prizeModal'];
+        }
+    },
+
+    watch: {
+        'standingsList': function standingsList() {
+            var total = this.standingsList[0].contest.buy_in * this.standingsList[0].contest.max_participants - this.standingsList[0].contest.buy_in * this.standingsList[0].contest.max_participants * 0.15;
+
+            var type = this.standingsList[0].contest.contest_type_name;
+            var numOfParticipants = this.standingsList[0].contest.max_participants;
+
+            var payoutArray = this.standingsList[0].contest.contest_type_id == 1 ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type];
+            var placePayouts = [];
+
+            for (var i = 0; i < payoutArray.length; i++) {
+                placePayouts.push(total * payoutArray[i]);
+            }
+
+            this.prizePool = {
+                total: total,
+                payouts: placePayouts
+            };
+
+            // this.parsePlayerRecords()
+            this.parsePlayerScores();
         }
     },
 
@@ -47493,7 +47537,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"templateWrap\" :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Contest Standings</h1>\n        <h4 class=\"pageHeader__subheader\">\n            {{ contest.event_short_name }} / <a v-if=\"standingsList.length\" v-link=\"{ path: '/contest/' + contest.contest_id + '/results' }\">Results</a><a v-else=\"\" v-link=\"{ path: '/contest/' + contest.contest_id + '/picks' }\">My Picks</a>\n        </h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Entry Fee:</span> ${{ contest.buy_in.toFixed(2) }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Rank:</span> {{ playerRanking }}/{{ contest.max_participants }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                <span class=\"contestDetails__title\">Prize Pool:</span> ${{ ((contest.buy_in * contest.max_participants) * .85).toFixed(2) }}\n                </div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ contest.contest_type_id }}\">\n                        {{ contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"participantsList\">\n        <template v-if=\"standingsList.length\">\n            <ul class=\"stripped-list\">\n                <li class=\"participantsList__item\" v-for=\"participant in standingsList\">\n                    <div class=\"container-fluid\">\n                        <div v-if=\"participant.avatar === ''\" class=\"col-xs-15 participantsList__img\">\n                            <img :src=\"URL.base + '/public/image/avatar/male.jpg'\">\n                        </div>\n                        <div v-else=\"\" class=\"col-xs-15 participantsList__img\">\n                            <img :src=\"URL.base + '/public/image/avatar/' + participant.avatar\">\n                        </div>\n                        <div class=\"col-xs-30\">\n                            <div class=\"participantsList__itemTitle\">&nbsp;</div>\n                            <div class=\"participantsList__name\">\n                                {{ participant.player_name }}\n                            </div>\n                        </div>\n                        <div class=\"col-xs-15\">\n                            <div class=\"participantsList__itemTitle\">Rank</div>\n                            <div class=\"standingsList__rank\">\n                                {{ $index + 1 }}\n                            </div>\n                        </div>\n                        <div class=\"col-xs-15\">\n                            <div class=\"participantsList__itemTitle\">Points</div>\n                            <div class=\"standingsList__points\">\n                                {{ participant.totalPoints }}\n                            </div>\n                        </div>\n                        <div class=\"col-xs-25\">\n                            <div class=\"participantsList__itemTitle\">Winnings</div>\n                            <div v-if=\"winnings.length\" class=\"standingsList__winnings\">\n                                <span v-if=\"winnings[$index]\" class=\"highlight\">${{ winnings[$index].payout.toFixed(2) }}</span>\n                                <span v-else=\"\">---</span>\n                            </div>\n                            <div v-else=\"\" class=\"standingsList__winnings\">\n                                --\n                            </div>\n                        </div>\n                    </div>\n                </li>\n            </ul>\n        </template>\n        <template v-else=\"\">\n            <p style=\"margin-top: 1rem; text-align: center;\">No results have been reported.</p>\n        </template>\n        <div v-if=\"hasPicks\" class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n                <a v-link=\"{ path: '/contest/' + contest.contest_id + '/picks' }\" class=\"button button--primary\">My Picks</a>\n            </div>\n        </div>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <section :class=\"infoModalClasses\">\n        <h3 class=\"infoModal__title\">{{ infoModalContent.title }}</h3>\n        <img class=\"infoModal__image\" :src=\"URL.base + '/public/image/info/' + infoModalContent.image\" alt=\"{{ infoModalContent.title }} Image\">\n        <div class=\"infoModal__rules\">\n            {{{ infoModalContent.rules }}}\n        </div>\n        <button @click=\"infoModalClose\" type=\"button\" class=\"infoModal__close\">x</button>\n    </section>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"templateWrap\" :working=\"working\">\n    <header class=\"pageHeader\" :working.sync=\"working\">\n        <h1 class=\"pageHeader__header\">Contest Standings</h1>\n        <h4 class=\"pageHeader__subheader\">\n            {{ contest.event_short_name }} / <a v-if=\"standingsList.length\" v-link=\"{ path: '/contest/' + contest.contest_id + '/results' }\">Results</a><a v-else=\"\" v-link=\"{ path: '/contest/' + contest.contest_id + '/picks' }\">My Picks</a>\n        </h4>\n    </header>\n    <div class=\"contestDetails\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\">Entry Fee:</span> ${{ contest.buy_in.toFixed(2) }}\n                </div>\n                <div class=\"col-xs-50 text-right\">\n                    <span class=\"contestDetails__title\">Rank:</span> {{ playerRanking }}/{{ contest.max_participants }}\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-50\">\n                    <span class=\"contestDetails__title\"><a @click=\"showPrizeModal\">Prize Pool</a>:</span> $<span v-if=\"! isNaN(parseFloat(prizePool.total))\">{{ parseFloat(prizePool.total).toFixed(2) }}\n                </span></div>\n                <div class=\"col-xs-50 contestDetails__type\">\n                    <a href=\"#\" @click=\"showContestRules\" data-contest-type=\"{{ contest.contest_type_id }}\">\n                        {{ contest.contest_type_name }}\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"participantsList\">\n        <template v-if=\"standingsList.length\">\n            <ul class=\"stripped-list\">\n                <li class=\"participantsList__item\" v-for=\"participant in standingsList\">\n                    <div class=\"container-fluid\">\n                        <div v-if=\"participant.avatar === ''\" class=\"col-xs-15 participantsList__img\">\n                            <img :src=\"URL.base + '/public/image/avatar/male.jpg'\">\n                        </div>\n                        <div v-else=\"\" class=\"col-xs-15 participantsList__img\">\n                            <img :src=\"URL.base + '/public/image/avatar/' + participant.avatar\">\n                        </div>\n                        <div class=\"col-xs-30\">\n                            <div class=\"participantsList__itemTitle\">&nbsp;</div>\n                            <div class=\"participantsList__name\">\n                                {{ participant.player_name }}\n                            </div>\n                        </div>\n                        <div class=\"col-xs-15\">\n                            <div class=\"participantsList__itemTitle\">Rank</div>\n                            <div class=\"standingsList__rank\">\n                                {{ $index + 1 }}\n                            </div>\n                        </div>\n                        <div class=\"col-xs-15\">\n                            <div class=\"participantsList__itemTitle\">Points</div>\n                            <div class=\"standingsList__points\">\n                                {{ participant.totalPoints }}\n                            </div>\n                        </div>\n                        <div class=\"col-xs-25\">\n                            <div class=\"participantsList__itemTitle\">Winnings</div>\n                            <div v-if=\"winnings.length\" class=\"standingsList__winnings\">\n                                <span v-if=\"winnings[$index]\" class=\"highlight\">${{ winnings[$index].payout.toFixed(2) }}</span>\n                                <span v-else=\"\">---</span>\n                            </div>\n                            <div v-else=\"\" class=\"standingsList__winnings\">\n                                --\n                            </div>\n                        </div>\n                    </div>\n                </li>\n            </ul>\n        </template>\n        <template v-else=\"\">\n            <p style=\"margin-top: 1rem; text-align: center;\">No results have been reported.</p>\n        </template>\n        <div v-if=\"hasPicks\" class=\"container-fluid\">\n            <div class=\"col-xs-100 button-wrap\">\n                <a v-link=\"{ path: '/contest/' + contest.contest_id + '/picks' }\" class=\"button button--primary\">My Picks</a>\n            </div>\n        </div>\n        <div :class=\"loaderClasses\">\n            <div class=\"js-global-loader loader\">\n                <svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\">\n                    <circle id=\"spinner\" cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\"></circle>\n                </svg>\n            </div>\n        </div>\n    </div>\n    <section :class=\"prizeModalClasses\">\n        <h3 class=\"prizeModal__title\">Prize Pool</h3>\n        <div class=\"prizeModal__body\">\n        <p>In a <a @click=\"showContestRules\" data-contest-type=\"{{ standingsList[0].contest.contest_type_id }}\">{{ standingsList[0].contest.contest_type_name }}</a> contest with {{ standingsList[0].contest.max_participants }} players:</p>\n            <div class=\"prizeModal__entryFeeWrap\">\n                <span class=\"prizeModal__entryFeeTitle\">Entry Fee:</span> <span class=\"prizeModal__entryFee\">${{ parseFloat(standingsList[0].contest.buy_in).toFixed(2) }}</span>\n            </div>\n            <table class=\"prizeModal__payoutTable\">\n                <thead>\n                    <tr>\n                        <th>Rank</th>\n                        <th>Prize</th>\n                    </tr>\n                </thead>\n                <tbody>\n                    <tr v-for=\"payout of prizePool.payouts\" track-by=\"$index\">\n                        <td>{{ $index + 1 }}</td>\n                        <td class=\"prizeModal__payout\">${{ parseFloat(payout).toFixed(2) }}</td>\n                    </tr>\n                </tbody>\n            </table>\n        </div>\n        <div class=\"button-wrap\">\n            <button @click=\"prizeModalClose\" type=\"button\" class=\"button button--green\">Got It</button>\n        </div>\n        <button @click=\"prizeModalClose\" type=\"button\" class=\"infoModal__close\">x</button>\n    </section>\n    <section :class=\"infoModalClasses\">\n        <h3 class=\"infoModal__title\">{{ infoModalContent.title }}</h3>\n        <img class=\"infoModal__image\" :src=\"URL.base + '/public/image/info/' + infoModalContent.image\" alt=\"{{ infoModalContent.title }} Image\">\n        <div class=\"infoModal__rules\">\n            {{{ infoModalContent.rules }}}\n        </div>\n        <button @click=\"infoModalClose\" type=\"button\" class=\"infoModal__close\">x</button>\n    </section>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
