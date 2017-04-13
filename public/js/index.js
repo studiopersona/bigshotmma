@@ -47524,9 +47524,6 @@ exports.default = {
                 total: total,
                 payouts: placePayouts
             };
-
-            // this.parsePlayerRecords()
-            this.parsePlayerScores();
         }
     },
 
