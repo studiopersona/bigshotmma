@@ -1,3 +1,4 @@
+- can only get to entires once, when returning never returns the list
 
 - if player hasn't entered contest shouldn't see My Picks link once contest is closed. shouldn't eve see the lobby. should just say the contest is closed
 

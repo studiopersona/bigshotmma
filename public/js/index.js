@@ -47508,12 +47508,12 @@ exports.default = {
 
     watch: {
         'standingsList': function standingsList() {
-            var total = this.standingsList[0].contest.buy_in * this.standingsList[0].contest.max_participants - this.standingsList[0].contest.buy_in * this.standingsList[0].contest.max_participants * 0.15;
+            var total = this.contest.buy_in * this.contest.max_participants - this.contest.buy_in * this.contest.max_participants * 0.15;
 
-            var type = this.standingsList[0].contest.contest_type_name;
-            var numOfParticipants = this.standingsList[0].contest.max_participants;
+            var type = this.contest.contest_type_name;
+            var numOfParticipants = this.contest.max_participants;
 
-            var payoutArray = this.standingsList[0].contest.contest_type_id == 1 ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type];
+            var payoutArray = this.contest.contest_type_id == 1 ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type];
             var placePayouts = [];
 
             for (var i = 0; i < payoutArray.length; i++) {

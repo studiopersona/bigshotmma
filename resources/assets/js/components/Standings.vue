@@ -305,12 +305,12 @@
 
         watch: {
             'standingsList'() {
-                let total = (this.standingsList[0].contest.buy_in * this.standingsList[0].contest.max_participants) - ((this.standingsList[0].contest.buy_in * this.standingsList[0].contest.max_participants)*0.15)
+                let total = (this.contest.buy_in * this.contest.max_participants) - ((this.contest.buy_in * this.contest.max_participants)*0.15)
 
-                let type = this.standingsList[0].contest.contest_type_name
-                let numOfParticipants = this.standingsList[0].contest.max_participants
+                let type = this.contest.contest_type_name
+                let numOfParticipants = this.contest.max_participants
 
-                let payoutArray = (this.standingsList[0].contest.contest_type_id == 1) ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type]
+                let payoutArray = (this.contest.contest_type_id == 1) ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type]
                 let placePayouts = [];
 
                 for(var i=0; i < payoutArray.length; i++) {
