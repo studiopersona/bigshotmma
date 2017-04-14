@@ -1135,7 +1135,6 @@
                         localforage.getItem('id_token').then(function(token) {
                             vm.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, (data) => {
                                 if ( data.success ) {
-                                    vm.$root.playersBalance = data.balance
                                     vm.$router.go({ path: '/contest/' + vm.contestId + '/picks' })
                                 }
                             }, {

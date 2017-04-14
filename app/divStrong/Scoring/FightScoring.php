@@ -47,10 +47,10 @@ class FightScoring
             $this->determineRoundPoints((int)$playersPicks['round'], (int)$fightResults['round']);
             $this->determineMinutePoints((int)$playersPicks['minute'], (int)$fightResults['minute']);
             $this->determineFinishPoints((int)$playersPicks['finish_id'], (int)$fightResults['finish_id']);
-            $this->determinePowerupPoints($playersPicks['power_up_id'], $fightResults['power_ups'], (int)$playersPicks['winning_fighter_id']);
+            $this->determinePowerupPoints($playersPicks['power_up_id'], $fightResults['power_ups'], $fighters);
             $tally += $this->getTotalPoints();
         } else {
-            $this->fightScoring->determinePowerupPoints($playersPicks['power_up_id'], $fightResults['power_ups'], (int)$playersPicks['winning_fighter_id']);
+            $this->fightScoring->determinePowerupPoints($playersPicks['power_up_id'], $fightResults['power_ups'], $fighters);
             $tally += $this->getTotalPoints();
         }
 
@@ -106,17 +106,22 @@ class FightScoring
 		}
 	}
 
-	public function determinePowerupPoints($selectedPowerupId, $winningPowerupIds=[], $fighterId)
+	public function determinePowerupPoints($selectedPowerupId, $winningPowerupIds=[], array $fighters = [])
 	{
+
 		if ( ! is_null($selectedPowerupId) ) {
 
 			$key = array_search($selectedPowerupId, array_column($this->powerUps, 'id'));
 			$found = false;
 
 			foreach ( $winningPowerupIds as $powerUpInfo ) {
-				if ( $powerUpInfo['id'] === $selectedPowerupId && $powerUpInfo['pivot']['fighter_id'] === $fighterId ) {
-					$found = true;
-					break;
+				if ($found) break;
+
+				foreach ( $fighters as $fighter ) {
+					if ( $powerUpInfo['id'] === $selectedPowerupId && $powerUpInfo['pivot']['fighter_id'] === $fighter['id'] ) {
+						$found = true;
+						break;
+					}
 				}
 			}
 

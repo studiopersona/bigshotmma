@@ -28,8 +28,6 @@ class PlayerPickTransformer extends Transformer {
         }
         else {
             $result = $result->toArray();
-            // add index for fightScoring
-            $result['power_ups'] = ( isset($result['powerUps']) ) ? $result['powerUps'] : [];
         }
 
         foreach ( $pick['contest']['event']['fights'] as $fight )

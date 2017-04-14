@@ -45964,7 +45964,6 @@ exports.default = {
                         _localforage2.default.getItem('id_token').then(function (token) {
                             vm.$http.post(URL.base + '/api/v1/picks', { picks: compiledPicks }, function (data) {
                                 if (data.success) {
-                                    vm.$root.playersBalance = data.balance;
                                     vm.$router.go({ path: '/contest/' + vm.contestId + '/picks' });
                                 }
                             }, {
@@ -46681,6 +46680,7 @@ exports.default = {
                 this.picksList = response.data.picks ? response.data.picks : [];
 
                 console.log(this.picksList);
+
                 this.working = false;
 
                 this.$http.get(URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/results', {}, {
@@ -46765,10 +46765,10 @@ exports.default = {
                         vm.outcome[obj.fightResults.fight_id].finish_abbr = obj.fightResults.finish.abbr;
                         vm.outcome[obj.fightResults.fight_id].finish_points = fightPicks.finish.points;
                         // round resluts
-                        console.log('obj.fightResults.round:', obj.fightResults.round);
-                        console.log('fightPicks.round.selected:', fightPicks.round.selected);
+                        // console.log('obj.fightResults.round:', obj.fightResults.round)
+                        // console.log('fightPicks.round.selected:', fightPicks.round.selected)
                         vm.outcome[obj.fightResults.fight_id].round = parseInt(obj.fightResults.round, 10) === parseInt(fightPicks.round.selected, 10) ? 1 : 0;
-                        console.log(vm.outcome[obj.fightResults.fight_id].round);
+                        // console.log(vm.outcome[obj.fightResults.fight_id].round)
                         vm.outcome[obj.fightResults.fight_id].round_points = fightPicks.round.points;
                         vm.outcome[obj.fightResults.fight_id].roundResult = obj.fightResults.round;
                         // minute results
@@ -46795,6 +46795,7 @@ exports.default = {
                     }
                     // power up points
                     if (fightPicks.power_up.power_up_id) {
+
                         powerUpResult = obj.fightResults.power_ups.findIndex(function (pu) {
                             return parseInt(fightPicks.power_up.power_up_id, 10) === parseInt(pu.pivot.power_up_id, 10);
                         });
