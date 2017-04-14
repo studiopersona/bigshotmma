@@ -84,10 +84,7 @@ class ContestsController extends ApiController
                             ->where('id', $contest_id)
                             ->get();
 
-        if ( $participants->isEmpty() )
-        {
-            return $this->respondNotFound('Contest Not Found');
-        }
+        if ( $participants->isEmpty() ) return $this->respondNotFound('Contest Not Found');
 
         $participants = $participants->toArray();
 
@@ -96,6 +93,8 @@ class ContestsController extends ApiController
             $participants[0]['users'][$key]['record'] = $this->getPlayerRecord($participant['id']);
             $playersScore = $this->getPlayersScore($participant['id']);
             $participants[0]['users'][$key]['overallPoints'] = (is_null($playersScore)) ? 0 : $playersScore;
+            // will need to deterimine rank based on total points once levels have been defined
+            $participants[0]['users'][$key]['rank'] = 1;
         }
 
         return $this->respond([

@@ -13,7 +13,7 @@ use Bsmma\PaypalEmail;
 use Bsmma\StripeDetail;
 use Bsmma\User;
 use Bsmma\UserBalance;
-use Bsmma\divStrong\Transformers\ProfileTransformer as ProfileTransformer;
+use Bsmma\divStrong\Transformers\ProfileTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Session;

@@ -18,7 +18,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title"><a @click="showPrizeModal">Prize Pool</a>:</span> $<span v-if="! isNaN(parseFloat(prizePool.total))">{{ parseFloat(prizePool.total).toFixed(2) }}
+                        <span class="contestDetails__title"><a href="#" @click="showPrizeModal">Prize Pool</a>:</span> $<span v-if="! isNaN(parseFloat(prizePool.total))">{{ parseFloat(prizePool.total).toFixed(2) }}
                     </div>
                     <div class="col-xs-50 contestDetails__type">
                         <a href="#" @click="showContestRules" data-contest-type="{{ contest.contest_type_id }}">
@@ -292,7 +292,9 @@
                 this.playerRanking = ( standings.findIndex(findPlayer) + 1 );
             },
 
-            showPrizeModal() {
+            showPrizeModal(e) {
+                e.preventDefault()
+
                 this.prizeModalClasses.push('show');
             },
 

@@ -31,7 +31,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title"><a @click="showPrizeModal">Prize Pool</a>:</span> $<span v-if="! isNaN(parseFloat(prizePool.total))">{{ parseFloat(prizePool.total).toFixed(2) }}
+                        <span class="contestDetails__title"><a href="#" @click="showPrizeModal">Prize Pool</a>:</span> $<span v-if="! isNaN(parseFloat(prizePool.total))">{{ parseFloat(prizePool.total).toFixed(2) }}
                     </div>
                     <div class="col-xs-50 contestDetails__type">
                         <a href="#" @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">
@@ -57,10 +57,16 @@
                                 {{ participant.player_name }}
                             </div>
                         </div>
-                        <div class="col-xs-45">
+                        <div class="col-xs-25">
                             <div class="participantsList__itemTitle">Career Points</div>
                             <div class="participantsList__wins">
                                 {{ participant.overallPoints }}
+                            </div>
+                        </div>
+                        <div class="col-xs-20">
+                            <div class="participantsList__itemTitle">Player Rank</div>
+                            <div class="participantsList__rank">
+                                <img :src="'public/image/level-icons/rank-icon-level-' + participant.rank + '.png'">
                             </div>
                         </div>
                     </div>
@@ -331,7 +337,9 @@
                 return contestType.id === parseInt(this.contestTypeId, 10);
             },
 
-            showPrizeModal() {
+            showPrizeModal(e) {
+                e.preventDefault()
+
                 this.prizeModalClasses.push('show');
             },
 

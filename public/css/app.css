@@ -4279,6 +4279,12 @@ a {
 .participantsList__img img {
   width: 100%; }
 
+.participantsList__rank {
+  text-align: center; }
+  .participantsList__rank > img {
+    width: 3rem;
+    margin-top: 0.5rem; }
+
 .Alert {
   position: relative;
   background: #fff;
