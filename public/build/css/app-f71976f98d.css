@@ -4291,7 +4291,7 @@ a {
   margin: 0 auto; }
   .Alert > p {
     margin: 0;
-    font-weight: 700; }
+    font-size: 1.4rem; }
 
 .Alert--Success {
   color: #2dbe0c;
