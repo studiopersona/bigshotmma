@@ -4792,6 +4792,8 @@ a {
 
 .profile__image {
   margin-bottom: 2rem; }
+  .profile__image img {
+    max-height: 24rem; }
 
 .profile__inputWrap {
   width: 93%;
