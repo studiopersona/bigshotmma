@@ -41,6 +41,13 @@
 					<span class="Alert__close" @click="error = flase">x</span>
 				</div>
 			</div>
+			<div v-if="errors.length" class="row form__row Alert Alert--Error">
+				<ul class="errorsList">
+					<li v-for="error in errors">
+						{{ error }}
+					</li>
+				</ul>
+			</div>
 			<div class="row">
 				<div class="col-xs-100">
 					<button @click="submit()" type="submit" class="button button--primary">Sign Up</button>
@@ -81,7 +88,7 @@
 					password: '',
 					player_name: '',
 				},
-				error: '',
+				errors: [],
                 URL: {
                     base: window.URL.base,
                     current: window.URL.current,
@@ -96,18 +103,26 @@
 
 		methods: {
 			submit() {
-				var credentials = {
+				let credentials = {
 						email: this.credentials.email,
 						password: this.credentials.password,
 						player_name: this.credentials.player_name,
 					},
-					vm = this;
+					vm = this
 
-				localforage.setItem('newplayer', 1).then(function() {
-					// We need to pass the component's this context
-					// to properly make use of http in the auth service
-					vm.signup(vm, credentials, 'dashboard')
-				});
+				this.errors = []
+
+				if ( credentials.email === '' ) this.errors.push('Your email address is required.')
+				if ( credentials.password === '' ) this.errors.push('A password is required.')
+				if ( credentials.player_name === '' ) this.errors.push('A player name is required.')
+
+				if (! this.errors.length) {
+					localforage.setItem('newplayer', 1).then(function() {
+						// We need to pass the component's this context
+						// to properly make use of http in the auth service
+						vm.signup(vm, credentials, 'dashboard')
+					});
+				}
 			},
 
 		    signup(context, creds, redirect) {

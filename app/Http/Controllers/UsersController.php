@@ -452,11 +452,11 @@ class UsersController extends ApiController
 
         $file = $request->file('file');
 
-        if ( $file->getClientOriginalExtension() !== 'jpg' && $file->getClientOriginalExtension() !== 'jpeg' &&$file->getClientOriginalExtension() !== 'png' )
+        if ( $file->getClientOriginalExtension() !== 'jpg' && $file->getClientOriginalExtension() !== 'jpeg' && $file->getClientOriginalExtension() !== 'png' && $file->getClientOriginalExtension() !== 'gif' )
         {
                 $this->setStatusCode(402);
 
-                return $this->respondWithError('Only jpeg or png files are allowed');
+                return $this->respondWithError('Only jpeg, png or gif files are allowed');
         }
 
         $fileName = 'profile-'.$user->id.'.'.$file->getClientOriginalExtension();
