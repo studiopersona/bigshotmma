@@ -6066,6 +6066,10 @@ a {
 .back {
   transform: rotateY(-180deg); }
 
+.text-right {
+  text-align: right;
+  padding-right: 0.5rem; }
+
 .stripped-list > li {
   background-color: #eee; }
   .stripped-list > li:nth-child(2n) {

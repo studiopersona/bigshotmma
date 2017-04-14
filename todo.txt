@@ -1,7 +1,5 @@
 - if player hasn't entered contest shouldn't see My Picks link once contest is closed. shouldn't eve see the lobby. should just say the contest is closed
 
-- contest standings view, need the prize pool modal, and the entry fee (this just may not be working when a player hasn't entered, fix the issue above first and test again)
-
 - *** debug total points not correct if fighter loses and power up is achieved ***
 
 - need to display validation errors on deposit profile view
@@ -21,8 +19,6 @@
 - fix entries icon to be proper height and remove style rule placed on the dashboard button
 
 - add working indictaor to buttons
-
-- avatar uploading isn't working
 
 ================================================================================================
 

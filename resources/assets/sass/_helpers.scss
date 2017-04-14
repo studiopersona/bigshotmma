@@ -1,3 +1,8 @@
+.text-right {
+    text-align: right;
+    padding-right: 0.5rem;
+}
+
 .stripped-list {
     > li {
         background-color: $color-gray-light;

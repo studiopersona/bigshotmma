@@ -74,17 +74,11 @@ class FightResultsController extends ApiController
                     ->where('id', $contest_id)
                     ->first();
 
-        if ( is_null($contest) )
-        {
-            return $this->respondNotFound('No contest was found');
-        }
+        if ( is_null($contest) ) return $this->respondNotFound('No contest was found');
 
         $fightResults = ($contest->event->fightResults) ? $contest->event->fightResults : collect([]);
 
-        if ( $fightResults->isEmpty() )
-        {
-            return $this->respondNotFound('No Results were found');
-        }
+        if ( $fightResults->isEmpty() ) return $this->respondNotFound('No Results were found');
 
         return $this->respond([
             'results' => $this->fightResultTransformer->transformCollection($fightResults->toArray()),

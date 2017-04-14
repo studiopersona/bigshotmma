@@ -3,14 +3,14 @@
         <header class="pageHeader" :working.sync="working">
             <div class="container-fluid">
                 <div class="col-xs-40">
-                    <h1 class="pageHeader__header">My Picks</h1>
+                    <h1 class="pageHeader__header pageHeader__subheader-toLeft">My Picks</h1>
                     <h4 class="pageHeader__subheader pageHeader__subheader-toLeft pageHeader__subheader-uppercase">Power Ups:
                         <span :class="powerupIndicatorsClasses[0]"></span>
                         <span :class="powerupIndicatorsClasses[1]"></span>
                         <span :class="powerupIndicatorsClasses[2]"></span>
                     </h4>
                 </div>
-                <div class="col-xs-60">
+                <div class="col-xs-60 text-right">
                     <span @click="switchFight" id="fi0" class="fighterIndicators"></span>
                     <span @click="switchFight" id="fi1" class="fighterIndicators"></span>
                     <span @click="switchFight" id="fi2" class="fighterIndicators"></span>
