@@ -4320,6 +4320,9 @@ a {
   background: #fff;
   display: none; }
 
+.errorsList > li {
+  margin-bottom: 0.5rem; }
+
 .fightsList {
   position: relative;
   min-height: 100px; }

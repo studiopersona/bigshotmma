@@ -38,3 +38,10 @@
     background: $color-white;
     display: none;
 }
+
+.errorsList {
+
+	> li {
+		margin-bottom: 0.5rem;
+	}
+}
