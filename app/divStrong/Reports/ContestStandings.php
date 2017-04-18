@@ -100,13 +100,13 @@ class ContestStandings
 	{
 		$this->contestList->each(function($contest, $contestKey) {
 			// if the contest has participants add their picks
-			if ( isset($contest->users[$contestKey]) ) {
+			// if ( isset($contest->users[$contestKey]) ) {
 				$contest->users->each(function ($user, $key) use (&$contest) {
 					$contest->users[$key]['picks'] = $this->pick->where('contest_id', $contest->id)
 									->where('user_id', (int)$user->id)
 									->get()->toArray();
 				});
-			}
+			// }
 		});
 
 		return;
