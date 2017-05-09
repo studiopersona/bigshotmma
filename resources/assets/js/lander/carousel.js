@@ -29,20 +29,28 @@ var Carousel = (function($, w, undefined) {
         itemWidth = ( (o.$carouselHolder.outerWidth() / o.itemsPerFrame) - o.marginSize ) + ( o.marginSize /(o.itemsPerFrame + 1 ) );
         itemsWrapWidth = Math.ceil((itemWidth * numberOfItems) + (( numberOfItems -1 ) * o.marginSize));
         // console.log(o.$itemsWrap);
+        // set the width of the carousel wrapper
         o.$itemsWrap.width(  itemsWrapWidth + 'px');
+
         o.$items.each(function(i, el) {
             $(this).outerWidth( itemWidth + 'px');
+            $(this).outerHeight( $(this).children('.powerupsCarousel__itemButton').outerHeight() + 'px' );
             if ( i < numberOfItems - 1 ) {
                 $(this).css('margin-right', o.marginSize);
             }
         });
+
+        // set the height of the navigation wrapper to the height of the carousel items
+        o.$navBtnsWrap.outerHeight($('.carousel__holder').outerHeight() + 'px');
+        $('.carousel').outerHeight($('.carousel__holder').outerHeight() + 'px');
+
         startPos = o.$itemsWrap.offset().left;
         distanceToMove = (o.itemsPerFrame * itemWidth) + ((o.itemsPerFrame) * o.marginSize);
 
-        $leftBtn = o.$navBtnsWrap.filter('[data-direction="forward"]');
-        $rightBtn = o.$navBtnsWrap.filter('[data-direction="backward"]');
-        // console.log($leftBtn);
-        // console.log($rightBtn);
+        $leftBtn = o.$navBtnsWrap.children('.carousel-nav').filter('[data-direction="forward"]');
+        $rightBtn = o.$navBtnsWrap.children('.carousel-nav').filter('[data-direction="backward"]');
+        console.log(o.$navBtnsWrap);
+        console.log($rightBtn);
         // if all the items fit in one frame hide the navigation buttons
         if ( numberOfItems <= o.itemsPerFrame ) {
             o.$navBtnsWrap.addClass('navBtn--hide');
@@ -52,7 +60,7 @@ var Carousel = (function($, w, undefined) {
             var direction = $(e.currentTarget).data('direction'),
                 currentPos = o.$itemsWrap.offset().left;
 
-           	console.log(direction);
+           	// console.log(direction);
 
             e.preventDefault();
 

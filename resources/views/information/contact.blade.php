@@ -8,12 +8,12 @@
 
 @section('content')
 	<p>Complete the form below and one of our representatives will get back to you within 24 hours.</p>
-	<p>Our call us Monday thru Friday, 9:00AM - 7:00PM EST<br><strong>(954) 213-6762</strong></p>
+	<p>Or call us Monday thru Friday, 9:00AM - 7:00PM EST<br><strong>(954) 213-6762</strong></p>
 	<div class="form-wrap">
     	<form id="contact-form" action="{{ url('contact-support') }}" method="POST">
     		<div class="container-fluid">
     			<div class="row">
-    				<div class="col-sm-49">
+    				<div class="col-sm-49 small-screen-row">
     					<label class="text-input" for="firstname">
 							<input type="text" name="firstname" placeholder="First Name" data-parsley-required data-parsley-error-message="Your first name is required">
 							<span class="visuallyhidden">First Name</span>
@@ -27,7 +27,7 @@
     				</div>
     			</div>
     			<div class="row">
-    				<div class="col-sm-49">
+    				<div class="col-sm-49 small-screen-row">
     					<label class="text-input" for="phone">
 							<input type="text" name="phone" placeholder="Phone Number" data-parsley-required data-parsley-error-message="Your phone number is required">
 							<span class="visuallyhidden">Phone Number</span>
