@@ -88,7 +88,7 @@
                                         {{ result.fightResults.fight.fighters[1].pivot.odds > 0 ? '+' : '' }}{{ result.fightResults.fight.fighters[1].pivot.odds }}
                                     </div>
                                 </div>
-                                <div v-if="parseInt(result.fightResults.finish_id, 10) === 4" class="col-xs-40  fightsList__fighterWrap">
+                                <div v-if="parseInt(result.fightResults.finish_id, 10) >= 4" class="col-xs-40  fightsList__fighterWrap">
                                     <div class="fightsList__fighterImgWrap" data-fight-id="{{ result.fightResults.id }}">
                                         <img
                                             :class="['fightsList__fighter']"
