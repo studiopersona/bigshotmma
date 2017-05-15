@@ -125,7 +125,7 @@
 	                    });
 	                })
 	                .catch(function(err) {
-	                    router.go('login');
+	                	this.working = false
 	                })
 
 	            } else {

@@ -46369,7 +46369,7 @@ exports.default = {
 						vm.$dispatch('logged-in', '/dashboard', response.data.token);
 					});
 				}).catch(function (err) {
-					_index.router.go('login');
+					this.working = false;
 				});
 			} else {
 				this.working = false;

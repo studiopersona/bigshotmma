@@ -50,7 +50,7 @@ class FightScoring
             $this->determinePowerupPoints($playersPicks['power_up_id'], $fightResults['power_ups'], $fighters);
             $tally += $this->getTotalPoints();
         } else {
-            $this->fightScoring->determinePowerupPoints($playersPicks['power_up_id'], $fightResults['power_ups'], $fighters);
+            $this->determinePowerupPoints($playersPicks['power_up_id'], $fightResults['power_ups'], $fighters);
             $tally += $this->getTotalPoints();
         }
 
