@@ -46369,6 +46369,7 @@ exports.default = {
 						vm.$dispatch('logged-in', '/dashboard', response.data.token);
 					});
 				}).catch(function (err) {
+					// could not refresh the token, so just display login
 					this.working = false;
 				});
 			} else {

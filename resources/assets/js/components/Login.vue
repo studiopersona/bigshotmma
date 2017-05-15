@@ -125,6 +125,7 @@
 	                    });
 	                })
 	                .catch(function(err) {
+	                	// could not refresh the token, so just display login
 	                	this.working = false
 	                })
 
