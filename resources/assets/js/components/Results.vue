@@ -22,7 +22,7 @@
                     <li class="fightsList__item resultsList__item" @click.prevent="toggleFight(result.fightResults.fight_id)" v-for="result in resultsList">
                         <div class="container-fluid fightsList__fightersWrap" data-fight-id="{{ result.fightResults.fight_id }}">
                             <div class="col-xs-50 fightsList__fighterStatsWarp">
-                                <div v-if="parseInt(result.fightResults.finish_id, 10) === 4" class="col-xs-40 fightsList__fighterWrap">
+                                <div v-if="parseInt(result.fightResults.finish_id, 10) >= 4" class="col-xs-40 fightsList__fighterWrap">
                                     <div class="fightsList__fighterImgWrap" data-fight-id="{{ result.fightResults.fight_id }}">
                                         <img
                                             :class="['fightsList__fighter']"
