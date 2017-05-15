@@ -42,7 +42,7 @@ class FightScoring
 
 		if ( empty($fightResults) ) return $tally;
 
-		if ( (int)$fightResults['finish_id'] !== 4  ) {
+		if ( (int)$fightResults['finish_id'] < 4  ) {
             $this->determineFighterPoints((int)$playersPicks['winning_fighter_id'], (int)$fightResults['winning_fighter_id'], $fighters);
             $this->determineRoundPoints((int)$playersPicks['round'], (int)$fightResults['round']);
             $this->determineMinutePoints((int)$playersPicks['minute'], (int)$fightResults['minute']);
