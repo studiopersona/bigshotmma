@@ -1,3 +1,7 @@
+- can't see deposit profile update button at bottom of profile page
+
+- event results view is freezing modile browsers!!! Trying to open a fights results
+
 - 100 person contest payout needs to be fixed on picks view
 
 - make sure the email entered when signning up has the correct format

@@ -129,7 +129,7 @@
                             headers: { 'Authorization' : 'Bearer ' + token }
                         })
                         .then(function(response) {
-                            console.log(response.data.participants)
+                            // console.log(response.data.participants)
                             this.participantsList = response.data.participants
                             this.working = false
                         })
@@ -146,7 +146,7 @@
 
         computed: {
             loaderClasses() {
-                console.log(this.working)
+                // console.log(this.working)
                 return (this.working) ? 'spinnerWrap' : 'spinnerWrap visuallyhidden';
             },
 

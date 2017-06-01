@@ -320,38 +320,38 @@
                     this.$http.get( URL.base + '/api/v1/contest-types', {}, {
                         // Attach the JWT header
                         headers: { 'Authorization' : 'Bearer ' + token }
-                    }).then(
-                        function(response) {
-                            this.contestTypes = response.data;
-                        },
-                        function(err) {
-                            console.log(err);
                     })
+                    .then(function(response) {
+                        this.contestTypes = response.data;
+                    })
+                    .catch(function(err) {
+                            console.log(err);
+                    });
 
                     this.$http.get( URL.base + '/api/v1/player-name', {}, {
                         // Attach the JWT header
                         headers: { 'Authorization' : 'Bearer ' + token }
-                    }).then(
-                        function(response) {
-                            this.playersName = response.data.player_name;
-
-                            this.$http.get( URL.base + '/api/v1/player-balance', {}, {
-                                // Attach the JWT header
-                                headers: { 'Authorization' : 'Bearer ' + token }
-                            }).then(
-                                function(response) {
-                                    this.playersBalance = response.data.playerBalance;
-                                    this.woking = false
-
-                                    if (redirect) router.go(redirect)
-                                },
-                                function(err) {
-                                    console.log(err);
-                            })
-                        },
-                        function(err) {
-                            console.log(err);
                     })
+                    .then(function(response) {
+                        this.playersName = response.data.player_name;
+
+                        this.$http.get( URL.base + '/api/v1/player-balance', {}, {
+                            // Attach the JWT header
+                            headers: { 'Authorization' : 'Bearer ' + token }
+                        }).then(
+                            function(response) {
+                                this.playersBalance = response.data.playerBalance;
+                                this.woking = false
+
+                                if (redirect) router.go(redirect)
+                            },
+                            function(err) {
+                                console.log(err);
+                        })
+                    })
+                    .catch(function(err) {
+                            console.log(err);
+                    });
                 }
             },
 
