@@ -11,5 +11,6 @@ class BogoPromo extends Model
     public function bogoPromosToUsers()
     {
     	return $this->hasMany('Bsmma\BogoPromosToUser');
+    	// this is a test
     }
 }
