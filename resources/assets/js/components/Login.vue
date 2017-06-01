@@ -125,7 +125,8 @@
 	                    });
 	                })
 	                .catch(function(err) {
-	                    router.go('login');
+	                	// could not refresh the token, so just display login
+	                	this.working = false
 	                })
 
 	            } else {

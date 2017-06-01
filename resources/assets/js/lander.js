@@ -30,7 +30,7 @@ window.onload = function() {
 				$carouselHolder: $('.carousel__holder'),
 	            $itemsWrap: $('.carousel__wrap'),
 	            $items: $('.carousel__item'),
-	            $navBtnsWrap: $('.carousel-nav'),
+	            $navBtnsWrap: $('.carousel-nav__wrap'),
 	            marginSize: 15, // in pixels
 	            itemsPerFrame: ipf,
 			})

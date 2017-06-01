@@ -22,7 +22,7 @@
                     <li class="fightsList__item resultsList__item" @click.prevent="toggleFight(result.fightResults.fight_id)" v-for="result in resultsList">
                         <div class="container-fluid fightsList__fightersWrap" data-fight-id="{{ result.fightResults.fight_id }}">
                             <div class="col-xs-50 fightsList__fighterStatsWarp">
-                                <div v-if="parseInt(result.fightResults.finish_id, 10) === 4" class="col-xs-40 fightsList__fighterWrap">
+                                <div v-if="parseInt(result.fightResults.finish_id, 10) >= 4" class="col-xs-40 fightsList__fighterWrap">
                                     <div class="fightsList__fighterImgWrap" data-fight-id="{{ result.fightResults.fight_id }}">
                                         <img
                                             :class="['fightsList__fighter']"
@@ -88,7 +88,7 @@
                                         {{ result.fightResults.fight.fighters[1].pivot.odds > 0 ? '+' : '' }}{{ result.fightResults.fight.fighters[1].pivot.odds }}
                                     </div>
                                 </div>
-                                <div v-if="parseInt(result.fightResults.finish_id, 10) === 4" class="col-xs-40  fightsList__fighterWrap">
+                                <div v-if="parseInt(result.fightResults.finish_id, 10) >= 4" class="col-xs-40  fightsList__fighterWrap">
                                     <div class="fightsList__fighterImgWrap" data-fight-id="{{ result.fightResults.id }}">
                                         <img
                                             :class="['fightsList__fighter']"
@@ -128,8 +128,14 @@
                                 </div><!-- .fightsList__fighterWrap -->
                             </div><!-- .fightsList__fighterStatsWarp -->
                         </div><!-- .fightsList__fightersWrap -->
-                        <div v-if="parseInt(result.fightResults.finish_id, 10) === 4" class="resultsList__outcomeString left">
-                            {{ result.fightResults.fight.fighters[0].lastname }} vs. {{ result.fightResults.fight.fighters[1].lastname }} declared a draw
+                        <div v-if="parseInt(result.fightResults.finish_id, 10) >= 4" class="resultsList__outcomeString left">
+                            <template v-if="parseInt(result.fightResults.finish_id, 10) === 4">
+                                {{ result.fightResults.fight.fighters[0].lastname }} vs. {{ result.fightResults.fight.fighters[1].lastname }} declared a draw
+                            </template>
+                            <template v-if="parseInt(result.fightResults.finish_id, 10) === 5">
+                                No winner as fight deemed No Contest in Round {{ result.fightResults.round }}
+                                at {{ result.roundTime }}
+                            </template>
                         </div>
                         <div v-else :class="['resultsList__outcomeString', (parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10)) ? 'right' : 'left']">
                             {{ parseInt(result.fightResults.fight.fighters[0].id, 10) === parseInt(result.fightResults.winning_fighter_id, 10) ? result.fightResults.fight.fighters[0].lastname : result.fightResults.fight.fighters[1].lastname }}

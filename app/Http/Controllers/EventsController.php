@@ -50,10 +50,7 @@ class EventsController extends ApiController
                     ->with(['promoter'])
                     ->get();
 
-        if ( $event->isEmpty() )
-        {
-            return $this->respondNotFound('Event does not exsist');
-        }
+        if ( $event->isEmpty() ) return $this->respondNotFound('Event does not exsist');
 
         return $this->respond([
             'event' => $this->eventTransformer->transformCollection($event->toArray()),
