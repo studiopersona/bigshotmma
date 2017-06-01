@@ -10,7 +10,8 @@
 }
 
 .smaller-screens,
-.smaller-screens-block {
+.smaller-screens-block,
+.smaller-screens-flex {
 	display: none;
 }
 
@@ -26,6 +27,7 @@
 	display: inline-block;
 }
 
+
 // 615px
 @media screen and (max-width: 38.4375rem) {
 	.smaller-screens {
@@ -34,6 +36,10 @@
 
 	.smaller-screens-block {
 		display: block;
+	}
+
+	.smaller-screens-flex {
+		display: flex;
 	}
 
 	.larger-screens,

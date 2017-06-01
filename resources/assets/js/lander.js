@@ -4,6 +4,7 @@ import powerupSlides from './lander/powerup-info'
 import infoPanels from './lander/info-panels'
 import menuControl from './lander/menu-control'
 import formControl from './lander/form-control'
+import hamburger from './lander/hamburger'
 import $ from 'jquery'
 import parsley from 'parsleyjs'
 
@@ -37,6 +38,8 @@ window.onload = function() {
 
 			$('.carousel-nav').on('click', pc.move)
 		}
+	} else {
+		hamburger.init()
 	}
 
 	if (document.querySelector('.powerupsInfo')) powerupSlides.init()

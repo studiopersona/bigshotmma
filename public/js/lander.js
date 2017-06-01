@@ -12638,6 +12638,10 @@ var _formControl = require('./lander/form-control');
 
 var _formControl2 = _interopRequireDefault(_formControl);
 
+var _hamburger = require('./lander/hamburger');
+
+var _hamburger2 = _interopRequireDefault(_hamburger);
+
 var _jquery = require('jquery');
 
 var _jquery2 = _interopRequireDefault(_jquery);
@@ -12678,6 +12682,8 @@ window.onload = function () {
 
 			(0, _jquery2.default)('.carousel-nav').on('click', pc.move);
 		}
+	} else {
+		_hamburger2.default.init();
 	}
 
 	if (document.querySelector('.powerupsInfo')) _powerupInfo2.default.init();
@@ -12690,7 +12696,7 @@ window.onload = function () {
 	});
 };
 
-},{"./lander/carousel":4,"./lander/form-control":5,"./lander/hero-sizer":6,"./lander/info-panels":7,"./lander/menu-control":8,"./lander/powerup-info":9,"jquery":1,"parsleyjs":2}],4:[function(require,module,exports){
+},{"./lander/carousel":4,"./lander/form-control":5,"./lander/hamburger":6,"./lander/hero-sizer":7,"./lander/info-panels":8,"./lander/menu-control":9,"./lander/powerup-info":10,"jquery":1,"parsleyjs":2}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12977,7 +12983,49 @@ var formControl = function ($, spinner, w, undefined) {
 
 exports.default = formControl;
 
-},{"./spinner.js":10,"./xhr.js":11,"jquery":1,"parsleyjs":2}],6:[function(require,module,exports){
+},{"./spinner.js":11,"./xhr.js":12,"jquery":1,"parsleyjs":2}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var hamburger = function ($, w, undefined) {
+	var $menu;
+
+	var init = function init() {
+		$('#lander-menu-trigger').on('click', toogleMenu);
+		$menu = $('#mobile-nav-menu');
+	};
+
+	var toggleMenu = function toggleMenu(e) {
+		var target = $(e.currentTarget);
+
+		e.preventDefault();
+
+		if (target.hasClass('is-active')) {
+			target.removeClass('is-active');
+			$menu.removeClass('show');
+		} else {
+			target.addClass('is-active');
+			$menu.addClass('show');
+		}
+	};
+
+	return {
+		init: init
+	};
+}(_jquery2.default, window);
+
+exports.default = hamburger;
+
+},{"jquery":1}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12998,7 +13046,7 @@ var heroSizer = function heroSizer() {
 
 exports.default = heroSizer;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13042,7 +13090,7 @@ var panelControl = function ($, w, undefined) {
 
 exports.default = panelControl;
 
-},{"jquery":1}],8:[function(require,module,exports){
+},{"jquery":1}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13078,7 +13126,7 @@ var menuControl = function ($, w, undefined) {
 
 exports.default = menuControl;
 
-},{"jquery":1}],9:[function(require,module,exports){
+},{"jquery":1}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13136,7 +13184,7 @@ var infoSlides = function ($, w, undefined) {
 
 exports.default = infoSlides;
 
-},{"jquery":1}],10:[function(require,module,exports){
+},{"jquery":1}],11:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -13496,7 +13544,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return Spinner;
 });
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
