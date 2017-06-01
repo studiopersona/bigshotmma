@@ -233,7 +233,6 @@
                 finishes: {},
                 contestId: 0,
                 numberNames: ['One', 'Two', 'Three', 'Four', 'Five'],
-                working: false,
                 contestId: this.$route.params.contest_id,
                 hasPicks: true,
                 URL: {

@@ -58,7 +58,6 @@
             return {
                 contestsList: { 'contests':{} },
                 contestsEntered: [],
-                working: false,
                 poolTotal: 0,
                 URL: {
                     base: window.URL.base,
@@ -76,19 +75,25 @@
             var vm = this,
                 params;
 
-            localforage.getItem('id_token').then(function(token) {
+            localforage.getItem('id_token')
+            .then(function(token) {
                 if ( token ) {
                     params = auth.parseToken(token);
+                    // if the token has not expired get the required data
                     if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
                         vm.fetch(token);
                     } else {
+                        // make a request to the server to refresh the token
                         vm.tokenRefresh(token);
                     }
                 } else {
+                    // player needs to login
                     router.go('login');
                 }
             })
             .catch(function(err) {
+                // player needs to login
+                route.go('login');
                 console.log(err);
             });
         },
@@ -99,33 +104,47 @@
 
                 this.$http.post(URL.base + '/api/v1/refresh', {}, {
                     headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    localforage.setItem('id_token', response.data.token).then(function() {
+                })
+                .then(function(response) {
+                    // store the new token and fetch required data
+                    localforage.setItem('id_token', response.data.token)
+                    .then(function() {
                         vm.fetch(token);
                     });
-                }, function(err) {
+                })
+                .catch(function(err) {
+                    // player needs to login again
                     router.go('login');
                 });
             },
 
             fetch(token) {
+                // get a list of all contests
                 this.$http.get(URL.base + '/api/v1/contests', {}, {
                     // Attach the JWT header
                     headers:{ 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
+                })
+                .then(function(response) {
                     this.contestsList = response.data;
+
                     this.working = false;
-                }, function(err) {
+                })
+                .catch(function(err) {
+                    console.log('an error was encounter while getting the contest list')
                     console.log(err);
+
                     this.working = false;
                 });
-
+                // get a list of contests the player has entered
                 this.$http.get(URL.base + '/api/v1/player/contests-entered', {}, {
                     // Attach the JWT header
                     headers:{ 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
+                })
+                .then(function(response) {
                     this.contestsEntered = response.data.contests;
-                }, function(err) {
+                })
+                .catch(function(err) {
+                    console.log('an error was encounter while getting the players entered contset list');
                     console.log(err);
                 });
             },

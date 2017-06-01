@@ -31,7 +31,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-50">
-                        <span class="contestDetails__title"><a href="#" @click="showPrizeModal">Prize Pool</a>:</span> $<span v-if="! isNaN(parseFloat(prizePool.total))">{{ parseFloat(prizePool.total).toFixed(2) }}
+                        <span class="contestDetails__title"><a href="#" @click="showPrizeModal">Prize Pool</a>:</span> $<span v-if="! isNaN(parseFloat(prizeTotal))">{{ parseFloat(prizeTotal).toFixed(2) }}
                     </div>
                     <div class="col-xs-50 contestDetails__type">
                         <a href="#" @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">
@@ -94,33 +94,7 @@
                 </div>
             </div>
         </div>
-        <section :class="prizeModalClasses">
-            <h3 class="prizeModal__title">Prize Pool</h3>
-            <div class="prizeModal__body">
-            <p>In a <a @click="showContestRules" data-contest-type="{{ participantsList[0].contest.contest_type_id }}">{{ participantsList[0].contest.contest_type_name }}</a> contest with {{ participantsList[0].contest.max_participants }} players:</p>
-                <div class="prizeModal__entryFeeWrap">
-                    <span class="prizeModal__entryFeeTitle">Entry Fee:</span> <span class="prizeModal__entryFee">${{ parseFloat(participantsList[0].contest.buy_in).toFixed(2) }}</span>
-                </div>
-                <table class="prizeModal__payoutTable">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Prize</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="payout of prizePool.payouts" track-by="$index">
-                            <td>{{ $index + 1 }}</td>
-                            <td class="prizeModal__payout">${{ parseFloat(payout).toFixed(2) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="button-wrap">
-                <button @click="prizeModalClose" type="button" class="button button--green">Got It</button>
-            </div>
-            <button @click="prizeModalClose" type="button" class="infoModal__close">x</button>
-        </section>
+        <prize-pool-panel></prize-pool-panel>
         <section :class="infoModalClasses">
             <h3 class="infoModal__title">{{ infoModalContent.title }}</h3>
             <img class="infoModal__image" :src="infoModalContent.image" alt="{{ infoModalContent.title }} Image">
@@ -162,14 +136,19 @@
     import auth from '../auth';
     import {router} from '../index';
     import localforage from 'localforage';
+    import PrizePoolPanel from './PrizePoolPanel.vue';
 
     export default {
+
+        components: {
+            'prize-pool-panel': PrizePoolPanel,
+        },
 
         props: ['working', 'participantsList'],
 
         data() {
             return {
-                prizePool: {},
+                prizeTotal: 0.00,
                 playersBalance: 0,
                 playerPromo: {
                     promoUserId: 0,
@@ -203,21 +182,9 @@
                 contestsEntered: [],
                 deadlinePast: false,
                 contestFull: false,
-                prizePoolPayouts: {
-                    Classic: {
-                        10: [0.7, 0.3],
-                        20: [0.5, 0.25, 0.15, 0.10],
-                        50: [0.365, 0.21, 0.15, 0.10, 0.05, 0.025, 0.025, 0.025, 0.025, 0.025],
-                        100: [0.3275, 0.150, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.0275, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150],
-                    },
-                    Greed: [1],
-                    '50/50': [1],
-                },
-                // working: false,
                 infoModalClasses: ['infoModal'],
                 fundsModalClasses: ['fundsModal'],
                 confirmModalClasses: ['confirmModal'],
-                prizeModalClasses: ['prizeModal'],
                 URL: {
                     base: window.URL.base,
                     current: window.URL.current,
@@ -231,12 +198,11 @@
         },
 
         ready() {
-            var vm = this,
-                params;
+            let vm = this;
 
             localforage.getItem('id_token').then(function(token) {
                 if ( token ) {
-                    params = auth.parseToken(token);
+                    let params = auth.parseToken(token);
                     if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
                         vm.fetch(token);
                     } else {
@@ -257,61 +223,74 @@
 
         methods: {
             tokenRefresh(token) {
-                var vm = this;
+                let vm = this;
 
                 this.$http.post(URL.base + '/api/v1/refresh', {}, {
                     headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
+                })
+                .then(function(response) {
                     localforage.setItem('id_token', response.data.token).then(function() {
                         vm.fetch(token);
                     });
-                }, function(err) {
+                })
+                .catch(function(err) {
                     router.go('login');
                 });
             },
 
             fetch(token) {
-                console.log(this.participantsList)
+                // console.log(this.participantsList)
                 this.$http.get( URL.base + '/api/v1/contest/' + this.$route.params.contest_id + '/players', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
-                    var now = new Date(),
-                        deadline;
-
+                })
+                .then(function(response) {
                     this.working = false;
 
-                    this.contestFull = ( response.data.participants[0].participants.length >= parseInt(response.data.participants[0].contest.max_participants, 10) );
-                }, function(err) {
+                    this.contestFull = this.isContestFull(response.data.participants[0]);
+                })
+                .catch(function(err) {
+                    console.log('an error was encountered while getting the players list')
                     console.log(err);
                 });
 
                 this.$http.get(URL.base + '/api/v1/player/contests-entered', {}, {
-                    // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
+                })
+                .then(function(response) {
                     this.contestsEntered = response.data.contests;
-                }, function(err) {
+                })
+                .catch(function(err) {
+                    console.log('an error was encountered while getting the contests the player is entered in');
                     console.log(err);
                 });
 
                 this.$http.get( URL.base + '/api/v1/contest-types', {}, {
                     // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(function(response) {
+                })
+                .then(function(response) {
                     this.contestTypes = response.data;
+                })
+                .catch(function(err) {
+                    console.log('an error was encountered while getting the contest types');
+                    console.log(err);
                 });
 
                 this.$http.get( URL.base + '/api/v1/player-balance', {}, {
-                    // Attach the JWT header
                     headers: { 'Authorization' : 'Bearer ' + token }
-                }).then(
-                    function(response) {
-                        this.playersBalance = response.data.playerBalance;
-                    },
-                    function(err) {
-                        console.log(err);
+                })
+                .then(function(response) {
+                    this.playersBalance = response.data.playerBalance;
+                })
+                .catch(function(err) {
+                    console.log('an error was encountered while getting the players balance');
+                    console.log(err);
                 });
+            },
+
+            isContestFull(participantsData) {
+                return (participantsData.participants.length >= parseInt(participantsData.contest.max_participants, 10) );
             },
 
             showContestRules(e) {
@@ -321,6 +300,7 @@
                 // if the content is already loaded don't load it again
                 if ( this.contestTypeId !== e.target.dataset.contestType )
                 {
+                    // load the contest type info into the panel
                     this.contestTypeId = e.target.dataset.contestType;
                     newType = this.contestTypes.find(this.findContestType);
 
@@ -329,7 +309,7 @@
                     this.infoModalContent.rules = newType.contest_type_rules,
                     this.infoModalContent.image = URL.base + '/public/image/info/' + newType.image_name;
                 }
-
+                // slide the panel into view
                 this.infoModalClasses.push('show');
             },
 
@@ -340,7 +320,7 @@
             showPrizeModal(e) {
                 e.preventDefault()
 
-                this.prizeModalClasses.push('show');
+                this.$broadcast('show-prize-modal');
             },
 
             infoModalClose(e) {
@@ -353,36 +333,6 @@
                 e.preventDefault();
 
                 this.fundsModalClasses = ['fundsModal'];
-            },
-
-            prizeModalClose(e) {
-                e.preventDefault();
-
-                this.prizeModalClasses = ['prizeModal'];
-            },
-
-            parsePlayerRecords() {
-                var vm = this;
-
-                this.playerRecords.forEach(function(player, index) {
-                    var findPlayer = function(player) {
-                        // console.log('player_id: ', player.id);
-                        // console.log('currentPlayerId: ', currentPlayerId);
-                        return parseInt(player.id, 10) === parseInt(currentPlayerId, 10);
-                    },
-                    match,
-                    currentPlayerId;
-
-                    currentPlayerId = player.id;
-                    match  = vm.participantsList[0].participants.find(findPlayer);
-                    match.record = {
-                        correctPicks: player.record.correctPicks,
-                        incorrectPicks: player.record.incorrectPicks,
-                        percent: (parseInt(player.record.totalPicks, 10) === 0) ? 0 : Math.round(( parseInt(player.record.correctPicks, 10)/parseInt(player.record.totalPicks, 10) ) * 100),
-                    };
-                });
-
-                // console.log(this.participantsList[0].participants);
             },
 
             parsePlayerScores() {
@@ -404,18 +354,18 @@
             },
 
             confirmQuit(e) {
-                var vm = this,
-                    params
+                let vm = this;
 
                 // get the players balance and promo from the server
-                var fetch = function(token) {
+                let fetch = function(token) {
                     vm.$http.get( URL.base + '/api/v1/player-balance', {}, {
                         // Attach the JWT header
                         headers: { 'Authorization' : 'Bearer ' + token }
                     })
                     .then(function(response) {
                         vm.$root.playersBalance = response.data.playerBalance;
-
+                    })
+                    .then(function() {
                         vm.$http.get(URL.base + '/api/v1/player-promo', {}, {
                             headers: { 'Authorization' : 'Bearer ' + token }
                         })
@@ -439,17 +389,22 @@
                         console.log('there was an error while fetching the players balance')
                         console.log(err)
                     })
-                }
+                };
+
                 // get token and re-query server to get players true balance (protect against client side changes to balance total)
-                localforage.getItem('id_token').then(function(token) {
+                localforage.getItem('id_token')
+                .then(function(token) {
                     if ( token ) {
-                        params = auth.parseToken(token);
+                        let params = auth.parseToken(token);
+                        // if token is not expired continue to fetch data
                         if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
                             fetch(token);
                         } else {
+                            // request a server token refresh
                             vm.$http.post(URL.base + '/api/v1/refresh', {}, {
                                 headers: { 'Authorization' : 'Bearer ' + token }
                             }).then(function(response) {
+                                // save the new token and fetch the data
                                 localforage.setItem('id_token', response.data.token).then(function() {
                                     fetch(token);
                                 });
@@ -468,9 +423,7 @@
             },
 
             confirmEnter(e) {
-                var vm = this,
-                    params,
-                    playersBalance
+                let vm = this;
 
                 // get the players balance and promo from the server
                 var fetch = function(token) {
@@ -479,7 +432,7 @@
                         headers: { 'Authorization' : 'Bearer ' + token }
                     })
                     .then(function(response) {
-                            playersBalance = response.data.playerBalance;
+                            let playersBalance = response.data.playerBalance;
                             vm.$root.playersBalance = response.data.playerBalance;
 
                             vm.$http.get(URL.base + '/api/v1/player-promo', {}, {
@@ -489,7 +442,7 @@
 
                                 if (response.data.valid) vm.playerPromo = response.data.promo
 
-                                console.log(vm.playerPromo)
+                                // console.log(vm.playerPromo)
 
                                   // has a balance to cover the entry and has and active promo in stage 1 (need to enter paid contest)
                                 if ( playersBalance >= parseInt(vm.participantsList[0].contest.buy_in, 10) && vm.playerPromo.status.stage === 1 && vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString()) ) {
@@ -538,17 +491,21 @@
                 // get token and re-query server to get players true balance (protect against client side changes to balance total)
                 localforage.getItem('id_token').then(function(token) {
                     if ( token ) {
-                        params = auth.parseToken(token);
+                        let params = auth.parseToken(token);
+
                         if ( Math.round(new Date().getTime() / 1000) <= params.exp ) {
                             fetch(token);
                         } else {
                             vm.$http.post(URL.base + '/api/v1/refresh', {}, {
                                 headers: { 'Authorization' : 'Bearer ' + token }
-                            }).then(function(response) {
-                                localforage.setItem('id_token', response.data.token).then(function() {
+                            })
+                            .then(function(response) {
+                                localforage.setItem('id_token', response.data.token)
+                                .then(function() {
                                     fetch(token);
                                 });
-                            }, function(err) {
+                            })
+                            .catch(function(err) {
                                 router.go('login');
                             });
                         }
@@ -557,6 +514,7 @@
                     }
                 })
                 .catch(function(err) {
+                    router.go('login')
                     console.log(err);
                 });
             },
@@ -568,16 +526,18 @@
             actionConfirmed(actionData, e) {
                 var vm = this;
 
-                localforage.getItem('id_token').then(function(token) {
+                localforage.getItem('id_token')
+                .then(function(token) {
                     if ( actionData.action === 'quit' ) {
                         vm.$http.get(URL.base + '/api/v1/contest/' + actionData.contestId +'/quit', {}, {
                             // Attach the JWT header
                             headers: { 'Authorization' : 'Bearer ' + token }
-                        }).then(function(response) {
+                        })
+                        .then(function(response) {
                             // console.log(response);
-                            console.log(vm.playerPromo.id)
-                            console.log(vm.playerPromo)
-                            console.log(vm.participantsList[0].contest.buy_in.toString())
+                            // console.log(vm.playerPromo.id)
+                            // console.log(vm.playerPromo)
+                            // console.log(vm.participantsList[0].contest.buy_in.toString())
                             // if player has a promo running need to set it back a stage
                             if ( vm.playerPromo.id !== 0 && vm.playerPromo.validEntryFees.includes(vm.participantsList[0].contest.buy_in.toString()) ) {
                                 vm.$http.post(URL.base + '/api/v1/backup-promo', {
@@ -599,6 +559,10 @@
                                 router.go('/event/' + response.data.data.eventId + '/contests');
                             }
 
+                        })
+                        .catch(function(err) {
+                            console.log('an error was encountered while trying to quit the contest');
+                            console.log(err);
                         });
                     } else if ( actionData.action === 'enter' ) {
                         // if the player has a valid active promo move to stage 2
@@ -622,29 +586,36 @@
 
         watch: {
             'participantsList'() {
-                let total = (this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants) - ((this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants)*0.15)
+                this.$broadcast('participants-list-changed', this.participantsList[0]);
 
-                let type = this.participantsList[0].contest.contest_type_name
-                let numOfParticipants = this.participantsList[0].contest.max_participants
+                // let total = (this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants) - ((this.participantsList[0].contest.buy_in * this.participantsList[0].contest.max_participants)*0.15)
 
-                console.log(type)
+                // let type = this.participantsList[0].contest.contest_type_name
+                // let numOfParticipants = this.participantsList[0].contest.max_participants
 
-                let payoutArray = (this.participantsList[0].contest.contest_type_id == 1) ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type]
-                let placePayouts = [];
+                // // console.log(type)
 
-                for(var i=0; i < payoutArray.length; i++) {
-                    placePayouts.push(total*payoutArray[i])
-                }
+                // let payoutArray = (this.participantsList[0].contest.contest_type_id == 1) ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type]
+                // let placePayouts = [];
 
-                this.prizePool = {
-                    total: total,
-                    payouts: placePayouts,
-                }
+                // for(var i=0; i < payoutArray.length; i++) {
+                //     placePayouts.push(total*payoutArray[i])
+                // }
 
-                console.log(this.prizePool.payouts)
+                // this.prizePool = {
+                //     total: total,
+                //     payouts: placePayouts,
+                // }
 
-                // this.parsePlayerRecords()
+                // console.log(this.prizePool.payouts)
                 this.parsePlayerScores()
+            },
+        },
+
+        events: {
+
+            'prize-total-calculated'(prizeTotal) {
+                this.prizeTotal = prizeTotal;
             },
         },
 
