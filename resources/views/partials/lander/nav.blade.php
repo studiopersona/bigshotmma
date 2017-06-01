@@ -30,4 +30,5 @@
 			</a>
 		</div>
 	</div>
+	<!-- change -->
 </section>
