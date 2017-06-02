@@ -43,6 +43,7 @@
 			@include('partials.lander.power-ups')
 			@include('partials.lander.footer')
 		</div>
+		@include('partials.lander.mobile-nav-inner')
 		<!-- scripts -->
 		@yield('scripts')
 		@if ( App::environment() === 'local' )

@@ -3,12 +3,15 @@ import jQuery from 'jquery'
 var hamburger = (function($, w, undefined) {
 	var $menu;
 	var $contentWrap;
+	var $menuTrigger;
 
 	var init = function() {
-		$('#lander-menu-trigger').on('click', toggleMenu);
+		$menuTrigger = $('#lander-menu-trigger');
 		$menu = $('.mobile-main-nav-wrap');
 		$contentWrap = $('.content-wrapper');
-	}
+
+		$menuTrigger.on('click', toggleMenu);
+	};
 
 	var toggleMenu = function(e) {
 		var target = $(e.currentTarget);
@@ -24,11 +27,18 @@ var hamburger = (function($, w, undefined) {
 			$menu.addClass('show');
 			$contentWrap.addClass('blur');
 		}
-	}
+	};
+
+	var closeMenu = function() {
+		$menuTrigger.removeClass('is-active');
+		$menu.removeClass('show');
+		$contentWrap.removeClass('blur');
+	};
 
 	return {
-		init: init
-	}
+		init: init,
+		close: closeMenu,
+	};
 
 })(jQuery, window);
 

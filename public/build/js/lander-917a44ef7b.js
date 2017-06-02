@@ -12618,6 +12618,14 @@ var _heroSizer = require('./lander/hero-sizer');
 
 var _heroSizer2 = _interopRequireDefault(_heroSizer);
 
+var _hamburger = require('./lander/hamburger');
+
+var _hamburger2 = _interopRequireDefault(_hamburger);
+
+var _menuControl = require('./lander/menu-control');
+
+var _menuControl2 = _interopRequireDefault(_menuControl);
+
 var _carousel = require('./lander/carousel');
 
 var _carousel2 = _interopRequireDefault(_carousel);
@@ -12630,17 +12638,9 @@ var _infoPanels = require('./lander/info-panels');
 
 var _infoPanels2 = _interopRequireDefault(_infoPanels);
 
-var _menuControl = require('./lander/menu-control');
-
-var _menuControl2 = _interopRequireDefault(_menuControl);
-
 var _formControl = require('./lander/form-control');
 
 var _formControl2 = _interopRequireDefault(_formControl);
-
-var _hamburger = require('./lander/hamburger');
-
-var _hamburger2 = _interopRequireDefault(_hamburger);
 
 var _jquery = require('jquery');
 
@@ -12661,7 +12661,7 @@ window.onload = function () {
 
 	(0, _jquery2.default)('.content-wrapper').css('paddingTop', (0, _jquery2.default)('.navigation').height() + 'px');
 
-	_menuControl2.default.init();
+	_menuControl2.default.init(_hamburger2.default);
 
 	if ((0, _jquery2.default)(window).width() > 615) {
 		if (document.getElementById('powerupsCarousel')) {
@@ -12999,11 +12999,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var hamburger = function ($, w, undefined) {
 	var $menu;
 	var $contentWrap;
+	var $menuTrigger;
 
 	var init = function init() {
-		$('#lander-menu-trigger').on('click', toggleMenu);
+		$menuTrigger = $('#lander-menu-trigger');
 		$menu = $('.mobile-main-nav-wrap');
 		$contentWrap = $('.content-wrapper');
+
+		$menuTrigger.on('click', toggleMenu);
 	};
 
 	var toggleMenu = function toggleMenu(e) {
@@ -13022,8 +13025,15 @@ var hamburger = function ($, w, undefined) {
 		}
 	};
 
+	var closeMenu = function closeMenu() {
+		$menuTrigger.removeClass('is-active');
+		$menu.removeClass('show');
+		$contentWrap.removeClass('blur');
+	};
+
 	return {
-		init: init
+		init: init,
+		close: closeMenu
 	};
 }(_jquery2.default, window);
 
@@ -13109,9 +13119,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var menuControl = function ($, w, undefined) {
 
-	var init = function init() {
+	var init = function init(hamburger) {
 		$('.navigation__btnWrap').on('click', 'button', scrollPage);
 		$('#powerupsBtn').on('click', scrollPage);
+
+		$('.mobile-main-nav').on('click', 'a[data-target]', function (e) {
+			hamburger.close();
+			scrollPage(e);
+		});
 	};
 
 	var scrollPage = function scrollPage(e) {

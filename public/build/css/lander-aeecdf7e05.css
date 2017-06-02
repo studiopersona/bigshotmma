@@ -4862,7 +4862,8 @@ h4 {
     text-transform: uppercase;
     font-size: 1.8rem;
     font-style: italic;
-    width: 100%; }
+    width: 100%;
+    text-decoration: none; }
   .mobile-main-nav > ul > li:last-child {
     border-bottom: 1px solid #bab4b4; }
 
@@ -5401,7 +5402,7 @@ a.information__itemLink {
     .carousel__holder .carousel__wrap {
       width: 100%; }
       .carousel__holder .carousel__wrap .carousel__item {
-        width: 48%;
+        width: 46%;
         padding-bottom: 2.8rem;
         height: auto; }
         .carousel__holder .carousel__wrap .carousel__item:nth-child(2n) {

@@ -4,9 +4,9 @@
 	</h3>
 	<nav class="mobile-main-nav">
 		<ul>
-			<li><a data-target="#contests">Contests</a></li>
-			<li><a data-target="#information">How to Play</a></li>
-			<li><a data-target="#powerups">Power Ups</a></li>
+			<li><a href="{{ url('/') }}#contests">Contests</a></li>
+			<li><a href="{{ url('/') }}#information">How to Play</a></li>
+			<li><a href="{{ url('/') }}#powerups">Power Ups</a></li>
 			<!--<li><a>Updates</a></li>-->
 			<li><a href="{{ url('contact-support') }}">Reach Out</a></li>
 		</ul>
@@ -17,7 +17,7 @@
 	</div>
 	<div class="menu-nav-footer">
 		<h2 class="menu-nav-footer-header">Skills, Not Scripts.</h2>
-		<h3 class="menu-nav-footer-subheader">We've got <a href="#">power ups</a> too.</h3>
+		<h3 class="menu-nav-footer-subheader">We've got <a href="{{ url('/') }}#powerups">power ups</a> too.</h3>
 		<img src="{{ asset('public/image/lander/mobile-menu-powerups.png') }}" alt="Cindrella +5, Hoyce +3">
 	</div>
 </div>

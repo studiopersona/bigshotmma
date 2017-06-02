@@ -1,10 +1,10 @@
 import heroSizer from './lander/hero-sizer'
+import hamburger from './lander/hamburger'
+import menuControl from './lander/menu-control'
 import Carousel from './lander/carousel'
 import powerupSlides from './lander/powerup-info'
 import infoPanels from './lander/info-panels'
-import menuControl from './lander/menu-control'
 import formControl from './lander/form-control'
-import hamburger from './lander/hamburger'
 import $ from 'jquery'
 import parsley from 'parsleyjs'
 
@@ -17,7 +17,7 @@ window.onload = function() {
 
 	$('.content-wrapper').css('paddingTop', $('.navigation').height() + 'px')
 
-	menuControl.init()
+	menuControl.init(hamburger)
 
 	if ( $(window).width() > 615 ) {
 		if (document.getElementById('powerupsCarousel')) {
