@@ -1,4 +1,3 @@
-<!-- see if this gets tracked -->
 <section id="contests" class="contests">
 	<div class="content-container">
 		<h2 class="contests__header">Contests</h2>

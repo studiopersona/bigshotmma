@@ -13,13 +13,14 @@
 			</div>
 		</div>
 	</div>
-	<div class="mobile-nav-container small-screens-flex">
+	<div class="mobile-nav-container smaller-screens-flex">
 		<div class="mobile-menu-btn-wrap">
 			<button id="lander-menu-trigger" class="hamburger hamburger--spin" type="button">
 				<span class="hamburger-box">
 			    	<span class="hamburger-inner"></span>
 			  	</span>
 			</button>
+			Menu
 		</div>
 		<div class="mobile-logo-wrap">
 			<img class="mobileMainLogo" src="{{ asset('public/image/lander/mobile-menu-logo.png') }}" alt="BSMMA - Fantasy MMA - Showcase Your Skills. Win Real Money.">
@@ -30,5 +31,4 @@
 			</a>
 		</div>
 	</div>
-	<!-- change -->
 </section>

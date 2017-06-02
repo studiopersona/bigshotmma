@@ -4,8 +4,8 @@ var hamburger = (function($, w, undefined) {
 	var $menu;
 
 	var init = function() {
-		$('#lander-menu-trigger').on('click', toogleMenu);
-		$menu = $('#mobile-nav-menu');
+		$('#lander-menu-trigger').on('click', toggleMenu);
+		$menu = $('.mobile-main-nav-wrap');
 	}
 
 	var toggleMenu = function(e) {
