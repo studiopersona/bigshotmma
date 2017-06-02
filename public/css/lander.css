@@ -4360,7 +4360,7 @@ textarea {
     opacity: 0.7; }
 
 .hamburger-box {
-  width: 30px;
+  width: 22px;
   height: 22px;
   display: inline-block;
   position: relative; }
@@ -4370,7 +4370,7 @@ textarea {
   top: 50%;
   margin-top: -2px; }
   .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
-    width: 30px;
+    width: 22px;
     height: 4px;
     background-color: #000;
     border-radius: 4px;
@@ -4494,7 +4494,8 @@ h4 {
       font-size: 1.563rem; } }
 
 .content-wrapper {
-  padding-top: 10.4rem; }
+  padding-top: 10.4rem;
+  transition: filter 0.3s ease; }
 
 @media screen and (max-width: 38.4375rem) {
   .content-wrapper {
@@ -4786,8 +4787,20 @@ h4 {
   padding: 0.75rem; }
 
 .hamburger {
-  padding: 5px 5px 5px 0;
-  outline: 0; }
+  padding: 6px 5px 5px 0;
+  outline: 0;
+  color: #a80300; }
+
+.hamburger-inner {
+  background-color: #a80300; }
+
+.hamburger-inner::before {
+  top: -7px;
+  background-color: #a80300; }
+
+.hamburger-inner::after {
+  bottom: -7px;
+  background-color: #a80300; }
 
 .mobile-menu-btn-wrap,
 .mobile-account-btn-wrap {
@@ -4798,7 +4811,8 @@ h4 {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
-  align-items: center; }
+  align-items: center;
+  color: #a80300; }
 
 .mobile-logo-wrap {
   width: 60%; }
@@ -4815,21 +4829,89 @@ h4 {
   text-decoration: none;
   color: #000; }
   .mobile-account-btn > img {
-    width: 30%;
+    width: 23%;
     vertical-align: middle;
     margin-left: 0; }
 
 .mobile-main-nav-wrap {
   position: fixed;
-  top: 3rem;
+  top: 5.1rem;
   left: 0;
+  bottom: 0;
   z-index: 200;
+  width: 310px;
   background-color: #fff;
-  padding: 1.4rem;
+  padding: 1.4rem 0;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.5);
   transform: translate3d(-100%, 0, 0);
-  transition: transform 0.3s ease; }
+  transition: transform 0.3s cubic-bezier(0.945, -0.005, 0.19, 1.005); }
   .mobile-main-nav-wrap.show {
     transform: translate3d(0, 0, 0); }
+    .mobile-main-nav-wrap.show .mobile-main-nav > ul > li {
+      transform: translate3d(0, 0, 0); }
+
+.mobile-main-nav > ul > li {
+  transform: translate3d(-100%, 0, 0);
+  transition: transform 0.3s cubic-bezier(0.945, -0.005, 0.19, 1.005) 0.1s;
+  border-top: 1px solid #bab4b4; }
+  .mobile-main-nav > ul > li > a {
+    font-weight: 700;
+    padding: 1rem 1.6rem;
+    display: inline-block;
+    color: #000;
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    font-style: italic;
+    width: 100%; }
+  .mobile-main-nav > ul > li:last-child {
+    border-bottom: 1px solid #bab4b4; }
+
+.mobile-nav-logo {
+  margin: 0 auto 1.4rem;
+  width: 190px;
+  height: 49px;
+  text-align: center;
+  background: url("../../image/lander/mobile-menu-logo.png") center center/100% auto no-repeat; }
+
+.mobile-nav-btn-wrap {
+  margin-top: 2.4rem; }
+
+.mobile-nav-btn {
+  color: #fff;
+  border-radius: 4px;
+  display: block;
+  width: 86%;
+  margin: 0 auto 1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  background-color: #a80300;
+  padding: 1rem 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.4rem; }
+
+.mobile-nav-btn--dark {
+  background-color: #262626; }
+
+.menu-nav-footer-header {
+  font-size: 3.1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -1.5px;
+  text-shadow: 1px 2px 0 #000, 2px 3px 0 #000, 3px 4px 0 #000, 4px 5px 0 #000, 5px 6px 0 #000, -1px -1px 0 #000;
+  text-align: center;
+  margin: 2.4rem 0 0; }
+
+.menu-nav-footer-subheader {
+  font-size: 1.4rem;
+  text-align: center;
+  font-weight: 100;
+  margin: 0.4rem 0 0.6rem; }
+
+.menu-nav-footer img {
+  width: 66%;
+  display: block;
+  margin: 0 auto; }
 
 @media screen and (max-width: 70rem) {
   .navigation__btnWrap .btn, .navigation__btnWrap .btn--block, .navigation__btnWrap .btn--primary, .navigation__btnWrap .btn--green, .navigation__btnWrap .btn--black, .navigation__btnWrap .btn--outline {
@@ -5594,6 +5676,9 @@ a.information__itemLink {
 
 .larger-screens-inline-block {
   display: inline-block; }
+
+.blur {
+  filter: blur(2px); }
 
 @media screen and (max-width: 38.4375rem) {
   .smaller-screens {

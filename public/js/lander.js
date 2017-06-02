@@ -12998,10 +12998,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var hamburger = function ($, w, undefined) {
 	var $menu;
+	var $contentWrap;
 
 	var init = function init() {
 		$('#lander-menu-trigger').on('click', toggleMenu);
 		$menu = $('.mobile-main-nav-wrap');
+		$contentWrap = $('.content-wrapper');
 	};
 
 	var toggleMenu = function toggleMenu(e) {
@@ -13012,9 +13014,11 @@ var hamburger = function ($, w, undefined) {
 		if (target.hasClass('is-active')) {
 			target.removeClass('is-active');
 			$menu.removeClass('show');
+			$contentWrap.removeClass('blur');
 		} else {
 			target.addClass('is-active');
 			$menu.addClass('show');
+			$contentWrap.addClass('blur');
 		}
 	};
 

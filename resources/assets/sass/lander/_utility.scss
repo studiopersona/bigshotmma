@@ -27,6 +27,9 @@
 	display: inline-block;
 }
 
+.blur {
+	filter: blur(2px);
+}
 
 // 615px
 @media screen and (max-width: 38.4375rem) {
