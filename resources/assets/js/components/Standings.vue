@@ -87,7 +87,7 @@
                 </div>
             </div>
         </div>
-        <!--<prize-pool-panel></prize-pool-panel>-->
+        <prize-pool-panel></prize-pool-panel>
         <section :class="infoModalClasses">
             <h3 class="infoModal__title">{{ infoModalContent.title }}</h3>
             <img class="infoModal__image" :src="URL.base + '/public/image/info/' + infoModalContent.image" alt="{{ infoModalContent.title }} Image">
