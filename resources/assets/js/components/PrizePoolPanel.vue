@@ -2,9 +2,9 @@
 <section :class="prizeModalClasses">
     <h3 class="prizeModal__title">Prize Pool</h3>
     <div class="prizeModal__body">
-    <p>In a <a @click="showContestRules" data-contest-type="{{ participantsList.contest.contest_type_id }}">{{ participantsList.contest.contest_type_name }}</a> contest with {{ participantsList.contest.max_participants }} players:</p>
+    <p>In a <a @click="showContestRules" data-contest-type="{{ participantsList.contest.contest_type_id }}">{{ participantsList.contest_type_name }}</a> contest with {{ participantsList.max_participants }} players:</p>
         <div class="prizeModal__entryFeeWrap">
-            <span class="prizeModal__entryFeeTitle">Entry Fee:</span> <span class="prizeModal__entryFee">${{ parseFloat(participantsList.contest.buy_in).toFixed(2) }}</span>
+            <span class="prizeModal__entryFeeTitle">Entry Fee:</span> <span class="prizeModal__entryFee">${{ parseFloat(participantsList.buy_in).toFixed(2) }}</span>
         </div>
         <table class="prizeModal__payoutTable">
             <thead>
