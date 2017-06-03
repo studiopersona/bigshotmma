@@ -53,16 +53,16 @@ export default {
     methods: {
 
         calculatePayouts(participantsList) {
-            this.participantsList = participantsList;
+            this.participantsList = participantsList.contest || participantsList;
 
-            let total = (participantsList.contest.buy_in * participantsList.contest.max_participants) - ((participantsList.contest.buy_in * participantsList.contest.max_participants)*0.15)
+            let total = (participantsList.buy_in * participantsList.max_participants) - ((participantsList.buy_in * participantsList.max_participants)*0.15)
 
             let type = participantsList.contest.contest_type_name
             let numOfParticipants = participantsList.contest.max_participants
 
             // console.log(type)
 
-            let payoutArray = (participantsList.contest.contest_type_id == 1) ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type]
+            let payoutArray = (participantsList.contest_type_id == 1) ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type]
             let placePayouts = [];
 
             for(var i=0; i < payoutArray.length; i++) {
