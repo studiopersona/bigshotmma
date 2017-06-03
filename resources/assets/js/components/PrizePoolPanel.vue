@@ -53,15 +53,12 @@ export default {
     methods: {
 
         calculatePayouts(participantsList) {
-            this.participantsList = participantsList.contest || participantsList;
-
-            console.log('participantsList', participantsList);
-            console.log('this.participantsList', this.participantsList)
+            this.participantsList = participantsList.contest || participantsList
 
             let total = (this.participantsList.buy_in * this.participantsList.max_participants) - ((this.participantsList.buy_in * this.participantsList.max_participants)*0.15)
 
             let type = this.participantsList.contest_type_name
-            let numOfParticipants = this.participantsList.contest.max_participants
+            let numOfParticipants = this.participantsList.max_participants
 
             // console.log(type)
 

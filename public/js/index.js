@@ -47026,13 +47026,10 @@ exports.default = {
         calculatePayouts: function calculatePayouts(participantsList) {
             this.participantsList = participantsList.contest || participantsList;
 
-            console.log('participantsList', participantsList);
-            console.log('this.participantsList', this.participantsList);
-
             var total = this.participantsList.buy_in * this.participantsList.max_participants - this.participantsList.buy_in * this.participantsList.max_participants * 0.15;
 
             var type = this.participantsList.contest_type_name;
-            var numOfParticipants = this.participantsList.contest.max_participants;
+            var numOfParticipants = this.participantsList.max_participants;
 
             // console.log(type)
 
