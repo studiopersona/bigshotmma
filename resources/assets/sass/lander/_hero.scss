@@ -79,6 +79,31 @@
     }
 }
 
+.quote__wrap {
+    margin-top: 1.4rem;
+}
+
+.quote {
+    color: #fff;
+    font-size: 1.7rem;
+    text-align: center;
+    font-weight: 700;
+    margin-top: 31.4rem;
+    font-style: italic;
+}
+
+.fiveStarRating {
+    display: inline-block;
+    margin: 2.4rem auto;
+    width: 100%;
+}
+
+.mobileHero__paymentLogos {
+    width: 100%;
+    height: 30px;
+    background: url('../../image/lander/mobile-payment-logos.png') center center/100% auto no-repeat;
+}
+
 // 1250px
 @media screen and (max-width: 78.125rem) {
     .hero__subheader {
@@ -97,7 +122,6 @@
     }
 }
 
-
 // 770px
 @media screen and (max-width: 48.125rem) {
     .hero__header {
@@ -114,7 +138,9 @@
 // 615px
 @media screen and (max-width: 38.4375rem) {
     .hero {
-        background-image: url('../../image/lander/hero-bkgd-small.jpg');
+        background-image: url('../../image/lander/mobile-hero.jpg');
+        background-size: 100% auto;
+        background-color: #000;
     }
 
     .hero__header {

@@ -31,6 +31,8 @@
 	.highlight--neg {
 		color: $color-red-bright;
 		text-shadow: 1px 1px 1px $color-black;
+		margin-top: 1rem;
+    	display: inline-block;
 	}
 }
 
@@ -39,6 +41,7 @@
 	text-transform: uppercase;
 	text-shadow: 4px 4px 0 rgba(0,0,0,1);
 	font-weight: 700;
+	margin-top: 0;
 }
 
 h3.information__header {

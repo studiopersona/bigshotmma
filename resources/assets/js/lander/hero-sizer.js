@@ -1,8 +1,8 @@
-var heroSizer = function() {
+var heroSizer = function(ratio) {
 	var heroEl = document.querySelector('.hero');
 
 	var sizeHero = function() {
-		heroEl.style.height = parseInt(heroEl.scrollWidth * (1071/1998), 10) + 'px';
+		heroEl.style.height = parseInt(heroEl.scrollWidth * ratio, 10) + 'px';
 	}
 
 	if ( document.querySelector('.hero') ) {

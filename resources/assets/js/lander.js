@@ -1,4 +1,5 @@
 import heroSizer from './lander/hero-sizer'
+import mobileHeroPadding from './lander/mobile-hero-padding'
 import hamburger from './lander/hamburger'
 import menuControl from './lander/menu-control'
 import Carousel from './lander/carousel'
@@ -9,7 +10,7 @@ import $ from 'jquery'
 import parsley from 'parsleyjs'
 
 window.onload = function() {
-	heroSizer()
+
 
 	$(window).on('orientationchange resize', function() {
 		$('.content-wrapper').css('paddingTop', $('.navigation').height() + 'px')
@@ -20,6 +21,7 @@ window.onload = function() {
 	menuControl.init(hamburger)
 
 	if ( $(window).width() > 615 ) {
+		heroSizer(1071/1998);
 		if (document.getElementById('powerupsCarousel')) {
 			var ipf = 6
 
@@ -39,7 +41,8 @@ window.onload = function() {
 			$('.carousel-nav').on('click', pc.move)
 		}
 	} else {
-		hamburger.init()
+		hamburger.init();
+		mobileHeroPadding(720/760);
 	}
 
 	if (document.querySelector('.powerupsInfo')) powerupSlides.init()

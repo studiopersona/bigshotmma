@@ -31,7 +31,7 @@
 					<div class="information__item" data-item="legal">
 						<h1 class="information__header">Is this Legal?</h1>
 						<p><span class="highlight--pos">Yes!</span> Daily fantasy sports (DFS) are completely legal for residents of 41 US states, and anyone is allowed to participate in our free entry contests.</p>
-						<p>Residents of the following states are not eligible to participate in paid entry contests:<br><span class="highlight--neg">Alabama, Arizona, Hawaii, Idaho, Iowa, Louisiana, Montana, Nevada, and Washington</span>.</p>
+						<p>Residents of the following states are not eligible to participate in paid entry contests:<br><span class="highlight--neg">Alabama, Arizona, Hawaii, Idaho, Iowa, Louisiana, Montana, Nevada, and Washington</span></p>
 					</div>
 				</div>
 				<div class="information__itemLinksWrap">
@@ -56,11 +56,6 @@
 							<a href="{{ url('/play') }}" class="information__itemLink">Start Playing</a>
 						</li>
 					</ul>
-				</div>
-				<div class="information__thirdPartyLogosWrap">
-					<img src="{{ asset('public/image/lander/paypal-logo.png') }}" class="information__thirdPartyLogo information__thirdPartyLogo--paypal">
-					<img src="{{ asset('public/image/lander/credit-card-logos.png') }}" class="information__thirdPartyLogo information__thirdPartyLogo--creditCards">
-					<img src="{{ asset('public/image/lander/ssl-logo.png') }}" class="information__thirdPartyLogo information__thirdPartyLogo--ssl">
 				</div>
 			</div>
 			<div class="col-sm-50 col-sm-offset-5">
