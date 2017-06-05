@@ -80,6 +80,16 @@
 			font-size: 0.75em;
 		}
 	}
+
+	th {
+	    background-color: #000;
+	    color: #fff;
+	    font-size: 1rem;
+	    text-transform: uppercase;
+	    font-weight: 700;
+	    padding: 0.5rem 1rem;
+	    font-style: italic;
+	}
 }
 
 .contests__tableHeader {
@@ -92,6 +102,15 @@
 	text-transform: uppercase;
 	line-height: 2.4;
 	margin-right: 0.5rem;
+}
+
+.contests__tableContestType {
+	text-transform: uppercase;
+
+	> span {
+		font-size: 1rem;
+		text-transform: none;
+	}
 }
 
 .contests__playerCount,
@@ -144,8 +163,15 @@
 	    margin: 0 auto 0 0;
 
 	    td {
-	    	padding: 0.5rem;
+	    	padding: 0.5rem 1rem;
 	    	font-size: 1.1rem;
+
+	    	&.contests__noContests {
+	    		color: $color-green;
+	    		font-size: 1.4rem;
+	    		font-weight: 700;
+	    		padding: 1rem;
+	    	}
 	    }
 	}
 

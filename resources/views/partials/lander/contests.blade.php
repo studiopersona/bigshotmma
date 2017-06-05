@@ -1,14 +1,14 @@
 <section id="contests" class="contests">
 	<div class="content-container">
 		<h2 class="contests__header">Contests</h2>
-		<h4 class="contests__subheader">Compete for real cash in our fantasy MMA contests which offer a variety of formats and entry fees for players of all skill levels:</h4>
+		<h4 class="contests__subheader">Play for free or compete for real cash!<br>Credit Card NOT Required.</h4>
 		@if ( is_null($event) )
 			<div class="contests__noEvents">
 				<p>There are no contests available at this time.<br>Please check back soon for a list of current contests.</p>
 			</div>
 		@else
 			<div class="container-fluid contests__list">
-				<div class="col-sm-100 col-md-30 hidden-xs contests__eventWrap larger-screens-block">
+				<div class="col-sm-100 col-md-30 contests__eventWrap">
 					<img class="contests__eventImage" src="{{ asset('public/image/events/'.$event['event_image_name']) }}">
 					<h4 class="countdownHeader">Live In:</h4>
 					<div id="countdown"></div>
@@ -61,10 +61,19 @@
 					</script>
 				</div>
 				<div class="col-xs-100 col-sm-100 col-md-68 col-sm-offset-2">
-					<h3 class="contests__tableHeader">{{ $event['event_name'] }}</h3>
 					<table class="contests__table">
+						<thead>
+							<tr>
+								<th>Format</th>
+								<th>Players</th>
+								<th colspan="2">Entry</th>
+							</tr>
+						</thead>
+						<tbody>
 						@if ($event['contests']->isEmpty())
-							<tr><td class="contests__noContests">No contests have been created for this event. Check back soon for updates.</td></tr>
+							<tr>
+								<td colspan="4" class="contests__noContests">No contests have been created for this event. Check back soon for updates.</td>
+							</tr>
 						@else
 							@if ($event['contests']->count() >= 5)
 								@foreach ($event['contests']->random(5) as $contest)
@@ -86,13 +95,11 @@
 							@else
 								@foreach ($event['contests'] as $contest)
 									<tr>
-										<td class="contests__tableContestType">{{ $contest['contestType']['contest_type_name'] }}</td>
+										<td class="contests__tableContestType">{{ $contest['contestType']['contest_type_name'] }}: <span class="contests__description">{{ $contest['description'] }}</span></td>
 										<td>
-											<span class="contests__tableTitle">Players: </span>
 											<span class="contests__playerCount">{{ count($contest['contestParticipants']) }}/{{ $contest['max_participants']}}</span>
 										</td>
 										<td>
-											<span class="contests__tableTitle">Entry: </span>
 											<span class="contests__tableFee">${{ $contest['entry_fee'] }}</span>
 										</td>
 										<td>
@@ -102,6 +109,7 @@
 								@endforeach
 							@endif
 						@endif
+						</tbody>
 					</table>
 					<div class="all-contests-btn-wrap">
 						<a href="{{ url('/play') }}" class="btn btn--green btn--round">View All Contests</a>
