@@ -1,6 +1,6 @@
 <section id="information" class="information">
 	<div class="content-container">
-		<div class="row">
+		<div class="row larger-screens-block">
 			<div class="col-sm-45 col-xs-100">
 				<div class="information__itemsWrap">
 					<div class="information__item show" data-item="scoring">
@@ -67,6 +67,99 @@
 						<div class="information__phoneScreen information__phoneScreen--contestFormats" data-item="contest-formats"></div>
 						<div class="information__phoneScreen information__phoneScreen--legal" data-item="legal"></div>
 					</div>
+				</div>
+			</div>
+		</div><!-- .row -->
+		<div class="row smaller-screens-block">
+			<div class="col-sm-45 col-xs-100">
+				<div class="information__itemsWrap">
+					<div class="information__item show" data-item="how-to-play">
+						<h1 class="information__header">How to Play</h1>
+						<p>Choose five (5) fighters and decide how &amp; when they will win to score points.</p>
+						<div class="information__itemSection">
+							<h3 class="information__subheader">Pick 5 Fighters</h3>
+							<img src="{{ asset('public/image/lander/mobile-pick-fighters.png') }}" alt="Five fighters icons indicating five fighters chosen">
+						</div>
+						<div class="information__itemSection">
+							<h3 class="information__subheader">Points System</h3>
+							<img src="{{ asset('public/image/lander/mobile-points-system.png') }}" alt="5 points for correct finish, 5 points for correct underdog figher win, 3 points for correct favorite firghter win, 2 points for correct round, 1 point for correct minute">
+						</div>
+						<div class="information__itemSection">
+							<h3 class="information__subheader">Power Ups*</h3>
+							<img class="mobileInformation__powerUpStars" src="{{ asset('public/image/lander/mobile-power-up-stars.png') }}" alt="3 stars indicating 3 power ups selected">
+							<p class="information__footnote">
+								*Up to three (3) powers ups can be applied per contest to score bonus points.
+							</p>
+						</div>
+					</div>
+					<div class="information__item" data-item="contest-formats">
+						<h1 class="information__header">Formats</h1>
+						<p>There are three different contest formats available with varying levels of risk.</p>
+						<ul>
+							<li>
+								<h3 class="information__subheader">Classic</h3>
+								<div class="formats__descriptionWrap">
+									<div class="formats__descriptionImgWarp">
+										<img src="{{ asset('public/image/info/classic-controller.png') }}" alt="Classic Format Icon">
+									</div>
+									<p class="formats__description">
+										<span class="formats__highlight">Top 20%</span> of highest scoring players win a prize.
+									</p>
+								</div>
+							</li>
+							<li>
+								<h3 class="information__subheader">Greed</h3>
+								<div class="formats__descriptionWrap">
+									<div class="formats__descriptionImgWarp">
+										<img src="{{ asset('public/image/info/greed-icon.png') }}" alt="Greed Format Icon">
+									</div>
+									<p class="formats__description">
+										The top scorer takes home <span class="formats__highlight">100%</span> of the prize pool.
+									</p>
+								</div>
+							</li>
+							<li>
+								<h3 class="information__subheader">50/50</h3>
+								<div class="formats__descriptionWrap">
+									<div class="formats__descriptionImgWarp">
+										<img src="{{ asset('public/image/info/5050-bar.png') }}" alt="Fifty Fifty Format Icon">
+									</div>
+									<p class="formats__description">
+										<span class="formats__highlight">Top 50%</span> of highest scoring players win a prize.
+									</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="information__item" data-item="legal">
+						<h1 class="information__header">Legal Info</h1>
+						<p>BSMMA offers daily fantasy (DFS) contests to players in Canada and the United States* with the exception of these states:</p>
+						<div class="illegalStates">
+							AL, AR, HI, ID, LA, MT, NV, WA
+						</div>
+						<img class="illegalStatesMap" src="{{ asset('public/image/lander/mobile-legal-map.png') }}" alt="Map graphic indicating AL, AR, HI, ID, LA, MT, NV, WA are not eligible for participation in paid contests">
+						<p class="legal__footnote">
+							*Resrictions only apply to paid contests.
+						</p>
+						<p><strong>All are welcome to compete in FREE contests!</strong></p>
+					</div>
+				</div>
+				<div class="information__itemLinksWrap">
+					<h3 class="information__header">Learn</h3>
+					<ul class="mobileInformation__itemLinksList clearfix">
+						<li>
+							<button type="button" class="information__itemLink" data-target="legal">Is this legal?</button>
+						</li>
+						<li>
+							<button type="button" class="information__itemLink" data-target="how-to-play">How to Play</button>
+						</li>
+						<li>
+							<button type="button" class="information__itemLink" data-target="contest-formats">Contest Formats</button>
+						</li>
+						<li>
+							<a href="{{ url('/play') }}" class="information__itemLink">Start Playing</a>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div><!-- .row -->

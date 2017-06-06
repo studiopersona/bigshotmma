@@ -4989,40 +4989,71 @@ h4 {
   background: url("../../image/lander/information-panel-bkgd.jpg") left top/cover no-repeat; }
 
 .information__itemsWrap {
-  width: 100%;
   min-height: 220px;
+  margin-bottom: 1.2rem;
   overflow: hidden;
   position: relative;
-  margin-bottom: 1.2rem;
-  transition: height 0.3s ease; }
+  transition: height 0.3s ease;
+  width: 100%; }
 
 .information__item {
   color: #fff;
-  width: inherit;
   position: absolute;
   transform: translate3d(-100%, 0, 0);
-  z-index: 1;
-  transition: transform 0.3s cubic-bezier(0, 0.685, 0.54, 1.005); }
+  transition: transform 0.3s cubic-bezier(0, 0.685, 0.54, 1.005);
+  width: inherit;
+  z-index: 1; }
   .information__item.show {
-    z-index: 5;
-    transform: translate3d(0, 0, 0); }
+    transform: translate3d(0, 0, 0);
+    z-index: 5; }
   .information__item .highlight--pos {
     color: #2dbe0c; }
   .information__item .highlight--neg {
     color: #F9546A;
-    text-shadow: 1px 1px 1px #000;
+    display: inline-block;
     margin-top: 1rem;
-    display: inline-block; }
+    text-shadow: 1px 1px 1px #000; }
 
 .information__header {
   color: #fff;
-  text-transform: uppercase;
-  text-shadow: 4px 4px 0 black;
+  font-style: italic;
   font-weight: 700;
-  margin-top: 0; }
+  margin: 0 auto 1.26rem;
+  text-transform: uppercase;
+  text-shadow: 4px 4px 0 black; }
 
 h3.information__header {
+  font-style: italic;
   margin-bottom: 0; }
+
+h3.information__subheader {
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: 700;
+  margin-bottom: 1.46rem;
+  text-align: left;
+  text-transform: uppercase; }
+
+.information__itemSection {
+  text-align: left; }
+  .information__itemSection p > {
+    text-align: center; }
+  .information__itemSection > img {
+    width: 98%; }
+    .information__itemSection > img.mobileInformation__powerUpStars {
+      width: 50%; }
+
+.illegalStates {
+  color: #F9546A;
+  border: 1px solid #F9546A;
+  margin: 1.4rem auto 2.8rem auto;
+  padding: 0.75rem 1rem; }
+
+.illegalStatesMap {
+  width: 100%; }
+
+.legal__footnote {
+  margin-top: 1.4rem; }
 
 .informaion__itemLinksList {
   width: 100%;
@@ -5050,6 +5081,11 @@ h3.information__header {
   outline: none; }
   .information__itemLink:hover {
     color: #fff; }
+
+.information__footnote {
+  margin: 1.4rem auto 0;
+  text-align: center;
+  width: 90%; }
 
 a.information__itemLink {
   padding-left: 5px; }
@@ -5114,6 +5150,34 @@ a.information__itemLink {
 .information__phoneScreen--legal {
   background-image: url("../../image/lander/availability-screen.jpg"); }
 
+.formats__descriptionWrap {
+  -ms-flex-align: center;
+  align-items: center;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  margin-bottom: 2.4rem; }
+  .formats__descriptionWrap > .formats__descriptionImgWarp {
+    -ms-flex-align: center;
+    align-items: center;
+    border: 1px solid rgba(150, 150, 150, 0.5);
+    box-sizing: border-box;
+    display: -ms-flexbox;
+    display: flex;
+    height: 90px;
+    margin-right: 1rem;
+    padding: 1.5rem;
+    width: 140px; }
+    .formats__descriptionWrap > .formats__descriptionImgWarp > img {
+      width: 100%; }
+
+.formats__description {
+  font-size: 1.5rem; }
+
+.formats__highlight {
+  font-weight: 700; }
+
 @media screen and (max-width: 62rem) {
   .informaion__itemLinksList > li {
     width: 48%;
@@ -5151,6 +5215,12 @@ a.information__itemLink {
     width: 24%; }
   .information__thirdPartyLogo--paypal {
     width: 18%; } }
+
+@media screen and (max-width: 38.4375rem) {
+  .information__itemsWrap {
+    min-height: 560px; }
+  .information__itemSection {
+    margin-bottom: 3.8rem; } }
 
 .contests__header {
   font-size: 5.96rem;
