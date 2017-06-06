@@ -5153,11 +5153,12 @@ a.information__itemLink {
     width: 18%; } }
 
 .contests__header {
-  text-transform: uppercase;
   font-size: 5.96rem;
+  font-style: italic;
   font-weight: 700;
   margin-bottom: 0;
-  text-align: center; }
+  text-align: center;
+  text-transform: uppercase; }
 
 .contests__subheader {
   font-size: 2.4rem;
@@ -5168,23 +5169,24 @@ a.information__itemLink {
   margin-top: 8rem; }
 
 .contests__noEvents {
+  margin: 0 auto;
   text-align: center;
-  width: 80%;
-  margin: 0 auto; }
+  width: 80%; }
   .contests__noEvents p {
-    font-size: 2.4rem;
-    color: #2dbe0c; }
+    color: #2dbe0c;
+    font-size: 2.4rem; }
 
 .contests__eventImage {
-  width: 90%;
-  margin-bottom: 1.4rem; }
+  margin-bottom: 1.4rem;
+  width: 90%; }
 
 .countdownHeader {
-  font-size: 3rem;
   color: #a80300;
+  font-size: 3rem;
+  font-style: italic;
   font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 0; }
+  margin-bottom: 0;
+  text-transform: uppercase; }
 
 .countdownValue {
   font-size: 3rem;
@@ -5210,28 +5212,28 @@ a.information__itemLink {
     .contests__table tr:nth-child(2n) {
       background: #fff; }
   .contests__table td {
-    padding: 1.5rem;
-    font-size: 1.3em; }
+    font-size: 1.3em;
+    padding: 1.5rem; }
     .contests__table td .btn, .contests__table td .btn--block, .contests__table td .btn--primary, .contests__table td .btn--green, .contests__table td .btn--black, .contests__table td .btn--outline {
       font-size: 0.75em; }
   .contests__table th {
     background-color: #000;
     color: #fff;
     font-size: 1rem;
-    text-transform: uppercase;
+    font-style: italic;
     font-weight: 700;
     padding: 0.5rem 1rem;
-    font-style: italic; }
+    text-transform: uppercase; }
 
 .contests__tableHeader {
-  text-align: center;
-  font-size: 1.8em; }
+  font-size: 1.8em;
+  text-align: center; }
 
 .contests__tableTitle {
   font-size: 1.2rem;
-  text-transform: uppercase;
   line-height: 2.4;
-  margin-right: 0.5rem; }
+  margin-right: 0.5rem;
+  text-transform: uppercase; }
 
 .contests__tableContestType {
   text-transform: uppercase; }
@@ -5249,32 +5251,32 @@ a.information__itemLink {
   color: #2dbe0c; }
 
 .all-contests-btn-wrap {
-  text-align: center;
-  padding: 2rem; }
+  padding: 2rem;
+  text-align: center; }
 
 @media screen and (max-width: 61.9375rem) {
   .contests__eventWrap {
     margin-bottom: 3.5rem; }
   .contests__eventImage {
-    width: 50%;
     display: block;
-    margin: 0 auto 2.4rem; } }
+    margin: 0 auto 2.4rem;
+    width: 50%; } }
 
 @media screen and (max-width: 38.4375rem) {
   .contests__list {
     margin-top: 1rem; }
     .contests__list .smaller-screens-block {
-      text-align: center;
-      padding-top: 2rem; }
+      padding-top: 2rem;
+      text-align: center; }
   .contests__playerCount,
   .contest__tableFee {
     font-size: 1.1rem; }
   .contests__table {
-    max-width: 100%;
-    margin: 0 auto 0 0; }
+    margin: 0 auto 0 0;
+    max-width: 100%; }
     .contests__table td {
-      padding: 0.5rem 1rem;
-      font-size: 1.1rem; }
+      font-size: 1.1rem;
+      padding: 0.5rem 1rem; }
       .contests__table td.contests__noContests {
         color: #2dbe0c;
         font-size: 1.4rem;
