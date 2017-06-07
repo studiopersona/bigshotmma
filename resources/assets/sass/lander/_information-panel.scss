@@ -312,6 +312,7 @@ a.information__itemLink {
 	}
 }
 
+// 615px
 @media screen and (max-width: 38.4375rem) {
 	.information__itemsWrap {
 		min-height: 560px;
@@ -399,6 +400,35 @@ a.information__itemLink {
 				z-index: 25;
 				border: none;
 				transition: transform 0.2s ease;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 25rem) {
+	.information__itemLinksWrap {
+
+		.information__header {
+			font-size: 1.4rem;;
+		}
+
+		.mobileInformation__itemLinksList {
+			height: 2.9rem;
+			padding-top: 2.9rem;
+
+			&.open {
+				height: 12.1rem;
+			}
+
+			> div {
+
+				&.arrow {
+					top: 0.5rem;
+				}
+
+				> button, a {
+					font-size: 1.4rem;
+				}
 			}
 		}
 	}
