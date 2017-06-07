@@ -4608,8 +4608,8 @@ h4 {
 
 .mobileHeroBtn {
   display: inline-block;
-  width: 60%;
-  font-size: 1.7rem; }
+  width: 68%;
+  font-size: 1.5rem; }
 
 .mobile-nav-btn--dark,
 .mobileHeroBtn--dark {
@@ -5047,7 +5047,8 @@ h3.information__subheader {
   color: #F9546A;
   border: 1px solid #F9546A;
   margin: 1.4rem auto 2.8rem auto;
-  padding: 0.75rem 1rem; }
+  padding: 0.75rem 1rem;
+  width: 60%; }
 
 .illegalStatesMap {
   width: 100%; }
@@ -5220,7 +5221,74 @@ a.information__itemLink {
   .information__itemsWrap {
     min-height: 560px; }
   .information__itemSection {
-    margin-bottom: 3.8rem; } }
+    margin-bottom: 3.8rem; }
+  .information__itemLinksWrap {
+    -ms-flex-align: center;
+    align-items: center;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin-top: 4.8rem;
+    padding: 1rem 0.5rem;
+    position: relative;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#49c934+0,49c934+36,3ebe29+45,2bab16+55,2bab16+56,24a40f+59,1f9f0a+64,20a00b+100 */
+    background: #49c934;
+    /* Old browsers */
+    /* FF3.6-15 */
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #49c934 0%, #49c934 36%, #3ebe29 45%, #2bab16 55%, #2bab16 56%, #24a40f 59%, #1f9f0a 64%, #20a00b 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#49c934', endColorstr='#20a00b',GradientType=0 );
+    /* IE6-9 */ }
+    .information__itemLinksWrap .information__header {
+      color: #fff;
+      font-size: 2rem;
+      margin: 0 0 0 1rem;
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8); }
+    .information__itemLinksWrap .mobileInformation__itemLinksList {
+      margin-right: 1rem;
+      position: absolute;
+      top: 0.5rem;
+      right: 0;
+      z-index: 1;
+      width: 50%;
+      height: 3.6rem;
+      overflow: hidden;
+      background-color: #fff;
+      padding-top: 3.7rem;
+      transition: height 0.25s ease; }
+      .information__itemLinksWrap .mobileInformation__itemLinksList.open {
+        height: 14.8rem;
+        box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5); }
+        .information__itemLinksWrap .mobileInformation__itemLinksList.open > div.arrow {
+          transform: rotate(180deg); }
+      .information__itemLinksWrap .mobileInformation__itemLinksList > div {
+        border-bottom: 1px dotted #bbb;
+        padding-bottom: 0.5rem; }
+        .information__itemLinksWrap .mobileInformation__itemLinksList > div > button, .information__itemLinksWrap .mobileInformation__itemLinksList > div a {
+          color: #444;
+          text-decoration: none;
+          display: block;
+          text-align: left;
+          padding: 0.6rem 0 0 1.5rem;
+          font-size: 1.8rem; }
+      .information__itemLinksWrap .mobileInformation__itemLinksList > div.current {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 20;
+        width: 100%; }
+      .information__itemLinksWrap .mobileInformation__itemLinksList > div.arrow {
+        background: url("../../image/lander/mobile-learn-more-selector.png") center center/100% auto no-repeat;
+        width: 10%;
+        height: 2rem;
+        position: absolute;
+        top: 0.7rem;
+        right: 1rem;
+        z-index: 25;
+        border: none;
+        transition: transform 0.2s ease; } }
 
 .contests__header {
   font-size: 5.96rem;

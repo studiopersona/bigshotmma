@@ -13079,14 +13079,17 @@ var _jquery2 = _interopRequireDefault(_jquery);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var panelControl = function ($, w, undefined) {
-	var $triggers, $infoWindows, $phoneScreens;
+	var $triggers, $infoWindows, $phoneScreens, $arrowTrigger, $learnMoreList;
 
 	var init = function init() {
 		$triggers = $('button.information__itemLink');
 		$infoWindows = $('.information__item');
 		$phoneScreens = $('.information__phoneScreen');
+		$arrowTrigger = $('.mobileInformation__itemLinksList > div.arrow');
+		$learnMoreList = $('.mobileInformation__itemLinksList');
 
 		$triggers.on('click', switchInfo);
+		$arrowTrigger.on('click', toggleLearnMore);
 
 		$('.information__itemsWrap').outerHeight($infoWindows.filter('[data-item="scoring"]').innerHeight() + 'px');
 	};
@@ -13100,6 +13103,16 @@ var panelControl = function ($, w, undefined) {
 		$phoneScreens.filter('.visible').removeClass('visible');
 		$phoneScreens.filter('[data-item="' + target + '"]').addClass('visible');
 		$('.information__itemsWrap').outerHeight($infoWindows.filter('[data-item="' + target + '"]').innerHeight() + 'px');
+
+		$('.mobileInformation__itemLinksList > div.current').removeClass('current');
+		$(e.currentTarget).parent().addClass('current');
+		$learnMoreList.toggleClass('open');
+	};
+
+	var toggleLearnMore = function toggleLearnMore(e) {
+		var target = $(e.currentTarget);
+
+		$learnMoreList.toggleClass('open');
 	};
 
 	return {

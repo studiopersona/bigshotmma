@@ -145,20 +145,21 @@
 					</div>
 				</div>
 				<div class="information__itemLinksWrap">
-					<h3 class="information__header">Learn</h3>
-					<ul class="mobileInformation__itemLinksList clearfix">
-						<li>
-							<button type="button" class="information__itemLink" data-target="legal">Is this legal?</button>
-						</li>
-						<li>
+					<h3 class="information__header">Learn More</h3>
+					<div class="mobileInformation__itemLinksList">
+						<div class="current">
 							<button type="button" class="information__itemLink" data-target="how-to-play">How to Play</button>
-						</li>
-						<li>
-							<button type="button" class="information__itemLink" data-target="contest-formats">Contest Formats</button>
-						</li>
-						<li>
+						</div>
+						<div>
+							<button type="button" class="information__itemLink" data-target="legal">Legal Info</button>
+						</div>
+						<div>
+							<button type="button" class="information__itemLink" data-target="contest-formats">Formats</button>
+						</div>
+						<div>
 							<a href="{{ url('/play') }}" class="information__itemLink">Start Playing</a>
-						</li>
+						</div>
+						<div class="arrow"></div>
 					</ul>
 				</div>
 			</div>
