@@ -92,16 +92,9 @@
     font-style: italic;
 }
 
-.fiveStarRating {
-    display: inline-block;
-    margin: 2.4rem auto;
-    width: 80%;
-}
-
 .mobileHero__paymentLogos {
-    width: 100%;
-    height: 30px;
     background: url('../../image/lander/mobile-payment-logos.png') center center/100% auto no-repeat;
+    margin: 0 auto;
 }
 
 // 1250px
@@ -159,6 +152,17 @@
             font-size: 4rem;
         }
     }
+
+    .fiveStarRating {
+        display: inline-block;
+        margin: 2.4rem auto;
+        width: 55%;
+    }
+
+    .mobileHero__paymentLogos {
+        width: 73%;
+        height: 39px;
+    }
 }
 
 // 520px
@@ -205,6 +209,16 @@
         }
     }
 
+    .fiveStarRating {
+        display: inline-block;
+        margin: 2.4rem auto;
+        width: 80%;
+    }
+
+    .mobileHero__paymentLogos {
+        width: 100%;
+        height: 30px;
+    }
 }
 
 @media screen and (max-width: 20rem) {

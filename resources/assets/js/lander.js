@@ -22,7 +22,12 @@ window.onload = function() {
 
 	if ( $(window).width() > 615 ) {
 		heroSizer(1071/1998);
-		if (document.getElementById('powerupsCarousel')) {
+	} else {
+		hamburger.init();
+		mobileHeroPadding(720/760);
+	}
+
+	if (document.getElementById('powerupsCarousel')) {
 			var ipf = 6
 
 			if (window.innerWidth < 900) ipf = 4
@@ -40,10 +45,6 @@ window.onload = function() {
 
 			$('.carousel-nav').on('click', pc.move)
 		}
-	} else {
-		hamburger.init();
-		mobileHeroPadding(720/760);
-	}
 
 	if (document.querySelector('.powerupsInfo')) powerupSlides.init()
 

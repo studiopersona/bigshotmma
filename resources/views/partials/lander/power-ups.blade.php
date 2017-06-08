@@ -1,11 +1,11 @@
 <section id="powerups" class="powerUps">
 	<div class="content-container">
-		<h1 class="powerUps__header">Apply Power Ups with Caution!</h1>
-		<h2 class="powerUps__subheader">Earn bonus points for success, but risk penalty for failure.</h2>
+		<h1 class="powerUps__header">Power Ups</h1>
+		<h2 class="powerUps__subheader">Earn bonus points for success, but risk penalty for failure!</h2>
 		<div class="carousel">
 			<div class="carousel-nav__wrap">
-				<button class="carousel-nav" data-direction="forward"><span class="visuallyhidden">Forward</span></button>
-			    <button class="carousel-nav disabled" data-direction="backward"><span class="visuallyhidden">Backward</span></button>
+				<button class="carousel-nav" data-direction="forward"><span class="visuallyhidden">Forward</span>More</button>
+			    <button class="carousel-nav disabled" data-direction="backward"><span class="visuallyhidden">Backward</span>More</button>
 			</div>
 		    <div id="powerupsCarousel" class="carousel__holder">
 		        <div class="carousel__wrap">

@@ -12668,27 +12668,28 @@ window.onload = function () {
 
 	if ((0, _jquery2.default)(window).width() > 615) {
 		(0, _heroSizer2.default)(1071 / 1998);
-		if (document.getElementById('powerupsCarousel')) {
-			var ipf = 6;
-
-			if (window.innerWidth < 900) ipf = 4;
-			if (window.innerWidth < 768) ipf = 3;
-			if (window.innerWidth < 600) ipf = 2;
-
-			var pc = new _carousel2.default.getInstance({
-				$carouselHolder: (0, _jquery2.default)('.carousel__holder'),
-				$itemsWrap: (0, _jquery2.default)('.carousel__wrap'),
-				$items: (0, _jquery2.default)('.carousel__item'),
-				$navBtnsWrap: (0, _jquery2.default)('.carousel-nav__wrap'),
-				marginSize: 15, // in pixels
-				itemsPerFrame: ipf
-			});
-
-			(0, _jquery2.default)('.carousel-nav').on('click', pc.move);
-		}
 	} else {
 		_hamburger2.default.init();
 		(0, _mobileHeroPadding2.default)(720 / 760);
+	}
+
+	if (document.getElementById('powerupsCarousel')) {
+		var ipf = 6;
+
+		if (window.innerWidth < 900) ipf = 4;
+		if (window.innerWidth < 768) ipf = 3;
+		if (window.innerWidth < 600) ipf = 2;
+
+		var pc = new _carousel2.default.getInstance({
+			$carouselHolder: (0, _jquery2.default)('.carousel__holder'),
+			$itemsWrap: (0, _jquery2.default)('.carousel__wrap'),
+			$items: (0, _jquery2.default)('.carousel__item'),
+			$navBtnsWrap: (0, _jquery2.default)('.carousel-nav__wrap'),
+			marginSize: 15, // in pixels
+			itemsPerFrame: ipf
+		});
+
+		(0, _jquery2.default)('.carousel-nav').on('click', pc.move);
 	}
 
 	if (document.querySelector('.powerupsInfo')) _powerupInfo2.default.init();

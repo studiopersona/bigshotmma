@@ -62,17 +62,6 @@
 	color: $color-primary;
 }
 
-.mobile-logo-wrap {
-	width: 60%;
-
-	> img {
-		width: 80%;
-	    margin: 0 auto;
-	    display: block;
-	    vertical-align: middle;
-	}
-}
-
 .mobile-account-btn-wrap {
     text-align: right;
 }
@@ -225,5 +214,26 @@
 
 	.nav-container {
 		padding: 0 2rem 0.5rem;
+	}
+
+	.mobile-logo-wrap {
+		width: 38%;
+
+		> img {
+			width: 63%;
+		    margin: 0 auto;
+		    display: block;
+		    vertical-align: middle;
+		}
+	}
+}
+
+@media screen and (max-width: 25rem) {
+	.mobile-logo-wrap {
+		width: 60%;
+
+		> img {
+			width: 80%;
+		}
 	}
 }

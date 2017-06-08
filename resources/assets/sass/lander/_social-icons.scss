@@ -1,0 +1,61 @@
+@font-face {
+  font-family: 'social-icons';
+  src:
+    url('#{$icomoon-font-path}/social-icons.ttf?7uxc6h') format('truetype'),
+    url('#{$icomoon-font-path}/social-icons.woff?7uxc6h') format('woff'),
+    url('#{$icomoon-font-path}/social-icons.svg?7uxc6h#social-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'social-icons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-facebook {
+  &:before {
+    content: $icon-facebook;
+  }
+}
+.icon-instagram {
+  &:before {
+    content: $icon-instagram;
+  }
+}
+.icon-twitter {
+  &:before {
+    content: $icon-twitter;
+  }
+}
+.icon-facebook-with-circle {
+  &:before {
+    content: $icon-facebook-with-circle;
+  }
+}
+.icon-instagram-with-circle {
+  &:before {
+    content: $icon-instagram-with-circle;
+  }
+}
+.icon-twitter-with-circle {
+  &:before {
+    content: $icon-twitter-with-circle;
+  }
+}
+.icon-youtube-with-circle {
+  &:before {
+    content: $icon-youtube-with-circle;
+  }
+}
+

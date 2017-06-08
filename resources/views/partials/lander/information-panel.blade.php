@@ -122,7 +122,7 @@
 								<h3 class="information__subheader">50/50</h3>
 								<div class="formats__descriptionWrap">
 									<div class="formats__descriptionImgWarp">
-										<img src="{{ asset('public/image/info/5050-bar.png') }}" alt="Fifty Fifty Format Icon">
+										<img src="{{ asset('public/image/info/5050-icon.png') }}" alt="Fifty Fifty Format Icon">
 									</div>
 									<p class="formats__description">
 										<span class="formats__highlight">Top 50%</span> of highest scoring players win a prize.
@@ -143,6 +143,22 @@
 						</p>
 						<p><strong>All are welcome to compete in FREE contests!</strong></p>
 					</div>
+					<div class="information__item" data-item="odds">
+						<h1 class="information__header">The Odds</h1>
+						<p>The further away from 100 indicates the strength of that position.</p>
+						<div class="odds__section">
+							<h3 class="odds__header odds__header--favorite">Favorite</h3>
+							<img class="odds__image" src="{{ asset('public/image/lander/favorite.png') }}" alt="">
+						</div>
+						<div class="odds__section">
+							<h3 class="odds__header odds__header--underdog">Underdog</h3>
+							<img class="odds__image" src="{{ asset('public/image/lander/underdog.png') }}" alt="">
+						</div>
+						<div class="odds__section">
+							<h3 class="odds__header odds__header--even">Even</h3>
+							<img class="odds__image odds__image--even" src="{{ asset('public/image/lander/even.png') }}" alt="">
+						</div>
+					</div>
 				</div>
 				<div class="information__itemLinksWrap">
 					<h3 class="information__header">Learn More</h3>
@@ -155,6 +171,9 @@
 						</div>
 						<div>
 							<button type="button" class="information__itemLink" data-target="contest-formats">Formats</button>
+						</div>
+						<div>
+							<button type="button" class="information__itemLink" data-target="odds">The Odds</button>
 						</div>
 						<div>
 							<a href="{{ url('/play') }}" class="information__itemLink">Start Playing</a>

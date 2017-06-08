@@ -67,7 +67,6 @@ h3.information__subheader {
 	}
 
 	> img {
-		width: 98%;
 
 		&.mobileInformation__powerUpStars {
 			width: 50%;
@@ -130,7 +129,7 @@ h3.information__subheader {
 
 .information__footnote {
 	margin: 1.4rem auto 0;
-	text-align: center;
+	text-align: left;
 	width: 90%;
 }
 
@@ -215,7 +214,6 @@ a.information__itemLink {
 .formats__descriptionWrap {
 	align-items: center;
 	display: flex;
-	justify-content: space-between;
 	margin-bottom: 2.4rem;
 
 	> .formats__descriptionImgWarp {
@@ -224,7 +222,7 @@ a.information__itemLink {
 	    box-sizing: border-box;
 	    display: flex;
 	    height: 90px;
-	    margin-right: 1rem;
+	    margin-right: 2rem;
 	    padding: 1.5rem;
 	    width: 140px;
 
@@ -244,6 +242,39 @@ a.information__itemLink {
 
 .formats__highlight {
 	font-weight: 700;
+}
+
+.odds__section {
+	margin-top: 5rem;
+}
+
+.odds__header {
+	font-size: 2.6rem;
+	font-weight: 700;
+	text-align: center;
+	text-transform: uppercase;
+	margin: 0 0 0.5rem 0;
+	text-shadow: 2px 2px 0 #000;
+
+	&--favorite {
+		color: $color-green;
+	}
+
+	&--underdog {
+		color: $color-primary;
+	}
+
+	&--even {
+
+	}
+}
+
+.odds__image {
+	width: 90%;
+
+	&--even {
+		width: 62%;
+	}
 }
 
 @media screen and (max-width: 62rem) {
@@ -315,7 +346,7 @@ a.information__itemLink {
 // 615px
 @media screen and (max-width: 38.4375rem) {
 	.information__itemsWrap {
-		min-height: 560px;
+		min-height: 670px;
 	}
 
 	.information__itemSection {
@@ -360,7 +391,7 @@ a.information__itemLink {
 			transition: height 0.25s ease;
 
 			&.open {
-				height: 14.8rem;
+				height: 18.5rem;
 				box-shadow: 2px 2px 3px rgba(0,0,0, 0.5);
 
 				> div.arrow {
@@ -379,6 +410,7 @@ a.information__itemLink {
 				    text-align: left;
 				    padding: 0.6rem 0 0 1.5rem;
 				    font-size: 1.8rem;
+				    width: 100%;
 				}
 			}
 
@@ -403,13 +435,57 @@ a.information__itemLink {
 			}
 		}
 	}
+
+	.formats__descriptionWrap {
+		justify-content: flex-start;
+
+		> .formats__descriptionImgWarp {
+		    height: 139px;
+		    width: 166px;
+
+			> img {
+				width: 77%;
+				margin: 0 auto;
+				display: block;
+			}
+		}
+	}
+
+	.illegalStatesMap {
+	    width: 85%;
+	    margin: 3.6rem 0;
+	}
+
+	.information__itemSection:first-of-type {
+	    margin-top: 4rem;
+	}
+
+	.information__itemSection > img {
+		width: 90%;
+	}
 }
 
-@media screen and (max-width: 25rem) {
+// 560px
+@media screen and (max-width: 35rem) {
+	.formats__descriptionWrap {
+
+		> .formats__descriptionImgWarp {
+			width: 130px;
+			height: calc(130px - 1.5rem);
+		}
+	}
+
+	.information__itemsWrap {
+	    min-height: 630px;
+	}
+}
+
+// 415px
+@media screen and (max-width: 25.9375rem) {
 	.information__itemLinksWrap {
 
 		.information__header {
-			font-size: 1.4rem;;
+			font-size: 1.4rem;
 		}
 
 		.mobileInformation__itemLinksList {
@@ -417,7 +493,7 @@ a.information__itemLink {
 			padding-top: 2.9rem;
 
 			&.open {
-				height: 12.1rem;
+				height: 15.3rem;
 			}
 
 			> div {
@@ -430,6 +506,44 @@ a.information__itemLink {
 					font-size: 1.4rem;
 				}
 			}
+		}
+	}
+
+	.formats__descriptionWrap {
+		justify-content: space-between;
+
+		> .formats__descriptionImgWarp {
+		    height: 90px;
+		    width: 140px;
+
+			> img {
+				width: 100%;
+			}
+		}
+	}
+
+	.illegalStatesMap {
+		width: 100%;
+		margin: 0;
+	}
+
+	.information__itemSection:first-of-type {
+	    margin-top: 1rem;
+	}
+
+	.information__itemSection > img {
+		width: 98%;
+	}
+
+	.information__itemsWrap {
+	    min-height: 550px;
+	}
+
+	.odds__image {
+		width: 98%;
+
+		&--even {
+			width: 70%;
 		}
 	}
 }
