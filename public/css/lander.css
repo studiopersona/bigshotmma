@@ -4994,7 +4994,7 @@ h4 {
     padding-left: 0;
     padding-right: 0; } }
 
-@media screen and (max-width: 48rem) {
+@media screen and (max-width: 768px) {
   .mainLogo {
     width: 144px;
     padding-top: 1rem; }
