@@ -13,11 +13,22 @@ var menuControl = (function($, w, undefined) {
 	}
 
 	var scrollPage = function(e) {
-		var target = $(e.currentTarget).data('target');
+		var target = $(e.currentTarget).data('target'),
+			windowWidth = $(w).width(),
+			scrollAdjustment;
+
+
+		if ( windowWidth <= 768 ) {
+			scrollAdjustment = 18
+		} else if ( windowWidth <= 1200 ) {
+			scrollAdjustment = 80
+		} else {
+			scrollAdjustment = 100
+		}
 
 		e.preventDefault();
 		$('html,body').animate({
-	    	scrollTop: $(target).offset().top - 14,
+	    	scrollTop: $(target).offset().top - scrollAdjustment,
 	    }, 600);
 	}
 

@@ -12666,8 +12666,11 @@ window.onload = function () {
 
 	_menuControl2.default.init(_hamburger2.default);
 
-	if ((0, _jquery2.default)(window).width() > 615) {
+	if ((0, _jquery2.default)(window).width() > 768) {
 		(0, _heroSizer2.default)(852 / 2000);
+	} else if ((0, _jquery2.default)(window).width() > 615) {
+		(0, _heroSizer2.default)(852 / 2000);
+		_hamburger2.default.init();
 	} else {
 		_hamburger2.default.init();
 		(0, _mobileHeroPadding2.default)(720 / 760);
@@ -13149,11 +13152,21 @@ var menuControl = function ($, w, undefined) {
 	};
 
 	var scrollPage = function scrollPage(e) {
-		var target = $(e.currentTarget).data('target');
+		var target = $(e.currentTarget).data('target'),
+		    windowWidth = $(w).width(),
+		    scrollAdjustment;
+
+		if (windowWidth <= 768) {
+			scrollAdjustment = 18;
+		} else if (windowWidth <= 1200) {
+			scrollAdjustment = 80;
+		} else {
+			scrollAdjustment = 100;
+		}
 
 		e.preventDefault();
 		$('html,body').animate({
-			scrollTop: $(target).offset().top - 14
+			scrollTop: $(target).offset().top - scrollAdjustment
 		}, 600);
 	};
 

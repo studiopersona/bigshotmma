@@ -4994,7 +4994,7 @@ h4 {
     padding-left: 0;
     padding-right: 0; } }
 
-@media screen and (max-width: 38.75rem) {
+@media screen and (max-width: 48rem) {
   .mainLogo {
     width: 144px;
     padding-top: 1rem; }
@@ -5021,8 +5021,13 @@ h4 {
       display: none; }
   .nav-container {
     padding: 0 2rem 0.5rem; }
+    .nav-container.larger-screens-block {
+      display: none; }
+  .mobile-nav-container.smaller-screens-flex {
+    display: -ms-flexbox;
+    display: flex; }
   .mobile-logo-wrap {
-    width: 38%; }
+    width: 28%; }
     .mobile-logo-wrap > img {
       width: 63%;
       margin: 0 auto;

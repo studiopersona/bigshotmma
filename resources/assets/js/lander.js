@@ -20,8 +20,11 @@ window.onload = function() {
 
 	menuControl.init(hamburger)
 
-	if ( $(window).width() > 615 ) {
+	if ( $(window).width() > 768 ) {
 		heroSizer(852/2000);
+	} else if ( $(window).width() > 615 ) {
+		heroSizer(852/2000);
+		hamburger.init();
 	} else {
 		hamburger.init();
 		mobileHeroPadding(720/760);

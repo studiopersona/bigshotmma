@@ -188,8 +188,8 @@
 		}
 	}
 }
-// 620px
-@media screen and (max-width: 38.75rem) {
+// 768px
+@media screen and (max-width: 48rem) {
 	.mainLogo {
 		width: 144px;
     	padding-top: 1rem;
@@ -214,10 +214,21 @@
 
 	.nav-container {
 		padding: 0 2rem 0.5rem;
+
+		&.larger-screens-block {
+			display: none;
+		}
+	}
+
+	.mobile-nav-container {
+
+		&.smaller-screens-flex {
+			display: flex;
+		}
 	}
 
 	.mobile-logo-wrap {
-		width: 38%;
+		width: 28%;
 
 		> img {
 			width: 63%;
