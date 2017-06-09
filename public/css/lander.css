@@ -4988,7 +4988,7 @@ h4 {
 
 @media screen and (max-width: 70rem) {
   .navigation__btnWrap .btn, .navigation__btnWrap .btn--block, .navigation__btnWrap .btn--primary, .navigation__btnWrap .btn--green, .navigation__btnWrap .btn--black, .navigation__btnWrap .btn--outline {
-    width: 30%;
+    width: 28%;
     font-size: 1em;
     text-align: center;
     padding-left: 0;
