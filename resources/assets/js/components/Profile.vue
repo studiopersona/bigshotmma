@@ -3,7 +3,7 @@
         <header class="pageHeader">
             <h1 class="pageHeader__header">{{ player.name }}</h1>
             <h4 class="pageHeader__subheader">
-                Modify your profile information
+                Update your <a v-link="{ path: '/deposit-profile' }">Deposit Method</a>
             </h4>
         </header>
         <div class="profile form">
