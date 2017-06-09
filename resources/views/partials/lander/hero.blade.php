@@ -1,8 +1,9 @@
 <section class="hero">
-	<div class="content-container larger-screens-block">
-		<h1 class="hero__header">Skills, Not Scripts.</h1>
-		<h2 class="hero__subheader">(we've got <a id="powerupsBtn" href="#" data-target="#powerups">power ups</a> too)</h2>
-		<a href="{{ url('/play') }}" class="btn btn--outline hero__ctaBtn larger-screens-inline-block">Play Now!</a>
+	<div class="larger-screens-block">
+		<h1 class="visuallyhidden">Fantasy MMA</h1>
+		<h2 class="visuallyhidden">Showcase your skills. Win real money.</h2>
+		<div class="visuallyhidden">We accept PayPal, Visa, MasterCard, Discover and American Express</div>
+		<a href="{{ url('/play#!/reister') }}" class="btn mobile-nav-btn hero__ctaBtn">Create Account</a>
 	</div>
 	<div class="content-container smaller-screens-block">
 		<div class="mobileHeroBtn__wrap">

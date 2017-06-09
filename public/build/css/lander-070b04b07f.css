@@ -4656,8 +4656,14 @@ h4 {
     transform: scale(1); }
 
 .hero {
-  background: url("../../image/lander/hero-bkgd.jpg") left top/cover no-repeat;
-  text-align: center; }
+  background: url("../../image/lander/hero-image-v2.jpg") left top/cover no-repeat;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  padding: 0 0 1.4vw 4.8vw; }
 
 .hero__header {
   font-size: 8.504rem;
@@ -4690,13 +4696,14 @@ h4 {
       color: #ccc; }
 
 .hero__ctaBtn {
-  font-size: 3.4rem;
-  border: 2px solid #000;
-  margin-top: 4rem;
   animation-delay: 0.2s;
   animation-duration: 0.175s;
   animation-name: fadeAndScale;
-  animation-timing-function: cubic-bezier(0.71, 0.55, 0.62, 1.57); }
+  animation-timing-function: cubic-bezier(0.71, 0.55, 0.62, 1.57);
+  display: inline-block;
+  width: auto;
+  padding: 1rem 3.6rem;
+  font-size: 1.8rem; }
 
 .heroInner {
   height: 180px;
@@ -4727,6 +4734,34 @@ h4 {
   background: url("../../image/lander/mobile-payment-logos.png") center center/100% auto no-repeat;
   margin: 0 auto; }
 
+@media screen and (min-width: 615px) {
+  .hero__ctaBtn {
+    font-size: 1.4rem; } }
+
+@media screen and (min-width: 750px) {
+  .hero__ctaBtn {
+    font-size: 1.8rem; } }
+
+@media screen and (min-width: 960px) {
+  .hero {
+    padding: 0 0 2.6vw 4.8vw; } }
+
+@media screen and (min-width: 1104px) {
+  .hero {
+    padding: 0 0 3vw 4.8vw; } }
+
+@media screen and (min-width: 1200px) {
+  .hero {
+    padding: 0 0 3.3vw 4.8vw; }
+  .hero__ctaBtn {
+    font-size: 2.5rem; } }
+
+@media screen and (min-width: 1600px) {
+  .hero {
+    padding: 0 0 3.3vw 4.8vw; }
+  .hero__ctaBtn {
+    font-size: 3.4rem; } }
+
 @media screen and (max-width: 78.125rem) {
   .hero__subheader {
     font-size: 4.25rem; } }
@@ -4749,7 +4784,8 @@ h4 {
   .hero {
     background-image: url("../../image/lander/mobile-hero.jpg");
     background-size: 100% auto;
-    background-color: #000; }
+    background-color: #000;
+    text-align: center; }
   .hero__header {
     font-size: 5.404rem;
     padding-top: 3.6rem;

@@ -12667,7 +12667,7 @@ window.onload = function () {
 	_menuControl2.default.init(_hamburger2.default);
 
 	if ((0, _jquery2.default)(window).width() > 615) {
-		(0, _heroSizer2.default)(1071 / 1998);
+		(0, _heroSizer2.default)(852 / 2000);
 	} else {
 		_hamburger2.default.init();
 		(0, _mobileHeroPadding2.default)(720 / 760);
