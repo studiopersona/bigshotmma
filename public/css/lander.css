@@ -5281,7 +5281,7 @@ a.information__itemLink {
       position: absolute;
       top: 0.5rem;
       right: 0;
-      z-index: 1;
+      z-index: 10;
       width: 50%;
       height: 3.6rem;
       overflow: hidden;
