@@ -1,3 +1,7 @@
+- need to add server side email validation during registration
+
+- need to add a notice email when the mailchimp user add fails (AddNewUserToMailchimp)
+
 - can't see deposit profile update button at bottom of profile page
 
 - event results view is freezing modile browsers!!! Trying to open a fights results

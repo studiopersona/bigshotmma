@@ -15,6 +15,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'Bsmma\Events\UserRegistered' => [
             'Bsmma\Listeners\AddFundsToUserAccount',
+            'Bsmma\Listeners\AddNewUserToMailchimp',
         ],
         'Bsmma\Events\PlayerRequestedWithdrawl' => [
             'Bsmma\Listeners\SendWithdrawlRequestNotice'
