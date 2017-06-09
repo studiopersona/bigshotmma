@@ -1,7 +1,4 @@
 <div class="mobile-main-nav-wrap">
-	<h3 class="mobile-nav-logo">
-		<span class="visuallyhidden">BSMMA - Fantasy MMA</span>
-	</h3>
 	<nav class="mobile-main-nav">
 		<ul>
 			<li><a data-target="#contests">Contests</a></li>

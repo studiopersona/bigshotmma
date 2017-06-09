@@ -36,6 +36,13 @@
     width: 30rem;
 }
 
+.ssl-badge {
+	background: url('../../image/lander/ssl-hires.png') center center/100% auto no-repeat;
+	height: 40vw;
+	margin: 1.4rem auto;
+	width: 40%;
+}
+
 // 980px
 @media screen and (max-width: 61.9375rem) {
 	.footer {
@@ -59,7 +66,7 @@
 	}
 
 	.social-icon {
-		font-size: 4.6rem;
+		font-size: 14vw;
 	    text-decoration: none;
 	    background-color: #fff;
 	    border-radius: 100%;
@@ -70,6 +77,7 @@
 	.followHeader {
 		margin: 0 0 1rem;
 		padding-top: 2.4rem;
+		font-size: 6vw;
 		font-weight: 700;
 		font-style: italic;
 		text-align: center;
