@@ -5054,7 +5054,7 @@ h4 {
 .information__item {
   color: #fff;
   position: absolute;
-  transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-102%, 0, 0);
   transition: transform 0.3s cubic-bezier(0, 0.685, 0.54, 1.005);
   width: inherit;
   z-index: 1; }
