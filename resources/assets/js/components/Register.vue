@@ -108,11 +108,13 @@ export default {
 					password: this.credentials.password,
 					player_name: this.credentials.player_name,
 				},
-				vm = this
+				vm = this,
+				emailRe = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 			this.errors = []
 
 			if ( credentials.email === '' ) this.errors.push('Your email address is required.')
+			if ( !emailRe.test(credentials.email) ) this.errors.push('Please enter a valid email address')
 			if ( credentials.password === '' ) this.errors.push('A password is required.')
 			if ( credentials.player_name === '' ) this.errors.push('A player name is required.')
 

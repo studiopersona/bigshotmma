@@ -200,7 +200,7 @@ class ContestStandings
 					break;
 
 				default:
-					$perentWinners = 0;
+					$percentWinners = 0;
 					break;
 			}
 
@@ -222,7 +222,7 @@ class ContestStandings
 					if ($currentScore > 0) array_push($standings[$place], $user);
 				} else {
 					$place += 1;
-					if ( $place === (int)$winningPlaces ) {
+					if ( $place === (int)$winningPlaces || $place > (int)$winningPlaces ) {
 						return false;
 					} else {
 
@@ -230,10 +230,12 @@ class ContestStandings
 						if ($currentScore > 0) array_push($standings[$place], $user);
 					}
 				}
+
 			});
 
 			$contestWinners[] = [
 				'contestId' => $contest['contestId'],
+				'contestTypeId' => $contest['contestTypeId'],
 				'maxParticipants' => $contest['maxParticipants'],
 				'places'    => $winningPlaces,
 				'entryFee'  => $contest['entryFee'],
@@ -251,8 +253,8 @@ class ContestStandings
 		$winningsByPlayer = [];
 
 		$this->contestWinners->each(function($contest, $index) use (&$winningsByPlayer) {
-			$winningPlaces = $contest['places'];
-			$payoutBreakdown = config('payouts.'.$contest['maxParticipants']);
+			$winningPlaces = ($contest['places'] === 0) ? 1 : $contest['places'];
+			$payoutBreakdown = config('payouts.'.($contest['contestTypeId'] - 1).'.'.$contest['maxParticipants']);
 			$totalPool = ($contest['maxParticipants'] * $contest['entryFee'])*0.85;
 
 			$currentPlaceIndex = 0;

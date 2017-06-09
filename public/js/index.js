@@ -46878,7 +46878,12 @@ exports.default = {
                     100: [0.3275, 0.150, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.0275, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150]
                 },
                 Greed: [1],
-                '50/50': [1]
+                '50/50': {
+                    10: [0.20, 0.20, 0.20, 0.20, 0.20],
+                    20: [0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10],
+                    50: [0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04],
+                    100: [0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02]
+                }
             },
             prizeModalClasses: ['prizeModal'],
             participantsList: {}
@@ -46897,7 +46902,7 @@ exports.default = {
 
             // console.log(type)
 
-            var payoutArray = this.participantsList.contest_type_id == 1 ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type];
+            var payoutArray = this.participantsList.contest_type_id !== 3 ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type];
             var placePayouts = [];
 
             for (var i = 0; i < payoutArray.length; i++) {
@@ -47171,11 +47176,13 @@ exports.default = {
 				password: this.credentials.password,
 				player_name: this.credentials.player_name
 			},
-			    vm = this;
+			    vm = this,
+			    emailRe = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 			this.errors = [];
 
 			if (credentials.email === '') this.errors.push('Your email address is required.');
+			if (!emailRe.test(credentials.email)) this.errors.push('Please enter a valid email address');
 			if (credentials.password === '') this.errors.push('A password is required.');
 			if (credentials.player_name === '') this.errors.push('A player name is required.');
 

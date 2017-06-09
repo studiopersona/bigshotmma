@@ -43,7 +43,12 @@ export default {
                     100: [0.3275, 0.150, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.0275, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150, 0.0150],
                 },
                 Greed: [1],
-                '50/50': [1],
+                '50/50': {
+                    10: [0.20, 0.20, 0.20, 0.20, 0.20],
+                    20: [0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10],
+                    50: [0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04],
+                    100: [0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02],
+                },
             },
             prizeModalClasses: ['prizeModal'],
             participantsList: {},
@@ -62,7 +67,7 @@ export default {
 
             // console.log(type)
 
-            let payoutArray = (this.participantsList.contest_type_id == 1) ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type]
+            let payoutArray = (this.participantsList.contest_type_id !== 3) ? this.prizePoolPayouts[type][numOfParticipants] : this.prizePoolPayouts[type]
             let placePayouts = [];
 
             for(var i=0; i < payoutArray.length; i++) {
