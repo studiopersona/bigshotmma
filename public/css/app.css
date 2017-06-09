@@ -4233,7 +4233,7 @@ a {
 .participantsList {
   position: relative;
   min-height: 100px;
-  margin-bottom: 6rem; }
+  margin-bottom: 8rem; }
   .participantsList > div .button-wrap {
     position: fixed;
     bottom: 0;
@@ -5388,7 +5388,7 @@ a {
   padding: 0 1.1rem 0.4rem; }
 
 .prizeModal {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   top: -20px;
@@ -5402,7 +5402,8 @@ a {
   color: #fff;
   text-align: center; }
   .prizeModal.show {
-    transform: translate3d(0, 0, 0); }
+    transform: translate3d(0, 0, 0);
+    position: absolute; }
 
 .prizeModal__body p {
   margin-bottom: 2rem;

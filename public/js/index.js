@@ -47525,7 +47525,9 @@ exports.default = {
                 // Attach the JWT header
                 headers: { 'Authorization': 'Bearer ' + token }
             }).then(function (response) {
-                if (!response.data.count) this.hasPicks = false;
+                console.log('has picks response', response);
+
+                if (!response.data.count && !response.data.data.count) this.hasPicks = false;
             }).catch(function (err) {
                 if (err.status === 404) this.hasPicks = false;
             });
