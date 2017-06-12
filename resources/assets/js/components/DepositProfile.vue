@@ -112,6 +112,12 @@
                         <option value="2">PayPal</option>
                     </select>
                 </div>
+                 <div v-show="parseInt(player.merchant, 10) === 2" transition="fade" class="profile__inputWrap form__row container-fluid">
+                    <label for="lastname" class="col-xs-100">
+                        <span class="visuallyhidden">PayPal Account Email</span>
+                        <input type="email" v-model="paypalEmail" placeholder="PayPal Account Email">
+                    </label>
+                </div>
             </fieldset>
             <div class="container-fluid">
                 <div class="col-xs-100 button-wrap">
@@ -251,6 +257,7 @@
                 }).then(function(response) {
                     console.log(response)
                     this.player = response.data.profile
+                    this.paypalEmail = response.data.profile.paypalEmail
                     this.checkEligibility()
                     this.working = false
                 }, function(err) {
@@ -276,31 +283,52 @@
             },
 
             depositUpdate() {
-                var vm = this
+                let vm = this
+                let errors = []
+                let emailRe = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                let submit = function() {
+                    localforage.getItem('id_token').then(function(token) {
+                        vm.$http.post(URL.base + '/api/v1/deposit-profile', {
+                            firstname: vm.player.firstname,
+                            lastname: vm.player.lastname,
+                            address: vm.player.address,
+                            address2: vm.player.address2,
+                            city: vm.player.city,
+                            state: vm.player.state,
+                            zipcode: vm.player.zipcode,
+                            merchant_id: vm.player.merchant,
+                            paypalEmail: vm.paypalEmail,
+                        }, {
+                            // Attach the JWT header
+                            headers: { 'Authorization' : 'Bearer ' + token }
+                        }).then(function(response) {
+                            vm.flash(response.data)
+                            vm.working = false
+                        }, function(err) {
+                            console.log(err)
+                            vm.working = false
+                        })
+                    });
+                }
 
                 this.working = true
 
-                localforage.getItem('id_token').then(function(token) {
-                    vm.$http.post(URL.base + '/api/v1/deposit-profile', {
-                        firstname: vm.player.firstname,
-                        lastname: vm.player.lastname,
-                        address: vm.player.address,
-                        address2: vm.player.address2,
-                        city: vm.player.city,
-                        state: vm.player.state,
-                        zipcode: vm.player.zipcode,
-                        merchant_id: vm.player.merchant,
-                    }, {
-                        // Attach the JWT header
-                        headers: { 'Authorization' : 'Bearer ' + token }
-                    }).then(function(response) {
-                        vm.flash(response.data)
-                        vm.working = false
-                    }, function(err) {
-                        console.log(err)
-                        vm.working = false
-                    })
-                });
+                if (parseInt(this.player.merchant, 10) === 2) {
+                    if ( this.paypalEmail === '') errors.push('You must enter a PayPal email address ')
+                    if ( !emailRe.test(this.paypalEmail) ) errors.push('Please enter a valid PayPal email address')
+                }
+
+                if ( errors.length > 0 ) {
+                    this.displayErrors(errors)
+                } else {
+                    submit()
+                }
+            },
+
+            displayErrors(errors) {
+                this.working = false
+
+                this.flash({ msg: errors[0] });
             },
 
             checkEligibility() {

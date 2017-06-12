@@ -23,6 +23,7 @@ class UsersController extends ApiController
     private $stripe;
     private $paypal;
     private $bogoPromosToUser;
+    private $paypalEmail;
 
     public function __construct(
         User $user,
@@ -31,7 +32,8 @@ class UsersController extends ApiController
         MerchantTransaction $merchantTransaction,
         CreditCardType $creditCardType,
         StripeDetail $stripeDetail,
-        BogoPromosToUser $bogoPromosToUser
+        BogoPromosToUser $bogoPromosToUser,
+        PaypalEmail $paypalEmail
     )
     {
     	$this->user = $user;
@@ -41,6 +43,7 @@ class UsersController extends ApiController
         $this->creditCardType = $creditCardType;
         $this->stripeDetail = $stripeDetail;
         $this->bogoPromosToUser = $bogoPromosToUser;
+        $this->paypalEmail = $paypalEmail;
     }
 
     public function getPlayerName()
@@ -156,6 +159,14 @@ class UsersController extends ApiController
         $userInfo->state       = $request->state;
         $userInfo->zipcode     = $request->zipcode;
         $userInfo->merchant_id = (int)$request->merchant_id;
+
+        if ( $request->paypalEmail !== '' ) {
+            if ( is_null($this->paypalEmail->where('user_id', $user->id)->first()) ) {
+                $this->paypalEmail->insert(['user_id' => $user->id, 'email' => $request->paypalEmail]);
+            } else {
+                $this->paypalEmail->where('user_id', $user->id)->update(['email' => $request->paypalEmail]);
+            }
+        }
 
         return ($userInfo->save()) ? $this->respond([
             'success' => true,
