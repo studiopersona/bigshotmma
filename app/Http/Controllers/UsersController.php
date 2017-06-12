@@ -287,12 +287,12 @@ class UsersController extends ApiController
         Session::forget('userId');
         Session::forget('fee');
 
-        return redirect()->away(url('/#!/deposit/paypal/'.$chargeOutcome['transactionId']));
+        return redirect()->away(url('/play#!/deposit/paypal/'.$chargeOutcome['transactionId']));
     }
 
     public function paypalPaymentRejected()
     {
-
+        return redirect()->away(url('/play#!/deposit'));
     }
 
     private function chargeCard($cardInfo, $request)

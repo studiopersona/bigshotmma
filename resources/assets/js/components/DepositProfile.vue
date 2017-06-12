@@ -103,7 +103,7 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset style="display:none;">
+            <fieldset>
                 <legend>Preferred Payment Method</legend>
                 <div class="profile__inputWrap form__row">
                     <select v-model="player.merchant">
