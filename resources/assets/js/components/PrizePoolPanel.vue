@@ -59,8 +59,9 @@ export default {
 
         calculatePayouts(participantsList) {
             this.participantsList = participantsList.contest || participantsList
+            let houseRate = (this.participantsList.max_participants < 10) ? 0.10 : 0.15;
 
-            let total = (this.participantsList.buy_in * this.participantsList.max_participants) - ((this.participantsList.buy_in * this.participantsList.max_participants)*0.15)
+            let total = (this.participantsList.buy_in * this.participantsList.max_participants) - ((this.participantsList.buy_in * this.participantsList.max_participants)*houseRate)
 
             let type = this.participantsList.contest_type_name
             let numOfParticipants = this.participantsList.max_participants

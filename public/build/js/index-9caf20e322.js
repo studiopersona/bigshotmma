@@ -46894,8 +46894,9 @@ exports.default = {
     methods: {
         calculatePayouts: function calculatePayouts(participantsList) {
             this.participantsList = participantsList.contest || participantsList;
+            var houseRate = this.participantsList.max_participants < 10 ? 0.10 : 0.15;
 
-            var total = this.participantsList.buy_in * this.participantsList.max_participants - this.participantsList.buy_in * this.participantsList.max_participants * 0.15;
+            var total = this.participantsList.buy_in * this.participantsList.max_participants - this.participantsList.buy_in * this.participantsList.max_participants * houseRate;
 
             var type = this.participantsList.contest_type_name;
             var numOfParticipants = this.participantsList.max_participants;
