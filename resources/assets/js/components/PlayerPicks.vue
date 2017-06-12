@@ -174,7 +174,8 @@
                                 <div class="col-xs-75">
                                     <h4 class="fightPicksList__powerUpName" :style="{color: pick.power_up.color}">{{ pick.power_up.power_up_name }}</h4>
                                     <p class="fightPicksList__selectionResults" v-show="results.length">
-                                        <span v-if="parseInt(outcome[pick.fight_id].power_up_points, 10) > 0">You chose a winning power up</span>
+
+                                        <span v-if="pick.power_up.points > 0">Your fighter achieved the power up</span>
                                         <span v-else>Your fighter did not achieve the power up</span>
                                     </p>
                                     <p class="fightPicksList__selectionResults" v-else>
@@ -184,7 +185,7 @@
                                 <div v-if="!results.length" class="col-xs-15 fightPicksList__points" :style="{color: pick.power_up.color}">
                                     --
                                 </div>
-                                <div    v-else :class="['col-xs-15', 'fightPicksList__points', parseInt(outcome[pick.fight_id].power_up_points, 10) > 0 ? 'correct' : 'penalty']" style="{color: pick.power_up.color}">
+                                <div v-else :class="['col-xs-15', 'fightPicksList__points', parseInt(outcome[pick.fight_id].power_up_points, 10) > 0 ? 'correct' : 'penalty']" style="{color: pick.power_up.color}">
                                     {{ outcome[pick.fight_id].power_up_points > 0 ? '+' : ''}}{{ outcome[pick.fight_id].power_up_points }}
                                 </div>
                             </div>
