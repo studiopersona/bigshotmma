@@ -78,13 +78,11 @@
 							@if ($event['contests']->count() >= 5)
 								@foreach ($event['contests']->random(5) as $contest)
 									<tr>
-										<td class="contests__tableContestType">{{ $contest['contestType']['contest_type_name'] }}</td>
+										<td class="contests__tableContestType">{{ $contest['contestType']['contest_type_name'] }}: <span class="contests__description">{{ $contest['description'] }}</span></td>
 										<td>
-											<span class="contests__tableTitle">Players: </span>
 											<span class="contests__playerCount">{{ count($contest['contestParticipants']) }}/{{ $contest['max_participants']}}</span>
 										</td>
 										<td>
-											<span class="contests__tableTitle">Entry: </span>
 											<span class="contests__tableFee">${{ $contest['entry_fee'] }}</span>
 										</td>
 										<td>
